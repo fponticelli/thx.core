@@ -11,4 +11,18 @@ class Ints
 	{
 		return v < min ? min : (v > max ? max : v);
 	}
+	
+	static var pattern_parse = ~/^[+-]?(\d+|0x[0-9A-F]+)$/i;
+	public static function canParse(s : String)
+	{
+		return pattern_parse.match(s);
+	}
+
+	// TODO add proper octal/hex/exp support
+	public static function parse(s : String)
+	{
+		if (s.substr(0, 1) == "+")
+			s = s.substr(1);
+		return Std.parseInt(s);
+	}
 }

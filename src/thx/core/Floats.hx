@@ -5,7 +5,7 @@
 
 package thx.core;
 
-class Floats 
+class Floats
 {
 	public static inline function normalize(v : Float) : Float
 	{
@@ -35,5 +35,18 @@ class Floats
 		if (v < 0)
 			v += max;
 		return v;
+	}
+	
+	static var pattern_parse = ~/^(\+|-)?\d+(\.\d+)?(e-?\d+)?$/;
+	public static function canParse(s : String)
+	{
+		return pattern_parse.match(s);
+	}
+
+	public static function parse(s : String)
+	{
+		if (s.substr(0, 1) == "+")
+			s = s.substr(1);
+		return Std.parseFloat(s);
 	}
 }
