@@ -43,7 +43,7 @@ class ValueTypes
 					classes.push(c);
 					c = Type.getSuperClass(c);
 				}
-				return classes.map(Type.getClassName);
+				classes.map(Type.getClassName);
 			case TEnum(e):  [Type.getEnumName(e)];
 			case _:         null;
 		}

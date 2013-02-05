@@ -16,7 +16,7 @@ class Arrays
 		return r;
 	}
 	
-	public static function crossNested<T>(a : Array<Array<T>>)
+	public static function crossMulti<T>(a : Array<Array<T>>)
 	{
 		var acopy  = a.copy(),
 			result = acopy.shift().map(function(v) return [v]);
