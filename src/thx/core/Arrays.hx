@@ -37,4 +37,11 @@ class Arrays
 		}
 		return result;
 	}
+	
+	public static function pushIf<T>(arr : Array<T>, cond : Bool, value : T)
+	{
+		if (cond)
+			arr.push(value);
+		return arr;
+	}
 }

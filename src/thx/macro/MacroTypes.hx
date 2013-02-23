@@ -20,6 +20,28 @@ class MacroTypes
 				throw 'type $type is not a function or $index is not a valid argument position';
 		}
 	}
+	
+	public static function isFunction(type : haxe.macro.Type)
+	{
+		return switch(type)
+		{
+			case TFun(_, _):
+				return true;
+			case _:
+				return false;
+		}
+	}
+	
+	public static function getArity(type : haxe.macro.Type)
+	{
+		return switch(type)
+		{
+			case TFun(args, _):
+				return args.length;
+			case _:
+				return -1;
+		}
+	}
 
 	public static function typeOfArgument(type : haxe.macro.Type, index : Int)
 	{
