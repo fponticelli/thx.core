@@ -7,6 +7,7 @@ class TestAll
 	{
 		runner.addCase(new thx.core.TestFloats());
 		runner.addCase(new thx.core.TestInts());
+		runner.addCase(new thx.core.TestProcedure());
 	}
 
 	public static function main()
