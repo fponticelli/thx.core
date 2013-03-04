@@ -4,3 +4,4 @@
 -neko bin/test/thx.core.n
 -D haxe3
 -main TestAll
+-cmd neko bin/test/thx.core.n
