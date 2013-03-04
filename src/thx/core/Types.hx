@@ -10,6 +10,12 @@ class Types
 
 }
 
+class ClassTypes
+{
+	public inline static function toString(cls : Class<Dynamic>)
+		return Type.getClassName(cls);
+}
+
 class ValueTypes
 {
 	public static function toString(type : Type.ValueType)

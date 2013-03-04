@@ -5,10 +5,45 @@
 
 package thx.core;
 
+abstract ProcedureDef<T>(T)
+{
+	inline function new(fun : T) 
+		this = fun;
+
+	@:from static public inline function fromArity0(fun : Void -> Void)
+		return new ProcedureDef(fun);
+	
+	@:from static public inline function fromArity1<T1>(fun : T1 -> Void)
+		return new ProcedureDef(fun);
+	
+	@:from static public inline function fromArity2<T1, T2>(fun : T1 -> T2 -> Void)
+		return new ProcedureDef(fun);
+	
+	@:from static public inline function fromArity3<T1, T2, T3>(fun : T1 -> T2 -> T3 -> Void)
+		return new ProcedureDef(fun);
+	
+	@:from static public inline function fromArity4<T1, T2, T3, T4>(fun : T1 -> T2 -> T3 -> T4 -> Void)
+		return new ProcedureDef(fun);
+	
+	@:from static public inline function fromArity5<T1, T2, T3, T4, T5>(fun : T1 -> T2 -> T3 -> T4 -> T5 -> Void)
+		return new ProcedureDef(fun);
+
+	public inline function getFunction() : T
+		return this;
+		
+	public inline function apply(args : Array<Dynamic>)
+		Reflect.callMethod(null, this, args);
+	
+	@:op(A == B) public inline function equal(other : ProcedureDef<T>)
+	{
+		return Reflect.compareMethods(this, other.getFunction());
+	}
+}
+
 abstract Procedure<T>({ fun : T, arity : Int })
 {
-	public inline function new(fun : T, arity : Int) 
-		this = { fun : fun, arity : arity };
+	public inline function new(fun : ProcedureDef<T>, arity : Int) 
+		this = { fun : fun.getFunction(), arity : arity };
 	
 	@:from static public inline function fromArity0(fun : Void -> Void)
 		return new Procedure(fun, 0);
