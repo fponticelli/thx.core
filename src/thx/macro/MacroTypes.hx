@@ -43,7 +43,7 @@ class MacroTypes
 		}
 	}
 
-	public static function typeOfArgument(type : haxe.macro.Type, index : Int)
+	public static function getArgumentType(type : haxe.macro.Type, index : Int)
 	{
 		return getFunctionArgument(type, index).t;
 	}
@@ -65,6 +65,17 @@ class MacroTypes
 		if (null == arg)
 			throw "invalid argument position $index";
 		return arg;
+	}
+	
+	public static function getFunctionReturn(type : haxe.macro.Type)
+	{
+		return switch(type)
+		{
+			case TFun(_, ret):
+				return ret;
+			case _:
+				throw 'type $type is not a function';
+		}
 	}
 	
 	public static function classInheritance(cls : ClassType)
