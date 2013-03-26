@@ -44,4 +44,12 @@ class Arrays
 			arr.push(value);
 		return arr;
 	}
+
+	public static function mapi<TIn, TOut>(arr : Array<TIn>, handler : TIn -> Int -> TOut) : Array<TOut>
+	{
+		var r = [];
+		for(i in 0...arr.length)
+			r.push(handler(arr[i], i));
+		return r;
+	}
 }
