@@ -78,6 +78,18 @@ class MacroTypes
 		}
 	}
 	
+	public static function getClassTypeParameters(type : haxe.macro.Type)
+	{
+		return switch(type)
+		{
+			case TInst(_, params):
+				return params;
+			case _:
+				throw 'type $type is not a class';
+		}
+
+	}
+
 	public static function classInheritance(cls : ClassType)
 	{
 		var types = [cls.pack.concat([cls.name]).join(".")],
