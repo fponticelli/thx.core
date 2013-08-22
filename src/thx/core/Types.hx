@@ -14,7 +14,7 @@ class ClassTypes
 {
 	public inline static function toString(cls : Class<Dynamic>)
 		return Type.getClassName(cls);
-	
+
 	static public #if !php inline #end function as<T1, T2>(value : T1, type : Class<T2>) : Null<T2>
 	{
 		return (Std.is(value, type) ? cast value : null);
