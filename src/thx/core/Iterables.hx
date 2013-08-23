@@ -4,6 +4,6 @@ class Iterables
 {
 	public inline static function map<T, S>(it : Iterable<T>, f : T -> S) : Array<S>
 	{
-		return Iterators.map(it.iterator());
+		return Iterators.map(it.iterator(), f);
 	}
 }
