@@ -2,7 +2,7 @@ package thx.core;
 
 using StringTools;
 
-class Strings 
+class Strings
 {
 	static var _reSplitWC = ~/(\r\n|\n\r|\n|\r)/g;
 	static var _reReduceWS = ~/\s+/;
@@ -136,9 +136,9 @@ class Strings
 	{
 		return re.matched(0).toUpperCase();
 	}
-	static var __ucwordsPattern = new EReg('[^a-zA-Z]([a-z])', '');
+	static var __ucwordsPattern = new EReg('[^a-zA-Z]([a-z])', 'g');
 #if !php
-	static var __ucwordswsPattern = new EReg('\\s([a-z])', '');
+	static var __ucwordswsPattern = new EReg('\\s[a-z]', 'g');
 	static var __alphaNumPattern = new EReg('^[a-z0-9]+$', 'i');
 	static var __digitsPattern = new EReg('^[0-9]+$', '');
 #end

@@ -7,10 +7,10 @@ package thx.core;
 
 import utest.Assert;
 
-class TestFloats 
+class TestFloats
 {
 	public function new() { }
-	
+
 	public function testNormalize()
 	{
 		Assert.floatEquals(0.0, Floats.normalize( 0.0));
