@@ -15,7 +15,7 @@ class Arrays
 				r.push([va, vb]);
 		return r;
 	}
-	
+
 	public static function crossMulti<T>(a : Array<Array<T>>)
 	{
 		var acopy  = a.copy(),
@@ -37,7 +37,7 @@ class Arrays
 		}
 		return result;
 	}
-	
+
 	public static function pushIf<T>(arr : Array<T>, cond : Bool, value : T)
 	{
 		if (cond)
@@ -51,5 +51,12 @@ class Arrays
 		for(i in 0...arr.length)
 			r.push(handler(arr[i], i));
 		return r;
+	}
+
+	public static function order<T>(arr : Array<T>, sort : T -> T -> Int)
+	{
+		var n = arr.copy();
+		n.sort(sort);
+		return n;
 	}
 }

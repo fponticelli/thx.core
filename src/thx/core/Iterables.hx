@@ -6,4 +6,14 @@ class Iterables
 	{
 		return Iterators.map(it.iterator(), f);
 	}
+
+  public inline static function toArray<T>(it : Iterable<T>) : Array<T>
+  {
+    return Iterators.toArray(it.iterator());
+  }
+
+  public inline static function order<T>(it : Iterable<T>, sort : T -> T -> Int) : Array<T>
+  {
+    return Iterators.order(it.iterator(), sort);
+  }
 }
