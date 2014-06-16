@@ -10,6 +10,15 @@ class Iterators
 		return acc;
 	}
 
+  public static function mapi<T, S>(it : Iterator<T>, f : T -> Int -> S) : Array<S>
+  {
+    var acc = [],
+        i = 0;
+    for(v in it)
+      acc.push(f(v, i++));
+    return acc;
+  }
+
   public static function toArray<T>(it : Iterator<T>) : Array<T>
   {
     var items = [];
@@ -24,4 +33,21 @@ class Iterators
     n.sort(sort);
     return n;
   }
+
+  public static function reduce<TItem, TAcc>(it : Iterator<TItem>, callback : TAcc -> TItem -> TAcc, initial : TAcc) : TAcc {
+    map(it, function(v) : Void {
+      initial = callback(initial, v);
+    });
+    return initial;
+  }
+
+  public static function reducei<TItem, TAcc>(it : Iterator<TItem>, callback : TAcc -> TItem -> Int -> TAcc, initial : TAcc) : TAcc {
+    mapi(it, function(v, i) {
+      initial = callback(initial, v, i);
+    });
+    return initial;
+  }
+
+  inline public static function isEmpty<T>(it : Iterator<T>) : Bool
+    return !it.hasNext();
 }

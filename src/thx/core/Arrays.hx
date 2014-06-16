@@ -45,12 +45,45 @@ class Arrays
 		return arr;
 	}
 
+	#if js inline #end
 	public static function mapi<TIn, TOut>(arr : Array<TIn>, handler : TIn -> Int -> TOut) : Array<TOut>
 	{
-		var r = [];
-		for(i in 0...arr.length)
-			r.push(handler(arr[i], i));
-		return r;
+		#if js
+			return (cast arr : { map : (TIn -> Int -> TOut) -> Array<TOut> }).map(handler);
+		#else
+			var r = [];
+			for(i in 0...arr.length)
+				r.push(handler(arr[i], i));
+			return r;
+		#end
+	}
+
+	inline public static function flatMap<TIn, TOut>(arr : Array<TIn>, callback : TIn -> Array<TOut>) : Array<TOut>
+		return flatten(arr.map(callback));
+
+	#if js inline #end
+	public static function flatten<T>(arr : Array<Array<T>>) {
+		#if js
+			return untyped __js__('Array.prototype.concat.apply')([], arr);
+		#else
+			return reduce(arr, function(acc : Array<T>, item) return acc.concat(item), []);
+		#end
+	}
+
+	inline public static function reduce<TItem, TAcc>(arr : Array<TItem>, callback : TAcc -> TItem -> TAcc, initial : TAcc) : TAcc {
+		#if js
+			return untyped arr.reduce(callback, initial);
+		#else
+			return Iterables.reduce(arr, callback, initial);
+		#end
+	}
+
+	inline public static function reducei<TItem, TAcc>(arr : Array<TItem>, callback : TAcc -> TItem -> Int -> TAcc, initial : TAcc) : TAcc {
+		#if js
+			return untyped arr.reduce(callback, initial);
+		#else
+			return Iterable.reducei(arr, callback, initial);
+		#end
 	}
 
 	public static function order<T>(arr : Array<T>, sort : T -> T -> Int)
@@ -59,4 +92,7 @@ class Arrays
 		n.sort(sort);
 		return n;
 	}
+
+	inline public static function isEmpty<T>(arr : Array<T>) : Bool
+		return arr.length == 0;
 }

@@ -7,7 +7,10 @@ package thx.core;
 
 class Types
 {
-
+	public static inline function isAnonymousObject(v : Dynamic) : Bool
+	{
+		return Reflect.isObject(v) && null == Type.getClass(v);
+	}
 }
 
 class ClassTypes
