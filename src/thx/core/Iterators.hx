@@ -50,4 +50,11 @@ class Iterators
 
   inline public static function isEmpty<T>(it : Iterator<T>) : Bool
     return !it.hasNext();
+
+  public static function filter<TItem>(it : Iterator<TItem>, predicate : TItem -> Bool) : Array<TItem>
+    return reduce(it, function(acc : Array<TItem>, item) {
+        if(predicate(item))
+          acc.push(item);
+        return acc;
+      }, []);
 }

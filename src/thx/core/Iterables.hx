@@ -27,4 +27,7 @@ class Iterables
 
   public inline static function isEmpty<T>(it : Iterable<T>) : Bool
     return Iterators.isEmpty(it.iterator());
+
+  public inline static function filter<T>(it : Iterable<T>, predicate : T -> Bool) : Array<T>
+    return Iterators.filter(it.iterator(), predicate);
 }
