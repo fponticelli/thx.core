@@ -9,6 +9,12 @@ class Options {
 			case Some(v) : v;
 		}
 
+	public static function toBool<T>(option : Option<T>) : Bool
+		return switch option {
+			case None: false;
+			case Some(_) : true;
+		}
+
 	public static function toOption<T>(value : T) : Option<T>
 		return null == value ? None : Some(value);
 
