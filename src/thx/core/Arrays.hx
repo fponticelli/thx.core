@@ -5,8 +5,19 @@
 
 package thx.core;
 
+import thx.core.Functions;
+
 class Arrays
 {
+	public static function same<T>(a : Array<T>, b : Array<T>, ?eq : T -> T -> Bool) {
+		if(a == null || b == null || a.length != b.length) return false;
+		if(null == eq) eq = Function.equality;
+		for(i in 0...a.length)
+			if(!eq(a[i], b[i]))
+				return false;
+		return true;
+	}
+
 	public static function cross<T>(a : Array<T>, b : Array<T>)
 	{
 		var r = [];
@@ -95,4 +106,15 @@ class Arrays
 
 	inline public static function isEmpty<T>(arr : Array<T>) : Bool
 		return arr.length == 0;
+
+	public static function contains<T>(arr : Array<T>, element : T, ?eq : T -> T -> Bool) : Bool {
+		if(null == eq) {
+			return arr.indexOf(element) >= 0;
+		} else {
+			for(i in 0...arr.length)
+				if(eq(arr[i], element))
+					return true;
+			return false;
+		}
+	}
 }

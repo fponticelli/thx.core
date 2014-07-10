@@ -25,3 +25,7 @@ class F1 {
 			fb(v);
 		}
 }
+
+class Function {
+	public static function equality<T>(a : T, b : T) return a == b;
+}
