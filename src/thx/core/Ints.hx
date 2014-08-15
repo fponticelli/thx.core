@@ -5,8 +5,7 @@ package thx.core;
  * @author Franco Ponticelli
  */
 
-class Ints
-{
+class Ints {
 	public static inline function clamp(v : Int, min : Int, max : Int) : Int
 		return v < min ? min : (v > max ? max : v);
 
@@ -31,8 +30,7 @@ class Ints
 		return a - b;
 
 	public static function range(start : Int, ?stop : Int, step = 1) : Array<Int> {
-		if (null == stop)
-		{
+		if (null == stop) {
 			stop = start;
 			start = 0;
 		}

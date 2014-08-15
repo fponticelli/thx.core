@@ -5,31 +5,22 @@
 
 package thx.core;
 
-class Types
-{
+class Types {
 	public static inline function isAnonymousObject(v : Dynamic) : Bool
-	{
 		return Reflect.isObject(v) && null == Type.getClass(v);
-	}
 }
 
-class ClassTypes
-{
+class ClassTypes {
 	public inline static function toString(cls : Class<Dynamic>)
 		return Type.getClassName(cls);
 
 	static public #if !php inline #end function as<T1, T2>(value : T1, type : Class<T2>) : Null<T2>
-	{
 		return (Std.is(value, type) ? cast value : null);
-	}
 }
 
-class ValueTypes
-{
-	public static function toString(type : Type.ValueType)
-	{
-		return switch(type)
-		{
+class ValueTypes {
+	public static function toString(type : Type.ValueType) {
+		return switch type {
 			case TInt:      "Int";
 			case TFloat:    "Float";
 			case TBool:     "Bool";
@@ -41,10 +32,8 @@ class ValueTypes
 		}
 	}
 
-	public static function typeInheritance(type : Type.ValueType)
-	{
-		return switch(type)
-		{
+	public static function typeInheritance(type : Type.ValueType) {
+		return switch type {
 			case TInt:      ["Int"];
 			case TFloat:    ["Float"];
 			case TBool:     ["Bool"];
@@ -52,8 +41,7 @@ class ValueTypes
 			case TFunction: ["Function"];
 			case TClass(c):
 				var classes = [];
-				while (null != c)
-				{
+				while (null != c) {
 					classes.push(c);
 					c = Type.getSuperClass(c);
 				}

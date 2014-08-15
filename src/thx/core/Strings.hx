@@ -2,16 +2,14 @@ package thx.core;
 
 using StringTools;
 
-class Strings
-{
+class Strings {
 	static var _reSplitWC = ~/(\r\n|\n\r|\n|\r)/g;
 	static var _reReduceWS = ~/\s+/;
 #if !php
 	static var _reStripTags = ~/(<[a-z]+[^>\/]*\/?>|<\/[a-z]+>)/i;
 #end
 // TODO, test me
-	public static function upTo(value : String, searchFor : String)
-	{
+	public static function upTo(value : String, searchFor : String) {
 		var pos = value.indexOf(searchFor);
 		if (pos < 0)
 			return value;
@@ -20,8 +18,7 @@ class Strings
 	}
 
 	// TODO, test me
-	public static function startFrom(value : String, searchFor : String)
-	{
+	public static function startFrom(value : String, searchFor : String) {
 		var pos = value.indexOf(searchFor);
 		if (pos < 0)
 			return value;
@@ -30,14 +27,12 @@ class Strings
 	}
 
 	// TODO, test me
-	public static function rtrim(value : String, charlist : String) : String
-	{
+	public static function rtrim(value : String, charlist : String) : String {
 #if php
 		return untyped __call__("rtrim", value, charlist);
 #else
 		var len = value.length;
-		while (len > 0)
-		{
+		while (len > 0) {
 			var c = value.substr(len - 1, 1);
 			if (charlist.indexOf(c) < 0)
 				break;
@@ -48,14 +43,12 @@ class Strings
 	}
 
 	// TODO, test me
-	public static function ltrim(value : String, charlist : String) : String
-	{
+	public static function ltrim(value : String, charlist : String) : String {
 #if php
 		return untyped __call__("ltrim", value, charlist);
 #else
 		var start = 0;
-		while (start < value.length)
-		{
+		while (start < value.length) {
 			var c = value.substr(start, 1);
 			if (charlist.indexOf(c) < 0)
 				break;
@@ -65,8 +58,7 @@ class Strings
 #end
 	}
 
-	public static inline function trim(value : String, charlist : String) : String
-	{
+	public static inline function trim(value : String, charlist : String) : String {
 #if php
 		return untyped __call__("trim", value, charlist);
 #else
@@ -76,47 +68,33 @@ class Strings
 
 	static var _reCollapse = ~/\s+/g;
 	public static function collapse(value : String)
-	{
 		return _reCollapse.replace(StringTools.trim(value), " ");
-	}
 
 	public static inline function ucfirst(value : String) : String
-	{
 		return (value == null ? null : value.charAt(0).toUpperCase() + value.substr(1));
-	}
 
 	public static inline function lcfirst(value : String) : String
-	{
 		return (value == null ? null : value.charAt(0).toLowerCase() + value.substr(1));
-	}
 
 	public static function empty(value : String)
-	{
 		return value == null || value == '';
-	}
 
 	public static inline function isAlphaNum(value : String) : Bool
-	{
 #if php
 		return untyped __call__("ctype_alnum", value);
 #else
 		return (value == null ? false : __alphaNumPattern.match(value));
 #end
-	}
 
 	public static inline function digitsOnly(value : String) : Bool
-	{
 #if php
 		return untyped __call__("ctype_digit", value);
 #else
 		return (value == null ? false : __digitsPattern.match(value));
 #end
-	}
 
 	public static function ucwords(value : String) : String
-	{
 		return __ucwordsPattern.map(ucfirst(value), __upperMatch);
-	}
 
 	/**
 	 * Like ucwords but uses only white spaces as boundaries
@@ -124,18 +102,14 @@ class Strings
 	 * @return
 	 */
 	public static function ucwordsws(value : String) : String
-	{
 #if php
 		return untyped __call__("ucwords", value);
 #else
 		return __ucwordswsPattern.map(ucfirst(value), __upperMatch);
 #end
-	}
 
 	static function __upperMatch(re : EReg)
-	{
 		return re.matched(0).toUpperCase();
-	}
 	static var __ucwordsPattern = new EReg('[^a-zA-Z]([a-z])', 'g');
 #if !php
 	static var __ucwordswsPattern = new EReg('\\s[a-z]', 'g');
@@ -148,25 +122,18 @@ class Strings
 	*  More than one UC in sequence is left untouched.
 	**/
 	public static function humanize(s : String)
-	{
 		return underscore(s).replace('_', ' ');
-	}
 
 	// TO TEST
 	public static function capitalize(s : String)
-	{
 		return s.substr(0, 1).toUpperCase() + s.substr(1);
-	}
 
 	// TO TEST
 	public static function succ(s : String)
-	{
 		return s.substr(0, -1) + String.fromCharCode(s.substr(-1).charCodeAt(0)+1);
-	}
 
 	// TO TEST
-	public static function underscore(s : String)
-	{
+	public static function underscore(s : String) {
 		s = (~/::/g).replace(s, '/');
 		s =	(~/([A-Z]+)([A-Z][a-z])/g).replace(s, '$1_$2');
 		s = (~/([a-z\d])([A-Z])/g).replace(s, '$1_$2');
@@ -175,20 +142,16 @@ class Strings
 	}
 
 	public static function dasherize(s : String)
-	{
 		return s.replace('_', '-');
-	}
 
-	public static function repeat(s : String, times : Int)
-	{
+	public static function repeat(s : String, times : Int) {
 		var b = [];
 		for(i in 0...times)
 			b.push(s);
 		return b.join('');
 	}
 
-	public static function wrapColumns(s : String, columns = 78, indent = "", newline = "\n")
-	{
+	public static function wrapColumns(s : String, columns = 78, indent = "", newline = "\n") {
 		var parts = _reSplitWC.split(s);
 		var result = [];
 		for(part in parts)
@@ -198,28 +161,23 @@ class Strings
 		return result.join(newline);
 	}
 
-	static function _wrapColumns(s : String, columns : Int, indent : String, newline : String)
-	{
+	static function _wrapColumns(s : String, columns : Int, indent : String, newline : String) {
 		var parts = [];
 		var pos = 0;
 		var len = s.length;
 		var ilen = indent.length;
 		columns -= ilen;
-		while(true)
-		{
-			if(pos + columns >= len - ilen)
-			{
+		while(true) {
+			if(pos + columns >= len - ilen) {
 				parts.push(s.substr(pos));
 				break;
 			}
 
 			var i = 0;
-			while(!StringTools.isSpace(s, pos + columns - i) && i < columns)
-			{
+			while(!StringTools.isSpace(s, pos + columns - i) && i < columns) {
 				i++;
 			}
-			if(i == columns)
-			{
+			if(i == columns) {
 				// search ahead
 				i = 0;
 				while(!StringTools.isSpace(s, pos + columns + i) && pos + columns + i < len)
@@ -238,16 +196,13 @@ class Strings
 	}
 
 	public static function stripTags(s : String) : String
-	{
 #if php
 		return untyped __call__("strip_tags", s);
 #else
 		return _reStripTags.replace(s, "");
 #end
-	}
 
-	public static function ellipsis(s : String, maxlen = 20, symbol = "...")
-	{
+	public static function ellipsis(s : String, maxlen = 20, symbol = "...") {
 		if (s.length > maxlen)
 			return s.substr(0, symbol.length > maxlen - symbol.length ? symbol.length : maxlen - symbol.length) + symbol;
 		else

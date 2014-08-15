@@ -18,7 +18,7 @@ class Options {
 	public static function toOption<T>(value : T) : Option<T>
 		return null == value ? None : Some(value);
 
-	public static function equals<T>(a : Option<T>, b : Option<T>, ?eq : T -> T -> Bool) {
+	public static function equals<T>(a : Option<T>, b : Option<T>, ?eq : T -> T -> Bool)
 		return switch [a, b] {
 			case [None, None]: true;
 			case [Some(a), Some(b)]:
@@ -27,10 +27,8 @@ class Options {
 				eq(a,b);
 			case [_, _]:
 				false;
-		}
-	}
+		};
 
-	public static function equalsValue<T>(a : Option<T>, b : Null<T>, ?eq : T -> T -> Bool) {
+	public static function equalsValue<T>(a : Option<T>, b : Null<T>, ?eq : T -> T -> Bool)
 		return equals(a, toOption(b));
-	}
 }

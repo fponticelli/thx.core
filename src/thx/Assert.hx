@@ -153,8 +153,7 @@ class Assert {
 		return isTrue(_floatEquals(expected, value, approx), msg, pos);
 	}
 
-	static function _floatEquals(expected : Float, value : Float, ?approx : Float)
-	{
+	static function _floatEquals(expected : Float, value : Float, ?approx : Float) {
 		if (Math.isNaN(expected))
 			return Math.isNaN(value);
 		else if (Math.isNaN(value))
@@ -166,30 +165,30 @@ class Assert {
 		return Math.abs(value-expected) < approx;
 	}
 
-	static function getTypeName(v : Dynamic) {
-		switch(Type.typeof(v))
-		{
-			case TNull    : return "[null]";
-			case TInt     : return "Int";
-			case TFloat   : return "Float";
-			case TBool    : return "Bool";
-			case TFunction: return "function";
-			case TClass(c): return Type.getClassName(c);
-			case TEnum(e) : return Type.getEnumName(e);
-			case TObject  : return "Object";
-			case TUnknown : return "Unknown";
-		}
-	}
+	static function getTypeName(v : Dynamic)
+		return switch Type.typeof(v) {
+			case TNull    : "[null]";
+			case TInt     : "Int";
+			case TFloat   : "Float";
+			case TBool    : "Bool";
+			case TFunction: "function";
+			case TClass(c): Type.getClassName(c);
+			case TEnum(e) : Type.getEnumName(e);
+			case TObject  : "Object";
+			case TUnknown : "Unknown";
+		};
 
 	static function isIterable(v : Dynamic, isAnonym : Bool) {
 		var fields = isAnonym ? Reflect.fields(v) : Type.getInstanceFields(Type.getClass(v));
-		if(!Lambda.has(fields, "iterator")) return false;
+		if(!Lambda.has(fields, "iterator"))
+			return false;
 		return Reflect.isFunction(Reflect.field(v, "iterator"));
 	}
 
 	static function isIterator(v : Dynamic, isAnonym : Bool) {
 		var fields = isAnonym ? Reflect.fields(v) : Type.getInstanceFields(Type.getClass(v));
-		if(!Lambda.has(fields, "next") || !Lambda.has(fields, "hasNext")) return false;
+		if(!Lambda.has(fields, "next") || !Lambda.has(fields, "hasNext"))
+			return false;
 		return Reflect.isFunction(Reflect.field(v, "next")) && Reflect.isFunction(Reflect.field(v, "hasNext"));
 	}
 
@@ -201,11 +200,9 @@ class Assert {
 			status.error = "expected type " + texpected + " but it is " + tvalue + (status.path == '' ? '' : ' for field ' + status.path);
 			return false;
 		}
-		switch(Type.typeof(expected))
-		{
+		switch Type.typeof(expected) {
 			case TFloat:
-				if (!_floatEquals(expected, value))
-				{
+				if (!_floatEquals(expected, value)) {
 					status.error = "expected " + q(expected) + " but it is " + q(value) + (status.path == '' ? '' : ' for field '+status.path);
 					return false;
 				}
@@ -217,8 +214,7 @@ class Assert {
 				}
 				return true;
 			case TFunction:
-				if (!Reflect.compareMethods(expected, value))
-				{
+				if (!Reflect.compareMethods(expected, value)) {
 					status.error = "expected same function reference" + (status.path == '' ? '' : ' for field '+status.path);
 					return false;
 				}
@@ -226,15 +222,13 @@ class Assert {
 			case TClass(c):
 				var cexpected = Type.getClassName(c);
 				var cvalue = Type.getClassName(Type.getClass(value));
-				if (cexpected != cvalue)
-				{
+				if (cexpected != cvalue) {
 					status.error = "expected instance of " + q(cexpected) + " but it is " + q(cvalue) + (status.path == '' ? '' : ' for field '+status.path);
 					return false;
 				}
 
 				// string
-				if (Std.is(expected, String) && expected != value)
-				{
+				if (Std.is(expected, String) && expected != value) {
 					status.error = "expected '" + expected + "' but it is '" + value + "'";
 					return false;
 				}
@@ -365,26 +359,21 @@ class Assert {
 			case TEnum(e) :
 				var eexpected = Type.getEnumName(e);
 				var evalue = Type.getEnumName(Type.getEnum(value));
-				if (eexpected != evalue)
-				{
+				if (eexpected != evalue) {
 					status.error = "expected enumeration of " + q(eexpected) + " but it is " + q(evalue) + (status.path == '' ? '' : ' for field '+status.path);
 					return false;
 				}
-				if (status.recursive || status.path == '')
-				{
-					if (Type.enumIndex(expected) != Type.enumIndex(value))
-					{
+				if (status.recursive || status.path == '') {
+					if (Type.enumIndex(expected) != Type.enumIndex(value)) {
 						status.error = 'expected ' + q(Type.enumConstructor(expected)) + ' but is ' + q(Type.enumConstructor(value)) + (status.path == '' ? '' : ' for field '+status.path);
 						return false;
 					}
 					var eparams = Type.enumParameters(expected);
 					var vparams = Type.enumParameters(value);
 					var path = status.path;
-					for (i in 0...eparams.length)
-					{
+					for (i in 0...eparams.length) {
 						status.path = path == '' ? 'enum[' + i + ']' : path + '[' + i + ']';
-						if (!sameAs(eparams[i], vparams[i], status))
-						{
+						if (!sameAs(eparams[i], vparams[i], status)) {
 							status.error = "expected " + q(expected) + " but it is " + q(value) + (status.path == '' ? '' : ' for field ' + status.path);
 							return false;
 						}
@@ -411,8 +400,7 @@ class Assert {
 						if(!sameAs(e, v, status))
 							return false;
 					}
-					if(tfields.length > 0)
-					{
+					if(tfields.length > 0) {
 						status.error = "the tested object has extra field(s) (" + tfields.join(", ") + ") not included in the expected ones";
 						return false;
 					}
@@ -474,12 +462,10 @@ class Assert {
 	}
 
 	static function q(v : Dynamic)
-	{
-		if (Std.is(v, String))
-			return '"' + StringTools.replace(v, '"', '\\"') + '"';
+		return if (Std.is(v, String))
+			'"' + StringTools.replace(v, '"', '\\"') + '"';
 		else
-			return Std.string(v);
-	}
+			Std.string(v);
 
 	/**
 	* Check that value is an object with the same fields and values found in expected.
@@ -497,11 +483,10 @@ class Assert {
 	*/
 	public static function same(expected : Dynamic, value : Dynamic, ?recursive : Bool, ?msg : String, ?pos : PosInfos) {
 		var status = { recursive : null == recursive ? true : recursive, path : '', error : null };
-		if(sameAs(expected, value, status)) {
+		if(sameAs(expected, value, status))
 			Assert.isTrue(true, msg, pos);
-		} else {
+		else
 			Assert.fail(msg == null ? status.error : msg, pos);
-		}
 	}
 
 	/**
@@ -547,13 +532,11 @@ class Assert {
 	* @param pos: Code position where the Assert call has been executed. Don't fill it
 	* unless you know what you are doing.
 	*/
-	public static function allows<T>(possibilities : Array<T>, value : T, ?msg : String , ?pos : PosInfos) {
-		if(Lambda.has(possibilities, value)) {
+	public static function allows<T>(possibilities : Array<T>, value : T, ?msg : String , ?pos : PosInfos)
+		if(Lambda.has(possibilities, value))
 			isTrue(true, msg, pos);
-		} else {
+		else
 			fail(msg == null ? "value " + q(value) + " not found in the expected possibilities " + possibilities : msg, pos);
-		}
-	}
 	/**
 	* Checks that the test array contains the match parameter.
 	* @param match: The element that must be included in the tested array
@@ -562,13 +545,11 @@ class Assert {
 	* @param pos: Code position where the Assert call has been executed. Don't fill it
 	* unless you know what you are doing.
 	*/
-	public static function contains<T>(match : T, values : Array<T>, ?msg : String , ?pos : PosInfos) {
-		if(Lambda.has(values, match)) {
+	public static function contains<T>(match : T, values : Array<T>, ?msg : String , ?pos : PosInfos)
+		if(Lambda.has(values, match))
 			isTrue(true, msg, pos);
-		} else {
+		else
 			fail(msg == null ? "values " + q(values) + " do not contain "+match: msg, pos);
-		}
-	}
 
 	/**
 	* Checks that the test array does not contain the match parameter.
@@ -578,13 +559,11 @@ class Assert {
 	* @param pos: Code position where the Assert call has been executed. Don't fill it
 	* unless you know what you are doing.
 	*/
-	public static function notContains<T>(match : T, values : Array<T>, ?msg : String , ?pos : PosInfos) {
-		if(!Lambda.has(values, match)) {
+	public static function notContains<T>(match : T, values : Array<T>, ?msg : String , ?pos : PosInfos)
+		if(!Lambda.has(values, match))
 			isTrue(true, msg, pos);
-		} else {
+		else
 			fail(msg == null ? "values " + q(values) + " do contain "+match: msg, pos);
-		}
-	}
 
 	/**
 	 * Checks that the expected values is contained in value.
@@ -593,31 +572,24 @@ class Assert {
 	 * @param msg: An optional error message. If not passed a default one will be used
 	* @param pos: Code position where the Assert call has been executed. Don't fill it
 	 */
-	public static function stringContains(match : String, value : String, ?msg : String , ?pos : PosInfos) {
-		if (value != null && value.indexOf(match) >= 0) {
+	public static function stringContains(match : String, value : String, ?msg : String , ?pos : PosInfos)
+		if (value != null && value.indexOf(match) >= 0)
 			isTrue(true, msg, pos);
-		} else {
+		else
 			fail(msg == null ? "value " + q(value) + " does not contain " + q(match) : msg, pos);
-		}
-	}
 
 	public static function stringSequence(sequence : Array<String>, value : String, ?msg : String , ?pos : PosInfos) {
-		if (null == value)
-		{
+		if (null == value) {
 			fail(msg == null ? "null argument value" : msg, pos);
 			return;
 		}
 		var p = 0;
-		for (s in sequence)
-		{
+		for (s in sequence) {
 			var p2 = value.indexOf(s, p);
-			if (p2 < 0)
-			{
-				if (msg == null)
-				{
+			if (p2 < 0) {
+				if (msg == null) {
 					msg = "expected '" + s + "' after ";
-					if (p > 0)
-					{
+					if (p > 0) {
 						var cut = value.substr(0, p);
 						if (cut.length > 30)
 							cut = '...' + cut.substr( -27);
@@ -639,18 +611,16 @@ class Assert {
 	* @param pos: Code position where the Assert call has been executed. Don't fill it
 	* unless you know what you are doing.
 	*/
-	public static function fail(msg = "failure expected", ?pos : PosInfos) {
+	public static function fail(msg = "failure expected", ?pos : PosInfos)
 		isTrue(false, msg, pos);
-	}
 	/**
 	* Creates a warning message.
 	* @param msg: A mandatory message that justifies the warning.
 	* @param pos: Code position where the Assert call has been executed. Don't fill it
 	* unless you know what you are doing.
 	*/
-	public static function warn(msg) {
+	public static function warn(msg)
 		results.add(Warning(msg));
-	}
 
 	/**
 	* Creates an asynchronous context for test execution. Assertions should be included
@@ -663,9 +633,8 @@ class Assert {
 	* @param f: A function that contains other Assert tests
 	* @param timeout: Optional timeout value in milliseconds.
 	*/
-	public static dynamic function createAsync(?f : Void -> Void, ?timeout : Int) {
+	public static dynamic function createAsync(?f : Void -> Void, ?timeout : Int)
 		return function(){};
-	}
 	/**
 	* Creates an asynchronous context for test execution of an event like method.
 	* Assertions should be included in the passed function.
@@ -674,12 +643,10 @@ class Assert {
 	* @param f: A function that contains other Assert tests
 	* @param timeout: Optional timeout value in milliseconds.
 	*/
-	public static dynamic function createEvent<EventArg>(f : EventArg -> Void, ?timeout : Int) {
+	public static dynamic function createEvent<EventArg>(f : EventArg -> Void, ?timeout : Int)
 		return function(e){};
-	}
 
-	static function typeToString(t : Dynamic)
-	{
+	static function typeToString(t : Dynamic) {
 		try {
 			var _t = Type.getClass(t);
 			if (_t != null)
@@ -698,9 +665,7 @@ class Assert {
 	}
 
 	static function __init__() {
-		function posToString(pos : haxe.PosInfos) {
-			return pos;
-		}
+		function posToString(pos : haxe.PosInfos) return pos;
 		results = {
 			add : function(assertion : Assertion) {
 				switch assertion {

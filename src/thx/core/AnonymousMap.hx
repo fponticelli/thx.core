@@ -3,13 +3,10 @@ package thx.core;
 import Map;
 using thx.core.Iterators;
 
-class AnonymousMap<V> implements IMap<String, V>
-{
+class AnonymousMap<V> implements IMap<String, V> {
 	var o : Dynamic<V>;
 	public function new(o : Dynamic<V>)
-	{
 		this.o = o;
-	}
 
 	public function get(k : String) : Null<V>
 		return Reflect.field(o, k);

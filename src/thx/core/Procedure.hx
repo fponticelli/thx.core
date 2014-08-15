@@ -5,8 +5,7 @@
 
 package thx.core;
 
-abstract ProcedureDef<T>(T)
-{
+abstract ProcedureDef<T>(T) {
 	inline function new(fun : T)
 		this = fun;
 
@@ -40,8 +39,7 @@ abstract ProcedureDef<T>(T)
 	}
 }
 
-abstract Procedure<T>({ fun : T, arity : Int })
-{
+abstract Procedure<T>({ fun : T, arity : Int }) {
 	public inline function new(fun : ProcedureDef<T>, arity : Int)
 		this = { fun : fun.getFunction(), arity : arity };
 
@@ -62,43 +60,37 @@ abstract Procedure<T>({ fun : T, arity : Int })
 
 	@:from static public inline function fromArity5<T1, T2, T3, T4, T5>(fun : T1 -> T2 -> T3 -> T4 -> T5 -> Void)
 		return new Procedure(fun, 5);
-	@:to public inline function toArity0() : Void -> Void
-	{
+	@:to public inline function toArity0() : Void -> Void {
 		if(this.arity != 0)
 			throw 'this procedure has arity ${this.arity} but you are trying to use it with arity 0';
 		return cast this.fun;
 	}
 
-	@:to public inline function toArity1<T1>() : T1 -> Void
-	{
+	@:to public inline function toArity1<T1>() : T1 -> Void {
 		if(this.arity != 1)
 			throw 'this procedure has arity ${this.arity} but you are trying to use it with arity 1';
 		return cast this.fun;
 	}
 
-	@:to public inline function toArity2<T1, T2>() : T1 -> T2 -> Void
-	{
+	@:to public inline function toArity2<T1, T2>() : T1 -> T2 -> Void {
 		if(this.arity != 2)
 			throw 'this procedure has arity ${this.arity} but you are trying to use it with arity 2';
 		return cast this.fun;
 	}
 
-	@:to public inline function toArity3<T1, T2, T3>() : T1 -> T2 -> T3 -> Void
-	{
+	@:to public inline function toArity3<T1, T2, T3>() : T1 -> T2 -> T3 -> Void {
 		if(this.arity != 3)
 			throw 'this procedure has arity ${this.arity} but you are trying to use it with arity 3';
 		return cast this.fun;
 	}
 
-	@:to public inline function toArity4<T1, T2, T3, T4>() : T1 -> T2 -> T3 -> T4 -> Void
-	{
+	@:to public inline function toArity4<T1, T2, T3, T4>() : T1 -> T2 -> T3 -> T4 -> Void {
 		if(this.arity != 4)
 			throw 'this procedure has arity ${this.arity} but you are trying to use it with arity 4';
 		return cast this.fun;
 	}
 
-	@:to public inline function toArity5<T1, T2, T3, T4, T5>() : T1 -> T2 -> T3 -> T4 -> T5 -> Void
-	{
+	@:to public inline function toArity5<T1, T2, T3, T4, T5>() : T1 -> T2 -> T3 -> T4 -> T5 -> Void {
 		if(this.arity != 5)
 			throw 'this procedure has arity ${this.arity} but you are trying to use it with arity 5';
 		return cast this.fun;
@@ -110,15 +102,12 @@ abstract Procedure<T>({ fun : T, arity : Int })
 	public inline function getFunction() : T
 		return this.fun;
 
-	public inline function apply(args : Array<Dynamic>)
-	{
+	public inline function apply(args : Array<Dynamic>) {
 		if (args.length != this.arity)
 			throw 'invalid number of arguments, expected ${this.arity} but was ${args.length}';
 		Reflect.callMethod(null, this.fun, args);
 	}
 
 	@:op(A == B) public inline function equal(other : Procedure<T>)
-	{
 		return Reflect.compareMethods(this.fun, other.getFunction());
-	}
 }

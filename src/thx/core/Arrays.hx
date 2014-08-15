@@ -7,8 +7,7 @@ package thx.core;
 
 import thx.core.Functions;
 
-class Arrays
-{
+class Arrays {
 	public static function same<T>(a : Array<T>, b : Array<T>, ?eq : T -> T -> Bool) {
 		if(a == null || b == null || a.length != b.length) return false;
 		if(null == eq) eq = Function.equality;
@@ -18,8 +17,7 @@ class Arrays
 		return true;
 	}
 
-	public static function cross<T>(a : Array<T>, b : Array<T>)
-	{
+	public static function cross<T>(a : Array<T>, b : Array<T>) {
 		var r = [];
 		for (va in a)
 			for (vb in b)
@@ -27,19 +25,15 @@ class Arrays
 		return r;
 	}
 
-	public static function crossMulti<T>(a : Array<Array<T>>)
-	{
+	public static function crossMulti<T>(a : Array<Array<T>>) {
 		var acopy  = a.copy(),
 			result = acopy.shift().map(function(v) return [v]);
-		while (acopy.length > 0)
-		{
+		while (acopy.length > 0) {
 			var arr = acopy.shift(),
 				tresult = result;
 			result = [];
-			for (v in arr)
-			{
-				for (ar in tresult)
-				{
+			for (v in arr) {
+				for (ar in tresult) {
 					var t = ar.copy();
 					t.push(v);
 					result.push(t);
@@ -49,16 +43,14 @@ class Arrays
 		return result;
 	}
 
-	public static function pushIf<T>(arr : Array<T>, cond : Bool, value : T)
-	{
+	public static function pushIf<T>(arr : Array<T>, cond : Bool, value : T) {
 		if (cond)
 			arr.push(value);
 		return arr;
 	}
 
 	#if js inline #end
-	public static function mapi<TIn, TOut>(arr : Array<TIn>, handler : TIn -> Int -> TOut) : Array<TOut>
-	{
+	public static function mapi<TIn, TOut>(arr : Array<TIn>, handler : TIn -> Int -> TOut) : Array<TOut> {
 		#if js
 			return (cast arr : { map : (TIn -> Int -> TOut) -> Array<TOut> }).map(handler);
 		#else
@@ -97,8 +89,7 @@ class Arrays
 		#end
 	}
 
-	public static function order<T>(arr : Array<T>, sort : T -> T -> Int)
-	{
+	public static function order<T>(arr : Array<T>, sort : T -> T -> Int) {
 		var n = arr.copy();
 		n.sort(sort);
 		return n;
@@ -118,12 +109,10 @@ class Arrays
 		}
 	}
 
-	public static function shuffle<T>(a : Array<T>) : Array<T>
-	{
+	public static function shuffle<T>(a : Array<T>) : Array<T> {
 		var t = Ints.range(a.length),
 			arr = [];
-		while (t.length > 0)
-		{
+		while (t.length > 0) {
 			var pos = Std.random(t.length),
 				index = t[pos];
 			t.splice(pos, 1);

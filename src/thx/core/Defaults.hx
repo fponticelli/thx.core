@@ -4,10 +4,7 @@ package thx.core;
 import haxe.macro.Expr;
 #end
 
-class Defaults
-{
+class Defaults {
 	macro public static function def(expr : Expr, alt : Expr)
-	{
 		return macro null == $expr ? ($expr = $alt) : $expr;
-	}
 }

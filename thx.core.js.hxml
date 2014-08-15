@@ -1,6 +1,0 @@
--cp src
--cp test
--lib utest
--js bin/test/thx.core.js
--D haxe3
--main TestAll
