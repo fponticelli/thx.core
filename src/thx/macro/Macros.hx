@@ -10,5 +10,15 @@ class Macros {
 			case TInst(t, _): Context.getPosInfos(t.get().pos).file;
 			case _: throw 'invalid type $type';
 		};
+
+	public static function getFileInClassPath(file : String) : String {
+		for(path in Context.getClassPath()) {
+			var fullpath = path+file;
+			if(sys.FileSystem.exists(fullpath) && !sys.FileSystem.isDirectory(fullpath))
+				return fullpath;
+		}
+		return null;
+	}
+
 }
 #end
