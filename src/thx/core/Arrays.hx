@@ -49,6 +49,13 @@ class Arrays {
 		return arr;
 	}
 
+	public static function eachPair<TIn, TOut>(arr : Array<TIn>, handler : TIn -> TIn -> Bool) {
+		for(i in 0...arr.length)
+			for(j in i...arr.length)
+				if(!handler(arr[i], arr[j]))
+					return;
+	}
+
 	#if js inline #end
 	public static function mapi<TIn, TOut>(arr : Array<TIn>, handler : TIn -> Int -> TOut) : Array<TOut> {
 		#if js
@@ -65,7 +72,7 @@ class Arrays {
 		return flatten(arr.map(callback));
 
 	#if js inline #end
-	public static function flatten<T>(arr : Array<Array<T>>) {
+	public static function flatten<T>(arr : Array<Array<T>>) : Array<T> {
 		#if js
 			return untyped __js__('Array.prototype.concat.apply')([], arr);
 		#else

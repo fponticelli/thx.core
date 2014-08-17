@@ -16,6 +16,9 @@ class Iterators {
 		return acc;
 	}
 
+	public static function eachPair<TIn, TOut>(it : Iterator<TIn>, handler : TIn -> TIn -> Bool)
+		Arrays.eachPair(toArray(it), handler);
+
 	public static function toArray<T>(it : Iterator<T>) : Array<T> {
 		var items = [];
 		for(item in it)
