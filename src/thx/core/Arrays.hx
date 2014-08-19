@@ -92,7 +92,7 @@ class Arrays {
 		#if js
 			return untyped arr.reduce(callback, initial);
 		#else
-			return Iterable.reducei(arr, callback, initial);
+			return Iterables.reducei(arr, callback, initial);
 		#end
 	}
 
