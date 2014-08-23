@@ -6,6 +6,9 @@
 package thx.core;
 
 class Floats {
+	public static function interpolateBetween(t : Float, a : Float, b : Float)
+		return (b - a) * t + a;
+
 	public static inline function normalize(v : Float) : Float
 		return clamp(v, 0, 1);
 
