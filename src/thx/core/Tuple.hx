@@ -3,11 +3,11 @@ package thx.core;
 abstract Tuple1<T0>(T0) {
 	inline public function new(_0 : T0)
 		this = _0;
-	public var _0(get, never) : T);
+	public var _0(get, never) : T0;
 	inline function get__0() return this;
 
 	public inline function toString()
-		return 'Tuple2($_0,$_1)';
+		return 'Tuple1($_0)';
 }
 
 abstract Tuple2<T0, T1>({ _0 : T0, _1 : T1 }) {
