@@ -8,7 +8,7 @@ class Strings {
 #if !php
 	static var _reStripTags = ~/(<[a-z]+[^>\/]*\/?>|<\/[a-z]+>)/i;
 #end
-// TODO, test me
+	// TODO, test me
 	public static function upTo(value : String, searchFor : String) {
 		var pos = value.indexOf(searchFor);
 		if (pos < 0)

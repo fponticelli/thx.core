@@ -34,9 +34,7 @@ abstract ProcedureDef<T>(T) {
 		Reflect.callMethod(null, this, args);
 
 	@:op(A == B) public inline function equal(other : ProcedureDef<T>)
-	{
 		return Reflect.compareMethods(this, other.getFunction());
-	}
 }
 
 abstract Procedure<T>({ fun : T, arity : Int }) {

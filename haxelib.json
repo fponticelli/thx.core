@@ -1,0 +1,11 @@
+{
+  "name": "thx.core",
+  "url": "https://github.com/fponticelli/thx.core",
+  "license": "MIT",
+  "classPath": "src",
+  "tags": ["thx", "general", "cross"],
+  "description": "Generic multi-purpose library",
+  "releasenote": "first formal release",
+  "version": "0.5.0",
+  "contributors": ["fponticelli"]
+}

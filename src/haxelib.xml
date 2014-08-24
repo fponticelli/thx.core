@@ -1,7 +1,0 @@
-<project name="thx" url="http://github.com/fponticelli/thx.core/" license="BSD">
-    <user name="fponticelli"/>
-    <tag v="general"/>
-	<tag v="cross"/>
-    <description>General Core library</description>
-    <version name="0.0.1">alpha release</version>
-</project>

@@ -1,5 +1,3 @@
-/Run.bat
-/thx.core.hxproj
-/bin
-
+bin
 .DS_Store
+thx.core.sublime-project

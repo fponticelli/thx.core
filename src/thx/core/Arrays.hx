@@ -49,12 +49,11 @@ class Arrays {
 		return arr;
 	}
 
-	public static function eachPair<TIn, TOut>(arr : Array<TIn>, handler : TIn -> TIn -> Bool) {
+	public static function eachPair<TIn, TOut>(arr : Array<TIn>, handler : TIn -> TIn -> Bool)
 		for(i in 0...arr.length)
 			for(j in i...arr.length)
 				if(!handler(arr[i], arr[j]))
 					return;
-	}
 
 	#if js inline #end
 	public static function mapi<TIn, TOut>(arr : Array<TIn>, handler : TIn -> Int -> TOut) : Array<TOut> {
@@ -72,29 +71,26 @@ class Arrays {
 		return flatten(arr.map(callback));
 
 	#if js inline #end
-	public static function flatten<T>(arr : Array<Array<T>>) : Array<T> {
+	public static function flatten<T>(arr : Array<Array<T>>) : Array<T>
 		#if js
 			return untyped __js__('Array.prototype.concat.apply')([], arr);
 		#else
 			return reduce(arr, function(acc : Array<T>, item) return acc.concat(item), []);
 		#end
-	}
 
-	inline public static function reduce<TItem, TAcc>(arr : Array<TItem>, callback : TAcc -> TItem -> TAcc, initial : TAcc) : TAcc {
+	inline public static function reduce<TItem, TAcc>(arr : Array<TItem>, callback : TAcc -> TItem -> TAcc, initial : TAcc) : TAcc
 		#if js
 			return untyped arr.reduce(callback, initial);
 		#else
 			return Iterables.reduce(arr, callback, initial);
 		#end
-	}
 
-	inline public static function reducei<TItem, TAcc>(arr : Array<TItem>, callback : TAcc -> TItem -> Int -> TAcc, initial : TAcc) : TAcc {
+	inline public static function reducei<TItem, TAcc>(arr : Array<TItem>, callback : TAcc -> TItem -> Int -> TAcc, initial : TAcc) : TAcc
 		#if js
 			return untyped arr.reduce(callback, initial);
 		#else
 			return Iterables.reducei(arr, callback, initial);
 		#end
-	}
 
 	public static function order<T>(arr : Array<T>, sort : T -> T -> Int) {
 		var n = arr.copy();

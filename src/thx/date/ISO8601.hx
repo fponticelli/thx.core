@@ -3,8 +3,7 @@ package thx.date;
 import thx.core.Strings;
 
 class ISO8601 {
-	static var dateParsers = [
-		{
+	static var dateParsers = [{
 			pattern : ~/^\d{4}$/,
 			extract : function(e : EReg) return createDate(mInt(e, 0))
 		}, {
@@ -23,8 +22,7 @@ class ISO8601 {
 		// TODO add ordinal dates parsing (YYYY-DDD or YYYYDDD)
 	];
 	static var timeZoneSign = ~/([+-])/;
-	static var timeParsers = [
-		{
+	static var timeParsers = [{
 			pattern : ~/^(\d{2}):(\d{2}):(\d{2})$/,
 			extract : function(e : EReg) return createTime(mInt(e, 1), mInt(e, 2), mInt(e, 3))
 		}, {
@@ -64,7 +62,7 @@ class ISO8601 {
 	public static function parseTime(timeString : String) : ISO8601Time {
 		var time     = null,
 			timeZone = LocalTime,
-			millis   = null;
+			millis   = 0;
 
 		if(timeString.substr(-1) == "Z") {
 			timeString = timeString.substr(0, timeString.length-1);
