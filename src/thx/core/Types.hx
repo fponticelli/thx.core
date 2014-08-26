@@ -8,6 +8,9 @@ package thx.core;
 class Types {
 	public static inline function isAnonymousObject(v : Dynamic) : Bool
 		return Reflect.isObject(v) && null == Type.getClass(v);
+
+	public static function sameType<A, B>(a : A, b : B) : Bool
+		return ValueTypes.toString(Type.typeof(a)) == ValueTypes.toString(Type.typeof(b));
 }
 
 class ClassTypes {
@@ -19,6 +22,9 @@ class ClassTypes {
 }
 
 class ValueTypes {
+	public static function typeAsString<T>(value : T)
+		return toString(Type.typeof(value));
+
 	public static function toString(type : Type.ValueType) {
 		return switch type {
 			case TInt:      "Int";
