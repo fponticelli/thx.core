@@ -13,8 +13,8 @@ abstract Tuple0(Nil) {
 	@:to inline public function toNil()
 		return this;
 
-	@:from inline static public function nilToTuple()
-		return new Tuple0(nil);
+	@:from inline static public function nilToTuple(v : Nil)
+		return new Tuple0();
 }
 
 abstract Tuple1<T0>(T0) {
