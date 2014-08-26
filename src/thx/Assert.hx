@@ -3,7 +3,7 @@ package thx;
 import thx.core.Assertion;
 import haxe.io.Bytes;
 import haxe.PosInfos;
-import thx.Error;
+import thx.core.Error;
 
 /**
 * This class contains only static members used to perform assertations inside a test method.

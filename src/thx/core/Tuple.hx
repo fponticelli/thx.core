@@ -18,6 +18,9 @@ abstract Tuple2<T0, T1>({ _0 : T0, _1 : T1 }) {
 	inline function get__0() return this._0;
 	inline function get__1() return this._1;
 
+	inline public function toTuple3<T2>(v : T2)
+		return new Tuple3(_0, _1, v);
+
 	public inline function toString()
 		return 'Tuple2($_0,$_1)';
 }
@@ -31,6 +34,9 @@ abstract Tuple3<T0, T1, T2>({ _0 : T0, _1 : T1, _2 : T2 }) {
 	inline function get__0() return this._0;
 	inline function get__1() return this._1;
 	inline function get__2() return this._2;
+
+	inline public function toTuple4<T3>(v : T3)
+		return new Tuple4(_0, _1, _2, v);
 
 	public inline function toString()
 		return 'Tuple3($_0,$_1,$_2)';
@@ -47,6 +53,9 @@ abstract Tuple4<T0, T1, T2, T3>({ _0 : T0, _1 : T1, _2 : T2, _3 : T3 }) {
 	inline function get__1() return this._1;
 	inline function get__2() return this._2;
 	inline function get__3() return this._3;
+
+	inline public function toTuple5<T4>(v : T4)
+		return new Tuple5(_0, _1, _2, _3, v);
 
 	public inline function toString()
 		return 'Tuple4($_0,$_1,$_2,$_3)';
@@ -65,6 +74,9 @@ abstract Tuple5<T0, T1, T2, T3, T4>({ _0 : T0, _1 : T1, _2 : T2, _3 : T3, _4 : T
 	inline function get__2() return this._2;
 	inline function get__3() return this._3;
 	inline function get__4() return this._4;
+
+	inline public function toTuple6<T5>(v : T5)
+		return new Tuple6(_0, _1, _2, _3, _4, v);
 
 	public inline function toString()
 		return 'Tuple5($_0,$_1,$_2,$_3,$_4)';
