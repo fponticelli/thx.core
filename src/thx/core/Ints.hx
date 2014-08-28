@@ -1,9 +1,9 @@
-package thx.core;
-
 /**
  * ...
  * @author Franco Ponticelli
  */
+
+package thx.core;
 
 class Ints {
 	public static inline function clamp(v : Int, min : Int, max : Int) : Int

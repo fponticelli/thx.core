@@ -98,8 +98,6 @@ class Strings {
 
 	/**
 	 * Like ucwords but uses only white spaces as boundaries
-	 * @param	value
-	 * @return
 	 */
 	public static function ucwordsws(value : String) : String
 #if php
@@ -152,20 +150,18 @@ class Strings {
 	}
 
 	public static function wrapColumns(s : String, columns = 78, indent = "", newline = "\n") {
-		var parts = _reSplitWC.split(s);
-		var result = [];
+		var parts = _reSplitWC.split(s),
+			result = [];
 		for(part in parts)
-		{
 			result.push(_wrapColumns(StringTools.trim(_reReduceWS.replace(part, " ")), columns, indent, newline));
-		}
 		return result.join(newline);
 	}
 
 	static function _wrapColumns(s : String, columns : Int, indent : String, newline : String) {
-		var parts = [];
-		var pos = 0;
-		var len = s.length;
-		var ilen = indent.length;
+		var parts = [],
+			pos = 0,
+			len = s.length,
+			ilen = indent.length;
 		columns -= ilen;
 		while(true) {
 			if(pos + columns >= len - ilen) {
@@ -174,16 +170,13 @@ class Strings {
 			}
 
 			var i = 0;
-			while(!StringTools.isSpace(s, pos + columns - i) && i < columns) {
+			while(!StringTools.isSpace(s, pos + columns - i) && i < columns)
 				i++;
-			}
 			if(i == columns) {
 				// search ahead
 				i = 0;
 				while(!StringTools.isSpace(s, pos + columns + i) && pos + columns + i < len)
-				{
 					i++;
-				}
 				parts.push(s.substr(pos, columns + i));
 				pos += columns + i + 1;
 			} else {
