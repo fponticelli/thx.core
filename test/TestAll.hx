@@ -6,6 +6,7 @@ class TestAll {
 		runner.addCase(new thx.core.TestERegs());
 		runner.addCase(new thx.core.TestFloats());
 		runner.addCase(new thx.core.TestInts());
+		runner.addCase(new thx.core.TestMaps());
 		runner.addCase(new thx.core.TestProcedure());
 		runner.addCase(new thx.core.TestStrings());
 		runner.addCase(new thx.date.TestISO8601());
