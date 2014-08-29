@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross"],
   "description": "Generic multi-purpose library",
-  "releasenote": "fixed typos in Tuple",
-  "version": "0.5.1",
+  "releasenote": "added Maps.tuples and Timer class",
+  "version": "0.5.2",
   "contributors": ["fponticelli"]
 }
