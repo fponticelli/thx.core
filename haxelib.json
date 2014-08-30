@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross"],
   "description": "Generic multi-purpose library",
-  "releasenote": "added Maps.tuples, Timer class, and other minors",
-  "version": "0.5.2",
+  "releasenote": "* changed signature of thx.core.Maps.tuples * added Float.nearEqual/nearZero",
+  "version": "0.5.3",
   "contributors": ["fponticelli"]
 }

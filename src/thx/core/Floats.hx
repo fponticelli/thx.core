@@ -6,6 +6,9 @@
 package thx.core;
 
 class Floats {
+	public static inline var TOLERANCE : Float = 10e-5;
+	public static inline var EPSILON : Float = 10e-10;
+
 	public static function interpolateBetween(t : Float, a : Float, b : Float)
 		return (b - a) * t + a;
 
@@ -40,4 +43,10 @@ class Floats {
 			s = s.substr(1);
 		return Std.parseFloat(s);
 	}
+
+	inline public static function nearZero(n : Float)
+		return Math.abs(n) <= EPSILON;
+
+	inline public static function nearEqual(a : Float, b : Float)
+		return Math.abs(a -b) <= EPSILON;
 }
