@@ -5,12 +5,18 @@
 
 package thx.core;
 
-import thx.core.Functions;
+import thx.core.Functions.Function in F;
+
+#if macro
+import haxe.macro.Context;
+import haxe.macro.Expr;
+import haxe.macro.ExprTools;
+#end
 
 class Arrays {
 	public static function same<T>(a : Array<T>, b : Array<T>, ?eq : T -> T -> Bool) {
 		if(a == null || b == null || a.length != b.length) return false;
-		if(null == eq) eq = Function.equality;
+		if(null == eq) eq = F.equality;
 		for(i in 0...a.length)
 			if(!eq(a[i], b[i]))
 				return false;
@@ -122,5 +128,17 @@ class Arrays {
 			arr.push(a[index]);
 		}
 		return arr;
+	}
+
+	macro public static function mapField<T>(a : ExprOf<Array<T>>, field : Expr) {
+		var id = 'o.'+ExprTools.toString(field),
+				expr = Context.parse(id, field.pos);
+		return macro $e{a}.map(function(o) return ${expr});
+	}
+
+	macro public static function mapFieldi<T>(a : ExprOf<Array<T>>, field : Expr) {
+		var id = 'o.'+ExprTools.toString(field),
+				expr = Context.parse(id, field.pos);
+		return macro thx.core.Arrays.mapi($e{a}, function(o, i) return ${expr});
 	}
 }
