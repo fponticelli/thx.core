@@ -130,6 +130,14 @@ class Arrays {
 		return arr;
 	}
 
+	public static function extract<T>(a : Array<T>, f : T -> Bool) : T {
+		for(i in 0...a.length) {
+			if(f(a[i]))
+				return a.splice(i, 1)[0];
+		}
+		return null;
+	}
+
 	macro public static function mapField<T>(a : ExprOf<Array<T>>, field : Expr) {
 		var id = 'o.'+ExprTools.toString(field),
 				expr = Context.parse(id, field.pos);
