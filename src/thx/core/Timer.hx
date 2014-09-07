@@ -38,11 +38,11 @@ class Timer {
   }
 
 #else
-  public inline static function repeat(callback : Void -> Void, delay : Int) : TimerID
-    return untyped __js__('setInterval')(callback, delay);
+  public inline static function repeat(callback : Void -> Void, ms : Int) : TimerID
+    return untyped __js__('setInterval')(callback, ms);
 
-  public inline static function delay(callback : Void -> Void, delay : Int) : TimerID
-    return untyped __js__('setTimeout')(callback, delay);
+  public inline static function delay(callback : Void -> Void, ms : Int) : TimerID
+    return untyped __js__('setTimeout')(callback, ms);
 
   public inline static function immediate(callback : Void -> Void) : TimerID
     return untyped __js__('setImmediate')(callback);
