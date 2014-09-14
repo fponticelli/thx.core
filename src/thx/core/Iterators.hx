@@ -16,6 +16,21 @@ class Iterators {
 		return acc;
 	}
 
+	public static function first<T, TFind>(it : Iterator<T>, f : T -> Bool) {
+		for(item in it)
+			if(f(item))
+				return item;
+		return null;
+	}
+
+	public static function find<T, TFind>(it : Iterator<T>, f : T -> Bool) {
+		var out = [];
+		for(item in it)
+			if(f(item))
+				out.push(item);
+		return out;
+	}
+
 	public static function eachPair<TIn, TOut>(it : Iterator<TIn>, handler : TIn -> TIn -> Bool)
 		Arrays.eachPair(toArray(it), handler);
 

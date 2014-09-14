@@ -73,6 +73,21 @@ class Arrays {
 		#end
 	}
 
+	public static function first<T, TFind>(arr : Array<T>, f : T -> Bool) {
+		for(item in arr)
+			if(f(item))
+				return item;
+		return null;
+	}
+
+	public static function find<T, TFind>(arr : Array<T>, f : T -> Bool) {
+		var out = [];
+		for(item in arr)
+			if(f(item))
+				out.push(item);
+		return out;
+	}
+
 	inline public static function flatMap<TIn, TOut>(arr : Array<TIn>, callback : TIn -> Array<TOut>) : Array<TOut>
 		return flatten(arr.map(callback));
 

@@ -4,6 +4,15 @@ class Iterables {
 	public inline static function map<T, S>(it : Iterable<T>, f : T -> S) : Array<S>
 		return Iterators.map(it.iterator(), f);
 
+	public inline static function mapi<T, S>(it : Iterable<T>, f : T -> Int -> S) : Array<S>
+		return Iterators.mapi(it.iterator(), f);
+
+	public inline static function first<T, TFind>(it : Iterable<T>, f : T -> Bool)
+		return Iterators.first(it.iterator(), f);
+
+	public inline static function find<T, TFind>(it : Iterable<T>, f : T -> Bool)
+		return Iterators.find(it.iterator(), f);
+
 	public inline static function eachPair<TIn, TOut>(it : Iterable<TIn>, handler : TIn -> TIn -> Bool)
 		return Iterators.eachPair(it.iterator(), handler);
 
