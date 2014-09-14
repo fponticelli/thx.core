@@ -30,5 +30,5 @@ class Options {
 		};
 
 	public static function equalsValue<T>(a : Option<T>, b : Null<T>, ?eq : T -> T -> Bool)
-		return equals(a, toOption(b));
+		return equals(a, toOption(b), eq);
 }
