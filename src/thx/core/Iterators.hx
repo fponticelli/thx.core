@@ -51,4 +51,10 @@ class Iterators {
 					acc.push(item);
 				return acc;
 			}, []);
+
+	public static function isIterator(v : Dynamic) {
+		var fields = Types.isAnonymousObject(v) ? Reflect.fields(v) : Type.getInstanceFields(Type.getClass(v));
+		if(!Lambda.has(fields, "next") || !Lambda.has(fields, "hasNext")) return false;
+		return Reflect.isFunction(Reflect.field(v, "next")) && Reflect.isFunction(Reflect.field(v, "hasNext"));
+	}
 }

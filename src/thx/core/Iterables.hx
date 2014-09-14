@@ -24,4 +24,10 @@ class Iterables {
 
 	public inline static function filter<T>(it : Iterable<T>, predicate : T -> Bool) : Array<T>
 		return Iterators.filter(it.iterator(), predicate);
+
+	public static function isIterable(v : Dynamic) {
+		var fields = Types.isAnonymousObject(v) ? Reflect.fields(v) : Type.getInstanceFields(Type.getClass(v));
+		if(!Lambda.has(fields, "iterator")) return false;
+		return Reflect.isFunction(Reflect.field(v, "iterator"));
+	}
 }
