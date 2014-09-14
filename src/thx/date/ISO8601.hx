@@ -100,7 +100,7 @@ class ISO8601 {
 	public static function parseDateTime(dateString : String) : Date {
 		var parts = dateString.split("T"),
 				date	= parseDate(parts[0]);
-		if(parts.length == 0) // no time part
+		if(parts.length == 1) // no time part
 			return date;
 		else
 			return addTimeSpan(date, parseTime(parts[1]));
