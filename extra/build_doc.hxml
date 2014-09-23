@@ -1,0 +1,6 @@
+-cp ../src
+-js bin/fake.js
+--macro ImportAll.run()
+--no-output
+-D doc-gen
+-xml doc/xml/js.xml
