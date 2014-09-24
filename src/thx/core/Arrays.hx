@@ -1,6 +1,6 @@
 package thx.core;
 
-import thx.core.Functions.Function in F;
+import thx.core.Functions.Functions in F;
 
 #if macro
 import haxe.macro.Context;

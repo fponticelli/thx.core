@@ -12,7 +12,6 @@ class TestAll {
 		runner.addCase(new thx.core.TestProcedure());
 		runner.addCase(new thx.core.TestStrings());
 		runner.addCase(new thx.core.TestTimer());
-		runner.addCase(new thx.date.TestISO8601());
 	}
 
 	public static function main() {

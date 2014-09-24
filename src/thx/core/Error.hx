@@ -31,8 +31,6 @@ class Error #if js extends js.Error #end {
     this.pos = pos;
   }
 
-#if !js
   public function toString()
     return message + "from: " + pos.className + "." + pos.methodName + "() at " + pos.lineNumber + "\n\n" + CallStack.toString(stackItems);
-#end
 }
