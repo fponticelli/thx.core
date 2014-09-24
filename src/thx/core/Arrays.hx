@@ -9,7 +9,9 @@ import haxe.macro.ExprTools;
 #end
 
 /**
-Provides additional extension methods on top of the `Array` type.
+It provides additional extension methods on top of the `Array` type.
+
+Note that some of the examples imply `using thx.core.Arrays;`.
 **/
 class Arrays {
 /**
@@ -17,19 +19,19 @@ Returns `true` if `element` is found in the array.
 
 An optional equality function can be passed as the last argument. If not provided, strict equality is adopted.
 **/
-  public static function contains<T>(arr : Array<T>, element : T, ?eq : T -> T -> Bool) : Bool {
+  public static function contains<T>(array : Array<T>, element : T, ?eq : T -> T -> Bool) : Bool {
     if(null == eq) {
-      return arr.indexOf(element) >= 0;
+      return array.indexOf(element) >= 0;
     } else {
-      for(i in 0...arr.length)
-        if(eq(arr[i], element))
+      for(i in 0...array.length)
+        if(eq(array[i], element))
           return true;
       return false;
     }
   }
 
 /**
-Returns the cross product between two arrays.
+It returns the cross product between two arrays.
 
 ```haxe
 var r = [1,2,3].cross([4,5,6]);
@@ -44,14 +46,14 @@ trace(r); // [[1,4],[1,5],[1,6],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6]]
     return r;
   }
 
-  public static function crossMulti<T>(a : Array<Array<T>>) {
-    var acopy  = a.copy(),
+  public static function crossMulti<T>(array : Array<Array<T>>) {
+    var acopy  = array.copy(),
         result = acopy.shift().map(function(v) return [v]);
     while (acopy.length > 0) {
-      var arr = acopy.shift(),
+      var array = acopy.shift(),
           tresult = result;
       result = [];
-      for (v in arr) {
+      for (v in array) {
         for (ar in tresult) {
           var t = ar.copy();
           t.push(v);
@@ -62,14 +64,14 @@ trace(r); // [[1,4],[1,5],[1,6],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6]]
     return result;
   }
 
-  public static function eachPair<TIn, TOut>(arr : Array<TIn>, handler : TIn -> TIn -> Bool)
-    for(i in 0...arr.length)
-      for(j in i...arr.length)
-        if(!handler(arr[i], arr[j]))
+  public static function eachPair<TIn, TOut>(array : Array<TIn>, callback : TIn -> TIn -> Bool)
+    for(i in 0...array.length)
+      for(j in i...array.length)
+        if(!callback(array[i], array[j]))
           return;
 
 /**
-Compare the lengths and items of two given arrays and returns `true` if they match.
+It compares the lengths and elements of two given arrays and returns `true` if they match.
 
 An optional equality function can be passed as the last argument. If not provided, strict equality is adopted.
 **/
@@ -89,34 +91,57 @@ An optional equality function can be passed as the last argument. If not provide
     return null;
   }
 
-  public static function find<T, TFind>(arr : Array<T>, f : T -> Bool) {
+  public static function find<T, TFind>(array : Array<T>, f : T -> Bool) {
     var out = [];
-    for(item in arr)
+    for(item in array)
       if(f(item))
         out.push(item);
     return out;
   }
 
-  public static function first<T, TFind>(arr : Array<T>, f : T -> Bool) {
-    for(item in arr)
-      if(f(item))
+/**
+It returns the first element of the array that matches the provided predicate function.
+If none is found it returns null.
+**/
+  public static function first<T, TFind>(array : Array<T>, predicate : T -> Bool) : Null<T> {
+    for(item in array)
+      if(predicate(item))
         return item;
     return null;
   }
 
-  inline public static function flatMap<TIn, TOut>(arr : Array<TIn>, callback : TIn -> Array<TOut>) : Array<TOut>
-    return flatten(arr.map(callback));
+/**
+It traverses an array of elements. Each element is split using the `callback` function and a 'flattened' array is returned.
 
+```haxe
+var chars = ['Hello', 'World'].flatMap(function(s) return s.split(''));
+trace(chars); // ['H','e','l','l','o','W','o','r','l','d']
+```
+**/
+  inline public static function flatMap<TIn, TOut>(array : Array<TIn>, callback : TIn -> Array<TOut>) : Array<TOut>
+    return flatten(array.map(callback));
+
+/**
+It takes an array of arrays and 'flattens' it into an array.
+
+```haxe
+var arr = [[1,2,3],[4,5,6],[7,8,9]];
+trace(arr); // [1,2,3,4,5,6,7,8,9]
+```
+**/
   #if js inline #end
-  public static function flatten<T>(arr : Array<Array<T>>) : Array<T>
+  public static function flatten<T>(array : Array<Array<T>>) : Array<T>
     #if js
-      return untyped __js__('Array.prototype.concat.apply')([], arr);
+      return untyped __js__('Array.prototype.concat.apply')([], array);
     #else
-      return reduce(arr, function(acc : Array<T>, item) return acc.concat(item), []);
+      return reduce(array, function(acc : Array<T>, item) return acc.concat(item), []);
     #end
 
-  inline public static function isEmpty<T>(arr : Array<T>) : Bool
-    return arr.length == 0;
+/**
+It returns `true` if the array contains zero elements.
+**/
+  inline public static function isEmpty<T>(array : Array<T>) : Bool
+    return array.length == 0;
 
   macro public static function mapField<T>(a : ExprOf<Array<T>>, field : Expr) {
     var id = 'o.'+ExprTools.toString(field),
@@ -130,53 +155,65 @@ An optional equality function can be passed as the last argument. If not provide
     return macro thx.core.Arrays.mapi($e{a}, function(o, i) return ${expr});
   }
 
+/**
+Same as `Array.map()` but it adds a second argument to the `callback` function with the current index value.
+**/
   #if js inline #end
-  public static function mapi<TIn, TOut>(arr : Array<TIn>, handler : TIn -> Int -> TOut) : Array<TOut> {
+  public static function mapi<TIn, TOut>(array : Array<TIn>, callback : TIn -> Int -> TOut) : Array<TOut> {
     #if js
-      return (cast arr : { map : (TIn -> Int -> TOut) -> Array<TOut> }).map(handler);
+      return (cast array : { map : (TIn -> Int -> TOut) -> Array<TOut> }).map(callback);
     #else
       var r = [];
-      for(i in 0...arr.length)
-        r.push(handler(arr[i], i));
+      for(i in 0...array.length)
+        r.push(callback(array[i], i));
       return r;
     #end
   }
 
-  public static function order<T>(arr : Array<T>, sort : T -> T -> Int) {
-    var n = arr.copy();
+/**
+It works the same as `Array.sort()` but returns a sorted copy of the original array.
+**/
+  public static function order<T>(array : Array<T>, sort : T -> T -> Int) {
+    var n = array.copy();
     n.sort(sort);
     return n;
   }
 
-  public static function pushIf<T>(arr : Array<T>, cond : Bool, value : T) {
-    if (cond)
-      arr.push(value);
-    return arr;
+/**
+It pushes `value` onto the array if `condition` is true. Also returns the array for easy method chaining.
+**/
+  public static function pushIf<T>(array : Array<T>, condition : Bool, value : T) {
+    if (condition)
+      array.push(value);
+    return array;
   }
 
-  inline public static function reduce<TItem, TAcc>(arr : Array<TItem>, callback : TAcc -> TItem -> TAcc, initial : TAcc) : TAcc
+  inline public static function reduce<TItem, TAcc>(array : Array<TItem>, callback : TAcc -> TItem -> TAcc, initial : TAcc) : TAcc
     #if js
-      return untyped arr.reduce(callback, initial);
+      return untyped array.reduce(callback, initial);
     #else
-      return Iterables.reduce(arr, callback, initial);
+      return Iterables.reduce(array, callback, initial);
     #end
 
-  inline public static function reducei<TItem, TAcc>(arr : Array<TItem>, callback : TAcc -> TItem -> Int -> TAcc, initial : TAcc) : TAcc
+  inline public static function reducei<TItem, TAcc>(array : Array<TItem>, callback : TAcc -> TItem -> Int -> TAcc, initial : TAcc) : TAcc
     #if js
-      return untyped arr.reduce(callback, initial);
+      return untyped array.reduce(callback, initial);
     #else
-      return Iterables.reducei(arr, callback, initial);
+      return Iterables.reducei(array, callback, initial);
     #end
 
+/**
+It returns a copy of the array with its elements randomly changed in position.
+**/
   public static function shuffle<T>(a : Array<T>) : Array<T> {
     var t = Ints.range(a.length),
-        arr = [];
+        array = [];
     while (t.length > 0) {
       var pos = Std.random(t.length),
         index = t[pos];
       t.splice(pos, 1);
-      arr.push(a[index]);
+      array.push(a[index]);
     }
-    return arr;
+    return array;
   }
 }
