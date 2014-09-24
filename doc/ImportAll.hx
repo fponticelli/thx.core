@@ -1,6 +1,5 @@
 import thx.core.AnonymousMap;
 import thx.core.Arrays;
-import thx.core.Assertion;
 import thx.core.Defaults;
 import thx.core.Dynamics;
 import thx.core.ERegs;
@@ -23,7 +22,5 @@ import thx.core.Timer;
 import thx.core.Tuple;
 import thx.core.Types;
 import thx.core.UUID;
-import thx.date.ISO8601;
 import thx.macro.Macros;
 import thx.macro.MacroTypes;
-import thx.Assert;

@@ -20,7 +20,7 @@ class Options {
   public static function flatMap<T, TOut>(option : Option<T>, callback : T -> Array<TOut>) : Array<TOut>
     return switch option {
       case None: [];
-      case Some(v): [callback(v)];
+      case Some(v): callback(v);
     };
 
   public static function map<T, TOut>(option : Option<T>, callback : T -> TOut) : Option<TOut>
