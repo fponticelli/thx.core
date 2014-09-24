@@ -143,12 +143,43 @@ It returns `true` if the array contains zero elements.
   inline public static function isEmpty<T>(array : Array<T>) : Bool
     return array.length == 0;
 
+/**
+In other libraries it is usually referred as `pluck()`. The method works like a normal `Array.map()`
+but instead of passing a function that receives an item, you can pass an expression that defines
+how to access to a member of the item itself.
+
+The following two examples are equivalent:
+
+```
+var r = ['a','b','c'].mapField(toUppercase());
+trace(r); // ['A','B','C']
+```
+
+Alternative using traditional `map`.
+
+```
+var r = ['a','b','c'].map(function(o) return o.toUppercase());
+trace(r); // ['A','B','C']
+```
+
+You can use `mapField` on any kind of field including properties and methods and you can even pass arguments
+to such functions.
+
+The method is a macro method that guarantees that the correct types and identifiers are used.
+**/
   macro public static function mapField<T>(a : ExprOf<Array<T>>, field : Expr) {
     var id = 'o.'+ExprTools.toString(field),
         expr = Context.parse(id, field.pos);
     return macro $e{a}.map(function(o) return ${expr});
   }
 
+/**
+Like `mapField` but with an extra argument `i` that can be used to infer the index of the iteration.
+
+```haxe
+var r = arr.mapFieldi(increment(i)); // where increment() is a method of the elements in the array
+```
+**/
   macro public static function mapFieldi<T>(a : ExprOf<Array<T>>, field : Expr) {
     var id = 'o.'+ExprTools.toString(field),
         expr = Context.parse(id, field.pos);
