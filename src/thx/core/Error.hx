@@ -9,11 +9,13 @@ class Error #if js extends js.Error #end {
       return cast err;
     return new Error(""+err, null, pos);
   }
+
 #if !js
   public var message(default, null) : String;
 #end
-  public var stackItems(default, null) : Array<StackItem>;
   public var pos(default, null) : PosInfos;
+  public var stackItems(default, null) : Array<StackItem>;
+
   public function new(message : String, ?stack : Array<StackItem>, ?pos : PosInfos) {
 #if js
     super(message);
