@@ -6,16 +6,7 @@ import haxe.PosInfos;
 import thx.core.Error;
 
 /**
-* This class contains only static members used to perform assertations inside a test method.
-* It's use is straight forward:
-* <pre>
-* public function testObvious() {
-*   Assert.equals(1, 0); // fails
-*   Assert.isFalse(1 == 1, "guess what?"); // fails and returns the passed message
-*   Assert.isTrue(true); // successfull
-* }
-* </pre>
-*/
+**/
 class Assert {
   /**
   * A stack of results for the current testing workflow. It is used internally

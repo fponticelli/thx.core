@@ -1,0 +1,45 @@
+-cp ../src
+--no-output
+-D doc-gen
+-D display
+ImportAll
+
+--each
+-xml xml/js.xml
+-js _
+
+--next
+-xml xml/swf.xml
+-swf-version 11.4
+-swf _
+
+--next
+-xml xml/neko.xml
+-neko _
+
+--next
+-xml xml/php.xml
+-php _
+
+--next
+-xml xml/cpp.xml
+-cpp _
+-D xmldoc
+
+--next
+-xml xml/java.xml
+-java _
+-D xmldoc
+
+--next
+-xml xml/cs.xml
+-cs _
+-D xmldoc
+
+#--next
+#-xml xml/python.xml
+#-python _
+#-D xmldoc
+
+#--next
+#-xml xml/cross.xml

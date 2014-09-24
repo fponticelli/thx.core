@@ -8,48 +8,53 @@ class Timer {
 #if !js
   static var timers = new Map<Int, haxe.Timer>();
   static var _id = 0;
-  public static function repeat(callback : Void -> Void, delay : Int) : TimerID {
+#end
+  public static function repeat(callback : Void -> Void, delay : Int) : Void -> Void {
+#if !js
     var id = _id++,
         timer = new T(delay);
     timer.run = callback;
     timers.set(id, timer);
-    return id;
+    return clear.bind(id);
+#else
+    return clear.bind(untyped __js__('setInterval')(callback, delay));
+#end
   }
 
-  public static function delay(callback : Void -> Void, delay : Int) : TimerID {
+  public static function delay(callback : Void -> Void, delay : Int) : Void -> Void {
+#if !js
     var id = _id++,
         timer = T.delay(function() {
           callback();
           clear(id);
         }, delay);
     timers.set(id, timer);
-    return id;
+    return clear.bind(id);
+#else
+    return clear.bind(untyped __js__('setTimeout')(callback, delay));
+#end
   }
 
-  public static function immediate(callback : Void -> Void) : TimerID
+  public static function immediate(callback : Void -> Void) : Void -> Void
+#if !js
     return delay(callback, 0);
+#else
+    return clear.bind(untyped __js__('setImmediate')(callback));
+#end
 
-  public static function clear(id : TimerID) : Void {
+  static #if js inline #end function clear(id : TimerID) : Void {
+#if !js
     var timer = timers.get(id);
     if(null != timer) {
       timers.remove(id);
       timer.stop();
     }
+#else
+    return untyped __js__('clearTimeout')(id);
+#end
   }
 
-#else
-  public inline static function repeat(callback : Void -> Void, ms : Int) : TimerID
-    return untyped __js__('setInterval')(callback, ms);
-
-  public inline static function delay(callback : Void -> Void, ms : Int) : TimerID
-    return untyped __js__('setTimeout')(callback, ms);
-
-  public inline static function immediate(callback : Void -> Void) : TimerID
-    return untyped __js__('setImmediate')(callback);
-
-  public inline static function clear(id : TimerID) : Void
-    return untyped __js__('clearTimeout')(id);
-
+#if js
   static function __init__() untyped {
     var scope : Dynamic = __js__('("undefined" !== typeof window && window) || ("undefined" !== typeof global && global) || this');
     if(!scope.setImmediate)
@@ -58,9 +63,4 @@ class Timer {
 #end
 }
 
-#if !js
-typedef TimerID = Int;
-#else
-extern
-class TimerID {}
-#end
+typedef TimerID = Dynamic;

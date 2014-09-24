@@ -22,13 +22,13 @@ class TestTimer {
         delay   = 100,
         start   = Date.now().getTime(),
         counter = 5,
-        id      = null;
-    id = Timer.repeat(function() {
+        cancel  = null;
+    cancel = Timer.repeat(function() {
       counter--;
       if(counter == 0) {
         var span = Date.now().getTime() - start;
         assertTime(500, span);
-        Timer.clear(id);
+        cancel();
         done();
       }
     }, delay);
@@ -48,14 +48,13 @@ class TestTimer {
   public function testCancelDelay() {
     var done  = Assert.createAsync(),
         delay = 100,
-        stop  = 50,
-        id    = null;
-    id = Timer.delay(function() {
+        stop  = 50;
+    var cancel = Timer.delay(function() {
       Assert.fail('should never reach here');
     }, delay);
 
     Timer.delay(function() {
-      Timer.clear(id);
+      cancel();
     }, stop);
 
     Timer.delay(function() {

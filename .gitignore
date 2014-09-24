@@ -1,4 +1,5 @@
 bin
-extra/doc/pages
+doc/pages
+doc/xml
 .DS_Store
 *.sublime-*

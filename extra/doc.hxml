@@ -1,4 +1,0 @@
--cmd haxe build_doc.hxml
--cmd rm -rf doc/pages
--cmd haxelib run dox -r / -o doc/pages -i doc/xml --title "thx.core"
--cmd static doc/pages

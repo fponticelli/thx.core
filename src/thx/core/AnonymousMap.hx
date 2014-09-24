@@ -1,26 +1,22 @@
-/**
- * @author Franco Ponticelli
- */
-
 package thx.core;
 
 import Map;
 using thx.core.Iterators;
 
 /**
-  IMap wrapper for anonymous objects. It allows to use anonymous objects
-  as sources for IMap without the need of explicitely extracting all of its values.
+`IMap` wrapper for anonymous objects. It allows to use anonymous objects
+as sources for IMap without the need of explicitely extracting all of its values.
 
-````
-  var map = new AnonymusMap({ a : "A", b : "B" });
-  trace(map.get("a"));
-````
+```haxe
+var map = new AnonymusMap({ a : "A", b : "B" });
+trace(map.get("a"));
+```
 
-  The API is exactly the same for `Map<TKey, TValue>`.
+The API is exactly the same for `Map<TKey, TValue>`.
 **/
 class AnonymousMap<V> implements IMap<String, V> {
-  var o : Dynamic<V>;
-  public function new(o : Dynamic<V>)
+  var o : {};
+  public function new(o : {})
     this.o = o;
 
   public function get(k : String) : Null<V>

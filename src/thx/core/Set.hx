@@ -1,12 +1,7 @@
-/**
- * ...
- * @author Franco Ponticelli
- */
-
 package thx.core;
 
 class Set<T> {
-  public static function ofArray<T>(arr : Array<T>) : Set<T> {
+  public static function arrayToSet<T>(arr : Array<T>) : Set<T> {
     var set = new Set();
     for (item in arr)
       set.add(item);
