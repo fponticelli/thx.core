@@ -9,29 +9,29 @@ class Timer {
   static var timers = new Map<Int, haxe.Timer>();
   static var _id = 0;
 #end
-  public static function repeat(callback : Void -> Void, delay : Int) : Void -> Void {
+  public static function repeat(callback : Void -> Void, delayms : Int) : Void -> Void {
 #if !js
     var id = _id++,
-        timer = new T(delay);
+        timer = new T(delayms);
     timer.run = callback;
     timers.set(id, timer);
     return clear.bind(id);
 #else
-    return clear.bind(untyped __js__('setInterval')(callback, delay));
+    return clear.bind(untyped __js__('setInterval')(callback, delayms));
 #end
   }
 
-  public static function delay(callback : Void -> Void, delay : Int) : Void -> Void {
+  public static function delay(callback : Void -> Void, delayms : Int) : Void -> Void {
 #if !js
     var id = _id++,
         timer = T.delay(function() {
           callback();
           clear(id);
-        }, delay);
+        }, delayms);
     timers.set(id, timer);
     return clear.bind(id);
 #else
-    return clear.bind(untyped __js__('setTimeout')(callback, delay));
+    return clear.bind(untyped __js__('setTimeout')(callback, delayms));
 #end
   }
 
@@ -42,7 +42,7 @@ class Timer {
     return clear.bind(untyped __js__('setImmediate')(callback));
 #end
 
-  static #if js inline #end function clear(id : TimerID) : Void {
+  static #if js inline #end function clear(id) : Void {
 #if !js
     var timer = timers.get(id);
     if(null != timer) {
@@ -62,5 +62,3 @@ class Timer {
   }
 #end
 }
-
-typedef TimerID = Dynamic;
