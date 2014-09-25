@@ -179,14 +179,14 @@ It works the same as `Array.sort()` but returns a sorted copy of the original ar
   }
 
 /**
-In other libraries it is usually referred as `pluck()`. The method works like a normal `Array.map()`
-but instead of passing a function that receives an item, you can pass an expression that defines
-how to access to a member of the item itself.
+The method works like a normal `Array.map()` but instead of passing a function that
+receives an item, you can pass an expression that defines how to access to a member
+of the item itself.
 
 The following two examples are equivalent:
 
 ```
-var r = ['a','b','c'].plunk(toUppercase());
+var r = ['a','b','c'].pluck(toUppercase());
 trace(r); // ['A','B','C']
 ```
 
@@ -197,25 +197,25 @@ var r = ['a','b','c'].map(function(o) return o.toUppercase());
 trace(r); // ['A','B','C']
 ```
 
-You can use `plunk` on any kind of field including properties and methods and you can even pass arguments
+You can use `pluck` on any kind of field including properties and methods and you can even pass arguments
 to such functions.
 
 The method is a macro method that guarantees that the correct types and identifiers are used.
 **/
-  macro public static function plunk<T>(a : ExprOf<Array<T>>, field : Expr) {
+  macro public static function pluck<T>(a : ExprOf<Array<T>>, field : Expr) {
     var id = 'o.'+ExprTools.toString(field),
         expr = Context.parse(id, field.pos);
     return macro $e{a}.map(function(o) return ${expr});
   }
 
 /**
-Like `plunk` but with an extra argument `i` that can be used to infer the index of the iteration.
+Like `pluck` but with an extra argument `i` that can be used to infer the index of the iteration.
 
 ```haxe
-var r = arr.plunki(increment(i)); // where increment() is a method of the elements in the array
+var r = arr.plucki(increment(i)); // where increment() is a method of the elements in the array
 ```
 **/
-  macro public static function plunki<T>(a : ExprOf<Array<T>>, field : Expr) {
+  macro public static function plucki<T>(a : ExprOf<Array<T>>, field : Expr) {
     var id = 'o.'+ExprTools.toString(field),
         expr = Context.parse(id, field.pos);
     return macro thx.core.Arrays.mapi($e{a}, function(o, i) return ${expr});
