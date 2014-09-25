@@ -202,8 +202,8 @@ to such functions.
 
 The method is a macro method that guarantees that the correct types and identifiers are used.
 **/
-  macro public static function pluck<T>(a : ExprOf<Array<T>>, field : Expr)
-    return macro $e{a}.map(function(_) return ${field});
+  macro public static function pluck<T>(a : ExprOf<Array<T>>, expr : Expr)
+    return macro $e{a}.map(function(_) return ${expr});
 
 /**
 Like `pluck` but with an extra argument `i` that can be used to infer the index of the iteration.
@@ -212,8 +212,8 @@ Like `pluck` but with an extra argument `i` that can be used to infer the index 
 var r = arr.plucki(_.increment(i)); // where increment() is a method of the elements in the array
 ```
 **/
-  macro public static function plucki<T>(a : ExprOf<Array<T>>, field : Expr)
-    return macro thx.core.Arrays.mapi($e{a}, function(_, i) return ${field});
+  macro public static function plucki<T>(a : ExprOf<Array<T>>, expr : Expr)
+    return macro thx.core.Arrays.mapi($e{a}, function(_, i) return ${expr});
 
 /**
 It pushes `value` onto the array if `condition` is true. Also returns the array for easy method chaining.
