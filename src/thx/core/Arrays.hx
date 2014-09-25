@@ -186,7 +186,7 @@ of the item itself.
 The following two examples are equivalent:
 
 ```
-var r = ['a','b','c'].pluck(toUppercase());
+var r = ['a','b','c'].pluck(_.toUppercase());
 trace(r); // ['A','B','C']
 ```
 
@@ -209,7 +209,7 @@ The method is a macro method that guarantees that the correct types and identifi
 Like `pluck` but with an extra argument `i` that can be used to infer the index of the iteration.
 
 ```haxe
-var r = arr.plucki(increment(i)); // where increment() is a method of the elements in the array
+var r = arr.plucki(_.increment(i)); // where increment() is a method of the elements in the array
 ```
 **/
   macro public static function plucki<T>(a : ExprOf<Array<T>>, field : Expr)
