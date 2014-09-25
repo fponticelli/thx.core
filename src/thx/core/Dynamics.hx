@@ -1,14 +1,20 @@
 package thx.core;
 
+/**
+`Dynamics` provides additional extension methods on any type.
+**/
 class Dynamics {
-  public static function same<T1, T2>(a : T1, b : T2) : Bool {
-    // quick check
-    if(untyped a == b)
-      return true;
-
+/**
+Structural and recursive equality.
+**/
+  public static function equals<T1, T2>(a : T1, b : T2) : Bool {
     // type check
     if(!Types.sameType(a, b))
       return false;
+
+    // quick check
+    if(untyped a == b)
+      return true;
 
     switch Type.typeof(a) {
       case TFloat, TNull, TInt, TBool:
@@ -32,7 +38,7 @@ class Dynamics {
           if (aa.length != ab.length)
             return false;
           for (i in 0...aa.length)
-            if (!same(aa[i], ab[i]))
+            if (!equals(aa[i], ab[i]))
               return false;
           return true;
         }
@@ -50,7 +56,7 @@ class Dynamics {
           if (ka.length != kb.length)
             return false;
           for (key in ka)
-            if (!hb.exists(key) || !same(ha.get(key), hb.get(key)))
+            if (!hb.exists(key) || !equals(ha.get(key), hb.get(key)))
               return false;
           return true;
         }
@@ -64,10 +70,15 @@ class Dynamics {
             return false;
 
           for (i in 0...va.length)
-            if (!same(va[i], vb[i]))
+            if (!equals(va[i], vb[i]))
               return false;
           return true;
         }
+
+        // custom class with equality method
+        var f;
+        if(Reflect.hasField(a, 'equals') && Reflect.isFunction(f = Reflect.field(a, 'equals')))
+          return Reflect.callMethod(a, f, [b]);
 
         // custom class
         var fields = Type.getInstanceFields(Type.getClass(a));
@@ -76,7 +87,7 @@ class Dynamics {
           if (Reflect.isFunction(va))
             continue;
           var vb = Reflect.field(b, field);
-          if(!same(va, vb))
+          if(!equals(va, vb))
             return false;
         }
         return true;
@@ -92,7 +103,7 @@ class Dynamics {
         var pa = Type.enumParameters(cast a),
           pb = Type.enumParameters(cast b);
         for (i in 0...pa.length)
-          if (!same(pa[i], pb[i]))
+          if (!equals(pa[i], pb[i]))
             return false;
         return true;
       case TObject  :
@@ -107,7 +118,7 @@ class Dynamics {
           if(Reflect.isFunction(va))
             continue;
           var vb = Reflect.field(b, field);
-          if(!same(va, vb))
+          if(!equals(va, vb))
             return false;
         }
         if (fb.length > 0)
@@ -127,7 +138,7 @@ class Dynamics {
           if (aa.length != ab.length)
             return false;
           for (i in 0...aa.length)
-            if (!same(aa[i], ab[i]))
+            if (!equals(aa[i], ab[i]))
               return false;
           return true;
         }

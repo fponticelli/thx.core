@@ -2,6 +2,9 @@
 --no-output
 -D doc-gen
 -D display
+-D dox
+-dce no
+-lib thx.core
 ImportAll
 
 --each

@@ -3,7 +3,15 @@ package thx.core;
 import haxe.PosInfos;
 import haxe.CallStack;
 
+/**
+
+**/
 class Error #if js extends js.Error #end {
+/**
+It creates an instance of Error from any value.
+
+If `err` is already an instance of `Error`, it is returned and nothing is created.
+**/
   public static function fromDynamic(err : Dynamic, ?pos : PosInfos) : Error {
     if(Std.is(err, Error))
       return cast err;

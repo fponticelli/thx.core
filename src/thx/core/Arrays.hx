@@ -9,7 +9,7 @@ import haxe.macro.ExprTools;
 #end
 
 /**
-It provides additional extension methods on top of the `Array` type.
+`Arrays` provides additional extension methods on top of the `Array` type.
 
 Note that some of the examples imply `using thx.core.Arrays;`.
 **/

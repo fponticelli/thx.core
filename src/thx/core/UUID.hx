@@ -1,13 +1,14 @@
 package thx.core;
 
+/**
+Helper class to generate [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier) strings (version 4).
+**/
 class UUID {
-  static var itoh = '0123456789ABCDEF';
-
   static inline function random()
     return Math.floor(Math.random()*0x10);
 
   static inline function srandom()
-    return ''+random();
+    return '${random()}';
 
   public static function create() {
     var s = [];
