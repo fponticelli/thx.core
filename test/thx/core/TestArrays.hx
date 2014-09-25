@@ -11,6 +11,11 @@ using thx.core.Arrays;
 class TestArrays {
   public function new() { }
 
+  public function testCrossMulti() {
+    var r = [[1,2],[3,4],[5,6]].crossMulti();
+    Assert.same([[1,3,5],[2,3,5],[1,4,5],[2,4,5],[1,3,6],[2,3,6],[1,4,6],[2,4,6]], r);
+  }
+
   public function testMapField() {
     var arr  = [{a:1},{a:2},{a:3}],
         test = Arrays.plunk(arr, a);

@@ -46,6 +46,14 @@ trace(r); // [[1,4],[1,5],[1,6],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6]]
     return r;
   }
 
+/**
+It produces the cross product of each array element.
+
+```haxe
+var r = [[1,2],[3,4],[5,6]].crossMulti();
+trace(r); // [[1,3,5],[2,3,5],[1,4,5],[2,4,5],[1,3,6],[2,3,6],[1,4,6],[2,4,6]]
+```
+**/
   public static function crossMulti<T>(array : Array<Array<T>>) {
     var acopy  = array.copy(),
         result = acopy.shift().map(function(v) return [v]);
@@ -64,6 +72,11 @@ trace(r); // [[1,4],[1,5],[1,6],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6]]
     return result;
   }
 
+/**
+It allows to iterate an array pairing each element with every other element in the array.
+
+The iteration ends as soon as the `callback` returns `false`.
+**/
   public static function eachPair<TIn, TOut>(array : Array<TIn>, callback : TIn -> TIn -> Bool)
     for(i in 0...array.length)
       for(j in i...array.length)
@@ -84,26 +97,24 @@ An optional equality function can be passed as the last argument. If not provide
     return true;
   }
 
-  public static function extract<T>(a : Array<T>, f : T -> Bool) : T {
+/**
+It finds an element in the array using `predicate` and returns it. The element is also
+removed from the original array.
+
+If no element satisfies `predicate` the array is left unmodified and `null` is returned.
+**/
+  public static function extract<T>(a : Array<T>, predicate : T -> Bool) : T {
     for(i in 0...a.length)
-      if(f(a[i]))
+      if(predicate(a[i]))
         return a.splice(i, 1)[0];
     return null;
-  }
-
-  public static function find<T, TFind>(array : Array<T>, f : T -> Bool) {
-    var out = [];
-    for(item in array)
-      if(f(item))
-        out.push(item);
-    return out;
   }
 
 /**
 It returns the first element of the array that matches the provided predicate function.
 If none is found it returns null.
 **/
-  public static function first<T, TFind>(array : Array<T>, predicate : T -> Bool) : Null<T> {
+  public static function first<T>(array : Array<T>, predicate : T -> Bool) : Null<T> {
     for(item in array)
       if(predicate(item))
         return item;
@@ -226,6 +237,9 @@ It pushes `value` onto the array if `condition` is true. Also returns the array 
       return Iterables.reduce(array, callback, initial);
     #end
 
+/**
+It is the same as `reduce` but with the extra integer `index` parameter.
+**/
   inline public static function reducei<TItem, TAcc>(array : Array<TItem>, callback : TAcc -> TItem -> Int -> TAcc, initial : TAcc) : TAcc
     #if js
       return untyped array.reduce(callback, initial);
