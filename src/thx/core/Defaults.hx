@@ -30,3 +30,8 @@ Notice that the subject `value` must be a constant identifier (eg: fields, local
     }
   }
 }
+
+/* TODO:
+11:49:51  Simn:  You could Context.typeExpr it I guess. 
+11:50:00  Simn:  And check if that returns something harmless. 
+*/
