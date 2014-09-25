@@ -19,6 +19,9 @@ class Floats {
   public static inline function clampSym(v : Float, max : Float) : Float
     return clamp(v, -max, max);
 
+  inline public static function compare(a : Float, b : Float) : Int
+    return a < b ? -1 : (b > a ? 1 : 0);
+
   public static function interpolateBetween(t : Float, a : Float, b : Float)
     return (b - a) * t + a;
 

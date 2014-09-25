@@ -1,8 +1,3 @@
-/**
- * ...
- * @author Franco Ponticelli
- */
-
 package thx.core;
 
 class Ints {
@@ -13,13 +8,13 @@ class Ints {
   public static inline function clamp(v : Int, min : Int, max : Int) : Int
     return v < min ? min : (v > max ? max : v);
 
-  public inline static function compare(a : Int, b : Int)
+  inline public static function compare(a : Int, b : Int) : Int
     return a - b;
 
-  public inline static function max(a : Int, b : Int)
+  inline public static function max(a : Int, b : Int) : Int
     return a > b ? a : b;
 
-  public inline static function min(a : Int, b : Int)
+  inline public static function min(a : Int, b : Int) : Int
     return a < b ? a : b;
 
   // TODO add proper octal/hex/exp support
