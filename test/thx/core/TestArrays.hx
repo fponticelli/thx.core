@@ -18,7 +18,7 @@ class TestArrays {
 
   public function testMapField() {
     var arr  = [{a:1},{a:2},{a:3}],
-        test = Arrays.pluck(arr, a);
+        test = Arrays.pluck(arr, _.a);
     Assert.same([1,2,3], test);
   }
 
@@ -27,13 +27,13 @@ class TestArrays {
           new Sample(2),
           new Sample(3),
           new Sample(4)
-        ], multiply(2));
+        ], _.multiply(2));
     Assert.same([4,6,8], test);
   }
 
   public function testUsingMapField() {
     var arr  = [{a:1},{a:2},{a:3}],
-        test = arr.pluck(a);
+        test = arr.pluck(_.a);
     Assert.same([1,2,3], test);
   }
 
@@ -44,7 +44,7 @@ class TestArrays {
           new Sample(2),
           new Sample(3),
           new Sample(4)
-        ].plucki(multiply(i))
+        ].plucki(_.multiply(i))
       );
   }
 }
