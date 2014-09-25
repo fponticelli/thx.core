@@ -230,6 +230,9 @@ It pushes `value` onto the array if `condition` is true. Also returns the array 
     return array;
   }
 
+/**
+It applies a function against an accumulator and each value of the array (from left-to-right) has to reduce it to a single value.
+**/
   inline public static function reduce<TItem, TAcc>(array : Array<TItem>, callback : TAcc -> TItem -> TAcc, initial : TAcc) : TAcc
     #if js
       return untyped array.reduce(callback, initial);
