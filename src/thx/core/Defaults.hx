@@ -6,6 +6,9 @@ import haxe.macro.ExprTools;
 import haxe.macro.Context;
 #end
 
+/**
+`Defaults` provides methods that help to deal with nullable values.
+**/
 class Defaults {
 /**
 The method can provide an alternative value `alt` in case `value` is `null`.

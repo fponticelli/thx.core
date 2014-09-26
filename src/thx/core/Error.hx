@@ -4,7 +4,8 @@ import haxe.PosInfos;
 import haxe.CallStack;
 
 /**
-
+Defines a generic Error type. When the target platform is JS, `Error` extends the native
+`js.Error` type.
 **/
 class Error #if js extends js.Error #end {
 /**
@@ -19,11 +20,25 @@ If `err` is already an instance of `Error`, it is returned and nothing is create
   }
 
 #if !js
+/**
+The text message associated with the error.
+**/
   public var message(default, null) : String;
 #end
+/**
+The location in code where the error has been instantiated.
+**/
   public var pos(default, null) : PosInfos;
+
+/**
+The collected error stack.
+**/
   public var stackItems(default, null) : Array<StackItem>;
 
+/**
+The `Error` constructor only requires a steing message. `stack` and `pos` are automatically
+populate but can be provided if preferred.
+**/
   public function new(message : String, ?stack : Array<StackItem>, ?pos : PosInfos) {
 #if js
     super(message);

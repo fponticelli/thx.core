@@ -10,9 +10,21 @@ class Floats {
   public static inline var EPSILON : Float = 10e-10;
 
   static var pattern_parse = ~/^(\+|-)?\d+(\.\d+)?(e-?\d+)?$/;
+/**
+`canParse` checks if a string value can be safely converted into a `Float` value.
+**/
   public static function canParse(s : String)
     return pattern_parse.match(s);
 
+/**
+`clamp` restricts a value within the specified range.
+
+```haxe
+trace(1.3.clamp(0, 1)); // prints 1
+trace(0.8.clamp(0, 1)); // prints 0.8
+trace(-0.5.clamp(0, 1)); // prints 0.0
+```
+**/
   public static inline function clamp(v : Float, min : Float, max : Float) : Float
     return v < min ? min : (v > max ? max : v);
 
@@ -26,7 +38,7 @@ class Floats {
     return (b - a) * t + a;
 
   inline public static function nearEqual(a : Float, b : Float)
-    return Math.abs(a -b) <= EPSILON;
+    return Math.abs(a - b) <= EPSILON;
 
   inline public static function nearZero(n : Float)
     return Math.abs(n) <= EPSILON;
