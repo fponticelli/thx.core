@@ -14,7 +14,6 @@ import thx.core.Maps;
 import thx.core.Nil;
 import thx.core.Objects;
 import thx.core.Options;
-import thx.core.Procedure;
 import thx.core.Set;
 import thx.core.Strings;
 #if (js || flash)

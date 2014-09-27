@@ -5,7 +5,7 @@
 -D dox
 -dce no
 -lib thx.core
-ImportAll
+ImportCore
 
 --each
 -xml xml/js.xml
