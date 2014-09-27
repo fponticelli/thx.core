@@ -47,6 +47,14 @@ class TestArrays {
         ].plucki(_.multiply(i))
       );
   }
+
+  public function testFilterPluck() {
+    Assert.same([1,3,5], [1,2,3,4,5,6].filterPluck(_ % 2 != 0));
+  }
+
+  public function testPluck() {
+    Assert.same([2,4,8], [1,2,4].pluck(_ * 2));
+  }
 }
 
 private class Sample {
