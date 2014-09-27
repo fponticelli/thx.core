@@ -4,6 +4,11 @@ package thx.core;
 import haxe.macro.Expr;
 #end
 
+/**
+Helper class for `Iterable`. Implementations usually fallback on `thx.core.Iterators`.
+
+For documentation of specific methods refer to the equivalent methods in `thx.core.Arrays`;
+**/
 class Iterables {
   public inline static function eachPair<TIn, TOut>(it : Iterable<TIn>, handler : TIn -> TIn -> Bool)
     return Iterators.eachPair(it.iterator(), handler);
@@ -26,6 +31,12 @@ class Iterables {
   public inline static function isEmpty<T>(it : Iterable<T>) : Bool
     return Iterators.isEmpty(it.iterator());
 
+/**
+`isIterable` checks that the passed argument has all the requirements to be an `Iterable`.
+
+Note that no type checking is performed at runtime, only if a method `iterator` exists regardless
+of its signature.
+**/
   public static function isIterable(v : Dynamic) {
     var fields = Types.isAnonymousObject(v) ? Reflect.fields(v) : Type.getInstanceFields(Type.getClass(v));
     if(!Lambda.has(fields, "iterator")) return false;
@@ -53,6 +64,9 @@ class Iterables {
   public inline static function reducei<TItem, TAcc>(it : Iterable<TItem>, callback : TAcc -> TItem -> Int -> TAcc, initial : TAcc) : TAcc
     return Iterators.reducei(it.iterator(), callback, initial);
 
+/**
+`toArray` transforms an `Iterable<T>` into an `Array<T>`.
+**/
   public inline static function toArray<T>(it : Iterable<T>) : Array<T>
     return Iterators.toArray(it.iterator());
 }

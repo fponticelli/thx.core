@@ -4,6 +4,11 @@ package thx.core;
 import haxe.macro.Expr;
 #end
 
+/**
+Helper class to work with `Iterator`.
+
+For documentation of specific methods refer to the equivalent methods in `thx.core.Arrays`;
+**/
 class Iterators {
   public static function eachPair<TIn, TOut>(it : Iterator<TIn>, handler : TIn -> TIn -> Bool)
     Arrays.eachPair(toArray(it), handler);
@@ -31,6 +36,12 @@ class Iterators {
   inline public static function isEmpty<T>(it : Iterator<T>) : Bool
     return !it.hasNext();
 
+/**
+`isIterator` checks that the passed argument has all the requirements to be an `Iterator`.
+
+Note that no type checking is performed at runtime, the method only checks that the value
+has two fields `next` and `hasNext` and that they are both functions.
+**/
   public static function isIterator(v : Dynamic) {
     var fields = Types.isAnonymousObject(v) ? Reflect.fields(v) : Type.getInstanceFields(Type.getClass(v));
     if(!Lambda.has(fields, "next") || !Lambda.has(fields, "hasNext")) return false;
@@ -80,6 +91,9 @@ class Iterators {
     return initial;
   }
 
+/**
+`toArray` transforms an `Iterator<T>` into an `Array<T>`.
+**/
   public static function toArray<T>(it : Iterator<T>) : Array<T> {
     var items = [];
     for(item in it)
