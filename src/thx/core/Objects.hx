@@ -1,5 +1,7 @@
 package thx.core;
 
+import thx.core.Tuple;
+
 /**
 Helper methods for generic objects.
 **/
@@ -29,5 +31,5 @@ tuple is the field name and the right value (_1) is the field value.
   public static function tuples(o : {}): Array<Tuple2<String, Dynamic>>
     return Reflect.fields(o).map(function(key)
         return new Tuple2(key, Reflect.field(o, key))
-    );)
+    );
 }
