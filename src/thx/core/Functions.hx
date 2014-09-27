@@ -62,5 +62,8 @@ and passes the same argument value to the both of them.
 Generic helper for functions.
 **/
 class Functions {
+/**
+It provides strict equality between the two arguments `a` and `b`.
+**/
   public static function equality<T>(a : T, b : T) return a == b;
 }
