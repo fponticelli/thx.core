@@ -10,6 +10,9 @@ package thx.core;
 **/
 class Floats {
   public static inline var TOLERANCE : Float = 10e-5;
+/**
+  Constant value employed to see if two `Float` values are very close.
+**/
   public static inline var EPSILON : Float = 10e-10;
 
   static var pattern_parse = ~/^(\+|-)?\d+(\.\d+)?(e-?\d+)?$/;
