@@ -1,45 +1,54 @@
 package thx.core;
 
-class Set<T> {
-  public static function arrayToSet<T>(arr : Array<T>) : Set<T> {
-    var set = new Set();
-    for (item in arr)
-      set.add(item);
+/**
+A set is a list of unique values.
+**/
+@:forward(indexOf, iterator, lastIndexOf, length, map, pop, remove, reverse, shift, sort)
+abstract Set<T>(Array<T>) {
+  @:from public static function arrayToSet(arr : Array<T>) {
+    var set = new Set([]);
+    for(v in arr)
+      set.push(v);
     return set;
   }
 
-  public var length : Int;
-  var _v : Array<T>;
-  public function new() {
-    _v = [];
-    length = 0;
-  }
+  inline function new(arr : Array<T>)
+    this = arr;
 
-  public function add(v : T) : Void {
-    _v.remove(v);
-    _v.push(v);
-    length = _v.length;
-  }
+  public function add(v : T) : Bool
+    return if(exists(v))
+      false;
+    else {
+      this.push(v);
+      true;
+    }
 
-  public function remove(v : T) : Bool {
-    var t = _v.remove(v);
-    length = _v.length;
-    return t;
-  }
+  inline public function copy()
+    return new Set(this.copy());
 
   public function exists(v : T) : Bool {
-    for (t in _v)
+    for (t in this)
       if (t == v)
         return true;
     return false;
   }
 
-  public function iterator()
-    return _v.iterator();
+  @:arrayAccess
+  inline public function get(index : Int)
+    return this[index];
 
-  public function array()
-    return _v.copy();
+  inline public function push(v : T) : Void
+    add(v);
 
-  public function toString()
-    return "{" + _v.join(", ") + "}";
+  inline public function slice(pos : Int, ?end : Int) : Set<T>
+    return new Set(this.slice(pos, end));
+
+  inline public function splice(pos : Int, len : Int) : Set<T>
+    return new Set(this.splice(pos, len));
+
+  @:to public function setToArray()
+    return this.copy();
+
+  @:to public function toString()
+    return "{" + this.join(", ") + "}";
 }
