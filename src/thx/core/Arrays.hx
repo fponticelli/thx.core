@@ -3,9 +3,7 @@ package thx.core;
 import thx.core.Functions.Functions in F;
 
 #if macro
-import haxe.macro.Context;
 import haxe.macro.Expr;
-import haxe.macro.ExprTools;
 #end
 
 /**
@@ -111,6 +109,18 @@ If no element satisfies `predicate` the array is left unmodified and `null` is r
   }
 
 /**
+Filters an array according to the expression passed as the second argument.
+
+The special symbol `_` refers to the current item.
+
+```haxe
+[1,2,3,4,5,6].filterPluck(_ % 2 != 0); // holds [1,3,5]
+```
+**/
+  macro public static function filterPluck<T>(a : ExprOf<Array<T>>, expr : ExprOf<Bool>) : ExprOf<Array<T>>
+    return macro $e{a}.filter(function(_) return $e{expr});
+
+/**
 It returns the first element of the array that matches the provided predicate function.
 If none is found it returns null.
 **/
@@ -214,7 +224,7 @@ to such functions.
 
 The method is a macro method that guarantees that the correct types and identifiers are used.
 **/
-  macro public static function pluck<T>(a : ExprOf<Array<T>>, expr : Expr)
+  macro public static function pluck<T, TOut>(a : ExprOf<Array<T>>, expr : ExprOf<TOut>) : ExprOf<Array<TOut>>
     return macro $e{a}.map(function(_) return ${expr});
 
 /**
