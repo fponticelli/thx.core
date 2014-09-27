@@ -114,12 +114,18 @@ If no element satisfies `predicate` the array is left unmodified and `null` is r
 It returns the first element of the array that matches the provided predicate function.
 If none is found it returns null.
 **/
-  public static function first<T>(array : Array<T>, predicate : T -> Bool) : Null<T> {
+  public static function find<T>(array : Array<T>, predicate : T -> Bool) : Null<T> {
     for(item in array)
       if(predicate(item))
         return item;
     return null;
   }
+
+/**
+It returns the first element of the array or null if the array is empty.
+**/
+  inline public static function first<T>(array : Array<T>) : Null<T>
+    return array[0];
 
 /**
 It traverses an array of elements. Each element is split using the `callback` function and a 'flattened' array is returned.
@@ -153,6 +159,12 @@ It returns `true` if the array contains zero elements.
 **/
   inline public static function isEmpty<T>(array : Array<T>) : Bool
     return array.length == 0;
+
+/**
+It returns the last element of the array or null if the array is empty.
+**/
+  inline public static function last<T>(array : Array<T>) : Null<T>
+    return array[array.length-1];
 
 /**
 Same as `Array.map()` but it adds a second argument to the `callback` function with the current index value.
