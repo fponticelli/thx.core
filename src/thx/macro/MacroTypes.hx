@@ -1,8 +1,3 @@
-/**
- * ...
- * @author Franco Ponticelli
- */
-
 package thx.macro;
 
 import haxe.macro.TypeTools;
