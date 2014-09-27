@@ -1,44 +1,53 @@
 package thx.core;
 
+/**
+Helper methods to use on values, types and classes.
+**/
 class Types {
+/**
+`isAnonymousObject` returns true if `v` is an object and it is not an instance of any custom class.
+**/
   public static inline function isAnonymousObject(v : Dynamic) : Bool
     return Reflect.isObject(v) && null == Type.getClass(v);
 
+/**
+`sameType` returns true if the arguments `a` and `b` share exactly the same type.
+**/
   public static function sameType<A, B>(a : A, b : B) : Bool
-    return ValueTypes.toString(Type.typeof(a)) == ValueTypes.toString(Type.typeof(b));
-}
+    return valueTypeToString(a) == valueTypeToString(b);
 
-class ClassTypes {
-  public inline static function toString(cls : Class<Dynamic>)
-    return Type.getClassName(cls);
+/**
+Returns a string describing the type of any `value`.
+**/
+  inline public static function valueTypeToString<T>(value : T)
+    return typeToString(Type.typeof(value));
 
-  static public #if !php inline #end function as<T1, T2>(value : T1, type : Class<T2>) : Null<T2>
-    return (Std.is(value, type) ? cast value : null);
-}
-
-class ValueTypes {
-  public static function typeAsString<T>(value : T)
-    return toString(Type.typeof(value));
-
-  public static function toString(type : Type.ValueType) {
+/**
+Returns a string representation of a `ValueType`.
+**/
+  public static function typeToString(type : Type.ValueType) {
     return switch type {
       case TInt:      "Int";
       case TFloat:    "Float";
       case TBool:     "Bool";
-      case TObject:   "Dynamic"; // TODO ?
+      case TObject:   "{}";
       case TFunction: "Function";
       case TClass(c): Type.getClassName(c);
       case TEnum(e):  Type.getEnumName(e);
-      case _:         null;
+      case _:         throw 'invalid type $type';
     }
   }
 
-  public static function typeInheritance(type : Type.ValueType) {
+/**
+`typeInheritance` returns an array of string describing the entire inheritance
+chain of the passed `ValueType`.
+**/
+  public static function typeInheritance(type : Type.ValueType) : Array<String> {
     return switch type {
       case TInt:      ["Int"];
       case TFloat:    ["Float"];
       case TBool:     ["Bool"];
-      case TObject:   ["Dynamic"];
+      case TObject:   ["{}"];
       case TFunction: ["Function"];
       case TClass(c):
         var classes = [];
@@ -48,7 +57,14 @@ class ValueTypes {
         }
         classes.map(Type.getClassName);
       case TEnum(e):  [Type.getEnumName(e)];
-      case _:         null;
+      case _:         throw 'invalid type $type';
     }
   }
+
+/**
+`valueTypeInheritance` returns an array of string describing the entire inheritance
+chain of the passed `value`.
+**/
+  inline public static function valueTypeInheritance<T>(value : T) : Array<String>
+    return typeInheritance(Type.typeof(value));
 }
