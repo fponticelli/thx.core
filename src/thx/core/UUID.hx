@@ -10,6 +10,9 @@ class UUID {
   static inline function srandom()
     return '${random()}';
 
+/**
+`UUID.create()` returns a string value representing a UUID value.
+**/
   public static function create() {
     var s = [];
     for(i in 0...8)
