@@ -1,10 +1,10 @@
 package thx.macro;
 
+#if macro
 import haxe.macro.TypeTools;
 import haxe.macro.Type.ClassType;
 
 class MacroTypes {
-#if macro
   public static function argumentIsOptional(type : haxe.macro.Type, index : Int)
     return switch type {
       case TFun(args, _) if(index < args.length):
@@ -99,5 +99,6 @@ class MacroTypes {
     } catch(e : Dynamic) {
       [TypeTools.toString(type)];
     };
-#end
 }
+
+#end
