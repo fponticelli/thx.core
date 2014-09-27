@@ -1,6 +1,7 @@
 package thx.core;
 
 import thx.core.Tuple;
+using thx.core.Arrays;
 
 /**
 Helper methods for generic objects.
@@ -32,4 +33,13 @@ tuple is the field name and the right value (_1) is the field value.
     return Reflect.fields(o).map(function(key)
         return new Tuple2(key, Reflect.field(o, key))
     );
+
+/**
+`objectToMap` transforms an anonymous object into an instance of `Map<String, Dynamic>`.
+**/
+  public static function objectToMap(o : {}) : Map<String, Dynamic>
+    return tuples(o).reduce(function(map : Map<String, Dynamic>, t) {
+      map.set(t._0, t._1);
+      return map;
+    }, new Map());
 }
