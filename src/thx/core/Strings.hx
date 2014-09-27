@@ -2,7 +2,34 @@ package thx.core;
 
 using StringTools;
 
+/**
+Helper functions for strings.
+**/
 class Strings {
+/**
+`capitalize` returns a string with the first character convert to upper case.
+**/
+  inline public static function capitalize(s : String)
+    return s.substr(0, 1).toUpperCase() + s.substr(1);
+
+/**
+It compares to string and it returns a negative number if `a` is inferior to `b`, zero if they are the same,
+or otherwise a positive non-sero number.
+**/
+  public static function compare(a : String, b : String) return a < b ? -1 : a > b ? 1 : 0;
+
+  static var _reCollapse = ~/\s+/g;
+/**
+It cleans up all the whitespaces in the passed `value`. `collapse` does the following:
+
+  - remove trailing/leading whitespaces
+  - within the string, it collapses seqeunces of whitespaces into a single space character
+
+For whitespaces in this description, it is intended to be anything that is matched by the regular expression `\s`.
+**/
+  public static function collapse(value : String)
+    return _reCollapse.replace(StringTools.trim(value), " ");
+
   static var _reSplitWC = ~/(\r\n|\n\r|\n|\r)/g;
   static var _reReduceWS = ~/\s+/;
 #if !php
@@ -21,7 +48,7 @@ class Strings {
   public static function startFrom(value : String, searchFor : String) {
     var pos = value.indexOf(searchFor);
     if (pos < 0)
-      return value;
+      return "";
     else
       return value.substr(pos + searchFor.length);
   }
@@ -65,10 +92,6 @@ class Strings {
     return rtrim(ltrim(value, charlist), charlist);
 #end
   }
-
-  static var _reCollapse = ~/\s+/g;
-  public static function collapse(value : String)
-    return _reCollapse.replace(StringTools.trim(value), " ");
 
   public static inline function ucfirst(value : String) : String
     return (value == null ? null : value.charAt(0).toUpperCase() + value.substr(1));
@@ -121,10 +144,6 @@ class Strings {
   **/
   public static function humanize(s : String)
     return underscore(s).replace('_', ' ');
-
-  // TO TEST
-  public static function capitalize(s : String)
-    return s.substr(0, 1).toUpperCase() + s.substr(1);
 
   // TO TEST
   public static function succ(s : String)
@@ -201,6 +220,4 @@ class Strings {
     else
       return s;
   }
-
-  public static function compare(a : String, b : String) return a < b ? -1 : a > b ? 1 : 0;
 }
