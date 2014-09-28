@@ -1,9 +1,8 @@
 package thx.macro;
 
-#if macro
+#if (neko || macro)
 import haxe.macro.TypeTools;
 import haxe.macro.Type.ClassType;
-
 /**
 Helper functions to work with types at macro time.
 **/
@@ -54,7 +53,7 @@ It returns an array of argument descriptions for a given function.
     return switch fun {
       case TFun(args, _):
         return args;
-      case _:fun
+      case _:
         throw 'type $fun is not a function';
     };
 
@@ -94,7 +93,7 @@ It returns an array of type parameters.
 It returns an array of types in string format representing the inheritance chain of the
 passed `ClassType`.
 **/
-  public static function classInheritance(cls : ClassType) {
+  public static function classInheritance(cls : haxe.macro.Type.ClassType) : Array<String> {
     var types = [cls.pack.concat([cls.name]).join(".")],
       parent = null == cls.superClass ? null : classInheritance(cls.superClass.t.get());
     if(null != parent)
@@ -106,12 +105,15 @@ passed `ClassType`.
 It returns an array of types in string format representing the inheritance chain of the
 passed `Type`.
 **/
-  public static function typeInheritance(type : haxe.macro.Type)
+  public static function typeInheritance(type : haxe.macro.Type) : Array<String>
+#if macro
     return try {
       classInheritance(TypeTools.getClass(type));
     } catch(e : Dynamic) {
       [TypeTools.toString(type)];
     };
+#else
+    return null;
+#end
 }
-
 #end

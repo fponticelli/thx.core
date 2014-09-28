@@ -1,6 +1,6 @@
 package thx.macro;
 
-#if macro
+#if (neko || macro)
 import haxe.macro.Context;
 import haxe.macro.Expr;
 
