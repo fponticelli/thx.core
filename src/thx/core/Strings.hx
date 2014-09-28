@@ -26,6 +26,22 @@ If `searchFor` is not found, an empty string is returned.
     return s.substr(0, 1).toUpperCase() + s.substr(1);
 
 /**
+Capitalize the first letter of every word in `value`. If `whiteSpaceOnly` is set to `true`
+the process is limited to whitespace separated words.
+**/
+  public static function capitalizeWords(value : String, ?whiteSpaceOnly = false) : String {
+    if(whiteSpaceOnly) {
+#if php
+      return untyped __call__("ucwords", value);
+#else
+      return UCWORDSWS.map(capitalize(value), upperMatch);
+#end
+    } else {
+      return UCWORDS.map(capitalize(value), upperMatch);
+    }
+  }
+
+/**
 It compares to string and it returns a negative number if `a` is inferior to `b`, zero if they are the same,
 or otherwise a positive non-sero number.
 **/
@@ -229,22 +245,6 @@ Sequences of more than one UpperCase character are left untouched.
     s = (~/([a-z\d])([A-Z])/g).replace(s, '$1_$2');
     s = (~/-/g).replace(s, '_');
     return s.toLowerCase();
-  }
-
-/**
-Capitalize the first letter of every word in `value`. If `whiteSpaceOnly` is set to `true`
-the capitlization is limited to whitespace separated words.
-**/
-  public static function upperCaseWords(value : String, ?whiteSpaceOnly = false) : String {
-    if(whiteSpaceOnly) {
-#if php
-      return untyped __call__("ucwords", value);
-#else
-      return UCWORDSWS.map(capitalize(value), upperMatch);
-#end
-    } else {
-      return UCWORDS.map(capitalize(value), upperMatch);
-    }
   }
 
 /**

@@ -21,7 +21,7 @@ class TestStrings {
       { expected : "Test\tTest", test : "test\ttest" },
     ];
     for (item in tests)
-      Assert.equals(item.expected, item.test.upperCaseWords(true));
+      Assert.equals(item.expected, item.test.capitalizeWords(true));
   }
 
   public function testUcwords() {
@@ -33,7 +33,7 @@ class TestStrings {
       { expected : "Test\tTest", test : "test\ttest" },
     ];
     for (item in tests)
-      Assert.equals(item.expected, item.test.upperCaseWords());
+      Assert.equals(item.expected, item.test.capitalizeWords());
   }
 
   public function testAlphaNum() {
