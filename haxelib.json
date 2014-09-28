@@ -6,6 +6,6 @@
   "tags": ["thx", "general", "cross"],
   "description": "Generic multi-purpose library",
   "releasenote": "added documentation and reviewed entire API",
-  "version": "0.9.0",
+  "version": "0.6.0",
   "contributors": ["fponticelli"]
 }
