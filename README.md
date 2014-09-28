@@ -1,7 +1,7 @@
 thx.core
 ========
 
-Generic multi-purpose library. `thx.core` aims to be the [loadash](http://lodash.com/) library for Haxe.
+Generic multi-purpose library. `thx.core` aims to be the [lodash](http://lodash.com/) library for Haxe.
 
 It contains a lot of usefult helper classes to simplify dealing with a lot of types from the standard library.
 
