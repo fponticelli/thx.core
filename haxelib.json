@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross"],
   "description": "Generic multi-purpose library",
-  "releasenote": "* added experimental method Arrays.mapField()",
-  "version": "0.5.4",
+  "releasenote": "added documentation and reviewed entire API",
+  "version": "0.9.0",
   "contributors": ["fponticelli"]
 }
