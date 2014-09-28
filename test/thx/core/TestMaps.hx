@@ -12,6 +12,7 @@ class TestMaps {
     ];
 
     var tuples = Maps.tuples(map);
+    tuples.sort(function(a, b) return Strings.compare(a._0, b._0));
 
     Assert.equals(2, tuples.length);
     Assert.equals(tuples[0]._0, "key1");

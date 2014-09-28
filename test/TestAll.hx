@@ -13,7 +13,9 @@ class TestAll {
 		runner.addCase(new thx.core.TestObjects());
 		runner.addCase(new thx.core.TestSet());
 		runner.addCase(new thx.core.TestStrings());
+#if (js || flash)
 		runner.addCase(new thx.core.TestTimer());
+#end
 		runner.addCase(new thx.core.TestTuple());
 	}
 

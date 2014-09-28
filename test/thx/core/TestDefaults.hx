@@ -101,7 +101,7 @@ class TestDefaults {
     Assert.isNull((arr.a[1].b).opt());
     Assert.equals('A', (arr.a[0].b).opt());
 
-    var arr : Array<Array<Array<Int>>> = null;
+    var arr : Array<Array<Array<Null<Int>>>> = null;
     Assert.isNull((arr[0]).opt());
     Assert.isNull((arr[0][1]).opt());
     Assert.isNull((arr[0][1][3]).opt());

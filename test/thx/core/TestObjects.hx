@@ -13,8 +13,20 @@ class TestObjects {
 
     var ob = { a : 'A', b : 'B' };
     Assert.isFalse(ob.isEmpty());
-    Assert.same(['a', 'b'], ob.fields());
-    Assert.same(['A', 'B'], ob.values());
-    Assert.same([{ _0 : 'a', _1 : 'A'}, { _0 : 'b', _1 : 'B'}], ob.tuples());
+
+    var fields = ob.fields();
+    Assert.isTrue(fields.remove('a'));
+    Assert.isTrue(fields.remove('b'));
+    Assert.equals(0, fields.length);
+
+    var values = ob.values();
+    Assert.isTrue(values.remove('A'));
+    Assert.isTrue(values.remove('B'));
+    Assert.equals(0, values.length);
+
+    var tuples = ob.tuples();
+
+    tuples.sort(function(a, b) return Strings.compare(a._0, b._0));
+    Assert.same([{ _0 : 'a', _1 : 'A'}, { _0 : 'b', _1 : 'B'}], tuples);
   }
 }
