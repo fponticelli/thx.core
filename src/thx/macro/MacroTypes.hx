@@ -4,15 +4,24 @@ package thx.macro;
 import haxe.macro.TypeTools;
 import haxe.macro.Type.ClassType;
 
+/**
+Helper functions to work with types at macro time.
+**/
 class MacroTypes {
-  public static function argumentIsOptional(type : haxe.macro.Type, index : Int)
-    return switch type {
+/**
+It returns true if the argument at position `index` is optional for the given function.
+**/
+  public static function argumentIsOptional(fun : haxe.macro.Type, index : Int)
+    return switch fun {
       case TFun(args, _) if(index < args.length):
         args[index].opt;
       case _:
-        throw 'type $type is not a function or $index is not a valid argument position';
+        throw 'type $fun is not a function or $index is not a valid argument position';
     };
 
+/**
+It returns `true` if the passed `type` is a function.
+**/
   public static function isFunction(type : haxe.macro.Type)
     return switch type {
       case TFun(_, _):
@@ -21,32 +30,47 @@ class MacroTypes {
         return false;
     };
 
-  public static function getArity(type : haxe.macro.Type)
-    return switch type {
+/**
+It returns the arity (number of arguments) of a given function.
+**/
+  public static function getArity(fun : haxe.macro.Type)
+    return switch fun {
       case TFun(args, _):
         return args.length;
       case _:
         return -1;
     };
 
-  public static function getArgumentType(type : haxe.macro.Type, index : Int)
-    return getFunctionArgument(type, index).t;
+/**
+It returns the type of an argument at `index` for a given function.
+**/
+  public static function getArgumentType(fun : haxe.macro.Type, index : Int)
+    return getFunctionArgument(fun, index).t;
 
-  public static function getFunctionArguments(type : haxe.macro.Type)
-    return switch type {
+/**
+It returns an array of argument descriptions for a given function.
+**/
+  public static function getFunctionArguments(fun : haxe.macro.Type)
+    return switch fun {
       case TFun(args, _):
         return args;
-      case _:
-        throw 'type $type is not a function';
+      case _:fun
+        throw 'type $fun is not a function';
     };
 
-  public static function getFunctionArgument(type : haxe.macro.Type, index : Int) {
-    var arg = getFunctionArguments(type)[index];
+/**
+It returns the argument description for a function at `index`.
+**/
+  public static function getFunctionArgument(fun : haxe.macro.Type, index : Int) {
+    var arg = getFunctionArguments(fun)[index];
     if (null == arg)
       throw "invalid argument position $index";
     return arg;
   }
 
+/**
+It gets the return type of a function.
+**/
   public static function getFunctionReturn(type : haxe.macro.Type)
     return switch type {
       case TFun(_, ret):
@@ -55,6 +79,9 @@ class MacroTypes {
         throw 'type $type is not a function';
     };
 
+/**
+It returns an array of type parameters.
+**/
   public static function getClassTypeParameters(type : haxe.macro.Type)
     return switch type {
       case TInst(_, params):
@@ -63,28 +90,10 @@ class MacroTypes {
         throw 'type $type is not a class';
     };
 
-  public static function toString(type : haxe.macro.Type, ?withparams = false)
-    return switch type {
-      case TMono(t):
-        t.toString();
-      case TEnum(t, params):
-        t.toString() + (withparams ? '<' + params.map(function(param) return toString(param, withparams)).join(", ") + '>' : '');
-      case TInst(t, params):
-        t.toString() + (withparams ? '<' + params.map(function(param) return toString(param, withparams)).join(", ") + '>' : '');
-      case TType(t, params):
-        t.toString() + (withparams ? '<' + params.map(function(param) return toString(param, withparams)).join(", ") + '>' : '');
-      case TFun(args, ret):
-        args.map(function(arg) return (arg.opt?'?':'') + toString(arg.t, withparams)).concat([toString(ret, withparams)]).join(' -> ');
-      case TAnonymous(a):
-        a.toString();
-      case TDynamic(t):
-        null == t ? 'Null' : toString(t);
-      case TLazy(f):
-        toString(f());
-      case TAbstract(t, params):
-        t.toString() + (withparams ? '<' + params.map(function(param) return toString(param, withparams)).join(", ") + '>' : '');
-    };
-
+/**
+It returns an array of types in string format representing the inheritance chain of the
+passed `ClassType`.
+**/
   public static function classInheritance(cls : ClassType) {
     var types = [cls.pack.concat([cls.name]).join(".")],
       parent = null == cls.superClass ? null : classInheritance(cls.superClass.t.get());
@@ -93,7 +102,11 @@ class MacroTypes {
     return types;
   }
 
-  public static function typeInheritance(type)
+/**
+It returns an array of types in string format representing the inheritance chain of the
+passed `Type`.
+**/
+  public static function typeInheritance(type : haxe.macro.Type)
     return try {
       classInheritance(TypeTools.getClass(type));
     } catch(e : Dynamic) {
