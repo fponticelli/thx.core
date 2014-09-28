@@ -1,5 +1,7 @@
 # thx.core
 
+[![Build Status](https://travis-ci.org/fponticelli/thx.core.svg?branch=master)](https://travis-ci.org/fponticelli/thx.core)
+
 Generic multi-purpose library. `thx.core` aims to be the [lodash](http://lodash.com/) library for Haxe.
 
 ## helper classes
