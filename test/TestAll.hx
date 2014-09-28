@@ -14,6 +14,7 @@ class TestAll {
 		runner.addCase(new thx.core.TestSet());
 		runner.addCase(new thx.core.TestStrings());
 		runner.addCase(new thx.core.TestTimer());
+		runner.addCase(new thx.core.TestTuple());
 	}
 
 	public static function main() {
