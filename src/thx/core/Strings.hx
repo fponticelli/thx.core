@@ -2,12 +2,6 @@ package thx.core;
 
 using StringTools;
 
-// TODO
-// iterator
-// map
-// filter
-// toArray
-
 /**
 Helper functions for strings.
 **/
@@ -76,6 +70,24 @@ of `symbol`.
       s;
 
 /**
+`filter` applies `predicate` character by character to `s` and it returns a filtered
+version of the string.
+**/
+  public static function filter(s : String, predicate : String -> Bool)
+    return toArray(s)
+      .filter(predicate)
+      .join('');
+
+/**
+Same as `filter` but `predicate` operates on integer char codes instead of string characters.
+**/
+  public static function filterCharcode(s : String, predicate : Int -> Bool)
+    return toCharcodeArray(s)
+      .filter(predicate)
+      .map(function(i) return String.fromCharCode(i))
+      .join('');
+
+/**
 `from` searches for the first occurrance of `searchFor` and returns the text from that point on.
 
 If `searchFor` is not found, an empty string is returned.
@@ -121,6 +133,18 @@ Works the same as `underscore` but also replaces underscores with whitespaces.
     return value == null || value == '';
 
 /**
+It returns an iterator holding in sequence one character of the string per iteration.
+**/
+  public static function iterator(s : String) : Iterator<String>
+    return s.split('').iterator();
+
+/**
+It maps a string character by character using `callback`.
+**/
+  public static function map(value : String, callback : String -> String) : String
+    return toArray(value).map(callback).join('');
+
+/**
 `repeat` builds a new string by repeating the argument `s`, n `times`.
 
 ```haxe
@@ -140,6 +164,18 @@ of the existing text nodes.
 #else
     return STRIPTAGS.replace(s, "");
 #end
+
+/**
+It transforms a string into an `Array` of characters.
+**/
+  inline public static function toArray(s : String)
+    return s.split('');
+
+/**
+It transforms a string into an `Array` of char codes in integer format.
+**/
+  inline public static function toCharcodeArray(s : String) : Array<Int>
+    return s.split('').map(function(s) return s.charCodeAt(0));
 
 /**
 `trim` removes from the beginning and the end of the string any character that is present in `charlist`.
