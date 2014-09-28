@@ -2,10 +2,29 @@ package thx.core;
 
 using StringTools;
 
+// TODO
+// iterator
+// map
+// filter
+// toArray
+
 /**
 Helper functions for strings.
 **/
 class Strings {
+/**
+`after` searches for the first occurrance of `searchFor` and returns the text after that.
+
+If `searchFor` is not found, an empty string is returned.
+**/
+  public static function after(value : String, searchFor : String) {
+    var pos = value.indexOf(searchFor);
+    if (pos < 0)
+      return "";
+    else
+      return value.substr(pos + searchFor.length);
+  }
+
 /**
 `capitalize` returns a string with the first character convert to upper case.
 **/
@@ -16,9 +35,15 @@ class Strings {
 It compares to string and it returns a negative number if `a` is inferior to `b`, zero if they are the same,
 or otherwise a positive non-sero number.
 **/
-  public static function compare(a : String, b : String) return a < b ? -1 : a > b ? 1 : 0;
+  public static function compare(a : String, b : String)
+    return a < b ? -1 : a > b ? 1 : 0;
 
-  static var _reCollapse = ~/\s+/g;
+/**
+`contains` returns `true` is `s` contains one or more occurrences of `test`.
+**/
+  inline public static function contains(s : String, test : String)
+    return s.indexOf(test) >= 0;
+
 /**
 It cleans up all the whitespaces in the passed `value`. `collapse` does the following:
 
@@ -28,128 +53,140 @@ It cleans up all the whitespaces in the passed `value`. `collapse` does the foll
 For whitespaces in this description, it is intended to be anything that is matched by the regular expression `\s`.
 **/
   public static function collapse(value : String)
-    return _reCollapse.replace(StringTools.trim(value), " ");
+    return WSG.replace(StringTools.trim(value), " ");
 
-  static var _reSplitWC = ~/(\r\n|\n\r|\n|\r)/g;
-  static var _reReduceWS = ~/\s+/;
-#if !php
-  static var _reStripTags = ~/(<[a-z]+[^>\/]*\/?>|<\/[a-z]+>)/i;
-#end
-  // TODO, test me
-  public static function upTo(value : String, searchFor : String) {
-    var pos = value.indexOf(searchFor);
-    if (pos < 0)
-      return value;
+/**
+`dasherize` replaces all the occurrances of `_` with `-`;
+**/
+  public static function dasherize(s : String)
+    return s.replace('_', '-');
+
+/**
+`ellipsis` truncates `s` at len `maxlen` replaces the last characters with the content
+of `symbol`.
+
+```haxe
+'thx is a nice linrary'.ellipsis(7); // returns 'thx is ...'
+```
+**/
+  public static function ellipsis(s : String, maxlen = 20, symbol = "...")
+    return if (s.length > maxlen)
+      s.substr(0, symbol.length > maxlen - symbol.length ? symbol.length : maxlen - symbol.length) + symbol;
     else
-      return value.substr(0, pos);
-  }
+      s;
 
-  // TODO, test me
-  public static function startFrom(value : String, searchFor : String) {
+/**
+`from` searches for the first occurrance of `searchFor` and returns the text from that point on.
+
+If `searchFor` is not found, an empty string is returned.
+**/
+  public static function from(value : String, searchFor : String) {
     var pos = value.indexOf(searchFor);
     if (pos < 0)
       return "";
     else
-      return value.substr(pos + searchFor.length);
+      return value.substr(pos);
   }
 
-  // TODO, test me
-  public static function rtrim(value : String, charlist : String) : String {
-#if php
-    return untyped __call__("rtrim", value, charlist);
-#else
-    var len = value.length;
-    while (len > 0) {
-      var c = value.substr(len - 1, 1);
-      if (charlist.indexOf(c) < 0)
-        break;
-      len--;
-    }
-    return value.substr(0, len);
-#end
-  }
+/**
+Works the same as `underscore` but also replaces underscores with whitespaces.
+**/
+  public static function humanize(s : String)
+    return underscore(s).replace('_', ' ');
 
-  // TODO, test me
-  public static function ltrim(value : String, charlist : String) : String {
-#if php
-    return untyped __call__("ltrim", value, charlist);
-#else
-    var start = 0;
-    while (start < value.length) {
-      var c = value.substr(start, 1);
-      if (charlist.indexOf(c) < 0)
-        break;
-      start++;
-    }
-    return value.substr(start);
-#end
-  }
-
-  public static inline function trim(value : String, charlist : String) : String {
-#if php
-    return untyped __call__("trim", value, charlist);
-#else
-    return rtrim(ltrim(value, charlist), charlist);
-#end
-  }
-
-  public static inline function ucfirst(value : String) : String
-    return (value == null ? null : value.charAt(0).toUpperCase() + value.substr(1));
-
-  public static inline function lcfirst(value : String) : String
-    return (value == null ? null : value.charAt(0).toLowerCase() + value.substr(1));
-
-  public static function empty(value : String)
-    return value == null || value == '';
-
+/**
+`isAlphaNum` returns `true` if the string only contains alpha-numeric characters.
+**/
   public static inline function isAlphaNum(value : String) : Bool
 #if php
     return untyped __call__("ctype_alnum", value);
 #else
-    return (value == null ? false : __alphaNumPattern.match(value));
+    return ALPHANUM.match(value);
 #end
 
-  public static inline function digitsOnly(value : String) : Bool
+/**
+`isDigitsOnly` returns `true` if the string only contains digits.
+**/
+  public static inline function isDigitsOnly(value : String) : Bool
 #if php
     return untyped __call__("ctype_digit", value);
 #else
-    return (value == null ? false : __digitsPattern.match(value));
+    return DIGITS.match(value);
 #end
 
-  public static function ucwords(value : String) : String
-    return __ucwordsPattern.map(ucfirst(value), __upperMatch);
+/**
+`isEmpty` returns true if either `value` is null or is an empty string.
+**/
+  public static function isEmpty(value : String)
+    return value == null || value == '';
 
-  /**
-   * Like ucwords but uses only white spaces as boundaries
-   */
-  public static function ucwordsws(value : String) : String
+/**
+`repeat` builds a new string by repeating the argument `s`, n `times`.
+
+```haxe
+'Xy'.repeat(3); // generates 'XyXyXy'
+```
+**/
+  public static function repeat(s : String, times : Int)
+    return [for(i in 0...times) s].join('');
+
+/**
+`stripTags` removes any HTML/XML markup from the string leaving only the concatenation
+of the existing text nodes.
+**/
+  public static function stripTags(s : String) : String
 #if php
-    return untyped __call__("ucwords", value);
+    return untyped __call__("strip_tags", s);
 #else
-    return __ucwordswsPattern.map(ucfirst(value), __upperMatch);
+    return STRIPTAGS.replace(s, "");
 #end
 
-  static function __upperMatch(re : EReg)
-    return re.matched(0).toUpperCase();
-  static var __ucwordsPattern = new EReg('[^a-zA-Z]([a-z])', 'g');
-#if !php
-  static var __ucwordswsPattern = new EReg('\\s[a-z]', 'g');
-  static var __alphaNumPattern = new EReg('^[a-z0-9]+$', 'i');
-  static var __digitsPattern = new EReg('^[0-9]+$', '');
+/**
+`trim` removes from the beginning and the end of the string any character that is present in `charlist`.
+**/
+  public static inline function trim(value : String, charlist : String) : String
+#if php
+    return untyped __call__("trim", value, charlist);
+#else
+    return trimRight(trimLeft(value, charlist), charlist);
 #end
 
-  /**
-  *  Replaces undescores with space, finds UC characters, turns them into LC and prepends them with a space.
-  *  More than one UC in sequence is left untouched.
-  **/
-  public static function humanize(s : String)
-    return underscore(s).replace('_', ' ');
+/**
+`trimLeft` removes from the beginning of the string any character that is present in `charlist`.
+**/
+  public static function trimLeft(value : String, charlist : String) : String {
+#if php
+    return untyped __call__("ltrim", value, charlist);
+#else
+    for(i in 0...value.length)
+      if(!contains(charlist, value.charAt(i)))
+        return value.substr(i);
+    return value;
+#end
+  }
 
-  // TO TEST
-  public static function succ(s : String)
-    return s.substr(0, -1) + String.fromCharCode(s.substr(-1).charCodeAt(0)+1);
+/**
+`trimRight` removes from the end of the string any character that is present in `charlist`.
+**/
+  public static function trimRight(value : String, charlist : String) : String {
+#if php
+    return untyped __call__("rtrim", value, charlist);
+#else
+    var len = value.length,
+        i;
+    for(j in 0...len) {
+      i = len - j - 1;
+      if(!contains(charlist, value.charAt(i)))
+        return value.substr(0, i+1);
+    }
+    return value;
+#end
+  }
 
-  // TO TEST
+/**
+`underscore` finds UpperCase characters and turns them into LowerCase and prepends them with a whtiespace.
+Sequences of more than one UpperCase character are left untouched.
+**/
   public static function underscore(s : String) {
     s = (~/::/g).replace(s, '/');
     s = (~/([A-Z]+)([A-Z][a-z])/g).replace(s, '$1_$2');
@@ -158,25 +195,52 @@ For whitespaces in this description, it is intended to be anything that is match
     return s.toLowerCase();
   }
 
-  public static function dasherize(s : String)
-    return s.replace('_', '-');
-
-  public static function repeat(s : String, times : Int) {
-    var b = [];
-    for(i in 0...times)
-      b.push(s);
-    return b.join('');
+/**
+Capitalize the first letter of every word in `value`. If `whiteSpaceOnly` is set to `true`
+the capitlization is limited to whitespace separated words.
+**/
+  public static function upperCaseWords(value : String, ?whiteSpaceOnly = false) : String {
+    if(whiteSpaceOnly) {
+#if php
+      return untyped __call__("ucwords", value);
+#else
+      return UCWORDSWS.map(capitalize(value), upperMatch);
+#end
+    } else {
+      return UCWORDS.map(capitalize(value), upperMatch);
+    }
   }
 
-  public static function wrapColumns(s : String, columns = 78, indent = "", newline = "\n") {
-    var parts = _reSplitWC.split(s),
-      result = [];
-    for(part in parts)
-      result.push(_wrapColumns(StringTools.trim(_reReduceWS.replace(part, " ")), columns, indent, newline));
-    return result.join(newline);
+/**
+`upTo` searches for the first occurrance of `searchFor` and returns the text up to that point.
+
+If `searchFor` is not found, the entire string is returned.
+**/
+  public static function upTo(value : String, searchFor : String) {
+    var pos = value.indexOf(searchFor);
+    if (pos < 0)
+      return value;
+    else
+      return value.substr(0, pos);
   }
 
-  static function _wrapColumns(s : String, columns : Int, indent : String, newline : String) {
+/**
+`wrapColumns` splits a long string into lines that are at most `columns` long.
+
+Words whose length exceeds `columns` are not split.
+**/
+  public static function wrapColumns(s : String, columns = 78, indent = "", newline = "\n")
+    return SPLIT_LINES.split(s).map(function(part)
+        return wrapLine(
+            StringTools.trim(WSG.replace(part, " ")),
+            columns, indent, newline)
+      ).join(newline);
+
+  static function upperMatch(re : EReg)
+    return re.matched(0).toUpperCase();
+
+
+  static function wrapLine(s : String, columns : Int, indent : String, newline : String) {
     var parts = [],
       pos = 0,
       len = s.length,
@@ -207,17 +271,13 @@ For whitespaces in this description, it is intended to be anything that is match
     return indent + parts.join(newline + indent);
   }
 
-  public static function stripTags(s : String) : String
-#if php
-    return untyped __call__("strip_tags", s);
-#else
-    return _reStripTags.replace(s, "");
+  static var UCWORDS = ~/[^a-zA-Z]([a-z])/g;
+#if !php
+  static var UCWORDSWS = ~/\s[a-z]/g;
+  static var ALPHANUM = ~/^[a-z0-9]+$/i;
+  static var DIGITS = ~/^[0-9]+$/;
+  static var STRIPTAGS = ~/<\/?[a-z]+[^>]*?\/?>/gi;
 #end
-
-  public static function ellipsis(s : String, maxlen = 20, symbol = "...") {
-    if (s.length > maxlen)
-      return s.substr(0, symbol.length > maxlen - symbol.length ? symbol.length : maxlen - symbol.length) + symbol;
-    else
-      return s;
-  }
+  static var WSG = ~/\s+/g;
+  static var SPLIT_LINES = ~/(\r\n|\n\r|\n|\r)/g;
 }
