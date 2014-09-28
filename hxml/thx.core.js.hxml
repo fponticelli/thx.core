@@ -4,5 +4,5 @@
 -js bin/test.js
 -D nodejs
 -main TestAll
--cmd echo "--------------------------------------JS---------------------------------------"
+
 -cmd node ./bin/test.js

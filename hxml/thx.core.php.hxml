@@ -3,5 +3,5 @@
 -lib utest
 -php bin/php
 -main TestAll
--cmd echo "--------------------------------------PHP--------------------------------------"
+
 -cmd php ./bin/php/index.php

@@ -4,5 +4,5 @@
 -lib hxcs
 -cs bin/cs
 -main TestAll
--cmd echo "--------------------------------------CS---------------------------------------"
--cmd ./bin/cs/bin/TestAll
+
+-cmd mono ./bin/cs/bin/TestAll.exe
