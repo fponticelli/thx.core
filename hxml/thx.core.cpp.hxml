@@ -1,5 +1,8 @@
 -cp src
 -cp test
 -lib utest
+-lib hxcpp
 -cpp bin/cpp
 -main TestAll
+-cmd echo "--------------------------------------CPP---------------------------------------"
+-cmd ./bin/cpp/TestAll

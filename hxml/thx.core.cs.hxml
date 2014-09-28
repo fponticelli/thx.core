@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib utest
+-lib hxcs
+-cs bin/cs
+-main TestAll
+-cmd echo "--------------------------------------CS---------------------------------------"
+-cmd ./bin/cs/bin/TestAll

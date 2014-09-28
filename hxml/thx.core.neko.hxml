@@ -1,0 +1,7 @@
+-cp src
+-cp test
+-lib utest
+-neko bin/test.n
+-main TestAll
+-cmd echo "-------------------------------------NEKO--------------------------------------"
+-cmd neko ./bin/test.n

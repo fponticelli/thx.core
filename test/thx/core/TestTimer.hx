@@ -13,12 +13,12 @@ class TestTimer {
 
 
   function assertTime(expected : Float, test : Float, ?pos : haxe.PosInfos) {
-    var tollerance = expected * .2;
+    var tollerance = expected * .5;
     Assert.isTrue(test >= expected - tollerance && test <= expected + tollerance, '$test is not in range of +/-$tollerance from $expected', pos);
   }
 
   public function testRepeat() {
-    var done    = Assert.createAsync(600),
+    var done    = Assert.createAsync(1000),
         delay   = 100,
         start   = Date.now().getTime(),
         counter = 5,

@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib utest
+-lib hxjava
+-java bin/java
+-main TestAll
+-cmd echo "-------------------------------------JAVA--------------------------------------"
+-cmd java -jar ./bin/java/TestAll.jar

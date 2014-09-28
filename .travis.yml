@@ -1,0 +1,39 @@
+language: php
+
+env:
+    matrix:
+    - TARGET=cpp
+    #- TARGET=cs
+    #- TARGET=java
+    - TARGET=js
+    - TARGET=neko
+    - TARGET=php
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - env: TARGET=cs
+    - env: TARGET=php
+
+# Install Haxe and dependencies before running the test.
+before_script:
+  - git submodule update --init --recursive            # update utest
+  - sudo add-apt-repository ppa:eyecreate/haxe -y      # add the ubuntu ppa that contains haxe
+  - sudo apt-get update                                # pull info from ppa
+  - sudo apt-get install haxe -y                       # install haxe (and neko)
+  - mkdir ~/haxelib                                    # create a folder for installing haxelib
+  - haxelib setup ~/haxelib
+  - haxelib install utest                              # dependency
+  - sh -c "if [ '$TARGET' = 'cpp' ]; then sudo apt-get install gcc-multilib g++-multilib -y; fi"
+  - sh -c "if [ '$TARGET' = 'cpp' ]; then haxelib install hxcpp; fi"
+  - sh -c "if [ '$TARGET' = 'cs' ]; then haxelib install hxcs; fi"
+  - sh -c "if [ '$TARGET' = 'java' ]; then haxelib install hxjava; fi"
+#  - sh -c "if [ '$TARGET' = 'node' ]; then haxelib install nodejs; fi"
+
+# Run the test!
+script:
+  - haxe hxml/thx.core.${TARGET}.hxml
+
+branches:
+      only:
+          - master

@@ -8,7 +8,7 @@ abstract Set<T>(Array<T>) {
 /**
 `arrayToSet` converts an `Array` into a `Set` removing all duplicated values.
 **/
-  @:from public static function arrayToSet(arr : Array<T>) {
+  @:from public static function arrayToSet<T>(arr : Array<T>) {
     var set = new Set([]);
     for(v in arr)
       set.push(v);
@@ -58,7 +58,7 @@ outside the boundaries.
 /**
 Like `add` but doesn't notify if the addition was successful or not.
 **/
-  inline public function push(v : T) : Void
+  public function push(v : T) : Void
     add(v);
 
 /**

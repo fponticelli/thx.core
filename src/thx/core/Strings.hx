@@ -191,7 +191,9 @@ It transforms a string into an `Array` of characters.
 It transforms a string into an `Array` of char codes in integer format.
 **/
   inline public static function toCharcodeArray(s : String) : Array<Int>
-    return s.split('').map(function(s) return s.charCodeAt(0));
+    return s.split('')
+      .map(function(s)
+        return s.charCodeAt(0));
 
 /**
 `trim` removes from the beginning and the end of the string any character that is present in `charlist`.
