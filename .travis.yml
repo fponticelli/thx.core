@@ -2,18 +2,17 @@ language: php
 
 env:
     matrix:
-    #- TARGET=cpp
+    - TARGET=cpp
     #- TARGET=cs
     #- TARGET=java
     - TARGET=js
-    #- TARGET=neko
+    - TARGET=neko
     - TARGET=php
 
 matrix:
   fast_finish: true
   allow_failures:
     - env: TARGET=cs
-    - env: TARGET=php
 
 # Install Haxe and dependencies before running the test.
 before_script:
