@@ -142,17 +142,23 @@ aaa aa", text.wrapColumns(6));
     Assert.equals('abcde', 'abcde'.trimLeft('x'));
     Assert.equals('de', 'abcde'.trimLeft('cba'));
     Assert.equals('abcde', 'abcde'.trimLeft('b'));
+
+    Assert.equals('', '/'.trimLeft('/'));
   }
 
   public function testRtrim() {
     Assert.equals('abcde', 'abcde'.trimRight('x'));
     Assert.equals('ab', 'abcde'.trimRight('ced'));
     Assert.equals('abcde', 'abcde'.trimRight('d'));
+
+    Assert.equals('', '/'.trimRight('/'));
   }
 
   public function testTrim() {
     Assert.equals('abcde', 'abcde'.trim('x'));
     Assert.equals('cd', 'abcde'.trim('abe'));
     Assert.equals('abcde', 'abcde'.trim('bd'));
+
+    Assert.equals('', '/'.trim('/'));
   }
 }

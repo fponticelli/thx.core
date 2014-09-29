@@ -212,10 +212,13 @@ It transforms a string into an `Array` of char codes in integer format.
 #if php
     return untyped __call__("ltrim", value, charlist);
 #else
+    var pos = 0;
     for(i in 0...value.length)
-      if(!contains(charlist, value.charAt(i)))
-        return value.substr(i);
-    return value;
+      if(contains(charlist, value.charAt(i)))
+        pos++;
+      else
+        break;
+    return value.substr(pos);
 #end
   }
 
@@ -227,13 +230,16 @@ It transforms a string into an `Array` of char codes in integer format.
     return untyped __call__("rtrim", value, charlist);
 #else
     var len = value.length,
+        pos = len,
         i;
     for(j in 0...len) {
       i = len - j - 1;
-      if(!contains(charlist, value.charAt(i)))
-        return value.substr(0, i+1);
+      if(contains(charlist, value.charAt(i)))
+        pos = i;
+      else
+        break;
     }
-    return value;
+    return value.substr(0, pos);
 #end
   }
 
