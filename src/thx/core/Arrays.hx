@@ -306,6 +306,17 @@ It returns a copy of the array with its elements randomly changed in position.
     }
     return array;
   }
+
+/**
+Returns the first `n` elements from the array.
+**/
+  inline public static function take<T>(arr : Array<T>, n : Int) : Array<T>
+    return arr.slice(0, n);
+/**
+Returns the last `n` elements from the array.
+**/
+  inline public static function takeLast<T>(arr : Array<T>, n : Int) : Array<T>
+    return arr.slice(arr.length - n);
 }
 
 /**
