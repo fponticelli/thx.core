@@ -38,6 +38,17 @@ It returns a boolean value indicating if the `Set` was changed by operation or n
     return new Set(this.copy());
 
 /**
+`difference` creates a new `Set` with elements from the first set excluding the elements
+from the second.
+**/
+  @:op(A-B) inline public function difference(set : Set<T>) : Set<T> {
+    var result = this.copy();
+    for(item in set)
+      result.remove(item);
+    return new Set(result);
+  }
+
+/**
 `exists` returns `true` if it contains an element that is equals to `v`.
 **/
   public function exists(v : T) : Bool {
@@ -72,6 +83,12 @@ Same operations as `Array.splice()` but it returns a new `Set` instead of an arr
 **/
   inline public function splice(pos : Int, len : Int) : Set<T>
     return new Set(this.splice(pos, len));
+
+/**
+Union creates a new Set with elements from bots sets.
+**/
+  @:op(A+B) inline public function union(set : Set<T>) : Set<T>
+    return arrayToSet(this.concat(set.setToArray()));
 
 /**
 Converts a `Set<T>` into `Array<T>`. The returned array is a copy of the internal
