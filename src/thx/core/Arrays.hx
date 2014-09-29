@@ -191,6 +191,12 @@ trace(arr); // [1,2,3,4,5,6,7,8,9]
     #end
 
 /**
+It returns the first element of the array or null if the array is empty. Same as `first`.
+**/
+  inline public static function head<T>(array : Array<T>) : Null<T>
+    return array[0];
+
+/**
 It returns `true` if the array contains zero elements.
 **/
   inline public static function isEmpty<T>(array : Array<T>) : Bool
@@ -291,6 +297,31 @@ It is the same as `reduce` but with the extra integer `index` parameter.
     #else
       return Iterables.reducei(array, callback, initial);
     #end
+
+/**
+Returns all but the first element of the array
+**/
+  inline public static function rest<T>(array : Array<T>) : Array<T>
+    return array.slice(1);
+
+/**
+Returns `n` elements at random from the array. Elements will not be repeated.
+**/
+  inline public static function sample<T>(array : Array<T>, n : Int) : Array<T> {
+    if(n > array.length)
+      n = array.length;
+    var copy = array.copy(),
+        result = [];
+    for(i in 0...n)
+      result.push(copy.splice(Std.random(copy.length), 1)[0]);
+    return result;
+  }
+
+/**
+Returns one element at random from the array or null if the array is empty.
+**/
+  inline public static function sampleOne<T>(array : Array<T>) : Null<T>
+    return array[Std.random(array.length)];
 
 /**
 It returns a copy of the array with its elements randomly changed in position.
