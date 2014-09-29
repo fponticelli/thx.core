@@ -79,6 +79,26 @@ class TestArrays {
   public function testAverageInts() {
     Assert.equals(3.0, [2, 6, 1].average());
   }
+
+  public function testMinString() {
+    Assert.equals('A', ['B', 'C', 'A'].min());
+  }
+
+  public function testMaxStrings() {
+    Assert.equals('C', ['B', 'C', 'A'].max());
+  }
+
+  public function testCompactFloats() {
+    Assert.same([1.5, 0.5, 1.0], [Math.NaN, 1.5, null, 0.5, 1.0].compact());
+  }
+
+  public function testCompactStrings() {
+    Assert.same(['B', 'C', 'A'], ['B', '', 'C', null, 'A', ''].compact());
+  }
+
+  public function testCompactInt() {
+    Assert.same([1, 0, 2], [null, 1, null, 0, 2].compact());
+  }
 }
 
 private class Sample {

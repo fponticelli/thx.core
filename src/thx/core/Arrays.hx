@@ -13,6 +13,32 @@ Note that some of the examples imply `using thx.core.Arrays;`.
 **/
 class Arrays {
 /**
+Checks if `predicate` returns true for all elements in the array.
+**/
+  public static function all<T>(arr : Array<T>, predicate : T -> Bool) {
+    for(item in arr)
+      if(!predicate(item))
+        return false;
+    return true;
+  }
+
+/**
+Checks if `predicate` returns true for at least one element in the array.
+**/
+  public static function any<T>(arr : Array<T>, predicate : T -> Bool) {
+    for(item in arr)
+      if(predicate(item))
+        return true;
+    return false;
+  }
+
+/**
+Filters out all null elements in the array
+**/
+  public static function compact<T>(arr : Array<Null<T>>) : Array<T>
+    return arr.filter(function(v) return null != v);
+
+/**
 Returns `true` if `element` is found in the array.
 
 An optional equality function can be passed as the last argument. If not provided, strict equality is adopted.
@@ -301,6 +327,12 @@ Finds the average of all the elements in the array.
   }
 
 /**
+Filters out all null or Math.NaN floats in the array
+**/
+  public static function compact(arr : Array<Null<Float>>) : Array<Float>
+    return arr.filter(function(v) return null != v && Math.isFinite(v));
+
+/**
 Finds the max float element in the array.
 **/
   public static function max(arr : Array<Float>) : Null<Float>
@@ -311,7 +343,6 @@ Finds the min float element in the array.
 **/
   public static function min(arr : Array<Float>) : Null<Float>
     return arr.length == 0 ? null : Arrays.reduce(arr, function(min, v) return v < min ? v : min, arr[0]);
-
 }
 
 /**
@@ -334,5 +365,28 @@ Finds the max int element in the array.
 Finds the min int element in the array.
 **/
   public static function min(arr : Array<Int>) : Null<Int>
+    return arr.length == 0 ? null : Arrays.reduce(arr, function(min, v) return v < min ? v : min, arr[0]);
+}
+
+/**
+Helper class for `Array<String>`.
+**/
+class ArrayStrings {
+/**
+Filters out all null or empty strings in the array
+**/
+  public static function compact(arr : Array<String>) : Array<String>
+    return arr.filter(function(v) return !Strings.isEmpty(v));
+
+/**
+Finds the max string element in the array.
+**/
+  public static function max(arr : Array<String>) : Null<String>
+    return arr.length == 0 ? null : Arrays.reduce(arr, function(max, v) return v > max ? v : max, arr[0]);
+
+/**
+Finds the min string element in the array.
+**/
+  public static function min(arr : Array<String>) : Null<String>
     return arr.length == 0 ? null : Arrays.reduce(arr, function(min, v) return v < min ? v : min, arr[0]);
 }
