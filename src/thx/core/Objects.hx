@@ -11,13 +11,25 @@ class Objects {
 `isEmpty` returns `true` if the object doesn't have any field.
 **/
   inline public static function isEmpty(o : {}) : Bool
-    return Reflect.fields(o).length == 0;
+    return size(o) == 0;
+
+/**
+`exists` returns true if `o` contains a field named `name`.
+**/
+  inline public static function exists(o : {}, name : String) : Bool
+    return Reflect.hasField(o, name);
 
 /**
 `fields` returns an array of string containing the field names of the argument object.
 **/
   inline public static function fields(o : {}) : Array<String>
     return Reflect.fields(o);
+
+/**
+`size` returns how many fields are present in the object.
+**/
+  inline public static function size(o : {}) : Int
+    return Reflect.fields(o).length;
 
 /**
 `values` returns an array of dynamic values containing the values of each field in the argument object.

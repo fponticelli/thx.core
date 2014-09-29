@@ -281,3 +281,58 @@ It returns a copy of the array with its elements randomly changed in position.
     return array;
   }
 }
+
+/**
+Helper class for `Array<Float>`.
+**/
+class ArrayFloats {
+/**
+Finds the average of all the elements in the array.
+**/
+  public static function average(arr : Array<Float>) : Null<Float> {
+    if(arr.length == 0)
+      return null;
+    var sum = Arrays.reduce(arr, function(acc, v) {
+        acc.count++;
+        acc.sum += v;
+        return acc;
+      }, { count : 0, sum : 0.0 });
+    return sum.sum / sum.count;
+  }
+
+/**
+Finds the max float element in the array.
+**/
+  public static function max(arr : Array<Float>) : Null<Float>
+    return arr.length == 0 ? null : Arrays.reduce(arr, function(max, v) return v > max ? v : max, arr[0]);
+
+/**
+Finds the min float element in the array.
+**/
+  public static function min(arr : Array<Float>) : Null<Float>
+    return arr.length == 0 ? null : Arrays.reduce(arr, function(min, v) return v < min ? v : min, arr[0]);
+
+}
+
+/**
+Helper class for `Array<Int>`.
+**/
+class ArrayInts {
+/**
+Finds the average of all the elements in the array.
+**/
+  inline public static function average(arr : Array<Int>) : Null<Float>
+    return ArrayFloats.average(cast arr);
+
+/**
+Finds the max int element in the array.
+**/
+  public static function max(arr : Array<Int>) : Null<Int>
+    return arr.length == 0 ? null : Arrays.reduce(arr, function(max, v) return v > max ? v : max, arr[0]);
+
+/**
+Finds the min int element in the array.
+**/
+  public static function min(arr : Array<Int>) : Null<Int>
+    return arr.length == 0 ? null : Arrays.reduce(arr, function(min, v) return v < min ? v : min, arr[0]);
+}

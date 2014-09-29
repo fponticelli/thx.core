@@ -55,6 +55,30 @@ class TestArrays {
   public function testPluck() {
     Assert.same([2,4,8], [1,2,4].pluck(_ * 2));
   }
+
+  public function testMinFloats() {
+    Assert.floatEquals(0.5, [1.5, 0.5, 1.0].min());
+  }
+
+  public function testMinInts() {
+    Assert.equals(1, [2, 5, 1].min());
+  }
+
+  public function testMaxFloats() {
+    Assert.floatEquals(1.5, [1.5, 0.5, 1.0].max());
+  }
+
+  public function testMaxInts() {
+    Assert.equals(5, [2, 5, 1].max());
+  }
+
+  public function testAverageFloats() {
+    Assert.floatEquals(1.0, [2.5, 0.5, 0.0].average());
+  }
+
+  public function testAverageInts() {
+    Assert.equals(3.0, [2, 6, 1].average());
+  }
 }
 
 private class Sample {
