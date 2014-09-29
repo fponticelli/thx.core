@@ -33,6 +33,12 @@ Checks if `predicate` returns true for at least one element in the array.
   }
 
 /**
+Creates an array of elements from the specified indexes.
+**/
+  public static function at<T>(arr : Array<T>, indexes : Array<Int>) : Array<T>
+    return indexes.map(function(i) return arr[i]);
+
+/**
 Filters out all null elements in the array
 **/
   public static function compact<T>(arr : Array<Null<T>>) : Array<T>
@@ -310,7 +316,7 @@ Returns `n` elements at random from the array. Elements will not be repeated.
   inline public static function sample<T>(array : Array<T>, n : Int) : Array<T> {
     if(n > array.length)
       n = array.length;
-    var copy = array.copy(),
+    var copy   = array.copy(),
         result = [];
     for(i in 0...n)
       result.push(copy.splice(Std.random(copy.length), 1)[0]);
