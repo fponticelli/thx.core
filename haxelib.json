@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross"],
   "description": "Generic multi-purpose library",
-  "releasenote": "added documentation and reviewed entire API",
-  "version": "0.6.0",
+  "releasenote": "added a few methods to Arrays and Set, and fixed issue with Strings.trim",
+  "version": "0.6.1",
   "contributors": ["fponticelli"]
 }
