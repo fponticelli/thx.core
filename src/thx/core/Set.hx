@@ -67,6 +67,17 @@ outside the boundaries.
     return this[index];
 
 /**
+`intersection` returns a Set with elements that are presents in both sets
+**/
+  inline public function intersection(set : Set<T>) : Set<T> {
+    var result = [];
+    for(item in this)
+      if(set.exists(item))
+        result.push(item);
+    return new Set(result);
+  }
+
+/**
 Like `add` but doesn't notify if the addition was successful or not.
 **/
   public function push(v : T) : Void
