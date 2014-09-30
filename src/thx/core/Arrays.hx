@@ -203,6 +203,12 @@ It returns the first element of the array or null if the array is empty. Same as
     return array[0];
 
 /**
+Get all the elements from `array` except for the last one.
+**/
+  inline public static function initial<T>(array : Array<T>) : Array<T>
+    return array.slice(0, array.length - 1);
+
+/**
 It returns `true` if the array contains zero elements.
 **/
   inline public static function isEmpty<T>(array : Array<T>) : Bool
@@ -276,6 +282,14 @@ var r = arr.plucki(_.increment(i)); // where increment() is a method of the elem
     return macro thx.core.Arrays.mapi($e{a}, function(_, i) return ${expr});
 
 /**
+Pulls from `array` all occurrences of all the elements in `toRemove`. Optionally takes
+an `equality` function.
+**/
+  public static function pull<T>(array : Array<T>, toRemove : Array<T>, ?equality : T -> T -> Bool)
+    for(item in toRemove)
+      removeAll(array, item, equality);
+
+/**
 It pushes `value` onto the array if `condition` is true. Also returns the array for easy method chaining.
 **/
   public static function pushIf<T>(array : Array<T>, condition : Bool, value : T) {
@@ -303,6 +317,19 @@ It is the same as `reduce` but with the extra integer `index` parameter.
     #else
       return Iterables.reducei(array, callback, initial);
     #end
+
+/**
+Remove every occurrance of `element` from `array`. If `equality` is not specified, strict equality
+will be adopted.
+**/
+  public static function removeAll<T>(array : Array<T>, element : T, ?equality : T -> T -> Bool) {
+    if(null == equality)
+      equality = Functions.equality;
+    var i = array.length;
+    while(--i >= 0)
+      if(equality(array[i], element))
+        array.splice(i, 1);
+  }
 
 /**
 Returns all but the first element of the array

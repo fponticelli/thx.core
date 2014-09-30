@@ -10,6 +10,13 @@ Helper functions for functions with arity 0 (functions that do not take argument
 **/
 class Function0 {
 /**
+Returns a function that invokes `callback` after being being invoked `n` times.
+**/
+  inline public function after(n : Int, callback : Void -> Void)
+    return function()
+      if(--n == 0)
+        callback();
+/**
 `join` creates a function that calls the 2 functions passed as arguments in sequence.
 **/
   public inline static function join(fa : Void -> Void, fb : Void -> Void)
