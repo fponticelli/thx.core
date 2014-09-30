@@ -26,18 +26,13 @@ Returns a function that invokes `callback` after being being invoked `n` times.
     }
 
 /**
-`noop` is a function that has no side effects and doesn't return any value.
-**/
-  public static function noop() : Void {}
-
-/**
 `once` wraps and returns the argument function. `once` ensures that `f` will be called
 at most once even if the returned function is invoked multiple times.
 **/
   public inline static function once(f : Void -> Void)
     return function() {
       var t = f;
-      f = noop;
+      f = Functions.noop;
       t();
     };
 
@@ -129,4 +124,9 @@ The `identity` function returns the value of its argument.
 **/
   public static function identity<T>(value : T) : T
     return value;
+
+/**
+`noop` is a function that has no side effects and doesn't return any value.
+**/
+  public static function noop() : Void {}
 }
