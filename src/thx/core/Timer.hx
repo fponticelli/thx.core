@@ -27,6 +27,27 @@ class Timer {
   static var timers = new Map<Int, haxe.Timer>();
   static var _id = 0;
 #end
+
+/**
+Creates a function that delays the execution of `callback` by `delayms` every time it is
+invoked. If `leading` is set to true, a first execution is guaranteed to happen as soon
+as the returnd function is invoked.
+**/
+  public static function debounce(callback : Void -> Void, delayms : Int, leading = false) {
+    var cancel = Functions.noop;
+    function poll() {
+      cancel();
+      cancel = Timer.delay(callback, delayms);
+    }
+    return function() {
+        if(leading) {
+          leading = false;
+          callback();
+        }
+        poll();
+    }
+  }
+
 /**
 `Timer.repeat` continues to invoke `callback` until it is cancelled using the returned
 cancel function.
@@ -72,6 +93,29 @@ the target platform.
 #else
     return clear.bind(untyped __js__('setImmediate')(callback));
 #end
+
+/**
+The returned function executes `callback` at most once every `delayms` regardless of
+how many times it is invoked in that timespance. Setting `leading` to true ensures
+that the callback is invoked at the beginning of the cycle.
+**/
+  public static function throttle(callback : Void -> Void, delayms : Int, leading = false) {
+    var waiting = false;
+    function poll() {
+      waiting = true;
+      Timer.delay(callback, delayms);
+    }
+    return function() {
+        if(leading) {
+          leading = false;
+          callback();
+          return;
+        }
+        if(waiting)
+          return;
+        poll();
+    };
+  }
 
   static #if js inline #end function clear(id) : Void {
 #if !js
