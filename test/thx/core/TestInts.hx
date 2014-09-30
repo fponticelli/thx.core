@@ -8,7 +8,7 @@ package thx.core;
 import utest.Assert;
 
 class TestInts {
-	public function new() { }
+  public function new() { }
 
   public function testRange() {
     var range = Ints.range(2, 7, 1);

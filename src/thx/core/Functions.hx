@@ -1,5 +1,10 @@
 package thx.core;
 
+#if macro
+import haxe.macro.Expr;
+import haxe.macro.ExprTools;
+#end
+
 /**
 Helper functions for functions with arity 0 (functions that do not take arguments).
 **/
@@ -28,6 +33,22 @@ at most once even if the returned function is invoked multiple times.
       f = noop;
       t();
     };
+
+/**
+Creates a function that calls `callback` `n` times and returns an array of results.
+**/
+  public inline static function times<T>(n : Int, callback : Void -> T)
+    return function()
+      return Ints.range(n).map(function(_) return callback());
+
+/**
+Creates a function that calls `callback` `n` times and returns an array of results.
+
+Callback takes an additional argument `index`.
+**/
+  public inline static function timesi<T>(n : Int, callback : Int -> T)
+    return function()
+      return Ints.range(n).map(function(i) return callback(i));
 }
 
 /**
@@ -56,6 +77,28 @@ and passes the same argument value to the both of them.
 **/
   public static function noop<T>(_ : T) : Void {}
 
+/**
+Creates a function that calls `callback` `n` times and returns an array of results.
+**/
+  public inline static function times<TIn, TOut>(n : Int, callback : TIn -> TOut)
+    return function(value : TIn)
+      return Ints.range(n).map(function(_) return callback(value));
+
+/**
+Creates a function that calls `callback` `n` times and returns an array of results.
+
+Callback takes an additional argument `index`.
+**/
+  public inline static function timesi<TIn, TOut>(n : Int, callback : TIn -> Int -> TOut)
+    return function(value : TIn)
+      return Ints.range(n).map(function(i) return callback(value, i));
+
+/**
+
+**/
+  public inline static function swapArguments<T1, T2, TReturn>(callback : T1 -> T2 -> TReturn) : T2 -> T1 -> TReturn
+    return function(a2 : T2, a1 : T1)
+      return callback(a1, a2);
 }
 
 /**
@@ -63,7 +106,20 @@ Generic helper for functions.
 **/
 class Functions {
 /**
+`constant` creates a function that always returns the same value.
+**/
+  public static function constant<T>(v : T)
+    return function() return v;
+
+/**
 It provides strict equality between the two arguments `a` and `b`.
 **/
-  public static function equality<T>(a : T, b : T) return a == b;
+  public static function equality<T>(a : T, b : T) : Bool
+    return a == b;
+
+/**
+The `identity` function returns the value of its argument.
+**/
+  public static function identity<T>(value : T) : T
+    return value;
 }
