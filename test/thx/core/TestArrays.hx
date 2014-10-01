@@ -105,6 +105,23 @@ class TestArrays {
     arr.sortPluck(_0 - _1);
     Assert.same([1,2,3], arr);
   }
+
+  public function testCount() {
+    var arr = [2,3,2,1,4,2,3],
+        map = arr.count();
+    Assert.equals(3, map.get(2));
+    Assert.equals(2, map.get(3));
+    Assert.equals(1, map.get(1));
+    Assert.equals(1, map.get(4));
+  }
+
+  public function testGroupBy() {
+    var arr = [2.1,3.5,2.0,1.4,2.7,3.0],
+        map = arr.groupBy(function(f) return Math.floor(f));
+    Assert.same([2.1, 2.0, 2.7], map.get(2));
+    Assert.same([3.5, 3.0], map.get(3));
+    Assert.same([1.4], map.get(1));
+  }
 }
 
 private class Sample {

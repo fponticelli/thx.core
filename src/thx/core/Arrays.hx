@@ -46,6 +46,18 @@ Filters out all null elements in the array
     return arr.filter(function(v) return null != v);
 
 /**
+Returns a Map containing the number of occurrances for each value in the array.
+**/
+  @:generic
+  public static function count<T>(arr : Array<T>) : Map<T, Int> {
+    var map = new Map<T, Int>();
+    arr.map(function(v)
+      map.set(v, map.exists(v) ? map.get(v) + 1 : 1)
+    );
+    return map;
+  }
+
+/**
 Returns `true` if `element` is found in the array.
 
 An optional equality function can be passed as the last argument. If not provided, strict equality is adopted.
@@ -196,6 +208,26 @@ trace(arr); // [1,2,3,4,5,6,7,8,9]
     #else
       return reduce(array, function(acc : Array<T>, item) return acc.concat(item), []);
     #end
+
+/**
+Returns a Map of arrays. Each value in the array is passed to `resolver` that returns a key to use
+to group such element.
+**/
+  @:generic
+  public static function groupBy<TKey, TValue>(arr : Array<TValue>, resolver : TValue -> TKey) : Map<TKey, Array<TValue>> {
+    var map = new Map<TKey, Array<TValue>>();
+    arr.map(function(v) {
+      var key = resolver(v),
+          arr = map.get(key);
+      if(null == arr) {
+        arr = [v];
+        map.set(key, arr);
+      } else {
+        arr.push(v);
+      }
+    });
+    return map;
+  }
 
 /**
 It returns the first element of the array or null if the array is empty. Same as `first`.
