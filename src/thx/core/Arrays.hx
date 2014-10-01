@@ -177,6 +177,21 @@ If none is found it returns null.
   }
 
 /**
+It returns the last element of the array that matches the provided predicate function.
+If none is found it returns null.
+**/
+  public static function findLast<T>(array : Array<T>, predicate : T -> Bool) : Null<T> {
+    var len = array.length,
+        j;
+    for(i in 0...len) {
+      j = len - i - 1;
+      if(predicate(array[j]))
+        return array[j];
+    }
+    return null;
+  }
+
+/**
 It returns the first element of the array or null if the array is empty.
 **/
   inline public static function first<T>(array : Array<T>) : Null<T>
