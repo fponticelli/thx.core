@@ -11,6 +11,18 @@ For documentation of specific methods refer to the equivalent methods in `thx.co
 **/
 class Iterables {
 /**
+Checks if `predicate` returns true for all elements in the iterable.
+**/
+  public static function all<T>(it : Iterable<T>, predicate : T -> Bool)
+    return Iterators.all(it.iterator(), predicate);
+
+/**
+Checks if `predicate` returns true for at least one element in the iterable.
+**/
+  public static function any<T>(it : Iterable<T>, predicate : T -> Bool)
+    return Iterators.any(it.iterator(), predicate);
+
+/**
 Refer to `thx.core.Arrays.eachPair`.
 **/
   public inline static function eachPair<TIn, TOut>(it : Iterable<TIn>, handler : TIn -> TIn -> Bool)

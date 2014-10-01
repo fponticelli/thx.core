@@ -50,4 +50,8 @@ class TestFunctions {
     Assert.equals(20, manage(2));
     Assert.equals(2, counter);
   }
+
+  public function testNegate() {
+    Assert.isFalse((function() return true).negate()());
+  }
 }
