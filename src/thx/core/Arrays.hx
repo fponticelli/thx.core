@@ -372,6 +372,12 @@ It returns a copy of the array with its elements randomly changed in position.
   }
 
 /**
+Uses the plcuk strategy to sort an array. Arguments for pluck are `_0` and `_1`.
+**/
+  macro public static function sortPluck<T>(array : ExprOf<Array<T>>, expr : ExprOf<Bool>)
+    return macro $e{array}.sort(function(_0, _1) return $e{expr});
+
+/**
 Returns the first `n` elements from the array.
 **/
   inline public static function take<T>(arr : Array<T>, n : Int) : Array<T>

@@ -99,6 +99,12 @@ class TestArrays {
   public function testCompactInt() {
     Assert.same([1, 0, 2], [null, 1, null, 0, 2].compact());
   }
+
+  public function testSortPluck() {
+    var arr = [2,3,1];
+    arr.sortPluck(_0 - _1);
+    Assert.same([1,2,3], arr);
+  }
 }
 
 private class Sample {
