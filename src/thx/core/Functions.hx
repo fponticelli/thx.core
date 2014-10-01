@@ -37,6 +37,13 @@ at most once even if the returned function is invoked multiple times.
     };
 
 /**
+Wraps `callback` in a function that negates its results.
+**/
+  public inline static function negate(callback : Void -> Bool)
+    return function()
+      return !callback();
+
+/**
 Creates a function that calls `callback` `n` times and returns an array of results.
 **/
   public inline static function times<T>(n : Int, callback : Void -> T)
@@ -95,6 +102,13 @@ the resolver function that by default directly converts the first argument into 
   }
 
 /**
+Wraps `callback` in a function that negates its results.
+**/
+  public inline static function negate<T1>(callback : T1 -> Bool)
+    return function(v : T1)
+      return !callback(v);
+
+/**
 `noop` is a function that has no side effects and doesn't return any value.
 **/
   public static function noop<T>(_ : T) : Void {}
@@ -146,6 +160,13 @@ the resolver function that by default directly converts the arguments into a str
       return result;
     }
   }
+
+/**
+Wraps `callback` in a function that negates its results.
+**/
+  public inline static function negate<T1, T2>(callback : T1 -> T2 -> Bool)
+    return function(v1 : T1, v2 : T2)
+      return !callback(v1, v2);
 }
 
 /**
@@ -171,6 +192,13 @@ the resolver function that by default directly converts the arguments into a str
       return result;
     }
   }
+
+/**
+Wraps `callback` in a function that negates its results.
+**/
+  public inline static function negate<T1, T2, T3>(callback : T1 -> T2 -> T3 -> Bool)
+    return function(v1 : T1, v2 : T2, v3 : T3)
+      return !callback(v1, v2, v3);
 }
 
 /**
