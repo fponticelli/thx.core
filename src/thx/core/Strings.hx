@@ -192,8 +192,9 @@ It transforms a string into an `Array` of char codes in integer format.
 **/
   inline public static function toCharcodeArray(s : String) : Array<Int>
     return s.split('')
-      .map(function(s)
-        return s.charCodeAt(0));
+      .map(function(s : String)
+        // the cast is required to compile safely to C#
+        return (s.charCodeAt(0) : Int));
 
 /**
 `trim` removes from the beginning and the end of the string any character that is present in `charlist`.
@@ -323,5 +324,5 @@ Words whose length exceeds `columns` are not split.
   static var STRIPTAGS = ~/<\/?[a-z]+[^>]*?\/?>/gi;
 #end
   static var WSG = ~/\s+/g;
-  static var SPLIT_LINES = ~/(\r\n|\n\r|\n|\r)/g;
+  static var SPLIT_LINES = ~/\r\n|\n\r|\n|\r/g;
 }

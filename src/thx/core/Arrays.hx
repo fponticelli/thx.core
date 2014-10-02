@@ -43,7 +43,8 @@ Creates an array of elements from the specified indexes.
 Filters out all null elements in the array
 **/
   public static function compact<T>(arr : Array<Null<T>>) : Array<T>
-    return arr.filter(function(v) return null != v);
+    // the cast is required to compile safely to C#
+    return cast arr.filter(function(v : Null<T>) return null != v);
 
 /**
 Returns a Map containing the number of occurrances for each value in the array.
@@ -557,7 +558,8 @@ Finds the average of all the elements in the array.
 Filters out all null or Math.NaN floats in the array
 **/
   public static function compact(arr : Array<Null<Float>>) : Array<Float>
-    return arr.filter(function(v) return null != v && Math.isFinite(v));
+    // the cast is required to compile safely to C#
+    return cast arr.filter(function(v) return null != v && Math.isFinite(v));
 
 /**
 Finds the max float element in the array.
