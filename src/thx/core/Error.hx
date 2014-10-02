@@ -46,7 +46,7 @@ populate but can be provided if preferred.
     this.message = message;
 #end
     if(null == stack) {
-      stack = CallStack.exceptionStack();
+      stack = try CallStack.exceptionStack() catch(e : Dynamic) [];
       if(stack.length == 0)
         stack = CallStack.callStack();
     }
