@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross"],
   "description": "Generic multi-purpose library",
-  "releasenote": "fix for Java",
-  "version": "0.7.1",
+  "releasenote": "more Arrays methods",
+  "version": "0.8.0",
   "contributors": ["fponticelli"]
 }
