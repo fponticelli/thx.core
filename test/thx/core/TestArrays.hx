@@ -122,6 +122,18 @@ class TestArrays {
     Assert.same([3.5, 3.0], map.get(3));
     Assert.same([1.4], map.get(1));
   }
+
+  public function testMapRight() {
+    Assert.same([6,4,2], [1,2,3].mapRight(function(v) return v * 2));
+  }
+
+  public function testPluckRight() {
+    Assert.same([6,4,2], [1,2,3].pluckRight(_ * 2));
+  }
+
+  public function testReduceRight() {
+    Assert.same('CBA', ['a','b','c'].reduceRight(function(acc, v) return acc + v.toUpperCase(), ''));
+  }
 }
 
 private class Sample {

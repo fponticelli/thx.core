@@ -288,7 +288,7 @@ It returns the last element of the array or null if the array is empty.
     return array[array.length-1];
 
 /**
-Same as `Array.map()` but it adds a second argument to the `callback` function with the current index value.
+Same as `Array.map` but it adds a second argument to the `callback` function with the current index value.
 **/
   #if js inline #end
   public static function mapi<TIn, TOut>(array : Array<TIn>, callback : TIn -> Int -> TOut) : Array<TOut> {
@@ -300,6 +300,17 @@ Same as `Array.map()` but it adds a second argument to the `callback` function w
         r.push(callback(array[i], i));
       return r;
     #end
+  }
+
+/**
+Same as `Array.map` but traverses the array from the last to the first element.
+**/
+  public static function mapRight<TIn, TOut>(array : Array<TIn>, callback : TIn -> TOut) : Array<TOut> {
+    var i = array.length,
+        result = [];
+    while(--i >= 0)
+      result.push(callback(array[i]));
+    return result;
   }
 
 /**
@@ -337,6 +348,12 @@ The method is a macro method that guarantees that the correct types and identifi
 **/
   macro public static function pluck<T, TOut>(a : ExprOf<Array<T>>, expr : ExprOf<TOut>) : ExprOf<Array<TOut>>
     return macro $e{a}.map(function(_) return ${expr});
+
+/**
+Same as pluck but in reverse order.
+**/
+  macro public static function pluckRight<T, TOut>(a : ExprOf<Array<T>>, expr : ExprOf<TOut>) : ExprOf<Array<TOut>>
+    return macro thx.core.Arrays.mapRight($e{a}, function(_) return ${expr});
 
 /**
 Like `pluck` but with an extra argument `i` that can be used to infer the index of the iteration.
@@ -384,6 +401,16 @@ It is the same as `reduce` but with the extra integer `index` parameter.
     #else
       return Iterables.reducei(array, callback, initial);
     #end
+
+/**
+Same as `Arrays.reduce` but starting from the last element and traversing to the first
+**/
+  inline public static function reduceRight<TItem, TAcc>(array : Array<TItem>, callback : TAcc -> TItem -> TAcc, initial : TAcc) : TAcc {
+    var i = array.length;
+    while(--i >= 0)
+      initial = callback(initial, array[i]);
+    return initial;
+  }
 
 /**
 Remove every occurrance of `element` from `array`. If `equality` is not specified, strict equality
