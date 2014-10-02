@@ -1,3 +1,4 @@
+#-debug
 -cp src
 -cp test
 -lib utest
@@ -5,4 +6,4 @@
 -java bin/java
 -main TestAll
 
--cmd java -jar ./bin/java/TestAll.jar
+-cmd java -jar "./bin/java/TestAll.jar"

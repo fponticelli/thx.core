@@ -4,11 +4,14 @@ package thx.core;
 `ERegs` provides helper methods to use together with `EReg`.
 **/
 class ERegs {
-	static var ESCAPE_PATTERN = ~/([-[\]{}()*+?.,\\^$|#\s])/g;
+  static var ESCAPE_PATTERN = ~/([-\[\]{}()*+?\.,\\^$|#\s])/g;
 
 /**
 It escapes any characer in a string that has a special meaning when used in a regula expression.
 **/
-	public static function escape(text : String) : String
-		return ESCAPE_PATTERN.replace(text, "\\$1");
+  public static function escape(text : String) : String
+    return ESCAPE_PATTERN.map(text , function(ereg)
+      return '\\' + ereg.matched(1));
+// The following should be the right solution but it works inconsistently in Java
+//    return ESCAPE_PATTERN.replace(text, "\\\\$1");
 }
