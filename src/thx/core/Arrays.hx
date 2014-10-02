@@ -14,6 +14,12 @@ Note that some of the examples imply `using thx.core.Arrays;`.
 **/
 class Arrays {
 /**
+Finds the first occurrance of `element` and returns all the elements after it.
+**/
+  inline public static function after<T>(array : Array<T>, element : T)
+    return array.slice(array.indexOf(element)+1);
+
+/**
 Checks if `predicate` returns true for all elements in the array.
 **/
   public static function all<T>(arr : Array<T>, predicate : T -> Bool) {
@@ -38,6 +44,12 @@ Creates an array of elements from the specified indexes.
 **/
   public static function at<T>(arr : Array<T>, indexes : Array<Int>) : Array<T>
     return indexes.map(function(i) return arr[i]);
+
+/**
+Finds the first occurrance of `element` and returns all the elements before it.
+**/
+  inline public static function before<T>(array : Array<T>, element : T)
+    return array.slice(0, array.indexOf(element));
 
 /**
 Filters out all null elements in the array
@@ -224,6 +236,12 @@ trace(arr); // [1,2,3,4,5,6,7,8,9]
     #else
       return reduce(array, function(acc : Array<T>, item) return acc.concat(item), []);
     #end
+
+/**
+Finds the first occurrance of `element` and returns all the elements from that point on.
+**/
+  inline public static function from<T>(array : Array<T>, element : T)
+    return array.slice(array.indexOf(element));
 
 /**
 Returns a Map of arrays. Each value in the array is passed to `resolver` that returns a key to use
