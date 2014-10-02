@@ -63,6 +63,7 @@ will be empty if `Option` is `None` or will contain one value otherwise.
 `toBool` transforms an `Option` value into a boolean: `None` maps to `false`, and
 `Some(_)` to `true`. The value in `Some` has no play in the conversion.
 **/
+  #if java @:generic #end
   public static function toBool<T>(option : Option<T>) : Bool
     return switch option {
       case None: false;
