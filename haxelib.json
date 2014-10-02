@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross"],
   "description": "Generic multi-purpose library",
-  "releasenote": "added more methods and fixed compat issues with Java/C#",
-  "version": "0.7.0",
+  "releasenote": "fix for Java",
+  "version": "0.7.1",
   "contributors": ["fponticelli"]
 }
