@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross"],
   "description": "Generic multi-purpose library",
-  "releasenote": "added a few methods to Arrays and Set, and fixed issue with Strings.trim",
-  "version": "0.6.1",
+  "releasenote": "added more methods and fixed compat issues with Java/C#",
+  "version": "0.7.0",
   "contributors": ["fponticelli"]
 }
