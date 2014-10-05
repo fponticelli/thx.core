@@ -130,6 +130,9 @@ the target platform.
   public static function immediate(callback : Void -> Void) : Void -> Void
 #if js
     return clear.bind(untyped __js__('setImmediate')(callback));
+#elseif java
+    // not sure why this is needed
+    return delay(callback, 1);
 #else
     return delay(callback, 0);
 #end
