@@ -80,6 +80,10 @@ cancel function.
     return clear.bind(untyped __global__["flash.utils.setInterval"](callback, delayms));
 #elseif flash
     return clear.bind(untyped _global["setInterval"](callback, delayms));
+#elseif java
+    var timer = new java.util.Timer();
+    timer.scheduleAtFixedRate(new TimerTask(callback), haxe.Int64.ofInt(delayms), haxe.Int64.ofInt(delayms));
+    return timer.cancel;
 #else
     var id = _id++,
         timer = new haxe.Timer(delayms);
@@ -100,6 +104,13 @@ canelled using the returned cancel function.
     return clear.bind(untyped __global__["flash.utils.setTimeout"](callback, delayms));
 #elseif flash
     return clear.bind(untyped _global["setTimeout"](callback, delayms));
+#elseif java
+    var timer = new java.util.Timer();
+    timer.scheduleAtFixedRate(new TimerTask(function() {
+      timer.cancel();
+      callback();
+    }), haxe.Int64.ofInt(delayms), haxe.Int64.ofInt(delayms));
+    return timer.cancel;
 #else
     var id = _id++,
         timer = haxe.Timer.delay(function() {
@@ -119,10 +130,6 @@ the target platform.
   public static function immediate(callback : Void -> Void) : Void -> Void
 #if js
     return clear.bind(untyped __js__('setImmediate')(callback));
-#elseif flash9
-    return clear.bind(untyped __global__["flash.utils.setTimeout"](callback, 0));
-#elseif flash
-    return clear.bind(untyped _global["setTimeout"](callback, 0));
 #else
     return delay(callback, 0);
 #end
@@ -151,3 +158,16 @@ the target platform.
   }
 #end
 }
+
+#if java
+@:nativeGen private class TimerTask extends java.util.TimerTask {
+  var callback : Void -> Void;
+  public function new(callback : Void -> Void) : Void {
+    super();
+    this.callback = callback;
+  }
+
+  @:overload public function run()
+    callback();
+}
+#end
