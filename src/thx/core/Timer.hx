@@ -1,9 +1,5 @@
 package thx.core;
 
-#if !js
-import haxe.Timer in T;
-#end
-
 /**
 `Timer` provides several meaning to delay the execution of code. At the moment it is only
 implemented for platforms that have a native concept of Timer like Swf and JavaScript or c++/Neko
@@ -23,11 +19,6 @@ cancel();
 Notice that calling the cancel function multiple times have no effect after the first execution.
 **/
 class Timer {
-#if !js
-  static var timers = new Map<Int, haxe.Timer>();
-  static var _id = 0;
-#end
-
 /**
 Creates a function that delays the execution of `callback` by `delayms` every time it is
 invoked. If `leading` is set to true, a first execution is guaranteed to happen as soon
@@ -47,52 +38,6 @@ as the returnd function is invoked.
         poll();
     }
   }
-
-/**
-`Timer.repeat` continues to invoke `callback` until it is cancelled using the returned
-cancel function.
-**/
-  public static function repeat(callback : Void -> Void, delayms : Int) : Void -> Void {
-#if !js
-    var id = _id++,
-        timer = new T(delayms);
-    timer.run = callback;
-    timers.set(id, timer);
-    return clear.bind(id);
-#else
-    return clear.bind(untyped __js__('setInterval')(callback, delayms));
-#end
-  }
-
-/**
-`Timer.delay` invokes `callback` after `delayms` milliseconds. The scheduling can be
-canelled using the returned cancel function.
-**/
-  public static function delay(callback : Void -> Void, delayms : Int) : Void -> Void {
-#if !js
-    var id = _id++,
-        timer = T.delay(function() {
-          callback();
-          clear(id);
-        }, delayms);
-    timers.set(id, timer);
-    return clear.bind(id);
-#else
-    return clear.bind(untyped __js__('setTimeout')(callback, delayms));
-#end
-  }
-
-/**
-`Timer.immediate` works essentially like `Timer.delay` with the exception that the delay
-will be the shortest allowed by the platform. How short the delay depends a lot on
-the target platform.
-**/
-  public static function immediate(callback : Void -> Void) : Void -> Void
-#if !js
-    return delay(callback, 0);
-#else
-    return clear.bind(untyped __js__('setImmediate')(callback));
-#end
 
 /**
 The returned function executes `callback` at most once every `delayms` regardless of
@@ -117,15 +62,76 @@ that the callback is invoked at the beginning of the cycle.
     };
   }
 
+// IMPLEMENTATIONS
+
+#if !(js || flash)
+  static var timers = new Map<Int, haxe.Timer>();
+  static var _id = 0;
+#end
+
+/**
+`Timer.repeat` continues to invoke `callback` until it is cancelled using the returned
+cancel function.
+**/
+  public static function repeat(callback : Void -> Void, delayms : Int) : Void -> Void {
+#if js
+    return clear.bind(untyped __js__('setInterval')(callback, delayms));
+#elseif flash
+    return clear.bind(untyped __global__["flash.utils.setInterval"](callback, delayms));
+#else
+    var id = _id++,
+        timer = new haxe.Timer(delayms);
+    timer.run = callback;
+    timers.set(id, timer);
+    return clear.bind(id);
+#end
+  }
+
+/**
+`Timer.delay` invokes `callback` after `delayms` milliseconds. The scheduling can be
+canelled using the returned cancel function.
+**/
+  public static function delay(callback : Void -> Void, delayms : Int) : Void -> Void {
+#if js
+    return clear.bind(untyped __js__('setTimeout')(callback, delayms));
+#elseif flash
+    return clear.bind(untyped __global__["flash.utils.setTimeout"](callback, delayms));
+#else
+    var id = _id++,
+        timer = haxe.Timer.delay(function() {
+          callback();
+          clear(id);
+        }, delayms);
+    timers.set(id, timer);
+    return clear.bind(id);
+#end
+  }
+
+/**
+`Timer.immediate` works essentially like `Timer.delay` with the exception that the delay
+will be the shortest allowed by the platform. How short the delay depends a lot on
+the target platform.
+**/
+  public static function immediate(callback : Void -> Void) : Void -> Void
+#if js
+    return clear.bind(untyped __js__('setImmediate')(callback));
+#elseif flash
+    return clear.bind(untyped __global__["flash.utils.setTimeout"](callback, 0));
+#else
+    return delay(callback, 0);
+#end
+
   static #if js inline #end function clear(id) : Void {
-#if !js
+#if js
+    return untyped __js__('clearTimeout')(id);
+#elseif flash
+    return untyped __global__["flash.utils.clearTimeout"](id);
+#else
     var timer = timers.get(id);
     if(null != timer) {
       timers.remove(id);
       timer.stop();
     }
-#else
-    return untyped __js__('clearTimeout')(id);
 #end
   }
 
