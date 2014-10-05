@@ -1,13 +1,13 @@
 language: php
 
 env:
-    matrix:
-    - TARGET=cpp
-    - TARGET=cs
-    - TARGET=java
-    - TARGET=js
-    - TARGET=neko
-    - TARGET=php
+  matrix:
+  - TARGET=cpp
+  - TARGET=cs
+  - TARGET=java
+  - TARGET=js
+  - TARGET=neko
+  - TARGET=php
 
 matrix:
   fast_finish: true
@@ -33,5 +33,5 @@ script:
   - haxe hxml/thx.core.${TARGET}.hxml
 
 branches:
-      only:
-          - master
+  only:
+    - master

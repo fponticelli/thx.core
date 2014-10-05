@@ -1,4 +1,5 @@
 -cmd rm -rf xml/*
+-cmd mkdir -p xml
 -cmd haxe build_doc.hxml
 -cmd rm -rf pages
 -cmd haxelib run dox -r / -o pages -i xml --title "thx.core" -in thx
