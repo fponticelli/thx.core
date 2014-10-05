@@ -76,8 +76,10 @@ cancel function.
   public static function repeat(callback : Void -> Void, delayms : Int) : Void -> Void {
 #if js
     return clear.bind(untyped __js__('setInterval')(callback, delayms));
-#elseif flash
+#elseif flash9
     return clear.bind(untyped __global__["flash.utils.setInterval"](callback, delayms));
+#elseif flash
+    return clear.bind(untyped _global["setInterval"](callback, delayms));
 #else
     var id = _id++,
         timer = new haxe.Timer(delayms);
@@ -94,8 +96,10 @@ canelled using the returned cancel function.
   public static function delay(callback : Void -> Void, delayms : Int) : Void -> Void {
 #if js
     return clear.bind(untyped __js__('setTimeout')(callback, delayms));
-#elseif flash
+#elseif flash9
     return clear.bind(untyped __global__["flash.utils.setTimeout"](callback, delayms));
+#elseif flash
+    return clear.bind(untyped _global["setTimeout"](callback, delayms));
 #else
     var id = _id++,
         timer = haxe.Timer.delay(function() {
@@ -115,8 +119,10 @@ the target platform.
   public static function immediate(callback : Void -> Void) : Void -> Void
 #if js
     return clear.bind(untyped __js__('setImmediate')(callback));
-#elseif flash
+#elseif flash9
     return clear.bind(untyped __global__["flash.utils.setTimeout"](callback, 0));
+#elseif flash
+    return clear.bind(untyped _global["setTimeout"](callback, 0));
 #else
     return delay(callback, 0);
 #end
@@ -124,8 +130,10 @@ the target platform.
   static #if js inline #end function clear(id) : Void {
 #if js
     return untyped __js__('clearTimeout')(id);
-#elseif flash
+#elseif flash9
     return untyped __global__["flash.utils.clearTimeout"](id);
+#elseif flash
+    return untyped _global["clearTimeout"](id);
 #else
     var timer = timers.get(id);
     if(null != timer) {
