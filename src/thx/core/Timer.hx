@@ -158,6 +158,29 @@ the target platform.
     var scope : Dynamic = __js__('("undefined" !== typeof window && window) || ("undefined" !== typeof global && global) || this');
     if(!scope.setImmediate)
       scope.setImmediate = function(callback) scope.setTimeout(callback, 0);
+
+    // based on Paul Irish code: http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
+    var lastTime = 0,
+        vendors = ['webkit', 'moz'],
+        x = 0;
+
+    while(x < vendors.length && !scope.requestAnimationFrame) {
+      scope.requestAnimationFrame = scope[vendors[x]+'RequestAnimationFrame'];
+      scope.cancelAnimationFrame = scope[vendors[x]+'CancelAnimationFrame'] || scope[vendors[x]+'CancelRequestAnimationFrame'];
+      x++;
+    }
+
+    if (!scope.requestAnimationFrame)
+      scope.requestAnimationFrame = function(callback, element) {
+        var currTime = Date.now().getTime(),
+            timeToCall = Math.max(0, 16 - (currTime - lastTime)),
+            id = scope.setTimeout(function() callback(currTime + timeToCall), timeToCall);
+        lastTime = currTime + timeToCall;
+        return id;
+      };
+
+    if (!scope.cancelAnimationFrame)
+      scope.cancelAnimationFrame = function(id) scope.clearTimeout(id);
   }
 #end
 }
