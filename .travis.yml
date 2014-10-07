@@ -34,7 +34,7 @@ before_script:
   - sh -c "if [ '$TARGET' = 'swf' ]; then wget http://fpdownload.macromedia.com/pub/flashplayer/updaters/11/flashplayer_11_sa_debug.i386.tar.gz; fi"
   - sh -c "if [ '$TARGET' = 'swf' ]; then tar xvzf flashplayer_11_sa_debug.i386.tar.gz; fi"
   - sh -c "if [ '$TARGET' = 'swf' ]; then mv flashplayerdebugger bin/; fi"
-  - sh -c "if [ '$TARGET' = 'swf' ]; then export PATH=${PATH}:~/bin/flashplayerdebugger/; fi"
+  - sh -c "if [ '$TARGET' = 'swf' ]; then export PATH=${PATH}:~/bin/; fi"
   - sh -c "if [ '$TARGET' = 'swf' ]; then sh -e /etc/init.d/xvfb start; fi"
 
 # Run the test!
