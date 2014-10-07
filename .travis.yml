@@ -22,7 +22,7 @@ before_install:
   - sudo add-apt-repository ppa:eyecreate/haxe -y      # add the ubuntu ppa that contains haxe
   - sudo apt-get update                                # pull info from ppa
   - sudo apt-get install haxe -y                       # install haxe (and neko)
-  - sudo dpkg --add-architecture i386
+  #- sudo dpkg --add-architecture i386
   - sudo apt-get update
   - sudo apt-get install xvfb libcurl3:i386 libglib2.0-0:i386 libx11-6:i386 libxext6:i386 libxt6:i386 libxcursor1:i386 libnss3:i386 libgtk2.0-0:i386
   - mkdir ~/haxelib                                    # create a folder for installing haxelib
