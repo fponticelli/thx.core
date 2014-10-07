@@ -17,8 +17,8 @@ matrix:
   fast_finish: true
 
 # Install Haxe and dependencies before running the test.
-before_script:
-  - git submodule update --init --recursive            # update utest
+before_install:
+  - git submodule update --init --recursive
   - sudo add-apt-repository ppa:eyecreate/haxe -y      # add the ubuntu ppa that contains haxe
   - sudo apt-get update                                # pull info from ppa
   - sudo apt-get install haxe -y                       # install haxe (and neko)
@@ -26,6 +26,7 @@ before_script:
   - haxelib setup ~/haxelib
   - haxelib install utest                              # dependency
   - mkdir -p ./bin
+before_script:
   - sh -c "if [ '$TARGET' = 'cpp' ]; then sudo apt-get install gcc-multilib g++-multilib -y; fi"
   - sh -c "if [ '$TARGET' = 'cpp' ]; then haxelib install hxcpp; fi"
   - sh -c "if [ '$TARGET' = 'cs' ]; then sudo apt-get install mono-gmcs; fi"
@@ -33,14 +34,15 @@ before_script:
   - sh -c "if [ '$TARGET' = 'java' ]; then haxelib install hxjava; fi"
   - sh -c "if [ '$TARGET' = 'swf' ]; then wget http://fpdownload.macromedia.com/pub/flashplayer/updaters/11/flashplayer_11_sa_debug.i386.tar.gz; fi"
   - sh -c "if [ '$TARGET' = 'swf' ]; then tar xvzf flashplayer_11_sa_debug.i386.tar.gz; fi"
-  - sh -c "if [ '$TARGET' = 'swf' ]; then chmod +x flashplayerdebugger; fi"
+  - sh -c "if [ '$TARGET' = 'swf' ]; then sudo cp flashplayerdebugger /usr/bin/; fi"
+  #- sh -c "if [ '$TARGET' = 'swf' ]; then chmod +x flashplayerdebugger; fi"
   #- sh -c "if [ '$TARGET' = 'swf' ]; then sh -e /etc/init.d/xvfb start; fi"
 
 # Run the test!
 script:
   - haxe hxml/thx.core.${TARGET}.hxml
   - sh -c "if [ '$TARGET' = 'swf' ]; then ls -la; fi"
-  - sh -c "if [ '$TARGET' = 'swf' ]; then xvfb-run -a ./flashplayerdebugger \"./bin/test.swf\"; fi"
+  - sh -c "if [ '$TARGET' = 'swf' ]; then xvfb-run -a flashplayerdebugger \"./bin/test.swf\"; fi"
   #- sh -c "if [ '$TARGET' = 'swf' ]; then xvfb-run -a ./flashplayerdebugger ./bin/test.swf; fi"
 
 branches:
