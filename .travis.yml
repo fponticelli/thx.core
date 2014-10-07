@@ -43,7 +43,7 @@ script:
   - haxe hxml/thx.core.${TARGET}.hxml
   #- sh -c "if [ '$TARGET' = 'swf' ]; then ls -laG .; fi"
   #- sh -c "if [ '$TARGET' = 'swf' ]; then ls -laG /usr/bin; fi"
-  - sh -c "if [ '$TARGET' = 'swf' ]; then flashplayerdebugger ./bin/test.swf; fi"
+  - sh -c "if [ '$TARGET' = 'swf' ]; then /usr/bin/flashplayerdebugger ./bin/test.swf; fi"
   #- sh -c "if [ '$TARGET' = 'swf' ]; then xvfb-run -a flashplayerdebugger \"./bin/test.swf\"; fi"
   #- sh -c "if [ '$TARGET' = 'swf' ]; then xvfb-run -a ./flashplayerdebugger ./bin/test.swf; fi"
 
