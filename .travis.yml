@@ -5,7 +5,7 @@ os:
 
 env:
   matrix:
-  - TARGET=swf
+  #- TARGET=swf #removed SWF for now
   - TARGET=php
   - TARGET=js
   - TARGET=neko
