@@ -40,7 +40,7 @@ before_script:
 script:
   - haxe hxml/thx.core.${TARGET}.hxml
   - sh -c "if [ '$TARGET' = 'swf' ]; then ls -la; fi"
-  - sh -c "if [ '$TARGET' = 'swf' ]; then ./flashplayerdebugger ./bin/test.swf; fi"
+  - sh -c "if [ '$TARGET' = 'swf' ]; then sh -e ./flashplayerdebugger ./bin/test.swf; fi"
   #- sh -c "if [ '$TARGET' = 'swf' ]; then xvfb-run -a ./flashplayerdebugger ./bin/test.swf; fi"
 
 branches:
