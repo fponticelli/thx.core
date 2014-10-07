@@ -171,7 +171,7 @@ the target platform.
     }
 
     if (!scope.requestAnimationFrame)
-      scope.requestAnimationFrame = function(callback, element) {
+      scope.requestAnimationFrame = function(callback) {
         var currTime = Date.now().getTime(),
             timeToCall = Math.max(0, 16 - (currTime - lastTime)),
             id = scope.setTimeout(function() callback(currTime + timeToCall), timeToCall);
