@@ -1,4 +1,7 @@
-language: php
+language: cpp
+
+os:
+  - linux
 
 env:
   matrix:
@@ -8,6 +11,7 @@ env:
   - TARGET=js
   - TARGET=neko
   - TARGET=php
+  - TARGET=swf
 
 matrix:
   fast_finish: true
@@ -21,12 +25,17 @@ before_script:
   - mkdir ~/haxelib                                    # create a folder for installing haxelib
   - haxelib setup ~/haxelib
   - haxelib install utest                              # dependency
+  - mkdir -p ./bin
   - sh -c "if [ '$TARGET' = 'cpp' ]; then sudo apt-get install gcc-multilib g++-multilib -y; fi"
   - sh -c "if [ '$TARGET' = 'cpp' ]; then haxelib install hxcpp; fi"
   - sh -c "if [ '$TARGET' = 'cs' ]; then sudo apt-get install mono-gmcs; fi"
   - sh -c "if [ '$TARGET' = 'cs' ]; then haxelib install hxcs; fi"
   - sh -c "if [ '$TARGET' = 'java' ]; then haxelib install hxjava; fi"
-  - mkdir -p ./bin
+  - sh -c "if [ '$TARGET' = 'swf' ]; then wget http://fpdownload.macromedia.com/pub/flashplayer/updaters/11/flashplayer_11_sa_debug.i386.tar.gz"
+  - sh -c "if [ '$TARGET' = 'swf' ]; then tar xvzf flashplayer_11_sa_debug.i386.tar.gz"
+  - sh -c "if [ '$TARGET' = 'swf' ]; then mv flashplayerdebugger bin/"
+  - sh -c "if [ '$TARGET' = 'swf' ]; then export PATH=${PATH}:~/builds/uzzu/flexunithelper/bin"
+  - sh -c "if [ '$TARGET' = 'swf' ]; then sh -e /etc/init.d/xvfb start"
 
 # Run the test!
 script:

@@ -5,4 +5,4 @@
 -swf bin/test.swf
 -main TestAll
 
--cmd open ./bin/test.swf
+-cmd flashplayerdebugger ./bin/test.swf
