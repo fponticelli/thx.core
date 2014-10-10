@@ -1,7 +1,7 @@
 -cp src
 -cp test
 -lib utest
--swf bin/test.swf
+-swf bin/flash.swf
 -main TestAll
 -D thx-core
 -debug

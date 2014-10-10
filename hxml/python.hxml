@@ -4,3 +4,4 @@
 -python bin/python.py
 -main TestAll
 -D thx-core
+-dce no
