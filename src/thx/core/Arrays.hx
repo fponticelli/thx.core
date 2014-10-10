@@ -385,22 +385,26 @@ It pushes `value` onto the array if `condition` is true. Also returns the array 
 /**
 It applies a function against an accumulator and each value of the array (from left-to-right) has to reduce it to a single value.
 **/
-  inline public static function reduce<TItem, TAcc>(array : Array<TItem>, callback : TAcc -> TItem -> TAcc, initial : TAcc) : TAcc
+  inline public static function reduce<TItem, TAcc>(array : Array<TItem>, callback : TAcc -> TItem -> TAcc, initial : TAcc) : TAcc {
     #if js
       return untyped array.reduce(callback, initial);
     #else
-      return Iterables.reduce(array, callback, initial);
+      array.map(function(v) initial = callback(initial, v));
+      return initial;
     #end
+  }
 
 /**
 It is the same as `reduce` but with the extra integer `index` parameter.
 **/
-  inline public static function reducei<TItem, TAcc>(array : Array<TItem>, callback : TAcc -> TItem -> Int -> TAcc, initial : TAcc) : TAcc
+  inline public static function reducei<TItem, TAcc>(array : Array<TItem>, callback : TAcc -> TItem -> Int -> TAcc, initial : TAcc) : TAcc {
     #if js
       return untyped array.reduce(callback, initial);
     #else
-      return Iterables.reducei(array, callback, initial);
+      Arrays.mapi(array, function(v, i) initial = callback(initial, v, i));
+      return initial;
     #end
+  }
 
 /**
 Same as `Arrays.reduce` but starting from the last element and traversing to the first
