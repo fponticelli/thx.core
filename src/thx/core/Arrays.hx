@@ -292,14 +292,10 @@ Same as `Array.map` but it adds a second argument to the `callback` function wit
 **/
   #if js inline #end
   public static function mapi<TIn, TOut>(array : Array<TIn>, callback : TIn -> Int -> TOut) : Array<TOut> {
-    #if js
-      return (cast array : { map : (TIn -> Int -> TOut) -> Array<TOut> }).map(callback);
-    #else
-      var r = [];
-      for(i in 0...array.length)
-        r.push(callback(array[i], i));
-      return r;
-    #end
+    var r = [];
+    for(i in 0...array.length)
+      r.push(callback(array[i], i));
+    return r;
   }
 
 /**
