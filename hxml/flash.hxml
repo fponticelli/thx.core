@@ -1,8 +1,8 @@
 -cp src
 -cp test
 -lib utest
--swf-version 11.4
 -swf bin/test.swf
 -main TestAll
-
-#-cmd flashplayerdebugger ./bin/test.swf
+-D thx-core
+-debug
+-D fdb

@@ -1,0 +1,6 @@
+-cp src
+-cp test
+-lib utest
+-php bin/php
+-main TestAll
+-D thx-core

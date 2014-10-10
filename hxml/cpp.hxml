@@ -4,5 +4,4 @@
 -lib hxcpp
 -cpp bin/cpp
 -main TestAll
-
--cmd ./bin/cpp/TestAll
+-D thx-core

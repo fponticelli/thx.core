@@ -1,9 +1,7 @@
-#-debug
 -cp src
 -cp test
 -lib utest
 -lib hxjava
 -java bin/java
 -main TestAll
-
--cmd java -jar "./bin/java/TestAll.jar"
+-D thx-core

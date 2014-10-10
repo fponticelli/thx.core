@@ -1,7 +1,0 @@
--cp src
--cp test
--lib utest
--python bin/test.py
--main TestAll
-
--cmd python ./bin/test.py

@@ -1,7 +1,7 @@
 -cp src
 -cp test
 -lib utest
--neko bin/test.n
+-js bin/js.js
+-D nodejs
 -main TestAll
-
--cmd neko ./bin/test.n
+-D thx-core

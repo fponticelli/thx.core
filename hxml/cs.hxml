@@ -4,5 +4,4 @@
 -lib hxcs
 -cs bin/cs
 -main TestAll
-
--cmd mono ./bin/cs/bin/TestAll.exe
+-D thx-core

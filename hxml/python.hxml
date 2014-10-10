@@ -1,7 +1,6 @@
 -cp src
 -cp test
 -lib utest
--php bin/php
+-python bin/python.py
 -main TestAll
-
--cmd php ./bin/php/index.php
+-D thx-core

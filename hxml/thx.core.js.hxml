@@ -1,8 +1,0 @@
--cp src
--cp test
--lib utest
--js bin/test.js
--D nodejs
--main TestAll
-
--cmd node ./bin/test.js
