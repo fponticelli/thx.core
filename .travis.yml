@@ -3,8 +3,8 @@ language: c
 env:
   global:
     - TARGET_DIR=bin
-    - secure: "atuG6T1kffpKR4uIzkIwotfNrwR72t6xeXpDbOMKEc6iWuBGMB2OzNtXkpDyQdF6hS8vSnVKtLUOPr4B4UGW0hI1xpTrlvDdIsZ5FKKgLkj+s8mBAtgOs9lWDnaT5Xscfy6DhW5PSNErEMIkS8cU4+m1yJTibF2udf5pcbCidAQ="
-    - secure: "tUms7g8Iv7U0tCv1pDhbkKSY7AdvYcjGTqZ0HsohPDiiEsnFJmXUblmP06xbJQ2Cxmthj76nmf98guYGQCirFCq2Ht3Mr4yQ9n/KdPUdMZJPXbqVQribc3y/xnt+/MmIstIM8zmIZh2OkiC14xPfqRISoZksQpx6tl736gv1+ww="
+     - secure: UUVsPXSN6eOaKoUaTbGuK7OeaglIkkvNqkkZgR5ZttJ/d8hkRLDVD6rJntL/clHTOvpwxINCesa+sp8t4fFJuCA4PWrQg2cBrkx1FcmgzurQhsSoiqVUfWn56wzvHCVW7GhieLpINSEFZXMG1qt7RbsOHcs15SImJ2V+ik91zuE=
+     - secure: GtWMwFaNAmEq+ubx28jg32N40mIPAm5tTxD5TJlF5eFONpnVNV78p/E2CeHSgpMqrAiRTAyT/4KrjimIRs0XB6R5aW470/DHTgercwTzP+SzcHjqDm6fHnkiqemH9f+xS/JZvc1xs/2KoVm8uLokBrIJBSuW21yy+BrEhnBECUo=
   matrix:
     - TARGET=cpp
     - TARGET=cs
