@@ -23,6 +23,7 @@ before_install: # clone travis-hx repo
   - travis_retry git clone --depth=50 --branch=master git://github.com/fponticelli/travis-hx.git ~/travis-hx
 
 install: # setup the target
+  - haxelib install utest
   - ~/travis-hx/setup.sh
 
 script:
