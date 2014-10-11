@@ -3,6 +3,7 @@ import thx.core.Arrays;
 import thx.core.Dates;
 import thx.core.Defaults;
 import thx.core.Dynamics;
+import thx.core.Either;
 import thx.core.ERegs;
 import thx.core.Error;
 import thx.core.Floats;
@@ -14,6 +15,7 @@ import thx.core.Maps;
 import thx.core.Nil;
 import thx.core.Objects;
 import thx.core.Options;
+import thx.core.Result;
 import thx.core.Set;
 import thx.core.Strings;
 #if (js || flash)
