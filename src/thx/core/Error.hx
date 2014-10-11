@@ -48,7 +48,7 @@ populate but can be provided if preferred.
     if(null == stack) {
       stack = try CallStack.exceptionStack() catch(e : Dynamic) [];
       if(stack.length == 0)
-        stack = CallStack.callStack();
+        stack = try CallStack.callStack() catch(e : Dynamic) [];
     }
     this.stackItems = stack;
     this.pos = pos;
