@@ -2,6 +2,5 @@
 -cp test
 -lib utest
 -js bin/js.js
--D nodejs
 -main TestAll
 -D thx-core
