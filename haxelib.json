@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross"],
   "description": "Generic multi-purpose library",
-  "releasenote": "fix issue with Phantomjs and thx.core.Error",
-  "version": "0.9.1",
+  "releasenote": "added Error helper classes",
+  "version": "0.10.0",
   "contributors": ["fponticelli"]
 }
