@@ -2,10 +2,26 @@ package thx.core.error;
 
 import haxe.PosInfos;
 
+/**
+`NullArgument` is used to detect if arguments of methods are `null` or empty values.
+
+It should not be used with its contructor but using the static extensions:
+
+```haxe
+public function capitalize(text : String) {
+  NullArgument.throwIfNull(text);
+  // ...
+}
+```
+*/
 class NullArgument extends thx.core.Error {
   public function new(message : String, ?posInfo : PosInfos)
     super(message, posInfo);
 
+/**
+Throws an exception of type `NullArgument` if the passed identifier (usually
+a function argument name) is `null`.
+*/
   macro public static function throwIfNull<T>(expr : ExprOf<Null<T>>) {
     var name = switch expr.expr {
       case EMeta({name:':this'},{expr:EConst(CIdent(s))}): s;
@@ -15,6 +31,12 @@ class NullArgument extends thx.core.Error {
 
     return macro if(null == $e{expr}) throw new thx.core.error.NullArgument('argument "$name" cannot be null');
   }
+
+/**
+Like `throwIfNull` but also throws an exception if the passed argument is empty.
+
+The concept of emptiness applies to String, Array, Iterator and Iterable.
+*/
 
   macro public static function throwIfEmpty(expr : haxe.macro.Expr) {
     var name = switch expr.expr {
