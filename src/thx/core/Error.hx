@@ -42,9 +42,9 @@ populate but can be provided if preferred.
   public function new(message : String, ?stack : Array<StackItem>, ?pos : PosInfos) {
 #if js
     super(message);
-#else
-    this.message = message;
 #end
+    this.message = message;
+
     if(null == stack) {
       stack = try CallStack.exceptionStack() catch(e : Dynamic) [];
       if(stack.length == 0)

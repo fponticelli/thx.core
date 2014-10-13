@@ -7,6 +7,7 @@ class TestAll {
 		runner.addCase(new thx.core.TestArrays());
 		runner.addCase(new thx.core.TestDefaults());
 		runner.addCase(new thx.core.TestERegs());
+		runner.addCase(new thx.core.TestError());
 		runner.addCase(new thx.core.TestFloats());
 		runner.addCase(new thx.core.TestFunctions());
 		runner.addCase(new thx.core.TestInts());

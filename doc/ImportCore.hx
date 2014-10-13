@@ -18,7 +18,7 @@ import thx.core.Options;
 import thx.core.Result;
 import thx.core.Set;
 import thx.core.Strings;
-#if (js || flash)
+#if (java || js || flash)
 import thx.core.Timer;
 #end
 import thx.core.Tuple;
