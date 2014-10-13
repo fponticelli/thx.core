@@ -55,5 +55,5 @@ populate but can be provided if preferred.
   }
 
   public function toString()
-    return message + "from: " + pos.className + "." + pos.methodName + "() at " + pos.lineNumber + "\n\n" + CallStack.toString(stackItems);
+    return message + "\nfrom: " + pos.className + "." + pos.methodName + "() at " + pos.lineNumber + "\n\n" + CallStack.toString(stackItems);
 }

@@ -193,7 +193,7 @@ the target platform.
     this.callback = callback;
   }
 
-  @:overload public function run()
+  override public function run()
     callback();
 }
 #end
