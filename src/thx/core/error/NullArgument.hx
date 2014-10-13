@@ -24,19 +24,19 @@ class NullArgument extends thx.core.Error {
     };
 
     switch haxe.macro.Context.typeof(expr) {
-      case TInst(c, _) if(c.toString() == "Array"):
+      case TInst(_.toString() => "Array", _):
         return macro
           if(null == $e{expr})
             throw new thx.core.error.NullArgument('Array argument "$name" cannot be null')
           else if($e{expr}.length == 0)
             throw new thx.core.error.NullArgument('Array argument "$name" cannot be empty');
-      case TInst(c, _) if(c.toString() == "String"):
+      case TInst(_.toString() => "String", _):
         return macro
           if(null == $e{expr})
             throw new thx.core.error.NullArgument('String argument "$name" cannot be null')
           else if($e{expr} == "")
             throw new thx.core.error.NullArgument('String argument "$name" cannot be empty');
-      case TType(c, _) if(c.toString() == "Iterator"):
+      case TType(_.toString() => "Iterator", _):
         return macro {
           var it = $e{expr};
           if(null == it)
@@ -44,7 +44,7 @@ class NullArgument extends thx.core.Error {
           else if(!it.hasNext())
             throw new thx.core.error.NullArgument('Iterator argument "$name" cannot be empty');
         }
-      case TType(c, _) if(c.toString() == "Iterable"):
+      case TType(_.toString() => "Iterable", _):
         return macro {
           var it = $e{expr};
           if(null == it)
