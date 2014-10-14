@@ -12,7 +12,7 @@ It contains a lot of useful helper classes to simplify dealing with a lot of typ
 
 ## new basic types
 
-It also provides new common types that should probably be part of the standard library: [Error](src/thx/core/Error.hx), [Nil](src/thx/core/Nil.hx), [Set](src/thx/core/Set.hx) and [Tuple](src/thx/core/Tuple.hx).
+It also provides new common types that should probably be part of the standard library: [Error](http://thx-lib.org/api/thx/core/Error.html), [Nil](http://thx-lib.org/api/thx/core/Nil.html), [Set](http://thx-lib.org/api/thx/core/Set.html) and [Tuple](http://thx-lib.org/api/thx/core/Tuple.html).
 
 ## macro helpers
 
