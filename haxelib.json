@@ -3,8 +3,8 @@
   "url": "https://github.com/fponticelli/thx.core",
   "license": "MIT",
   "classPath": "src",
-  "tags": ["thx", "general", "cross"],
-  "description": "Generic multi-purpose library",
+  "tags": ["thx", "general", "cross", "std"],
+  "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
   "releasenote": "added Error helper classes",
   "version": "0.10.0",
   "contributors": ["fponticelli"]
