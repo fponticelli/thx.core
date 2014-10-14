@@ -6,6 +6,20 @@
 
 Generic multi-purpose library. `thx.core` aims to be the [lodash](http://lodash.com/) library for Haxe.
 
+## install
+
+From the command line just type:
+
+```bash
+haxelib install thx.core
+```
+
+To use the `dev` version do:
+
+```bash
+haxelib git thx.core https://github.com/fponticelli/thx.core.git
+```
+
 ## helper classes
 
 It contains a lot of useful helper classes to simplify dealing with a lot of types from the standard library.
