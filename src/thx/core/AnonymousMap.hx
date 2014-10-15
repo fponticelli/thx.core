@@ -8,7 +8,7 @@ using thx.core.Iterators;
 as sources for IMap without the need of explicitely extracting all of its values.
 
 ```haxe
-var map = new AnonymusMap({ a : "A", b : "B" });
+var map = new AnonymousMap({ a : "A", b : "B" });
 trace(map.get("a"));
 ```
 
