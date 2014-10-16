@@ -84,6 +84,12 @@ as the tollerance value.
   }
 
 /**
+`sign` returns `-1` if `value` is a negative number, `1` otherwise.
+*/
+  inline public static function sign(value : Float) : Int
+    return value < 0 ? -1 : 1;
+
+/**
 Passed two boundaries values (`min`, `max`), `wrap` ensure that the passed vale `v` will
 be included in the boundaries. If the value exceeds `max`, the value is reduced by `min`
 repeatedely until it falls within the range. Similar treatment is done if value is

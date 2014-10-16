@@ -40,6 +40,14 @@ equals.
     return a - b;
 
 /**
+Given a value `t` between 0 and 1, it interpolates that value in the range between `a` and `b`.
+
+The returned value is a rounded integer.
+*/
+  public static function interpolate(t : Float, a : Float, b : Float) : Int
+    return Math.round(a + (b - a) * f);
+
+/**
 It returns the maximum value between `a` and `b`.
 **/
   inline public static function max(a : Int, b : Int) : Int
@@ -87,6 +95,12 @@ case start will need to be a greater value than stop.
       while ((j = start + step * ++i) < stop) range.push(j);
     return range;
   }
+
+/**
+`sign` returns `-1` if `value` is a negative number, `1` otherwise.
+*/
+  inline public static function sign(value : Int) : Int
+    return value < 0 ? -1 : 1;
 
 /**
 Similar to `wrap`, it works for numbers between 0 and `max`.
