@@ -44,7 +44,7 @@ Given a value `t` between 0 and 1, it interpolates that value in the range betwe
 
 The returned value is a rounded integer.
 */
-  public static function interpolate(t : Float, a : Float, b : Float) : Int
+  public static function interpolate(f : Float, a : Float, b : Float) : Int
     return Math.round(a + (b - a) * f);
 
 /**

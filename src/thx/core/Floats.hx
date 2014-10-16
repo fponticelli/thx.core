@@ -48,10 +48,10 @@ It returns the comparison value (an integer number) between two `float` values.
     return a < b ? -1 : (b > a ? 1 : 0);
 
 /**
-`interpolate` returns a value between `a` and `b` for any value of `t` between 0 and 1.
+`interpolate` returns a value between `a` and `b` for any value of `f` between 0 and 1.
 **/
-  public static function interpolate(t : Float, a : Float, b : Float)
-    return (b - a) * t + a;
+  public static function interpolate(f : Float, a : Float, b : Float)
+    return (b - a) * f + a;
 
 /**
 Float numbers can sometime introduce tiny errors even for simple operations. `nearEquals`
