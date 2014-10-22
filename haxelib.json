@@ -4,8 +4,8 @@
   "license": "MIT",
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
-  "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
+  "description": "Improved behavior of `Defaults.or()`.",
   "releasenote": "minor",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "contributors": ["fponticelli"]
 }

@@ -23,11 +23,26 @@ trace(s.or('b')); // prints 'a'
 Notice that the subject `value` must be a constant identifier (eg: fields, local variables, ...).
 **/
   macro public static function or<T>(value : ExprOf<Null<T>>, alt : ExprOf<T>) {
+    var t = switch haxe.macro.TypeTools.follow(haxe.macro.Context.typeof(value)) {
+      case TInst(t, p):
+        t + (p.length == 0 ? '' : '<${p.join(",")}>');
+      case TAbstract(t, p):
+        t + (p.length == 0 ? '' : '<${p.join(",")}>');
+      case TAnonymous(_): "{}";
+      case _: null;
+      //case TType | TMono | TLazy | TFun | TEnum | TDynamic:
+    };
     switch value.expr {
       case EMeta({name:':this'},{expr:EConst(CIdent(_))}),
            EField({expr:EConst(CIdent(_))}, _),
            EConst(CIdent(_)):
-        return macro (function(t) return null == t ? $alt : t)($value);
+        if(null == t) {
+          return macro (function(t) return null == t ? $alt : t)($value);
+        } else {
+          var salt = ExprTools.toString(alt),
+              svalue = ExprTools.toString(value);
+          return Context.parse('(function(t : Null<$t>) : $t return null == t ? $salt : t)($svalue)', value.pos);
+        }
       case _:
         trace(value);
         throw '"or" method can only be used on constant identifiers (eg: fields, local variables, ...)';
