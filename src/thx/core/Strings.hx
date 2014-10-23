@@ -133,6 +133,12 @@ Works the same as `underscore` but also replaces underscores with whitespaces.
 #end
 
 /**
+`ifEmpty` returns `value` if it is neither `null` or empty, otherwise it returns `alt`
+**/
+  public static inline function ifEmpty(value : String, alt : String) : String
+    return null != value && "" != value ? value : alt;
+
+/**
 `isDigitsOnly` returns `true` if the string only contains digits.
 **/
   public static inline function isDigitsOnly(value : String) : Bool
