@@ -10,9 +10,9 @@ import thx.core.Ints;
 #end
 
 /**
-`Defaults` provides methods that help to deal with nullable values.
+`Nulls` provides methods that help to deal with nullable values.
 **/
-class Defaults {
+class Nulls {
 /**
 It traverses a chain of dot/array identifiers and it returns the last value in the chain or null if any of the identifiers is not set.
 
@@ -53,7 +53,7 @@ trace((o.a.b.c).opt()); // prints 'A'
         ids[ids.length - 1] += '($a)';
       case TBlock(_):
         if(Context.defined("python"))
-          Context.error("Defaults.opt doesn't support some method calls on Python", value.pos);
+          Context.error("Nulls.opt doesn't support some method calls on Python", value.pos);
         var s = TypedExprTools.toString(e, true);
         trace(s);
         ids.push(s);
@@ -92,11 +92,11 @@ trace(s.or('b')); // prints 'a'
 Notice that the subject `value` must be a constant identifier (eg: fields, local variables, ...).
 **/
   macro public static function or<T>(value : ExprOf<Null<T>>, alt : ExprOf<T>)
-    return macro { var t = $e{Defaults.opt(value)}; t != null ? t : $e{alt}; };
+    return macro { var t = $e{Nulls.opt(value)}; t != null ? t : $e{alt}; };
 
   macro public static function isNull(value : Expr)
-    return macro ($e{Defaults.opt(value)} == null);
+    return macro ($e{Nulls.opt(value)} == null);
 
   macro public static function notNull(value : Expr)
-    return macro ($e{Defaults.opt(value)} != null);
+    return macro ($e{Nulls.opt(value)} != null);
 }

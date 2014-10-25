@@ -1,10 +1,10 @@
 package thx.core;
 
 import utest.Assert;
-using thx.core.Defaults;
-import thx.core.Defaults.*;
+using thx.core.Nulls;
+import thx.core.Nulls.*;
 
-class TestDefaults {
+class TestNulls {
   public var withValue = "A";
   public var withoutValue : String;
   public var getter(get, null) : String;
@@ -33,32 +33,32 @@ class TestDefaults {
     Assert.equals('A', s.or('B'));
 
     var s : String = null;
-    Assert.equals('B', Defaults.or(s, 'B'));
+    Assert.equals('B', Nulls.or(s, 'B'));
     s = 'A';
-    Assert.equals('A', Defaults.or(s, 'B'));
+    Assert.equals('A', Nulls.or(s, 'B'));
 
-    Assert.equals('A', Defaults.or(withValue, 'B'));
+    Assert.equals('A', Nulls.or(withValue, 'B'));
     Assert.equals('A', withValue.or('B'));
 
-    Assert.equals('B', Defaults.or(withoutValue, 'B'));
+    Assert.equals('B', Nulls.or(withoutValue, 'B'));
     Assert.equals('B', withoutValue.or('B'));
 
     var o : { a : String, b : String } = { a : "A", b : null };
 
-    Assert.equals('A', Defaults.or(o.a, 'B'));
+    Assert.equals('A', Nulls.or(o.a, 'B'));
     Assert.equals('A', (o.a).or('B'));
 
-    Assert.equals('B', Defaults.or(o.b, 'B'));
+    Assert.equals('B', Nulls.or(o.b, 'B'));
     Assert.equals('B', (o.b).or('B'));
 
-    Assert.equals('A', Defaults.or(getter, 'B'));
+    Assert.equals('A', Nulls.or(getter, 'B'));
     Assert.equals('A', getter.or('B'));
 
-    Assert.equals('B', Defaults.or(setter, 'B'));
+    Assert.equals('B', Nulls.or(setter, 'B'));
     Assert.equals('B', setter.or('B'));
 
     setter = 'A';
-    Assert.equals('A', Defaults.or(setter, 'B'));
+    Assert.equals('A', Nulls.or(setter, 'B'));
     Assert.equals('A', setter.or('B'));
   }
 
@@ -66,8 +66,8 @@ class TestDefaults {
     var o : { a : { b : { c : String }}} = null;
 
     Assert.isNull((o.a.b.c).opt());
-    Assert.isNull(Defaults.opt(o.a.b.c));
-    Assert.isNull(Defaults.opt(o.a.b.c));
+    Assert.isNull(Nulls.opt(o.a.b.c));
+    Assert.isNull(Nulls.opt(o.a.b.c));
     Assert.isNull((o.a.b.c).opt());
 
     Assert.equals('B', (o.a.b.c).or('B'));
