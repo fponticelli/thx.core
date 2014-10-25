@@ -218,11 +218,47 @@ it.isIterable() // checks that the instance has the right members to be an Itera
 
 ### [Strings](http://thx-lib.org/api/thx/core/Strings.html)
 
-???
+Extension methods for `String`. Some examples:
+
+  * `after` returns the text after the first occurance of a certain string
+  * `capitalizeWords` each word in a text
+  * `collapse` trims white spaces from the beginning/end of a text and reduces any sequence of more than white space to just one inside a given text
+  * `isAlphaNum` returns true if the text contains only alpha-numeric characters
+  * `ifEmpty` returns the either the passed value if not empty (null or "") or an alternative value.
+  * `isDigitsOnly` returns true if the string contains only digits
+  * `map` iterates on each character individually
+  * `repeat` creates a string repeating a certain pattern `n` times
+  * `stripTags` sanitize html string by removing any tag-like information
+  * `wrapColumns` breaks a long string into consistently sized lines without breaking words apart.
 
 ### [Types](http://thx-lib.org/api/thx/core/Types.html)
 
-???
+Helper methods to use on values, types and classes.
+
+`isAnonymousObject` returns true if the passed argument is an anonymous object.
+
+```haxe
+Types.isAnonymousObject({}); // true
+```
+
+`valueTypeToString` returns a string describing the type of any `value`.
+
+```haxe
+Types.valueTypeToString("thx"); // "String"
+Types.valueTypeToString(1); // "Int"
+Types.valueTypeToString(Left("some")); // "thx.core.Either"
+```
+
+`valueTypeInheritance` returns an array of string describing the entire inheritance
+chain of the passed `value`.
+
+`valueTypeInheritance` works on any value, not just class instances. Obviously most types will return an array of just one value.
+
+```haxe
+class B extends A {};
+
+Types.valueTypeInheritance(new B()); // ["B", "A"]
+```
 
 ### [Dynamics](http://thx-lib.org/api/thx/core/Dynamics.html).equals
 
