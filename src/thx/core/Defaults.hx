@@ -48,7 +48,6 @@ trace((o.a.b.c).opt()); // prints 'A'
       case TParenthesis(p):
         traverse(p);
       case TCall(e, el):
-        // TODO, maybe add error here for Python users
         if(Context.defined("python"))
           Context.error("Defaults.opt doesn't support method calls on python", value.pos);
         traverse(e);
