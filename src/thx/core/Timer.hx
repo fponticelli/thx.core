@@ -16,7 +16,7 @@ var cancel = Timer.delay(doSomethingLater, 200);
 cancel();
 ```
 
-Notice that calling the cancel function multiple times have no effect after the first execution.
+Note that calling the cancel function multiple times have no effect after the first execution.
 **/
 class Timer {
 /**

@@ -7,7 +7,7 @@ class ERegs {
   static var ESCAPE_PATTERN = ~/([-\[\]{}()*+?\.,\\^$|#\s])/g;
 
 /**
-It escapes any characer in a string that has a special meaning when used in a regula expression.
+It escapes any characer in a string that has a special meaning when used in a regular expression.
 **/
   public static function escape(text : String) : String
     return ESCAPE_PATTERN.map(text , function(ereg)

@@ -188,6 +188,83 @@ it.isIterator() // checks that the instance has the right members to be an Itera
 it.isIterable() // checks that the instance has the right members to be an Iterable
 ```
 
+### [Floats](http://thx-lib.org/api/thx/core/Floats.html)
+
+???
+
+### [Functions](http://thx-lib.org/api/thx/core/Functions.html)
+
+???
+
+### [Ints](http://thx-lib.org/api/thx/core/Ints.html)
+
+???
+
+### [Maps](http://thx-lib.org/api/thx/core/Maps.html)
+
+???
+
+### [Objects](http://thx-lib.org/api/thx/core/Objects.html)
+
+???
+
+### [Options](http://thx-lib.org/api/thx/core/Options.html)
+
+???
+
+### [Nulls](http://thx-lib.org/api/thx/core/Nulls.html)
+
+???
+
+### [Strings](http://thx-lib.org/api/thx/core/Strings.html)
+
+???
+
+### [Types](http://thx-lib.org/api/thx/core/Types.html)
+
+???
+
+### [Dynamics](http://thx-lib.org/api/thx/core/Dynamics.html).equals
+
+Compares any two values checking their type first and recursively all their members for structural equality. It should work on any type. If the values passed are objects and they contain a method `equals`, it will be used to decide if the two objects match.
+
+```haxe
+Dynamics.equals({ a : 1 }, { a : 1 }); // true
+Dynamics.equals(1, 2); // false
+```
+
+### [ERegs](http://thx-lib.org/api/thx/core/ERegs.html).escape
+
+It escapes any characer in a string that has a special meaning when used in a regular expression.
+
+## General Purpose Features
+
+The following utilities have no direct relationship with standard types and just provides commonly required functionalities.
+
+### [Timer](http://thx-lib.org/api/thx/core/Timer.html)
+
+`Timer` provides several meaning to delay the execution of code. At the moment it is only implemented for platforms that have a native concept of Timer like Swf and JavaScript or c++/Neko with OpenFL or NME.
+
+All of the Timer methods return a function with signature `Void -> Void` that can be used to cancel the timer.
+
+```haxe
+// set the execution delayed by 200ms
+var cancel = Timer.delay(doSomethingLater, 200);
+
+// cancel immediately (`doSomethingLater` will never be executed)
+cancel();
+```
+
+Note that calling the cancel function multiple times have no effect after the first execution.
+
+### [UUID](http://thx-lib.org/api/thx/core/UUID.html)
+
+Helper class to generate [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier) strings (version 4).
+
+```haxe
+UUID.create(); // generates something like f47ac10b-58cc-4372-a567-0e02b2c3d479
+```
+
 ## Errors
 
 Haxe brings the power of being able to use any type to throw an exception. It is not uncommon to find code that simply does `throw "my error`. There is nothing wrong with that approach except that some times, most commonly in bigger applications that use many libraries, you need to be conservative when you want to catch an exception and introduce a `catch(e : Dynamic)` to be sure to not forget any possible error. The problem with Dynamic is that you don't really know how to access the error info. The type `thx.core.Error` described below tries to solve this problem providing a common and generic implementation.
@@ -244,7 +321,13 @@ function myMethod(value : String) {
 
 ## Macro Helpers
 
-`thx.core` also includes a few helpers to more easily write and deal with macros.
+### [Macros](http://thx-lib.org/api/thx/macro/Macros.html)
+
+Helper methods to use inside macro context.
+
+### [MacroTypes](http://thx-lib.org/api/thx/macro/MacroTypes.html)
+
+Several utility function to extract type information from macro types and expressions.
 
 ## Install
 
