@@ -4,6 +4,9 @@ package thx.core;
 import haxe.macro.Expr;
 import haxe.macro.ExprTools;
 import haxe.macro.Context;
+import haxe.macro.TypedExprTools;
+import thx.core.Arrays;
+import thx.core.Ints;
 #end
 
 /**
@@ -23,30 +26,54 @@ trace(s.or('b')); // prints 'a'
 Notice that the subject `value` must be a constant identifier (eg: fields, local variables, ...).
 **/
   macro public static function or<T>(value : ExprOf<Null<T>>, alt : ExprOf<T>) {
-    var t = switch haxe.macro.TypeTools.follow(haxe.macro.Context.typeof(value)) {
-      case TInst(t, p):
-        t + (p.length == 0 ? '' : '<${p.join(",")}>');
-      case TAbstract(t, p):
-        t + (p.length == 0 ? '' : '<${p.join(",")}>');
-      case TAnonymous(_): "{}";
-      case _: null;
-      //case TType | TMono | TLazy | TFun | TEnum | TDynamic:
-    };
-    switch value.expr {
-      case EMeta({name:':this'},{expr:EConst(CIdent(_))}),
-           EField({expr:EConst(CIdent(_))}, _),
-           EConst(CIdent(_)):
-        if(null == t) {
-          return macro (function(t) return null == t ? $alt : t)($value);
-        } else {
-          var salt = ExprTools.toString(alt),
-              svalue = ExprTools.toString(value);
-          return Context.parse('(function(t : Null<$t>) : $t return null == t ? $salt : t)($svalue)', value.pos);
+    var ids  = [],
+        salt = ExprTools.toString(alt);
+    function traverse(e : haxe.macro.Type.TypedExpr) switch e.expr {
+      case TArray(a, e):
+        traverse(a);
+        traverse(e);
+      case TConst(TThis):
+        ids.push('this');
+      case TConst(TInt(index)):
+        ids.push('$index');
+      case TLocal(o):
+        ids.push(o.name);
+      case TField(f, v):
+        traverse(f);
+        switch v {
+          case FAnon(id):
+            ids.push(id.toString());
+          case FInstance(_, n):
+            ids.push(n.toString());
+          case _:
+            throw 'invalid expression $e';
         }
+      case TParenthesis(p):
+        traverse(p);
+      case TCall(e, el):
+        traverse(e);
+        var a = el.map(TypedExprTools.toString.bind(_, true)).join(", ");
+        ids[ids.length - 1] += '($a)';
       case _:
-        trace(value);
-        throw '"or" method can only be used on constant identifiers (eg: fields, local variables, ...)';
+        throw 'invalid expression $e';
     }
+
+    traverse(Context.typeExpr(value));
+    var first = ids.shift(),
+        temps = ['_0 = $first'].concat(Arrays.mapi(ids, function(_, i) return '_${i+1}')).join(', '),
+        buf   = '{\n  function _() return $salt;\n  var ${temps};\n  if(null == _0) _();\n',
+        path;
+    for(i in 0...ids.length) {
+      var id = ids[i];
+      if(Ints.canParse(id)) {
+        path = '[$id]';
+      } else {
+        path = '.$id';
+      }
+      buf += '  else if(null == (_${i+1} = _$i$path)) _();\n';
+    }
+    buf += '  else _${ids.length};\n}';
+    return Context.parse(buf , value.pos);
   }
 
 /**
@@ -59,8 +86,8 @@ var o = { a : { b : { c : 'A' }}};
 trace((o.a.b.c).opt()); // prints 'A'
 ```
 **/
-  macro public static function opt(expr : Expr) {
-    var ids = [];
+  macro public static function opt(value : Expr) {
+    var ids  = [];
     function traverse(e : haxe.macro.Type.TypedExprDef) switch e {
       case TArray(a, e):
         traverse(a.expr);
@@ -83,27 +110,29 @@ trace((o.a.b.c).opt()); // prints 'A'
         }
       case TParenthesis(p):
         traverse(p.expr);
+      case TCall(e, el):
+        traverse(e.expr);
+        var a = el.map(TypedExprTools.toString.bind(_, true)).join(", ");
+        ids[ids.length - 1] += '($a)';
       case _:
         throw 'invalid expression $e';
     }
-    traverse(Context.typeExpr(expr).expr);
+
+    traverse(Context.typeExpr(value).expr);
     var first = ids.shift(),
-        buf   = '(function(_) { if(null == _) return null; ',
-        path  = '_';
-    for(id in ids) {
-      if(thx.core.Ints.canParse(id)) {
-        path = '$path[$id]';
+        temps = ['_0 = $first'].concat(Arrays.mapi(ids, function(_, i) return '_${i+1}')).join(', '),
+        buf   = '{\n  var ${temps};\n  null == _0 ? null :',
+        path;
+    for(i in 0...ids.length) {
+      var id = ids[i];
+      if(Ints.canParse(id)) {
+        path = '[$id]';
       } else {
-        path = path == '' ? id : '$path.$id';
+        path = '.$id';
       }
-      buf += 'if(null == $path) return null; ';
+      buf += '\n    (null == (_${i+1} = _$i$path) ? null :';
     }
-    buf += 'return $path; })($first)';
-    return Context.parse(buf , expr.pos);
+    buf += ' _${ids.length}' + Strings.repeat(')', ids.length) + ';\n}';
+    return Context.parse(buf , value.pos);
   }
 }
-
-/* TODO:
-11:49:51  Simn:  You could Context.typeExpr it I guess.
-11:50:00  Simn:  And check if that returns something harmless.
-*/

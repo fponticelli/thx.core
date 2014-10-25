@@ -48,13 +48,13 @@ class TestDefaults {
     Assert.equals('B', Defaults.or(withoutValue, 'B'));
     Assert.equals('B', withoutValue.or('B'));
 
-    var o = { a : "A", b : null };
+    var o : { a : String, b : String } = { a : "A", b : null };
 
     Assert.equals('A', Defaults.or(o.a, 'B'));
-    Assert.equals('A', o.a.or('B'));
+    Assert.equals('A', (o.a).or('B'));
 
     Assert.equals('B', Defaults.or(o.b, 'B'));
-    Assert.equals('B', o.b.or('B'));
+    Assert.equals('B', (o.b).or('B'));
 
     Assert.equals('A', Defaults.or(getter, 'B'));
     Assert.equals('A', getter.or('B'));
@@ -69,25 +69,27 @@ class TestDefaults {
 
   public function testOpt() {
     var o : { a : { b : { c : String }}} = null;
+
     Assert.isNull((o.a.b.c).opt());
     Assert.isNull(Defaults.opt(o.a.b.c));
     Assert.isNull(Defaults.opt(o.a.b.c));
     Assert.isNull((o.a.b.c).opt());
-    Assert.equals('B', (o.a.b.c).opt().or('B'));
+
+    Assert.equals('B', (o.a.b.c).or('B'));
 
     o = { a : { b : { c : 'A' } } };
     Assert.equals('A', (o.a.b.c).opt());
-    Assert.equals('A', (o.a.b.c).opt().or('B'));
+    Assert.equals('A', (o.a.b.c).or('B'));
 
     Assert.same({ c : 'A'}, (o.a.b).opt());
-    Assert.same({ c : 'A'}, (o.a.b).opt().or({ c : 'B'}));
+    Assert.same({ c : 'A'}, (o.a.b).or({ c : 'B'}));
 
     o = { a : { b : null } };
     Assert.isNull((o.a.b.c).opt());
-    Assert.equals('B', (o.a.b.c).opt().or('B'));
+    Assert.equals('B', (o.a.b.c).or('B'));
 
     Assert.isNull((o.a.b).opt());
-    Assert.same({ c : 'B'}, (o.a.b).opt().or({ c : 'B'}));
+    Assert.same({ c : 'B'}, (o.a.b).or({ c : 'B'}));
 
     Assert.equals('A', (this.nested.a.b).opt());
     Assert.equals('A', (nested.a.b).opt());
@@ -109,5 +111,26 @@ class TestDefaults {
     arr = [[[1,2,3],[4,5,6]]];
     Assert.equals(1, (arr[0][0][0]).opt());
     Assert.equals(6, (arr[0][1][2]).opt());
+  }
+
+  var m : {
+    f : String -> Null<String>
+  };
+
+  public function testOrMethod() {
+    Assert.equals('x', (this.m.f('Y').toLowerCase()).or('x'));
+    var first = true;
+    m = {
+      f : function(s) {
+        if(first) {
+          first = false;
+          return s.toLowerCase();
+        } else {
+          // check for side effects on potentially multiple calls
+          return throw 'method called multiple times';
+        }
+      }
+    };
+    Assert.equals('y', (this.m.f('Y').toLowerCase()).or('x'));
   }
 }
