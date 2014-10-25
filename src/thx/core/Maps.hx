@@ -6,7 +6,7 @@ using thx.core.Iterators;
 using thx.core.Arrays;
 
 /**
-Helper methods for Maps
+Extension methods for Maps
 **/
 class Maps {
 /**

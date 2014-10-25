@@ -220,7 +220,10 @@ Extension methods for integer values. Many methods are implemented the same as i
 
 ### [Maps](http://thx-lib.org/api/thx/core/Maps.html)
 
-???
+Extension methods for Maps.
+
+  * `tuples` transforms a `Map<TKey, TValue>` in an `Array` of `Tuple2<TKey, TValue>`
+  * `mapToObject` transforms a `Map<String, T>` into an anonymous object.
 
 ### [Objects](http://thx-lib.org/api/thx/core/Objects.html)
 
