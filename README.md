@@ -6,7 +6,7 @@
 
 Generic multi-purpose library. `thx.core` aims to be the [lodash](http://lodash.com/) library for Haxe.
 
-## data structures
+## Data Structures
 
 `thx.core` provides a few data types to complet the standard library.
 
@@ -111,7 +111,7 @@ var s = ([1,2,3] : Set<Int>).union([2,3,4]).difference([2,3]);
 
 Note that boolean operations return new `Set` instances and do not change the original instances.
 
-### [Tuple](http://thx-lib.org/api/thx/core/Tuple.html)
+### [Tuple](http://thx-lib.org/api/thx/core/Tuple2.html)
 
 A `Tuple` is a value containing multiple values of potentially different types. All tuples are immutable; that means that any tuple operation that seems to change the Tuple it is creating a new structure instead.
 
@@ -135,7 +135,7 @@ t.with("0.123") // appends a new value to the right creating a new Tuple3
 
 [`Tuple3`](http://thx-lib.org/api/thx/core/Tuple3.html), [`Tuple4`](http://thx-lib.org/api/thx/core/Tuple4.html), [`Tuple5`](http://thx-lib.org/api/thx/core/Tuple5.html) and [`Tuple6`](http://thx-lib.org/api/thx/core/Tuple6.html) work much like [`Tuple`](http://thx-lib.org/api/thx/core/Tuple2.html) but bring more values.
 
-## type helpers
+## Type Helpers
 
 `thx.core` also contains a lot of useful helper classes to simplify dealing with a lot of types from the standard library.
 
@@ -188,11 +188,11 @@ it.isIterator() // checks that the instance has the right members to be an Itera
 it.isIterable() // checks that the instance has the right members to be an Iterable
 ```
 
-## macro helpers
+## Macro Helpers
 
 `thx.core` also includes a few helpers to more easily write and deal with macros.
 
-## install
+## Install
 
 From the command line just type:
 
