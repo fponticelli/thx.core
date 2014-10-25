@@ -76,7 +76,6 @@ trace((o.a.b.c).opt()); // prints 'A'
       buf += '\n    (null == (_${i+1} = _$i$path) ? null :';
     }
     buf += ' _${ids.length}' + Strings.repeat(')', ids.length) + ';\n}';
-    trace(buf);
     return Context.parse(buf , value.pos);
   }
 
