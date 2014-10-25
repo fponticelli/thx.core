@@ -114,28 +114,27 @@ class TestDefaults {
   }
 
   var m : {
-    f : String -> Null<String>
+    f : String -> { change : Void -> String }
   };
 
-//#if !python
-// python generates an EBlock that messes with the way 'or' works. It now generates an explicit error.
   public function testOrMethod() {
-    Assert.equals('x', (this.m.f('Y').toLowerCase()).or('x'));
+    Assert.equals('x', (this.m.f('Y').change()).or('x'));
     var first = true;
     m = {
       f : function(s) {
         if(first) {
           first = false;
-          return s.toLowerCase();
+          return {
+            change : function() return s.toLowerCase()
+          }
         } else {
           // check for side effects on potentially multiple calls
           return throw 'method called multiple times';
         }
       }
     };
-    Assert.equals('y', (this.m.f('Y').toLowerCase()).or('x'));
+    Assert.equals('y', (this.m.f('Y').change()).or('x'));
   }
-//#end
 
   public function testIsNull() {
     Assert.isTrue((empty).isNull());
