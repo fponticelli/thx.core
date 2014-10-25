@@ -148,17 +148,17 @@ Similarly to `Lambda`, `Arrays`/`Iterators`/`Iterables` provide extension method
 Some examples of the common features:
 
 ```haxe
-[1,2,3].all(function(i) return i > 1) // false
-[1,2,3].any(function(i) return i > 1) // true
+[1,2,3].all(function(i) return i > 1); // false
+[1,2,3].any(function(i) return i > 1); // true
 
 // filter works for any Iterator/Iterable like the normal Array.filter
-[1,2,3].filter(Ints.isOdd) // [1,3]
+[1,2,3].filter(Ints.isOdd); // [1,3]
 
-[1,2,3].filterPluck(_ != 2) // equivalent to [1,2,3].filter(function(i) return i != 2)
+[1,2,3].filterPluck(_ != 2); // equivalent to [1,2,3].filter(function(i) return i != 2)
 
-[1,2,3].isEmpty() // false
+[1,2,3].isEmpty(); // false
 
-[1,2,3].pluck(_ * 2) // [2,4,6]
+[1,2,3].pluck(_ * 2); // [2,4,6]
 ```
 
 ### [Arrays](http://thx-lib.org/api/thx/core/Arrays.html)
@@ -186,6 +186,60 @@ it.isIterator() // checks that the instance has the right members to be an Itera
 
 ```haxe
 it.isIterable() // checks that the instance has the right members to be an Iterable
+```
+
+## Errors
+
+Haxe brings the power of being able to use any type to throw an exception. It is not uncommon to find code that simply does `throw "my error`. There is nothing wrong with that approach except that some times, most commonly in bigger applications that use many libraries, you need to be conservative when you want to catch an exception and introduce a `catch(e : Dynamic)` to be sure to not forget any possible error. The problem with Dynamic is that you don't really know how to access the error info. The type `thx.core.Error` described below tries to solve this problem providing a common and generic implementation.
+
+### [Error](http://thx-lib.org/api/thx/core/Error.html)
+
+Represent a Runtime error or exception. When used with JS it inherits from the native `Error` type. It tries to bring information like error message and error location. Usage is super easy:
+
+```haxe
+throw new Error('my error message');
+```
+
+Note that `Error` will try to collect (if possible) information about the error stack and the error location using `haxe.PosInfos`.
+
+On top of `thx.core.Error` a few definitions are built for very common situations.
+
+### AbstractMethod
+
+Mark a method as `abstract`. If it is not implemented by a sub-type a runtime exception is thrown indicating the class/method name that is abstract and has no implementation.
+
+```haxe
+function myAbstract() {
+    throw new AbstractMethod(); // no argument required
+}
+```
+
+### NotImplemented
+
+Similarly to `AbstracMethod` it is used to mark method that have not been implementd yet.
+
+```haxe
+function myNotImplemented() {
+    throw new NotImplemented(); // no argument required
+}
+```
+
+### NullArgument
+
+Checks that a certain argument of a function is not `null` and throws an exception otherwise.
+
+```haxe
+function myMethod(value : String) {
+    NullArgument.throwIfNull(value);
+}
+```
+
+With arguments of type `Array`, `String`, `Iterator` or `Iterable`, it is also possible to check for emptyness:
+
+```haxe
+function myMethod(value : String) {
+    NullArgument.throwIfEmpty(value); // check that value is not `null` but also not empty ("")
+}
 ```
 
 ## Macro Helpers
