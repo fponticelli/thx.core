@@ -190,7 +190,14 @@ it.isIterable() // checks that the instance has the right members to be an Itera
 
 ### [Floats](http://thx-lib.org/api/thx/core/Floats.html)
 
-???
+`Floats` contains helper methods to work with `Float` values. Some examples:
+
+  * `canParse` checks if a string can be safely parsed into a `Float`. Use `parse` for the final conversion
+  * `clamp` restricts a value within a given range
+  * `compare` returns a value suitable for comparison
+  * `interpolate` does exactly that :)
+  * `nearEquals` compare two values with a small margin to account for floating precision issues
+  * `wrap` ensure that the passed valeu will be included in the boundaries. If the value exceeds `max`, the value is reduced by `min` repeatedely until it falls within the range. Similar and inverted treatment is performed if the value is below `min`
 
 ### [Functions](http://thx-lib.org/api/thx/core/Functions.html)
 

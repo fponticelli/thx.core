@@ -17,28 +17,6 @@ class Types {
     return valueTypeToString(a) == valueTypeToString(b);
 
 /**
-Returns a string describing the type of any `value`.
-**/
-  inline public static function valueTypeToString<T>(value : T)
-    return typeToString(Type.typeof(value));
-
-/**
-Returns a string representation of a `ValueType`.
-**/
-  public static function typeToString(type : Type.ValueType) {
-    return switch type {
-      case TInt:      "Int";
-      case TFloat:    "Float";
-      case TBool:     "Bool";
-      case TObject:   "{}";
-      case TFunction: "Function";
-      case TClass(c): Type.getClassName(c);
-      case TEnum(e):  Type.getEnumName(e);
-      case _:         throw 'invalid type $type';
-    }
-  }
-
-/**
 `typeInheritance` returns an array of string describing the entire inheritance
 chain of the passed `ValueType`.
 **/
@@ -62,9 +40,31 @@ chain of the passed `ValueType`.
   }
 
 /**
+Returns a string representation of a `ValueType`.
+**/
+  public static function typeToString(type : Type.ValueType) {
+    return switch type {
+      case TInt:      "Int";
+      case TFloat:    "Float";
+      case TBool:     "Bool";
+      case TObject:   "{}";
+      case TFunction: "Function";
+      case TClass(c): Type.getClassName(c);
+      case TEnum(e):  Type.getEnumName(e);
+      case _:         throw 'invalid type $type';
+    }
+  }
+
+/**
 `valueTypeInheritance` returns an array of string describing the entire inheritance
 chain of the passed `value`.
 **/
   inline public static function valueTypeInheritance<T>(value : T) : Array<String>
     return typeInheritance(Type.typeof(value));
+
+/**
+Returns a string describing the type of any `value`.
+**/
+  inline public static function valueTypeToString<T>(value : T)
+    return typeToString(Type.typeof(value));
 }

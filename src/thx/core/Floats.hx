@@ -85,10 +85,10 @@ as the tollerance value.
     return value < 0 ? -1 : 1;
 
 /**
-Passed two boundaries values (`min`, `max`), `wrap` ensure that the passed vale `v` will
+Passed two boundaries values (`min`, `max`), `wrap` ensures that the passed value `v` will
 be included in the boundaries. If the value exceeds `max`, the value is reduced by `min`
-repeatedely until it falls within the range. Similar treatment is done if value is
-below `min`.
+repeatedely until it falls within the range. Similar and inverted treatment is performed if
+the value is below `min`.
 **/
   public static function wrap(v : Float, min : Float, max : Float) : Float {
     var range = max - min + 1;
