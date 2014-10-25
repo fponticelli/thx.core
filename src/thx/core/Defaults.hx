@@ -55,6 +55,7 @@ trace((o.a.b.c).opt()); // prints 'A'
         ids[ids.length - 1] += '($a)';
       case TBlock(_):
         var s = TypedExprTools.toString(e, true);
+        trace(s);
         ids.push(s);
       case _:
         throw 'invalid expression $e';
@@ -75,6 +76,7 @@ trace((o.a.b.c).opt()); // prints 'A'
       buf += '\n    (null == (_${i+1} = _$i$path) ? null :';
     }
     buf += ' _${ids.length}' + Strings.repeat(')', ids.length) + ';\n}';
+    trace(buf);
     return Context.parse(buf , value.pos);
   }
 
