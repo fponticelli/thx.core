@@ -133,4 +133,16 @@ class TestDefaults {
     };
     Assert.equals('y', (this.m.f('Y').toLowerCase()).or('x'));
   }
+
+  public function testIsNull() {
+    Assert.isTrue((empty).isNull());
+    Assert.isTrue((empty.a).isNull());
+    Assert.isTrue((empty.a.b).isNull());
+  }
+
+  public function testNotNull() {
+    Assert.isTrue((nested).notNull());
+    Assert.isTrue((nested.a).notNull());
+    Assert.isTrue((nested.a.b).notNull());
+  }
 }

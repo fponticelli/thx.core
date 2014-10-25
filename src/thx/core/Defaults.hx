@@ -86,7 +86,7 @@ var o = { a : { b : { c : 'A' }}};
 trace((o.a.b.c).opt()); // prints 'A'
 ```
 **/
-  macro public static function opt(value : Expr) {
+  #if !macro macro #end public static function opt(value : Expr) {
     var ids  = [];
     function traverse(e : haxe.macro.Type.TypedExprDef) switch e {
       case TArray(a, e):
@@ -134,5 +134,15 @@ trace((o.a.b.c).opt()); // prints 'A'
     }
     buf += ' _${ids.length}' + Strings.repeat(')', ids.length) + ';\n}';
     return Context.parse(buf , value.pos);
+  }
+
+  macro public static function isNull(value : Expr) {
+    var e = Defaults.opt(value);
+    return macro ($e{e} == null);
+  }
+
+  macro public static function notNull(value : Expr) {
+    var e = Defaults.opt(value);
+    return macro ($e{e} != null);
   }
 }
