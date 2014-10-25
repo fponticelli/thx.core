@@ -213,7 +213,13 @@ Extension methods for integer values. Many methods are implemented the same as i
 
 ### [Objects](http://thx-lib.org/api/thx/core/Objects.html)
 
-???
+Extension methods for objects.
+
+  * `isEmpty` returns true if the object contains no fields
+  * `size` counts the number of fields in an object
+  * `values` returns an array with the values of each field (order is not guaranteed)
+  * `tuples` returns an array of `Tuple2<String, Dynamic>` containing pairs of fields/values (order is not guaranteed)
+  * `objectToMap` transform an object in to a map of type `Map<String, Dynamic>`
 
 ### [Options](http://thx-lib.org/api/thx/core/Options.html)
 
