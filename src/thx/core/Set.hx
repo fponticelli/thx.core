@@ -15,6 +15,12 @@ abstract Set<T>(Array<T>) {
     return set;
   }
 
+/**
+Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` otherwise.
+**/
+  public static function create<T>(?arr : Array<T>)
+    return null == arr ? new Set<T>([]) : arrayToSet(arr);
+
   inline function new(arr : Array<T>)
     this = arr;
 
