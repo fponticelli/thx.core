@@ -48,12 +48,12 @@ trace((o.a.b.c).opt()); // prints 'A'
       case TParenthesis(p):
         traverse(p);
       case TCall(e, el):
-        //if(Context.defined("python"))
-        //  Context.error("Defaults.opt doesn't support method calls on python", value.pos);
         traverse(e);
         var a = el.map(TypedExprTools.toString.bind(_, true)).join(", ");
         ids[ids.length - 1] += '($a)';
       case TBlock(_):
+        if(Context.defined("python"))
+          Context.error("Defaults.opt doesn't support some method calls on Python", value.pos);
         var s = TypedExprTools.toString(e, true);
         trace(s);
         ids.push(s);
