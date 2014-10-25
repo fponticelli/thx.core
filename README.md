@@ -204,7 +204,7 @@ Note that `Error` will try to collect (if possible) information about the error 
 
 On top of `thx.core.Error` a few definitions are built for very common situations.
 
-### AbstractMethod
+### [AbstractMethod](http://thx-lib.org/api/thx/core/error/AbstractMethod.html)
 
 Mark a method as `abstract`. If it is not implemented by a sub-type a runtime exception is thrown indicating the class/method name that is abstract and has no implementation.
 
@@ -214,7 +214,7 @@ function myAbstract() {
 }
 ```
 
-### NotImplemented
+### [NotImplemented](http://thx-lib.org/api/thx/core/error/NotImplemented.html)
 
 Similarly to `AbstracMethod` it is used to mark method that have not been implementd yet.
 
@@ -224,7 +224,7 @@ function myNotImplemented() {
 }
 ```
 
-### NullArgument
+### [NullArgument](http://thx-lib.org/api/thx/core/error/NullArgument.html)
 
 Checks that a certain argument of a function is not `null` and throws an exception otherwise.
 
