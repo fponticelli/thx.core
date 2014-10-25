@@ -117,7 +117,7 @@ class TestDefaults {
     f : String -> Null<String>
   };
 
-#if !python
+//#if !python
 // python generates an EBlock that messes with the way 'or' works. It now generates an explicit error.
   public function testOrMethod() {
     Assert.equals('x', (this.m.f('Y').toLowerCase()).or('x'));
@@ -135,7 +135,7 @@ class TestDefaults {
     };
     Assert.equals('y', (this.m.f('Y').toLowerCase()).or('x'));
   }
-#end
+//#end
 
   public function testIsNull() {
     Assert.isTrue((empty).isNull());
