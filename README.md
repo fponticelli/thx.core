@@ -205,7 +205,7 @@ it.isIterable() // checks that the instance has the right members to be an Itera
 
 ### [Ints](http://thx-lib.org/api/thx/core/Ints.html)
 
-???
+Extension methods for integer values. Many methods are implemented the same as in `thx.core.Floats` but specialized for `Int` values. Some are methods available in `Std` or `Math` but only available for `Float`.
 
 ### [Maps](http://thx-lib.org/api/thx/core/Maps.html)
 

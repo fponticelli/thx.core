@@ -1,7 +1,7 @@
 package thx.core;
 
 /**
-Helper class for integer values.
+Extension methods for integer values.
 **/
 class Ints {
   static var pattern_parse = ~/^[+-]?(\d+|0x[0-9A-F]+)$/i;
