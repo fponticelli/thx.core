@@ -48,6 +48,18 @@ The returned value is a rounded integer.
     return Math.round(a + (b - a) * f);
 
 /**
+`isEven` returns `true` if `v` is even, `false` otherwise.
+**/
+  inline public static function isEven(v : Int)
+    return v % 2 == 0;
+
+/**
+`isOdd` returns `true` if `v` is odd, `false` otherwise.
+**/
+  inline public static function isOdd(v : Int)
+    return v % 2 != 0;
+
+/**
 It returns the maximum value between `a` and `b`.
 **/
   inline public static function max(a : Int, b : Int) : Int
