@@ -631,16 +631,11 @@ Helper class for `Array<Float>`.
 class ArrayFloats {
 /**
 Finds the average of all the elements in the array.
+
+It returns `NaN` if the array is empty.
 **/
-  public static function average(arr : Array<Float>) : Null<Float> {
-    if(arr.length == 0)
-      return null;
-    var sum = Arrays.reduce(arr, function(acc, v) {
-        acc.count++;
-        acc.sum += v;
-        return acc;
-      }, { count : 0, sum : 0.0 });
-    return sum.sum / sum.count;
+  public static function average(arr : Array<Float>) : Float {
+    return sum(arr) / arr.length;
   }
 
 /**
@@ -661,6 +656,12 @@ Finds the min float element in the array.
 **/
   public static function min(arr : Array<Float>) : Null<Float>
     return arr.length == 0 ? null : Arrays.reduce(arr, function(min, v) return v < min ? v : min, arr[0]);
+
+/**
+Finds the sum of all the elements in the array.
+**/
+  public static function sum(arr : Array<Float>) : Null<Float>
+    return Arrays.reduce(arr, function(tot, v) return tot + v, 0.0);
 }
 
 /**
@@ -670,8 +671,8 @@ class ArrayInts {
 /**
 Finds the average of all the elements in the array.
 **/
-  inline public static function average(arr : Array<Int>) : Null<Float>
-    return ArrayFloats.average(cast arr);
+  public static function average(arr : Array<Int>) : Null<Float>
+    return sum(arr) / arr.length;
 
 /**
 Finds the max int element in the array.
@@ -684,6 +685,12 @@ Finds the min int element in the array.
 **/
   public static function min(arr : Array<Int>) : Null<Int>
     return arr.length == 0 ? null : Arrays.reduce(arr, function(min, v) return v < min ? v : min, arr[0]);
+
+/**
+Finds the sum of all the elements in the array.
+**/
+  public static function sum(arr : Array<Int>) : Null<Int>
+    return Arrays.reduce(arr, function(tot, v) return tot + v, 0);
 }
 
 /**
