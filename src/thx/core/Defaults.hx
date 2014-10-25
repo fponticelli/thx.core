@@ -54,6 +54,8 @@ Notice that the subject `value` must be a constant identifier (eg: fields, local
         traverse(e);
         var a = el.map(TypedExprTools.toString.bind(_, true)).join(", ");
         ids[ids.length - 1] += '($a)';
+      case TBlock(_):
+        ids.push(TypedExprTools.toString(e, true));
       case _:
         throw 'invalid expression $e';
     }
@@ -88,10 +90,10 @@ trace((o.a.b.c).opt()); // prints 'A'
 **/
   #if !macro macro #end public static function opt(value : Expr) {
     var ids  = [];
-    function traverse(e : haxe.macro.Type.TypedExprDef) switch e {
+    function traverse(e : haxe.macro.Type.TypedExpr) switch e.expr {
       case TArray(a, e):
-        traverse(a.expr);
-        traverse(e.expr);
+        traverse(a);
+        traverse(e);
       case TConst(TThis):
         ids.push('this');
       case TConst(TInt(index)):
@@ -99,7 +101,7 @@ trace((o.a.b.c).opt()); // prints 'A'
       case TLocal(o):
         ids.push(o.name);
       case TField(f, v):
-        traverse(f.expr);
+        traverse(f);
         switch v {
           case FAnon(id):
             ids.push(id.toString());
@@ -109,16 +111,18 @@ trace((o.a.b.c).opt()); // prints 'A'
             throw 'invalid expression $e';
         }
       case TParenthesis(p):
-        traverse(p.expr);
+        traverse(p);
       case TCall(e, el):
-        traverse(e.expr);
+        traverse(e);
         var a = el.map(TypedExprTools.toString.bind(_, true)).join(", ");
         ids[ids.length - 1] += '($a)';
+      case TBlock(_):
+        ids.push(TypedExprTools.toString(e, true));
       case _:
         throw 'invalid expression $e';
     }
 
-    traverse(Context.typeExpr(value).expr);
+    traverse(Context.typeExpr(value));
     var first = ids.shift(),
         temps = ['_0 = $first'].concat(Arrays.mapi(ids, function(_, i) return '_${i+1}')).join(', '),
         buf   = '{\n  var ${temps};\n  null == _0 ? null :',
