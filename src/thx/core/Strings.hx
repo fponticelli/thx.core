@@ -42,6 +42,17 @@ the process is limited to whitespace separated words.
   }
 
 /**
+It cleans up all the whitespaces in the passed `value`. `collapse` does the following:
+
+  - remove trailing/leading whitespaces
+  - within the string, it collapses seqeunces of whitespaces into a single space character
+
+For whitespaces in this description, it is intended to be anything that is matched by the regular expression `\s`.
+**/
+  public static function collapse(value : String)
+    return WSG.replace(StringTools.trim(value), " ");
+
+/**
 It compares to string and it returns a negative number if `a` is inferior to `b`, zero if they are the same,
 or otherwise a positive non-sero number.
 **/
@@ -53,17 +64,6 @@ or otherwise a positive non-sero number.
 **/
   inline public static function contains(s : String, test : String)
     return s.indexOf(test) >= 0;
-
-/**
-It cleans up all the whitespaces in the passed `value`. `collapse` does the following:
-
-  - remove trailing/leading whitespaces
-  - within the string, it collapses seqeunces of whitespaces into a single space character
-
-For whitespaces in this description, it is intended to be anything that is matched by the regular expression `\s`.
-**/
-  public static function collapse(value : String)
-    return WSG.replace(StringTools.trim(value), " ");
 
 /**
 `dasherize` replaces all the occurrances of `_` with `-`;
@@ -165,6 +165,25 @@ It maps a string character by character using `callback`.
 **/
   public static function map(value : String, callback : String -> String) : String
     return toArray(value).map(callback).join('');
+
+/**
+If present, it removes all the occurrencies of `toremove` from `value`.
+**/
+  inline public static function remove(value : String, toremove : String) : String
+    return StringTools.replace(value, toremove, "");
+
+
+/**
+If present, it removes the `toremove` text from the end of `value`.
+**/
+  public static function removeAfter(value : String, toremove : String) : String
+    return StringTools.endsWith(value, toremove) ? value.substring(0, value.length - toremove.length) : value;
+
+/**
+If present, it removes the `toremove` text from the beginning of `value`.
+**/
+  public static function removeBefore(value : String, toremove : String) : String
+    return StringTools.startsWith(value, toremove) ? value.substring(toremove.length) : value;
 
 /**
 `repeat` builds a new string by repeating the argument `s`, n `times`.
