@@ -6,13 +6,13 @@ import haxe.macro.ExprTools;
 #end
 
 /**
-Helper functions for functions with arity 0 (functions that do not take arguments).
+Extension methods for functions with arity 0 (functions that do not take arguments).
 **/
-class Function0 {
+class Functions0 {
 /**
 Returns a function that invokes `callback` after being being invoked `n` times.
 **/
-  inline public static function after(n : Int, callback : Void -> Void)
+  inline public static function after(callback : Void -> Void, n : Int)
     return function()
       if(--n == 0)
         callback();
@@ -63,7 +63,7 @@ Callback takes an additional argument `index`.
 /**
 Helper functions for functions with arity 1 (functions that take exactly 1 argument).
 **/
-class Function1 {
+class Functions1 {
  /**
 `compose` returns a function that calls the first arguemnt function with the result
 of the following one.
@@ -140,7 +140,7 @@ Returns a function that behaves the same as `callback` but has its arguments inv
 /**
 Helper class for functions that take 2 arguments
 **/
-class Function2 {
+class Functions2 {
 /**
 `memoize` wraps `callback` and calls it only once storing the result for future needs.
 
@@ -172,7 +172,7 @@ Wraps `callback` in a function that negates its results.
 /**
 Helper class for functions that take 3 arguments
 **/
-class Function3 {
+class Functions3 {
 /**
 `memoize` wraps `callback` and calls it only once storing the result for future needs.
 

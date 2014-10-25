@@ -26,6 +26,15 @@ class Objects {
     return Reflect.fields(o);
 
 /**
+`objectToMap` transforms an anonymous object into an instance of `Map<String, Dynamic>`.
+**/
+  public static function objectToMap(o : {}) : Map<String, Dynamic>
+    return tuples(o).reduce(function(map : Map<String, Dynamic>, t) {
+      map.set(t._0, t._1);
+      return map;
+    }, new Map());
+
+/**
 `size` returns how many fields are present in the object.
 **/
   inline public static function size(o : {}) : Int
@@ -45,13 +54,4 @@ tuple is the field name and the right value (_1) is the field value.
     return Reflect.fields(o).map(function(key)
         return new Tuple2(key, Reflect.field(o, key))
     );
-
-/**
-`objectToMap` transforms an anonymous object into an instance of `Map<String, Dynamic>`.
-**/
-  public static function objectToMap(o : {}) : Map<String, Dynamic>
-    return tuples(o).reduce(function(map : Map<String, Dynamic>, t) {
-      map.set(t._0, t._1);
-      return map;
-    }, new Map());
 }

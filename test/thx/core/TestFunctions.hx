@@ -9,7 +9,7 @@ class TestFunctions {
   public function testAfter() {
     var counter = 0,
         test    = function() Assert.equals(1, ++counter),
-        manage  = Function0.after(3, test);
+        manage  = Functions0.after(3, test);
 
     Assert.equals(0, counter);
     manage();
@@ -25,7 +25,7 @@ class TestFunctions {
   public function testOnce() {
     var counter = 0,
         test    = function() Assert.equals(1, ++counter),
-        manage  = Function0.once(test);
+        manage  = Functions0.once(test);
 
     Assert.equals(0, counter);
     manage();
@@ -40,7 +40,7 @@ class TestFunctions {
           ++counter;
           return x * 10;
         },
-        manage  = Function1.memoize(test);
+        manage  = Functions1.memoize(test);
 
     Assert.equals(0, counter);
     Assert.equals(10, manage(1));

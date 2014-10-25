@@ -201,7 +201,18 @@ it.isIterable() // checks that the instance has the right members to be an Itera
 
 ### [Functions](http://thx-lib.org/api/thx/core/Functions.html)
 
-???
+Extension methods for functions. Methods are roughly distributed between [`Functions`](http://thx-lib.org/api/thx/core/Functions.html),  [`Functions0`](http://thx-lib.org/api/thx/core/Functions0.html),  [`Functions1`](http://thx-lib.org/api/thx/core/Functions1.html),  [`Functions2`](http://thx-lib.org/api/thx/core/Functions2.html) and  [`Functions3`](http://thx-lib.org/api/thx/core/Functions3.html) where the number suffix denotes the arity (number of arguments) of the function that are going to be extended.
+
+  * `after` returns a function that wraps the passed function. The original function will be executed only after it has been called `n` times
+  * `compose` returns a function that calls the first arguemnt function with the result of the following one.
+  * `equality` performs strict physical equality
+  * `identity` is a function that returns its first argument
+  * `join` creates a function that calls the 2 functions passed as arguments in sequence
+  * `memoize` returns a new version of the argument function that stores the computation from the function and recycles it whenever called again
+  * `negate` return a new version of a function that returns a `Bool` and transforms it so that it will return the negation of its result
+  * `noop` its a function that performs no computations and doesn't return a value
+  * `once` wraps and returns the argument function. `once` ensures that `f` will be called at most once even if the returned function is invoked multiple times
+  * `times` creates a function that calls `callback` `n` times and returns an array of results.
 
 ### [Ints](http://thx-lib.org/api/thx/core/Ints.html)
 
@@ -216,10 +227,10 @@ Extension methods for integer values. Many methods are implemented the same as i
 Extension methods for objects.
 
   * `isEmpty` returns true if the object contains no fields
+  * `objectToMap` transform an object in to a map of type `Map<String, Dynamic>`
   * `size` counts the number of fields in an object
   * `values` returns an array with the values of each field (order is not guaranteed)
   * `tuples` returns an array of `Tuple2<String, Dynamic>` containing pairs of fields/values (order is not guaranteed)
-  * `objectToMap` transform an object in to a map of type `Map<String, Dynamic>`
 
 ### [Options](http://thx-lib.org/api/thx/core/Options.html)
 
