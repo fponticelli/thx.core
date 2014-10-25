@@ -89,6 +89,8 @@ trace((o.a.b.c).opt()); // prints 'A'
 ```
 **/
   #if !macro macro #end public static function opt(value : Expr) {
+    // `opt` implementation could reuse `or` but Macro seem to choke
+    // on some nested TBlock/TCall generating erroneous code
     var ids  = [];
     function traverse(e : haxe.macro.Type.TypedExpr) switch e.expr {
       case TArray(a, e):
