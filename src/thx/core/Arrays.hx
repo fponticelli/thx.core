@@ -316,7 +316,7 @@ Same as `Array.map` but traverses the array from the last to the first element.
   }
 
 /**
-It works the same as `Array.sort()` but returns a sorted copy of the original array.
+It works the same as `Array.sort()` but doesn't change the original array and returns a sorted copy it.
 **/
   public static function order<T>(array : Array<T>, sort : T -> T -> Int) {
     var n = array.copy();

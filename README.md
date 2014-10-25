@@ -135,9 +135,58 @@ t.with("0.123") // appends a new value to the right creating a new Tuple3
 
 [`Tuple3`](http://thx-lib.org/api/thx/core/Tuple3.html), [`Tuple4`](http://thx-lib.org/api/thx/core/Tuple4.html), [`Tuple5`](http://thx-lib.org/api/thx/core/Tuple5.html) and [`Tuple6`](http://thx-lib.org/api/thx/core/Tuple6.html) work much like [`Tuple`](http://thx-lib.org/api/thx/core/Tuple2.html) but bring more values.
 
-## helper classes
+## type helpers
 
-It contains a lot of useful helper classes to simplify dealing with a lot of types from the standard library.
+`thx.core` also contains a lot of useful helper classes to simplify dealing with a lot of types from the standard library.
+
+Most methods described below assume that the respective types have been required using `using` and are used as type extensions.
+
+### Arrays/Iterators/Iterables
+
+Similarly to `Lambda`, `Arrays`/`Iterators`/`Iterables` provide extension methods to work with collections. They share most of the methods and are repeated to avoid useless casting or conversions and to provide optimizations where possible.
+
+Some examples of the common features:
+
+```haxe
+[1,2,3].all(function(i) return i > 1) // false
+[1,2,3].any(function(i) return i > 1) // true
+
+// filter works for any Iterator/Iterable like the normal Array.filter
+[1,2,3].filter(Ints.isOdd) // [1,3]
+
+[1,2,3].filterPluck(_ != 2) // equivalent to [1,2,3].filter(function(i) return i != 2)
+
+[1,2,3].isEmpty() // false
+
+[1,2,3].pluck(_ * 2) // [2,4,6]
+```
+
+### [Arrays](http://thx-lib.org/api/thx/core/Arrays.html)
+
+Beside the usual methods to traverse, reduce, slice and arrange arrays, `Arrays` contains peculiar things like:
+
+  * `compact` to filter out null values
+  * `cross` to create cross products between 2 arrays
+  * `equals` to compare each element of two arrays
+  * `flatMap` and `flatten` to reduce nested arrays into flat arrays
+  * `groupBy` to create `Map` from arrays
+  * `sample` and `sampleOne` to extract random elements from one array
+  * `shuffle` to reorder randomly an array
+  * `zip`/`unzip` to create/deconstruct arrays of `Tuple`
+
+In the `thx.core.Arrays` module are also defined a few specialized operations for specific type of arrays: [ArrayFloats](http://thx-lib.org/api/thx/core/ArrayFloats.html), [ArrayInts](http://thx-lib.org/api/thx/core/ArrayInts.html) and [ArrayStrings](http://thx-lib.org/api/thx/core/ArrayStrings.html). The numeric array variations provide methods for `average`, `sum`, `min` and `max` (plus `compact` for `Float` that removes non-finite numbers).
+
+### [Iterators](http://thx-lib.org/api/thx/core/Iterators.html)
+
+```haxe
+it.isIterator() // checks that the instance has the right members to be an Iterator
+```
+
+### [Iterables](http://thx-lib.org/api/thx/core/Iterables.html)
+
+```haxe
+it.isIterable() // checks that the instance has the right members to be an Iterable
+```
 
 ## macro helpers
 
