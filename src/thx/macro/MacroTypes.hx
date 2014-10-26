@@ -4,7 +4,7 @@ package thx.macro;
 import haxe.macro.TypeTools;
 import haxe.macro.Type.ClassType;
 /**
-Helper functions to work with types at macro time.
+Extension methods to work with types at macro time.
 **/
 class MacroTypes {
 /**

@@ -190,7 +190,7 @@ it.isIterable() // checks that the instance has the right members to be an Itera
 
 ### [Floats](http://thx-lib.org/api/thx/core/Floats.html)
 
-`Floats` contains helper methods to work with `Float` values. Some examples:
+`Floats` contains extension methods to work with `Float` values. Some examples:
 
   * `canParse` checks if a string can be safely parsed into a `Float`. Use `parse` for the final conversion
   * `clamp` restricts a value within a given range
@@ -237,7 +237,15 @@ Extension methods for objects.
 
 ### [Options](http://thx-lib.org/api/thx/core/Options.html)
 
-???
+Extension methods for the `haxe.ds.Option` type.
+
+  * `equals` campares two `Option` values of the same type
+  * `flatMap` reduces an `Option<T>` value into an `Array<T>`
+  * `map` transforms a value contained in `Option<T>` to `Option<TOut>`
+  * `toArray` transforms an `Option` value to an `Array`
+  * `toBool` transforms an `Option` to `true` (`Some(_)`) or `false` (`None`)
+  * `toOption` transforms any type T into `Option<T>`
+  * `toValue` extracts the value from `Option` or returns `null`
 
 ### [Nulls](http://thx-lib.org/api/thx/core/Nulls.html)
 
@@ -260,7 +268,7 @@ Extension methods for `String`. Some examples:
 
 ### [Types](http://thx-lib.org/api/thx/core/Types.html)
 
-Helper methods to use on values, types and classes.
+Extension methods to use on values, types and classes.
 
 `isAnonymousObject` returns true if the passed argument is an anonymous object.
 

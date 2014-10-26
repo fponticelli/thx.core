@@ -3,11 +3,11 @@ package thx.core;
 import haxe.ds.Option;
 
 /**
-Helper functions for the `haxe.ds.Option` type.
+Extension methods for the `haxe.ds.Option` type.
 **/
 class Options {
 /**
-Equality function to campare to `Option` values of the same type. An optional equality
+Equality function to campare two `Option` values of the same type. An optional equality
 function can be provided if values inside `Some` should be compared using something
 different than strict equality.
 **/

@@ -3,7 +3,7 @@ package thx.core;
 using StringTools;
 
 /**
-Helper functions for strings.
+Extension methods for strings.
 **/
 class Strings {
 /**

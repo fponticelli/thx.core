@@ -61,7 +61,7 @@ Callback takes an additional argument `index`.
 }
 
 /**
-Helper functions for functions with arity 1 (functions that take exactly 1 argument).
+Extension methods for functions with arity 1 (functions that take exactly 1 argument).
 **/
 class Functions1 {
  /**
