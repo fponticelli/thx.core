@@ -10,9 +10,19 @@ import thx.core.Ints;
 #end
 
 /**
-`Nulls` provides methods that help to deal with nullable values.
+`Nulls` provides extension methods that help to deal with nullable values.
+
+Note that the parenthesis wrap the entire chain of identifiers. That means that a null check will be performed for each identifier in the chain.
+
+Identifiers can also be getters and methods (both are invoked only once and only if the check reaches them). `Python` seems to struggle with some native methods like methods on strings.
 **/
 class Nulls {
+/**
+`isNull` checks if a chain of identifier is null at any point.
+**/
+  macro public static function isNull(value : Expr)
+    return macro ($e{Nulls.opt(value)} == null);
+
 /**
 It traverses a chain of dot/array identifiers and it returns the last value in the chain or null if any of the identifiers is not set.
 
@@ -80,13 +90,19 @@ trace((o.a.b.c).opt()); // prints 'A'
   }
 
 /**
-The method can provide an alternative value `alt` in case `value` is `null`.
+Like `opt` but allows an `alt` value that replaces a `null` occurrance.
 
 ```haxe
 var s : String = null;
 trace(s.or('b')); // prints 'b'
 s = 'a';
 trace(s.or('b')); // prints 'a'
+
+// or more complex
+var o : { a : { b : { c : String }}} = null;
+trace((o.a.b.c).or("B")); // prints 'B'
+var o = { a : { b : { c : 'A' }}};
+trace((o.a.b.c).or("B")); // prints 'A'
 ```
 
 Notice that the subject `value` must be a constant identifier (eg: fields, local variables, ...).
@@ -94,9 +110,9 @@ Notice that the subject `value` must be a constant identifier (eg: fields, local
   macro public static function or<T>(value : ExprOf<Null<T>>, alt : ExprOf<T>)
     return macro { var t = $e{Nulls.opt(value)}; t != null ? t : $e{alt}; };
 
-  macro public static function isNull(value : Expr)
-    return macro ($e{Nulls.opt(value)} == null);
-
+/**
+`notNull` is the negation of `isNull`.
+**/
   macro public static function notNull(value : Expr)
     return macro ($e{Nulls.opt(value)} != null);
 }

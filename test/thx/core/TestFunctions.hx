@@ -9,7 +9,7 @@ class TestFunctions {
   public function testAfter() {
     var counter = 0,
         test    = function() Assert.equals(1, ++counter),
-        manage  = Functions0.after(3, test);
+        manage  = Functions0.after(test, 3);
 
     Assert.equals(0, counter);
     manage();
