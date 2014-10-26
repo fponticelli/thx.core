@@ -4,8 +4,8 @@
   "license": "MIT",
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
-  "description": "Improved behavior of `Defaults.or()`.",
-  "releasenote": "minor",
-  "version": "0.10.2",
+  "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
+  "releasenote": "More documentation and improved behavior of `Nulls.or()`, `Nulls.opt()`, and added `Nulls.isNull()`/`Nulls.notNull()` (was Defaults).",
+  "version": "0.11.0",
   "contributors": ["fponticelli"]
 }
