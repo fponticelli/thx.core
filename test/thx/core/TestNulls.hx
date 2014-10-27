@@ -112,6 +112,10 @@ class TestNulls {
     f : String -> { change : Void -> String }
   };
 
+  var m2 : {
+    f : String -> String
+  };
+
   public function testOrMethod() {
     Assert.equals('x', (this.m.f('Y').change()).or('x'));
     var first = true;
@@ -129,6 +133,8 @@ class TestNulls {
       }
     };
     Assert.equals('y', (this.m.f('Y').change()).or('x'));
+
+    Assert.equals('x', (this.m2.f('Y').toLowerCase()).or('x'));
   }
 
   public function testIsNull() {
