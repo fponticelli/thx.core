@@ -133,8 +133,9 @@ class TestNulls {
       }
     };
     Assert.equals('y', (this.m.f('Y').change()).or('x'));
-
+#if !python
     Assert.equals('x', (this.m2.f('Y').toLowerCase()).or('x'));
+#end
   }
 
   public function testIsNull() {
