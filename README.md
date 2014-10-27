@@ -8,7 +8,7 @@ Generic multi-purpose library. `thx.core` aims to be the [lodash](http://lodash.
 
 ## Data Structures
 
-`thx.core` provides a few data types to complet the standard library.
+`thx.core` provides a few data types to complete the standard library.
 
 ### [AnonymousMap](http://thx-lib.org/api/thx/core/AnonymousMap.html)
 
