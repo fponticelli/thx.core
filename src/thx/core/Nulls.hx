@@ -38,7 +38,8 @@ trace((o.a.b.c).opt()); // prints 'A'
     function traverse(e : haxe.macro.Type.TypedExpr) switch e.expr {
       case TArray(a, e):
         traverse(a);
-        traverse(e);
+        var index = TypedExprTools.toString(e, true);
+        ids.push('[$index]');
       case TConst(TThis):
         ids.push('this');
       case TConst(TInt(index)):
@@ -78,8 +79,8 @@ trace((o.a.b.c).opt()); // prints 'A'
         path;
     for(i in 0...ids.length) {
       var id = ids[i];
-      if(Ints.canParse(id)) {
-        path = '[$id]';
+      if(id.substring(0, 1) == '[') {
+        path = id;
       } else {
         path = '.$id';
       }

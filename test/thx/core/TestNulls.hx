@@ -108,6 +108,15 @@ class TestNulls {
     Assert.equals(6, (arr[0][1][2]).opt());
   }
 
+  public function testOrWithIndex() {
+    var arr : Array<Array<Array<Null<Int>>>> = null,
+        i = 4;
+    Assert.equals(7, (arr[0][1][3]).or(7));
+    Assert.equals(7, (arr[i][1][3]).or(7));
+    Assert.equals(7, (arr[0][i][3]).or(7));
+    Assert.equals(7, (arr[0][1][i]).or(7));
+  }
+
   var m : {
     f : String -> { change : Void -> String }
   };
