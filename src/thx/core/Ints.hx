@@ -87,7 +87,7 @@ It is also possible to provide an optiona `negativeSign` and/or `positiveSign`.
     return Math.isNaN(v) ? null : v;
     #elseif flash9
     if(radix == null) radix = 0;
-    var v : Int = untyped __global__["parseInt"](value, radix);
+    var v : Int = untyped __global__["parseInt"](s, radix);
     return Math.isNaN(v) ? null : v;
     #else
 
@@ -116,11 +116,11 @@ It is also possible to provide an optiona `negativeSign` and/or `positiveSign`.
       radix = 10;
     }
 
-    return try (negative ? -1 : 1) * s.toArray().reduce(function(acc, c) {
+    return try ((negative ? -1 : 1) * s.toArray().reduce(function(acc, c) {
       var i = BASE.indexOf(c);
       if(i < 0 || i >= radix) throw 'invalid';
       return (acc * radix) + i;
-    }, 0) catch(e : Dynamic) null;
+    }, 0) : Null<Int>) catch(e : Dynamic) null;
     #end
   }
 
@@ -163,7 +163,7 @@ Transform an `Int` value to a `String` using the specified `radix`. A negative s
   #if(js || flash) inline #end
   public static function toString(value : Int, radix : Int, ?negativeSign : String = '-') : String {
     #if(js || flash)
-    return untyped (value || "").toString(radix).replace('-', negativeSign);
+    return untyped value.toString(radix).replace('-', negativeSign);
     #else
 
     if(radix < 2 || radix > BASE.length)
