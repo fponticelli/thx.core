@@ -1,5 +1,9 @@
 package thx.core;
 
+using thx.core.Arrays;
+using thx.core.Strings;
+using StringTools;
+
 /**
 Extension methods for integer values.
 **/
@@ -71,11 +75,53 @@ It returns the minimum value between `a` and `b`.
   inline public static function min(a : Int, b : Int) : Int
     return a < b ? a : b;
 
-  // TODO add proper octal/hex/exp support
-  public static function parse(s : String) {
-    if (s.substr(0, 1) == "+")
-      s = s.substr(1);
-    return Std.parseInt(s);
+/**
+Parses a string into an Int value using the provided radix. Default radix is 16 for strings that begin with
+0x (after optional sign) or 10 otherwise.
+
+It is also possible to provide an optiona `negativeSign` and/or `positiveSign`.
+**/
+  public static function parse(s : String, ?radix : Int, ?negativeSign = "-", ?positiveSign = "+") : Null<Int> {
+    #if js
+    var v : Int = untyped __js__("parseInt")(s, radix);
+    return Math.isNaN(v) ? null : v;
+    #elseif flash9
+    if(radix == null) radix = 0;
+    var v : Int = untyped __global__["parseInt"](value, radix);
+    return Math.isNaN(v) ? null : v;
+    #else
+
+    if(radix != null && (radix < 2 || radix > BASE.length))
+      return throw 'invalid radix $radix, it must be between 2 and ${BASE.length}';
+
+    if(s.substring(0, positiveSign.length) == positiveSign)
+      s = s.substring(positiveSign.length);
+
+    var negative = s.substring(0, negativeSign.length) == negativeSign;
+
+    if(negative)
+      s = s.substring(negativeSign.length);
+
+    if(s.length == 0)
+      return null;
+
+    s = s.trim().toLowerCase();
+
+    if(s.startsWith('0x')) {
+      if(null != radix && 16 != radix)
+        return null; // attempting at converting a hex using a different radix
+      radix = 16;
+      s = s.substring(2);
+    } else if(null == radix) {
+      radix = 10;
+    }
+
+    return try (negative ? -1 : 1) * s.toArray().reduce(function(acc, c) {
+      var i = BASE.indexOf(c);
+      if(i < 0 || i >= radix) throw 'invalid';
+      return (acc * radix) + i;
+    }, 0) catch(e : Dynamic) null;
+    #end
   }
 
 /**
@@ -95,17 +141,45 @@ with a progression set by `step`. A negative value for `step` can be used but in
 case start will need to be a greater value than stop.
 **/
   public static function range(start : Int, ?stop : Int, step = 1) : Array<Int> {
-    if (null == stop) {
+    if(null == stop) {
       stop = start;
       start = 0;
     }
-    if ((stop - start) / step == Math.POSITIVE_INFINITY) throw "infinite range";
+    if((stop - start) / step == Math.POSITIVE_INFINITY) throw "infinite range";
     var range = [], i = -1, j;
-    if (step < 0)
+    if(step < 0)
       while ((j = start + step * ++i) > stop) range.push(j);
     else
       while ((j = start + step * ++i) < stop) range.push(j);
     return range;
+  }
+
+  // Base used for toString/parseInt conversions. Supporting base 2 to 36 for now as common standard.
+  static var BASE = "0123456789abcdefghijklmnopqrstuvwxyz";
+
+/**
+Transform an `Int` value to a `String` using the specified `radix`. A negative sign can be provided optionally.
+**/
+  #if(js || flash) inline #end
+  public static function toString(value : Int, radix : Int, ?negativeSign : String = '-') : String {
+    #if(js || flash)
+    return untyped (value || "").toString(radix).replace('-', negativeSign);
+    #else
+
+    if(radix < 2 || radix > BASE.length)
+      return throw 'invalid radix $radix, it must be between 2 and ${BASE.length}';
+    if(radix == 10 || value == 0)
+      return '$value';
+
+    var buf = "",
+        abs = Ints.abs(value);
+    while(abs > 0) {
+      buf = BASE.charAt(abs % radix) + buf;
+      abs = Std.int(abs / radix);
+    }
+
+    return (value < 0 ? negativeSign : '') + buf;
+    #end
   }
 
 /**
@@ -119,7 +193,7 @@ Similar to `wrap`, it works for numbers between 0 and `max`.
 **/
   public static function wrapCircular(v : Int, max : Int) : Int {
     v = v % max;
-    if (v < 0)
+    if(v < 0)
       v += max;
     return v;
   }
