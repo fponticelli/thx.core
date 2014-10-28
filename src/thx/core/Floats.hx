@@ -79,6 +79,14 @@ as the tollerance value.
   }
 
 /**
+Rounds a number to the specified number of decimals.
+**/
+  static public function round(f : Float, decimals : Int) : Float {
+    var p = Math.pow(10, decimals);
+    return Math.round(f * p) / p;
+  }
+
+/**
 `sign` returns `-1` if `value` is a negative number, `1` otherwise.
 */
   inline public static function sign(value : Float) : Int
