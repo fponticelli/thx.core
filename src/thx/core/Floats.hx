@@ -73,8 +73,8 @@ as the tollerance value.
 `parse` can parse a string and tranform it into a `Float` value.
 **/
   public static function parse(s : String) {
-    if (s.substr(0, 1) == "+")
-      s = s.substr(1);
+    if (s.substring(0, 1) == "+")
+      s = s.substring(1);
     return Std.parseFloat(s);
   }
 

@@ -16,14 +16,14 @@ If `searchFor` is not found, an empty string is returned.
     if (pos < 0)
       return "";
     else
-      return value.substr(pos + searchFor.length);
+      return value.substring(pos + searchFor.length);
   }
 
 /**
 `capitalize` returns a string with the first character convert to upper case.
 **/
   inline public static function capitalize(s : String)
-    return s.substr(0, 1).toUpperCase() + s.substr(1);
+    return s.substring(0, 1).toUpperCase() + s.substring(1);
 
 /**
 Capitalize the first letter of every word in `value`. If `whiteSpaceOnly` is set to `true`
@@ -81,7 +81,7 @@ of `symbol`.
 **/
   public static function ellipsis(s : String, maxlen = 20, symbol = "...")
     return if (s.length > maxlen)
-      s.substr(0, symbol.length > maxlen - symbol.length ? symbol.length : maxlen - symbol.length) + symbol;
+      s.substring(0, symbol.length > maxlen - symbol.length ? symbol.length : maxlen - symbol.length) + symbol;
     else
       s;
 
@@ -113,7 +113,7 @@ If `searchFor` is not found, an empty string is returned.
     if (pos < 0)
       return "";
     else
-      return value.substr(pos);
+      return value.substring(pos);
   }
 
 /**
@@ -244,7 +244,7 @@ It transforms a string into an `Array` of char codes in integer format.
         pos++;
       else
         break;
-    return value.substr(pos);
+    return value.substring(pos);
 #end
   }
 
@@ -265,7 +265,7 @@ It transforms a string into an `Array` of char codes in integer format.
       else
         break;
     }
-    return value.substr(0, pos);
+    return value.substring(0, pos);
 #end
   }
 
@@ -291,7 +291,7 @@ If `searchFor` is not found, the entire string is returned.
     if (pos < 0)
       return value;
     else
-      return value.substr(0, pos);
+      return value.substring(0, pos);
   }
 
 /**
@@ -318,7 +318,7 @@ Words whose length exceeds `columns` are not split.
     columns -= ilen;
     while(true) {
       if(pos + columns >= len - ilen) {
-        parts.push(s.substr(pos));
+        parts.push(s.substring(pos));
         break;
       }
 
