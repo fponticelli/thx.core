@@ -95,15 +95,12 @@ Parses a string into an Int value using the provided base. Default base is 16 fo
     var negative = if(s.startsWith("+")) {
       s = s.substring(1);
       false;
-    } else if(s.substring(0, 1) == "-") {
+    } else if(s.startsWith("-")) {
       s = s.substring(1);
       true;
     } else {
       false;
     };
-
-    if(negative)
-      s = s.substring(1);
 
     if(s.length == 0)
       return null;
@@ -119,7 +116,7 @@ Parses a string into an Int value using the provided base. Default base is 16 fo
       base = 10;
     }
 
-    return try ((negative ? -1 : 1) * s.toArray().reduce(function(acc, c) {
+    return try ((negative ? -1 : 1) * s.toArray().reduce(function(acc : Int, c : String) {
       var i = BASE.indexOf(c);
       if(i < 0 || i >= base) throw 'invalid';
       return (acc * base) + i;

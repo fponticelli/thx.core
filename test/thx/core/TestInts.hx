@@ -6,6 +6,7 @@
 package thx.core;
 
 import utest.Assert;
+using thx.core.Ints;
 
 class TestInts {
   public function new() { }
@@ -20,5 +21,9 @@ class TestInts {
 
     range = Ints.range(7, 2, -2);
     Assert.same([7,5,3], range);
+  }
+
+  public function testParse() {
+    Assert.equals(-50, "-50".parse());
   }
 }
