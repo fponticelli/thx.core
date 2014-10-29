@@ -76,31 +76,34 @@ It returns the minimum value between `a` and `b`.
     return a < b ? a : b;
 
 /**
-Parses a string into an Int value using the provided radix. Default radix is 16 for strings that begin with
+Parses a string into an Int value using the provided base. Default base is 16 for strings that begin with
 0x (after optional sign) or 10 otherwise.
-
-It is also possible to provide an optiona `negativeSign` and/or `positiveSign`.
 **/
-  public static function parse(s : String, ?radix : Int, ?negativeSign = "-", ?positiveSign = "+") : Null<Int> {
+  public static function parse(s : String, ?base : Int) : Null<Int> {
     #if js
-    var v : Int = untyped __js__("parseInt")(s, radix);
+    var v : Int = untyped __js__("parseInt")(s, base);
     return Math.isNaN(v) ? null : v;
     #elseif flash9
-    if(radix == null) radix = 0;
-    var v : Int = untyped __global__["parseInt"](s, radix);
+    if(base == null) base = 0;
+    var v : Int = untyped __global__["parseInt"](s, base);
     return Math.isNaN(v) ? null : v;
     #else
 
-    if(radix != null && (radix < 2 || radix > BASE.length))
-      return throw 'invalid radix $radix, it must be between 2 and ${BASE.length}';
+    if(base != null && (base < 2 || base > BASE.length))
+      return throw 'invalid base $base, it must be between 2 and ${BASE.length}';
 
-    if(s.substring(0, positiveSign.length) == positiveSign)
-      s = s.substring(positiveSign.length);
-
-    var negative = s.substring(0, negativeSign.length) == negativeSign;
+    var negative = if(s.startsWith("+")) {
+      s = s.substring(1);
+      false;
+    } else if(s.substring(0, 1) == "-") {
+      s = s.substring(1);
+      true;
+    } else {
+      false;
+    };
 
     if(negative)
-      s = s.substring(negativeSign.length);
+      s = s.substring(1);
 
     if(s.length == 0)
       return null;
@@ -108,18 +111,18 @@ It is also possible to provide an optiona `negativeSign` and/or `positiveSign`.
     s = s.trim().toLowerCase();
 
     if(s.startsWith('0x')) {
-      if(null != radix && 16 != radix)
-        return null; // attempting at converting a hex using a different radix
-      radix = 16;
+      if(null != base && 16 != base)
+        return null; // attempting at converting a hex using a different base
+      base = 16;
       s = s.substring(2);
-    } else if(null == radix) {
-      radix = 10;
+    } else if(null == base) {
+      base = 10;
     }
 
     return try ((negative ? -1 : 1) * s.toArray().reduce(function(acc, c) {
       var i = BASE.indexOf(c);
-      if(i < 0 || i >= radix) throw 'invalid';
-      return (acc * radix) + i;
+      if(i < 0 || i >= base) throw 'invalid';
+      return (acc * base) + i;
     }, 0) : Null<Int>) catch(e : Dynamic) null;
     #end
   }
@@ -158,27 +161,27 @@ case start will need to be a greater value than stop.
   static var BASE = "0123456789abcdefghijklmnopqrstuvwxyz";
 
 /**
-Transform an `Int` value to a `String` using the specified `radix`. A negative sign can be provided optionally.
+Transform an `Int` value to a `String` using the specified `base`
 **/
   #if(js || flash) inline #end
-  public static function toString(value : Int, radix : Int, ?negativeSign : String = '-') : String {
+  public static function toString(value : Int, base : Int) : String {
     #if(js || flash)
-    return untyped value.toString(radix).replace('-', negativeSign);
+    return untyped value.toString(base);
     #else
 
-    if(radix < 2 || radix > BASE.length)
-      return throw 'invalid radix $radix, it must be between 2 and ${BASE.length}';
-    if(radix == 10 || value == 0)
+    if(base < 2 || base > BASE.length)
+      return throw 'invalid base $base, it must be between 2 and ${BASE.length}';
+    if(base == 10 || value == 0)
       return '$value';
 
     var buf = "",
         abs = Ints.abs(value);
     while(abs > 0) {
-      buf = BASE.charAt(abs % radix) + buf;
-      abs = Std.int(abs / radix);
+      buf = BASE.charAt(abs % base) + buf;
+      abs = Std.int(abs / base);
     }
 
-    return (value < 0 ? negativeSign : '') + buf;
+    return (value < 0 ? "-" : "") + buf;
     #end
   }
 
