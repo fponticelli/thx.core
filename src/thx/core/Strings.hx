@@ -330,10 +330,10 @@ Words whose length exceeds `columns` are not split.
         i = 0;
         while(!StringTools.isSpace(s, pos + columns + i) && pos + columns + i < len)
           i++;
-        parts.push(s.substr(pos, columns + i));
+        parts.push(s.substring(pos, pos + columns + i));
         pos += columns + i + 1;
       } else {
-        parts.push(s.substr(pos, columns - i));
+        parts.push(s.substring(pos, pos + columns - i));
         pos += columns - i + 1;
       }
     }
