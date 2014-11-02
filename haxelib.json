@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
-  "releasenote": "Nulls methods now support non literal constants array indexes.",
-  "version": "0.11.1",
+  "releasenote": "Fixed several issues including `Floats.round()` and changed `Strings.map()` signature.",
+  "version": "0.11.2",
   "contributors": ["fponticelli"]
 }

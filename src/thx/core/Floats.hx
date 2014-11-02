@@ -83,7 +83,7 @@ Rounds a number to the specified number of decimals.
 **/
   static public function round(f : Float, decimals : Int) : Float {
     var p = Math.pow(10, decimals);
-    return Math.round(f * p) / p;
+    return Math.fround(f * p) / p;
   }
 
 /**

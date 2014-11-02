@@ -7,6 +7,8 @@ package thx.core;
 
 import utest.Assert;
 
+using thx.core.Floats;
+
 class TestFloats {
   public function new() { }
 
@@ -30,5 +32,19 @@ class TestFloats {
     Assert.floatEquals( -10, Floats.clampSym( -100, 10));
     Assert.floatEquals( 10, Floats.clampSym( 100, 10));
     Assert.floatEquals( 0, Floats.clampSym( 0, 10));
+  }
+
+  public function testRound() {
+    var value = 123.456;
+    Assert.floatEquals(123.5, value.round(1));
+    Assert.floatEquals(123.46, value.round(2));
+    Assert.floatEquals(123.456, value.round(3));
+    Assert.floatEquals(123.456, value.round(4));
+
+    value = 1234567890.123456;
+    Assert.floatEquals(1234567890.1, value.round(1));
+    Assert.floatEquals(1234567890.12, value.round(2));
+    Assert.floatEquals(1234567890.123, value.round(3));
+    Assert.floatEquals(1234567890.1235, value.round(4));
   }
 }
