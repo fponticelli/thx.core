@@ -163,8 +163,8 @@ It returns an iterator holding in sequence one character of the string per itera
 /**
 It maps a string character by character using `callback`.
 **/
-  public static function map(value : String, callback : String -> String) : String
-    return toArray(value).map(callback).join('');
+  public static function map<T>(value : String, callback : String -> T) : Array<T>
+    return toArray(value).map(callback);
 
 /**
 If present, it removes all the occurrencies of `toremove` from `value`.
@@ -216,8 +216,7 @@ It transforms a string into an `Array` of characters.
 It transforms a string into an `Array` of char codes in integer format.
 **/
   inline public static function toCharcodeArray(s : String) : Array<Int>
-    return s.split('')
-      .map(function(s : String)
+    return map(s, function(s : String)
         // the cast is required to compile safely to C#
         return (s.charCodeAt(0) : Int));
 
