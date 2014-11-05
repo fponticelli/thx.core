@@ -123,6 +123,50 @@ canelled using the returned cancel function.
   }
 
 /**
+Invokes `callback` at every frame using native implementation where available.
+**/
+  public static function frame(callback : Void -> Void) {
+#if js
+    var cancelled = false,
+        f = Functions.noop;
+    f = function() {
+          if(cancelled) return;
+          callback();
+          untyped __js__("requestAnimationFrame")(f);
+        };
+
+    untyped __js__("requestAnimationFrame")(f);
+    return function() cancelled = false;
+#elseif flash9
+    var listener = function(_) callback();
+    flash.Lib.current.addEventListener(flash.events.Event.ENTER_FRAME, listener);
+    return function()
+      flash.Lib.current.removeEventListener(flash.events.Event.ENTER_FRAME, listener);
+#else
+    return repeat(callback, 50);
+#end
+  }
+
+/**
+Delays `callback` untile the next frame using native implementation where available.
+**/
+  public static function nextFrame(callback : Void -> Void) {
+#if js
+    var id = untyped __js__("requestAnimationFrame")(callback);
+    return function() untyped __js__("cancelAnimationFrame")(id);
+#elseif flash9
+    var cancel = Functions.noop;
+    cancel = frame(function() {
+      cancel();
+      callback();
+    });
+    return cancel;
+#else
+  return delay(callback, 50);
+#end
+  }
+
+/**
 `Timer.immediate` works essentially like `Timer.delay` with the exception that the delay
 will be the shortest allowed by the platform. How short the delay depends a lot on
 the target platform.
