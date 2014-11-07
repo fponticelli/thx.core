@@ -64,7 +64,7 @@ that the callback is invoked at the beginning of the cycle.
 
 // IMPLEMENTATIONS
 
-#if !(js || flash)
+#if !(js || flash || openfl)
   static var timers = new Map<Int, haxe.Timer>();
   static var _id = 0;
 #end
@@ -137,6 +137,11 @@ Invokes `callback` at every frame using native implementation where available.
 
     untyped __js__("requestAnimationFrame")(f);
     return function() cancelled = false;
+#elseif openfl
+    var listener = function(_) callback();
+    openfl.Lib.current.addEventListener(openfl.events.Event.ENTER_FRAME, listener);
+    return function()
+      openfl.Lib.current.removeEventListener(openfl.events.Event.ENTER_FRAME, listener);
 #elseif flash9
     var listener = function(_) callback();
     flash.Lib.current.addEventListener(flash.events.Event.ENTER_FRAME, listener);
@@ -166,7 +171,7 @@ Delays `callback` untile the next frame using native implementation where availa
 #end
   }
 
-  static var FRAME_RATE = 1000 / 60;
+  static var FRAME_RATE = Math.round(1000 / 60);
 
 /**
 `Timer.immediate` works essentially like `Timer.delay` with the exception that the delay
