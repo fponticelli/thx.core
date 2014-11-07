@@ -143,7 +143,7 @@ Invokes `callback` at every frame using native implementation where available.
     return function()
       flash.Lib.current.removeEventListener(flash.events.Event.ENTER_FRAME, listener);
 #else
-    return repeat(callback, 50);
+    return repeat(callback, FRAME_RATE);
 #end
   }
 
@@ -162,9 +162,11 @@ Delays `callback` untile the next frame using native implementation where availa
     });
     return cancel;
 #else
-  return delay(callback, 50);
+  return delay(callback, FRAME_RATE);
 #end
   }
+
+  static var FRAME_RATE = 1000 / 60;
 
 /**
 `Timer.immediate` works essentially like `Timer.delay` with the exception that the delay
@@ -203,7 +205,7 @@ Returns a time value in milliseconds. Where supported, the decimal value represe
 
 Note that the initial value might change from platfomr to platform so only delta measurements make sense.
 **/
-  public static function time() : Float {
+  inline public static function time() : Float
 #if js
     return untyped __js__("performance").now();
 #elseif flash
@@ -215,7 +217,6 @@ Note that the initial value might change from platfomr to platform so only delta
 #else
     return throw 'Timer.time() is not implemented in this target';
 #end
-  }
 
 #if js
   static function __init__() untyped {
