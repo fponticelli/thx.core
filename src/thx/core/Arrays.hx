@@ -441,8 +441,7 @@ Returns all but the first element of the array
 Returns `n` elements at random from the array. Elements will not be repeated.
 **/
   inline public static function sample<T>(array : Array<T>, n : Int) : Array<T> {
-    if(n > array.length)
-      n = array.length;
+    n = Ints.min(n, array.length);
     var copy   = array.copy(),
         result = [];
     for(i in 0...n)

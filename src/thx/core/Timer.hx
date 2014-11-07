@@ -197,12 +197,37 @@ the target platform.
 #end
   }
 
+
+/**
+Returns a time value in milliseconds. Where supported, the decimal value represents microseconds.
+
+Note that the initial value might change from platfomr to platform so only delta measurements make sense.
+**/
+  public static function time() : Float {
+#if js
+    return untyped __js__("performance").now();
+#elseif flash
+    return flash.Lib.getTimer();
+#elseif cpp
+    return untyped __global__.__time_stamp() / 1000;
+#elseif sys
+    return Sys.time() / 1000;
+#else
+    return throw 'Timer.time() is not implemented in this target';
+#end
+  }
+
 #if js
   static function __init__() untyped {
+    // Polyfills
+    // SCOPE
     var scope : Dynamic = __js__('("undefined" !== typeof window && window) || ("undefined" !== typeof global && global) || this');
+
+    // setImmediate
     if(!scope.setImmediate)
       scope.setImmediate = function(callback) scope.setTimeout(callback, 0);
 
+    // rAF
     // based on Paul Irish code: http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
     var lastTime = 0,
         vendors = ['webkit', 'moz'],
@@ -225,6 +250,20 @@ the target platform.
 
     if (!scope.cancelAnimationFrame)
       scope.cancelAnimationFrame = function(id) scope.clearTimeout(id);
+
+    // performance.now /  High Resolution Timer
+    if(__js__("typeof")(scope.performance) == "undefined")
+      scope.performance = {};
+
+    if(__js__("typeof")(scope.performance.now) == "undefined") {
+      var nowOffset = Date.now().getTime();
+
+      if (scope.performance.timing && scope.performance.timing.navigationStart)
+        nowOffset = scope.performance.timing.navigationStart;
+
+      scope.performance.now = function now()
+        return Date.now() - nowOffset;
+    }
   }
 #end
 }
