@@ -123,32 +123,56 @@ canelled using the returned cancel function.
   }
 
 /**
-Invokes `callback` at every frame using native implementation where available.
+Invokes `callback` at every frame using native implementation where available. A delta time
+in milliseconds is passed since the latest time callback was invoked.
 **/
-  public static function frame(callback : Void -> Void) {
+  public static function frame(callback : Float -> Void) {
 #if js
     var cancelled = false,
-        f = Functions.noop;
+        f = Functions.noop,
+        current = time(),
+        next;
     f = function() {
           if(cancelled) return;
-          callback();
+          next = time();
+          callback(next - current);
+          current = next;
           untyped __js__("requestAnimationFrame")(f);
         };
 
     untyped __js__("requestAnimationFrame")(f);
     return function() cancelled = false;
 #elseif openfl
-    var listener = function(_) callback();
+    var current = time(),
+        next,
+        listener = function(_) {
+          next = time();
+          callback(next - current);
+          current = next;
+        };
     openfl.Lib.current.addEventListener(openfl.events.Event.ENTER_FRAME, listener);
     return function()
       openfl.Lib.current.removeEventListener(openfl.events.Event.ENTER_FRAME, listener);
 #elseif flash9
-    var listener = function(_) callback();
+    var current = time(),
+        next,
+        listener = function(_) {
+          next = time();
+          callback(next - current);
+          current = next;
+        };
     flash.Lib.current.addEventListener(flash.events.Event.ENTER_FRAME, listener);
     return function()
       flash.Lib.current.removeEventListener(flash.events.Event.ENTER_FRAME, listener);
 #else
-    return repeat(callback, FRAME_RATE);
+    var current = time(),
+        next,
+        listener = function(_) {
+          next = time();
+          callback(next - current);
+          current = next;
+        };
+    return repeat(listener, FRAME_RATE);
 #end
   }
 
