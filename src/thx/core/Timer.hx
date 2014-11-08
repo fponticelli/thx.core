@@ -167,7 +167,7 @@ in milliseconds is passed since the latest time callback was invoked.
 #else
     var current = time(),
         next,
-        listener = function(_) {
+        listener = function() {
           next = time();
           callback(next - current);
           current = next;
