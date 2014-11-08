@@ -183,12 +183,23 @@ Delays `callback` untile the next frame using native implementation where availa
 #if js
     var id = untyped __js__("requestAnimationFrame")(callback);
     return function() untyped __js__("cancelAnimationFrame")(id);
-#elseif flash9
-    var cancel = Functions.noop;
-    cancel = frame(function() {
+#elseif openfl
+    var listener = Functions.noop,
+        cancel = function() openfl.Lib.current.removeEventListener(openfl.events.Event.ENTER_FRAME, listener);
+    listener = function(_) {
       cancel();
       callback();
-    });
+    };
+    openfl.Lib.current.addEventListener(openfl.events.Event.ENTER_FRAME, listener);
+    return cancel;
+#elseif flash9
+    var listener = Functions.noop,
+        cancel = function() flash.Lib.current.removeEventListener(flash.events.Event.ENTER_FRAME, listener);
+    listener = function(_) {
+      cancel();
+      callback();
+    };
+    flash.Lib.current.addEventListener(flash.events.Event.ENTER_FRAME, listener);
     return cancel;
 #else
   return delay(callback, FRAME_RATE);
