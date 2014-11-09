@@ -34,10 +34,10 @@ ImportCore
 -java _
 -D xmldoc
 
---next
--xml xml/cs.xml
--cs _
--D xmldoc
+#--next
+#-xml xml/cs.xml
+#-cs _
+#-D xmldoc
 
 #--next
 #-xml xml/python.xml

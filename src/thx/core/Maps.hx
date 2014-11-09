@@ -25,4 +25,10 @@ Converts a Map<TKey, TValue> into an Array<Tuple2<TKey, TValue>>
       Reflect.setField(o, t._0, t._1);
       return o;
     }, {});
+
+/**
+Returns true if a value is of any type of Map.
+**/
+  public static function isMap(v : Dynamic)
+    return Std.is(v, haxe.ds.StringMap) || Std.is(v, haxe.ds.IntMap) || Std.is(v, haxe.ds.ObjectMap) || Std.is(v, haxe.ds.EnumValueMap);
 }

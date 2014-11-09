@@ -48,7 +48,7 @@ Structural and recursive equality.
           return untyped a.getTime() == b.getTime();
 
         // map
-        if (Std.is(a, Map)) {
+        if (Maps.isMap(a)) {
           var ha : Map<Dynamic, Dynamic> = cast a,
               hb : Map<Dynamic, Dynamic> = cast b;
           var ka = Iterators.toArray(ha.keys()),
@@ -76,7 +76,7 @@ Structural and recursive equality.
         }
 
         // custom class with equality method
-        var f;
+        var f = null;
         if(Reflect.hasField(a, 'equals') && Reflect.isFunction(f = Reflect.field(a, 'equals')))
           return Reflect.callMethod(a, f, [b]);
 
