@@ -64,7 +64,7 @@ that the callback is invoked at the beginning of the cycle.
 
 // IMPLEMENTATIONS
 
-#if !(js || flash || openfl)
+#if !(js || flash)
   static var timers = new Map<Int, haxe.Timer>();
   static var _id = 0;
 #end
@@ -248,6 +248,8 @@ Note that the initial value might change from platfomr to platform so only delta
   inline public static function time() : Float
 #if js
     return untyped __js__("performance").now();
+#elseif openfl
+    return openfl.Lib.getTimer();
 #elseif flash
     return flash.Lib.getTimer();
 #elseif cpp
