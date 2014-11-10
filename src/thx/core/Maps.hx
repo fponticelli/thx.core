@@ -1,6 +1,5 @@
 package thx.core;
 
-import Map;
 import thx.core.Tuple;
 using thx.core.Iterators;
 using thx.core.Arrays;
@@ -12,7 +11,7 @@ class Maps {
 /**
 Converts a Map<TKey, TValue> into an Array<Tuple2<TKey, TValue>>
 **/
-  public static function tuples<TKey, TValue>(map: IMap<TKey, TValue>): Array<Tuple2<TKey, TValue>>
+  public static function tuples<TKey, TValue>(map: Map.IMap<TKey, TValue>): Array<Tuple2<TKey, TValue>>
     return map.keys().map(function(key)
       return new Tuple2(key, map.get(key))
     );
@@ -27,8 +26,8 @@ Converts a Map<TKey, TValue> into an Array<Tuple2<TKey, TValue>>
     }, {});
 
 /**
-Returns true if a value is of any type of Map.
+Returns true if a value is of any type of Map. Equivalent to `Std.is(v, Map.IMap)`.
 **/
-  public static function isMap(v : Dynamic)
-    return Std.is(v, haxe.ds.StringMap) || Std.is(v, haxe.ds.IntMap) || Std.is(v, haxe.ds.ObjectMap) || Std.is(v, haxe.ds.EnumValueMap);
+  inline public static function isMap(v : Dynamic)
+    return Std.is(v, Map.IMap);
 }
