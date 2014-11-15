@@ -9,4 +9,10 @@ It compares two dates.
 **/
   public static function compare(a : Date, b : Date) : Int
     return Floats.compare(a.getTime(), b.getTime());
+
+/**
+Returns `true` if the passed dates are the same.
+**/
+  inline public static function equals(a : Date, b : Date) : Int
+    return a.getTime() = b.getTime();
 }
