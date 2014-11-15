@@ -207,6 +207,13 @@ of the existing text nodes.
 #end
 
 /**
+Surrounds a string with the contents of `left` and `right`. If `right` is omitted,
+`left` will be used on both sides;
+*/
+  inline public static function surround(s : String, left : String, ?right : String)
+    return '$left$s${null==right?left:right}';
+
+/**
 It transforms a string into an `Array` of characters.
 **/
   inline public static function toArray(s : String)
