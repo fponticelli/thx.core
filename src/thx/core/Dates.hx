@@ -14,5 +14,5 @@ It compares two dates.
 Returns `true` if the passed dates are the same.
 **/
   inline public static function equals(a : Date, b : Date) : Int
-    return a.getTime() = b.getTime();
+    return a.getTime() == b.getTime();
 }
