@@ -18,6 +18,12 @@ Identifiers can also be getters and methods (both are invoked only once and only
 **/
 class Nulls {
 /**
+`exists` is synonymous of `notNull`.
+**/
+  macro public static function exists(value : Expr)
+    return macro ($e{Nulls.opt(value)} != null);
+
+/**
 `isNull` checks if a chain of identifier is null at any point.
 **/
   macro public static function isNull(value : Expr)
