@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
-  "releasenote": "Fixed issues with haxe 3.2.0.",
-  "version": "0.13.1",
+  "releasenote": "Few additions.",
+  "version": "0.14.0",
   "contributors": ["fponticelli"]
 }
