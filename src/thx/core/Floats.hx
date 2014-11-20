@@ -11,6 +11,15 @@ class Floats {
   public static inline var EPSILON : Float = 10e-10;
 
   static var pattern_parse = ~/^(\+|-)?\d+(\.\d+)?(e-?\d+)?$/;
+
+/**
+Rounds a number up to the specified number of decimals.
+**/
+  static public function ceil(f : Float, decimals : Int) : Float {
+    var p = Math.pow(10, decimals);
+    return Math.fceil(f * p) / p;
+  }
+
 /**
 `canParse` checks if a string value can be safely converted into a `Float` value.
 **/
@@ -41,6 +50,14 @@ It returns the comparison value (an integer number) between two `float` values.
 **/
   inline public static function compare(a : Float, b : Float) : Int
     return a < b ? -1 : (b > a ? 1 : 0);
+
+/**
+Rounds a number down to the specified number of decimals.
+**/
+  static public function floor(f : Float, decimals : Int) : Float {
+    var p = Math.pow(10, decimals);
+    return Math.ffloor(f * p) / p;
+  }
 
 /**
 `interpolate` returns a value between `a` and `b` for any value of `f` between 0 and 1.
