@@ -228,6 +228,19 @@ It transforms a string into an `Array` of char codes in integer format.
         return (s.charCodeAt(0) : Int));
 
 /**
+Returns an array of `String` whose elements are equally long (using `len`). If the string `s`
+is not exactly divisible by `len` the last element of the array will be shorter.
+**/
+  public static function toChunks(s : String, len : Int) : Array<String> {
+    var chunks = [];
+    while(s.length > 0) {
+      chunks.push(s.substring(0, len));
+      s = s.substring(len);
+    }
+    return chunks;
+  }
+
+/**
 `trim` removes from the beginning and the end of the string any character that is present in `charlist`.
 **/
   public static inline function trim(value : String, charlist : String) : String
