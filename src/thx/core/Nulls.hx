@@ -24,6 +24,17 @@ class Nulls {
     return macro ($e{Nulls.opt(value)} != null);
 
 /**
+Executes `expr` only if `value` is a non-null value. Inside `expr` the `value` can be
+referenced using the special var `_`. It is also possible to provide an alternative value `alt` in
+case a non null value is desired.
+
+```haxe
+myvalue.with(_.myMethod());
+```
+**/
+  macro public static function with<TValue, TOut>(value : ExprOf<TValue>, expr : ExprOf<TOut>, ?alt : ExprOf<TOut>) : ExprOf<TOut>
+    return macro (function(_) { return null == _ ? $e{alt} : $e{expr}; })($e{value});
+/**
 `isNull` checks if a chain of identifier is null at any point.
 **/
   macro public static function isNull(value : Expr)
