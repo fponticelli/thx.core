@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
-  "releasenote": "Few additions.",
-  "version": "0.14.0",
+  "releasenote": "Added features: Floats.ceil(), Floats.floor(), Strings.toChunk() and Nulls.with().",
+  "version": "0.15.0",
   "contributors": ["fponticelli"]
 }
