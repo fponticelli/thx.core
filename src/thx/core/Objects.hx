@@ -26,6 +26,26 @@ class Objects {
     return Reflect.fields(o);
 
 /**
+Copies the values from the fields of `from` to `to`. If `to` already contains those fields, then it replace
+those values with the return value of the function `replacef`.
+
+If not set, `replacef` always returns the value from the `from` object.
+**/
+  public static function merge(to : {}, from : {}, ?replacef : String -> Dynamic -> Dynamic -> Dynamic) : {} {
+    if(null == replacef)
+      replacef = function(field : String, oldv : Dynamic, newv : Dynamic) return newv;
+    for(field in Reflect.fields(from)) {
+      var newv = Reflect.field(from, field);
+      if(Reflect.hasField(to, field)) {
+        Reflect.setField(to, field, replacef(field, Reflect.field(to, field), newv));
+      } else {
+        Reflect.setField(to, field, newv);
+      }
+    }
+    return to;
+  }
+
+/**
 `objectToMap` transforms an anonymous object into an instance of `Map<String, Dynamic>`.
 **/
   public static function objectToMap(o : {}) : Map<String, Dynamic>
