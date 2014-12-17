@@ -7,7 +7,6 @@
   { "browserName": "firefox", "version": "31", "platform": "Windows 7" },
   { "browserName": "firefox", "version": "32", "platform": "Windows 7" },
   { "browserName": "firefox", "version": "beta", "platform": "Windows 7" },
-  { "browserName": "firefox", "version": "dev", "platform": "Windows 7" },
 
   { "browserName": "chrome", "version": "36", "platform": "Windows 7" },
   { "browserName": "chrome", "version": "37", "platform": "Windows 7" },
