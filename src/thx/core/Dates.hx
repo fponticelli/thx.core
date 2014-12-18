@@ -78,3 +78,6 @@ Tells how many days in the month of the given date.
   public static function numDaysInThisMonth(d : Date)
     return numDaysInMonth(d.getMonth(), d.getFullYear());
 }
+
+/** Alias of `DateTools`, included so mixins work with `using thx.core.Dates;` **/
+typedef HaxeDateTools = DateTools;

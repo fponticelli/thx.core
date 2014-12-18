@@ -241,19 +241,19 @@ is not exactly divisible by `len` the last element of the array will be shorter.
   }
 
 /**
-`trim` removes from the beginning and the end of the string any character that is present in `charlist`.
+`trimChars` removes from the beginning and the end of the string any character that is present in `charlist`.
 **/
-  public static inline function trim(value : String, charlist : String) : String
+  public static inline function trimChars(value : String, charlist : String) : String
 #if php
     return untyped __call__("trim", value, charlist);
 #else
-    return trimRight(trimLeft(value, charlist), charlist);
+    return trimCharsRight(trimCharsLeft(value, charlist), charlist);
 #end
 
 /**
-`trimLeft` removes from the beginning of the string any character that is present in `charlist`.
+`trimCharsLeft` removes from the beginning of the string any character that is present in `charlist`.
 **/
-  public static function trimLeft(value : String, charlist : String) : String {
+  public static function trimCharsLeft(value : String, charlist : String) : String {
 #if php
     return untyped __call__("ltrim", value, charlist);
 #else
@@ -268,9 +268,9 @@ is not exactly divisible by `len` the last element of the array will be shorter.
   }
 
 /**
-`trimRight` removes from the end of the string any character that is present in `charlist`.
+`trimCharsRight` removes from the end of the string any character that is present in `charlist`.
 **/
-  public static function trimRight(value : String, charlist : String) : String {
+  public static function trimCharsRight(value : String, charlist : String) : String {
 #if php
     return untyped __call__("rtrim", value, charlist);
 #else
@@ -370,3 +370,6 @@ Words whose length exceeds `columns` are not split.
   static var WSG = ~/\s+/g;
   static var SPLIT_LINES = ~/\r\n|\n\r|\n|\r/g;
 }
+
+/** Alias of `StringTools`, included so mixins work with `using thx.core.Strings;` **/
+typedef HaxeStringTools = StringTools;

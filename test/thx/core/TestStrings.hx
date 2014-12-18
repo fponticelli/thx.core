@@ -135,26 +135,26 @@ aaa aa", text.wrapColumns(6));
   }
 
   public function testLtrim() {
-    Assert.equals('abcde', 'abcde'.trimLeft('x'));
-    Assert.equals('de', 'abcde'.trimLeft('cba'));
-    Assert.equals('abcde', 'abcde'.trimLeft('b'));
+    Assert.equals('abcde', 'abcde'.trimCharsLeft('x'));
+    Assert.equals('de', 'abcde'.trimCharsLeft('cba'));
+    Assert.equals('abcde', 'abcde'.trimCharsLeft('b'));
 
-    Assert.equals('', '/'.trimLeft('/'));
+    Assert.equals('', '/'.trimCharsLeft('/'));
   }
 
   public function testRtrim() {
-    Assert.equals('abcde', 'abcde'.trimRight('x'));
-    Assert.equals('ab', 'abcde'.trimRight('ced'));
-    Assert.equals('abcde', 'abcde'.trimRight('d'));
+    Assert.equals('abcde', 'abcde'.trimCharsRight('x'));
+    Assert.equals('ab', 'abcde'.trimCharsRight('ced'));
+    Assert.equals('abcde', 'abcde'.trimCharsRight('d'));
 
-    Assert.equals('', '/'.trimRight('/'));
+    Assert.equals('', '/'.trimCharsRight('/'));
   }
 
   public function testTrim() {
-    Assert.equals('abcde', 'abcde'.trim('x'));
-    Assert.equals('cd', 'abcde'.trim('abe'));
-    Assert.equals('abcde', 'abcde'.trim('bd'));
+    Assert.equals('abcde', 'abcde'.trimChars('x'));
+    Assert.equals('cd', 'abcde'.trimChars('abe'));
+    Assert.equals('abcde', 'abcde'.trimChars('bd'));
 
-    Assert.equals('', '/'.trim('/'));
+    Assert.equals('', '/'.trimChars('/'));
   }
 }
