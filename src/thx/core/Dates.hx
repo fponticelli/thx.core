@@ -137,25 +137,29 @@ Snaps a Date to the nearest second, minute, hour, day, week, month or year.
     }
 
     // Wrap values that are too large
-    while (sec>60) { sec -= 60; min++; }
-    while (min>60) { min -= 60; hour++; }
-    while (hour>23) { hour -= 24; day++; }
-    while (hour>23) { hour -= 24; day++; }
+    min += Math.floor(sec / 60);
+    sec = sec % 60;
+
+    hour += Math.floor(min / 60);
+    min = min % 60;
+
+    day += Math.floor(hour / 24);
+    hour = hour % 24;
 
     var daysInMonth = numDaysInMonth(month,year);
-    while (day>daysInMonth || month>11) {
-        if (day>daysInMonth) {
+    while (day > daysInMonth || month > 11) {
+        if (day > daysInMonth) {
             day -= daysInMonth;
             month++;
         }
-        if (month>11) {
+        if (month > 11) {
             month -= 12;
             year++;
         }
         daysInMonth = numDaysInMonth(month,year);
     }
 
-    return new Date(year,month,day,hour,min,sec);
+    return new Date(year, month, day, hour, min, sec);
   }
 
   /** Returns a new date, exactly 1 year before the given date/time. */
