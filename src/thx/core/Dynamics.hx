@@ -162,10 +162,8 @@ Class instances will either be cloned, or the reference copied, depending on the
 @param v The object which will be cloned.
 @param cloneInstances If true, class instances will be cloned using `Type.createEmptyInstance` and `Reflect.setField`. If false, class instances will be re-used, not cloned. Default is false.
 **/
-  public static function clone(v : Dynamic, cloneInstances = false) : Dynamic
-  {
-    switch(Type.typeof(v))
-    {
+  public static function clone(v : Dynamic, cloneInstances = false) : Dynamic {
+    switch(Type.typeof(v)) {
       case TNull:
         return null;
       case TInt, TFloat, TBool, TEnum(_), TUnknown, TFunction:
@@ -174,8 +172,7 @@ Class instances will either be cloned, or the reference copied, depending on the
         return Objects.copyTo(v,{});
       case TClass(c):
         var name = Type.getClassName(c);
-        switch(name)
-        {
+        switch(name) {
           case "Array":
             var src : Array<Dynamic> = v,
                 a = [];
@@ -185,8 +182,7 @@ Class instances will either be cloned, or the reference copied, depending on the
           case "String", "Date":
             return v;
           default:
-            if(cloneInstances)
-            {
+            if(cloneInstances) {
               var o = Type.createEmptyInstance(c);
               for (field in Reflect.fields(v))
                 Reflect.setField(o, field, clone(Reflect.field(v, field), cloneInstances));

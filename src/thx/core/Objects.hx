@@ -50,14 +50,11 @@ If not set, `replacef` always returns the value from the `from` object.
 `copyTo` copies the fields from `src` to `dst` using `Reflect.setField()` and `Dynamics.clone()`.
 Anonymous objects are entered into and copied recursively.
 **/
-  public static function copyTo(src : { }, dst : { }, cloneInstances = false) : {}
-  {
-    for (field in Reflect.fields(src))
-    {
+  public static function copyTo(src : { }, dst : { }, cloneInstances = false) : {} {
+    for (field in Reflect.fields(src)) {
       var sv = Dynamics.clone(Reflect.field(src, field),cloneInstances);
       var dv = Reflect.field(dst, field);
-      if (Types.isAnonymousObject(sv) && Types.isAnonymousObject(dv))
-      {
+      if (Types.isAnonymousObject(sv) && Types.isAnonymousObject(dv)) {
         copyTo(sv, dv);
       } else {
         Reflect.setField(dst, field, sv);
@@ -69,8 +66,7 @@ Anonymous objects are entered into and copied recursively.
 /**
 Clone the current object by creating a new object and using `copyTo` to clone each field.
 **/
-  public static function clone<T:{}>(src : T, cloneInstances = false) : T
-  {
+  public static function clone<T:{}>(src : T, cloneInstances = false) : T {
     return Dynamics.clone(src,cloneInstances);
   }
 
