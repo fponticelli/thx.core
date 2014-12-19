@@ -93,18 +93,18 @@ Tells how many days in the month of the given date.
   @param amount The multiple of `period` that you wish to jump by. A positive amount moves forward in time, a negative amount moves backward.
 **/
   public static function jump(date : Date, period : TimePeriod, amount : Int) {
-    var sec = d.getSeconds();
-    var min = d.getMinutes();
-    var hour = d.getHours();
-    var day = d.getDate();
-    var month = d.getMonth();
-    var year = d.getFullYear();
+    var sec = date.getSeconds();
+    var min = date.getMinutes();
+    var hour = date.getHours();
+    var day = date.getDate();
+    var month = date.getMonth();
+    var year = date.getFullYear();
     switch period {
       case Second: sec = sec+amount;
       case Minute: min = min+amount;
       case Hour: hour = hour+amount;
       case Day: day = day+amount;
-      case Week: day = day+7*amount
+      case Week: day = day+7*amount;
       case Month: month = month+amount;
       case Year: year = year+amount;
     }
