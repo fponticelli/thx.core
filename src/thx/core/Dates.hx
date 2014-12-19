@@ -78,7 +78,34 @@ Tells how many days in the month of the given date.
   public static function numDaysInThisMonth(d : Date)
     return numDaysInMonth(d.getMonth(), d.getFullYear());
 
-  public static function snapTo(date : Date, period : TimePeriod) : Date
+/**
+Snaps a Date to the next second, minute, hour, day, week, month or year.
+
+@param date The date to snap.  See Date.
+@param period Either: Second, Minute, Hour, Day, Week, Month or Year
+@return The snapped date.
+**/
+  inline public static function snapAfter(date : Date, period : TimePeriod) : Date
+    return Date.fromTime(Timestamps.snapAfter(date.getTime(), period));
+
+/**
+Snaps a Date to the previous second, minute, hour, day, week, month or year.
+
+@param date The date to snap.  See Date.
+@param period Either: Second, Minute, Hour, Day, Week, Month or Year
+@return The snapped date.
+**/
+  inline public static function snapBefore(date : Date, period : TimePeriod) : Date
+    return Date.fromTime(Timestamps.snapBefore(date.getTime(), period));
+
+/**
+Snaps a Date to the nearest second, minute, hour, day, week, month or year.
+
+@param date The date to snap.  See Date.
+@param period Either: Second, Minute, Hour, Day, Week, Month or Year
+@return The snapped date.
+**/
+  inline public static function snapTo(date : Date, period : TimePeriod) : Date
     return Date.fromTime(Timestamps.snapTo(date.getTime(), period));
 
 /**
@@ -166,7 +193,73 @@ Tells how many days in the month of the given date.
 }
 
 class Timestamps {
-  // 0 == Sunday
+/**
+Snaps a time to the next second, minute, hour, day, week, month or year.
+
+@param time The unix time in milliseconds.  See date.getTime()
+@param period Either: Second, Minute, Hour, Day, Week, Month or Year
+@return The unix time of the snapped date (In milliseconds).
+**/
+  public static function snapAfter(time : Float, period : TimePeriod) : Float
+    return switch period {
+      case Second:
+        c(time, 1000.0);
+      case Minute:
+        c(time, 60000.0);
+      case Hour:
+        c(time, 3600000.0);
+      case Day:
+        var d = Date.fromTime(time);
+        new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1, 0, 0, 0).getTime();
+      case Week:
+        var d = Date.fromTime(time),
+            wd = d.getDay();
+        new Date(d.getFullYear(), d.getMonth(), d.getDate() + 7 - wd, 0, 0, 0).getTime();
+      case Month:
+        var d = Date.fromTime(time);
+        new Date(d.getFullYear(), d.getMonth() + 1, 1, 0, 0, 0).getTime();
+      case Year:
+        var d = Date.fromTime(time);
+        new Date(d.getFullYear() + 1, 0, 1, 0, 0, 0).getTime();
+    };
+
+/**
+Snaps a time to the previous second, minute, hour, day, week, month or year.
+
+@param time The unix time in milliseconds.  See date.getTime()
+@param period Either: Second, Minute, Hour, Day, Week, Month or Year
+@return The unix time of the snapped date (In milliseconds).
+**/
+  public static function snapBefore(time : Float, period : TimePeriod) : Float
+    return switch period {
+      case Second:
+        f(time, 1000.0);
+      case Minute:
+        f(time, 60000.0);
+      case Hour:
+        f(time, 3600000.0);
+      case Day:
+        var d = Date.fromTime(time);
+        new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0).getTime();
+      case Week:
+        var d = Date.fromTime(time),
+            wd = d.getDay();
+        new Date(d.getFullYear(), d.getMonth(), d.getDate() - wd, 0, 0, 0).getTime();
+      case Month:
+        var d = Date.fromTime(time);
+        new Date(d.getFullYear(), d.getMonth(), 1, 0, 0, 0).getTime();
+      case Year:
+        var d = Date.fromTime(time);
+        new Date(d.getFullYear(), 0, 1, 0, 0, 0).getTime();
+    };
+
+/**
+Snaps a time to the nearest second, minute, hour, day, week, month or year.
+
+@param time The unix time in milliseconds.  See date.getTime()
+@param period Either: Second, Minute, Hour, Day, Week, Month or Year
+@return The unix time of the snapped date (In milliseconds).
+**/
   public static function snapTo(time : Float, period : TimePeriod) : Float
     return switch period {
       case Second:
@@ -180,9 +273,10 @@ class Timestamps {
             mod = (d.getHours() >= 12) ? 1 : 0;
         new Date(d.getFullYear(), d.getMonth(), d.getDate() + mod, 0, 0, 0).getTime();
       case Week:
-        var t = r(time, 7.0 * 24.0 * 3600000.0),
-            d = time - t;
-        t + (d < -5.0 * 3600000.0 ? -(17.0 + 3.0 * 24.0) * 3600000.0 : (7.0 + 3.0 * 24.0) * 3600000.0);
+        var d = Date.fromTime(time),
+            wd = d.getDay(),
+            mod = wd < 3 ? -wd : (wd > 3 ? 7 - wd : d.getHours() < 12 ? -wd : 7 - wd);
+        new Date(d.getFullYear(), d.getMonth(), d.getDate() + mod, 0, 0, 0).getTime();
       case Month:
         var d = Date.fromTime(time),
             mod = d.getDate() > Math.round(DateTools.getMonthDays(d) / 2) ? 1 : 0;
@@ -195,6 +289,10 @@ class Timestamps {
 
     inline static function r(t : Float, v : Float)
       return Math.fround(t / v) * v;
+    inline static function f(t : Float, v : Float)
+      return Math.ffloor(t / v) * v;
+    inline static function c(t : Float, v : Float)
+      return Math.fceil(t / v) * v;
 }
 
 enum TimePeriod {
