@@ -80,6 +80,107 @@ Tells how many days in the month of the given date.
 
   public static function snapTo(date : Date, period : TimePeriod) : Date
     return Date.fromTime(Timestamps.snapTo(date.getTime(), period));
+  
+  /**
+      Perform a delta by creating a new Date object, rather than incrementing a timestamp.
+
+      This is important when the length of the delta is not a guaranteed number of seconds, for example:
+
+      - a month may have a differing number of days,
+      - a day may not be exactly 24 hours if Daylight Savings begins or ends during that day,
+      - a year may be 365 or or 366 days depending on the year.
+  **/
+  public static function dateBasedDelta(d : Date, ?yearDelta : Int = 0, ?monthDelta : Int = 0, ?dayDelta : Int = 0, ?hourDelta : Int = 0, ?minDelta : Int = 0, ?secDelta : Int = 0, ?msDelta : Int = 0 ) : Date {
+      var year = d.getFullYear()+yearDelta;
+      var month = d.getMonth()+monthDelta;
+      var day = d.getDate()+dayDelta;
+      var hour = d.getHours()+hourDelta;
+      var min = d.getMinutes()+minDelta;
+      var sec = d.getSeconds()+secDelta;
+
+      // Wrap values that are too large
+      while (sec>60) { sec -= 60; min++; }
+      while (min>60) { min -= 60; hour++; }
+      while (hour>23) { hour -= 24; day++; }
+      while (hour>23) { hour -= 24; day++; }
+
+      var daysInMonth = numDaysInMonth(month,year);
+      while (day>daysInMonth || month>11) {
+          if (day>daysInMonth) {
+              day -= daysInMonth;
+              month++;
+          }
+          if (month>11) {
+              month -= 12;
+              year++;
+          }
+          daysInMonth = numDaysInMonth(month,year);
+      }
+
+      var d = new Date(year,month,day,hour,min,sec);
+      return DateTools.delta(d,msDelta);
+  }
+
+  /** Return a new date, offset by `numSec` seconds */
+  public inline static function deltaSec(d : Date, numSec : Int) : Date
+    return DateTools.delta(d,numSec*1000);
+
+  /** Return a new date, offset by `numMin` minutes */
+  public inline static function deltaMin(d : Date, numMin : Int) : Date
+    return DateTools.delta(d,numMin*60*1000);
+
+  /** Return a new date, offset by `numHrs` hours */
+  public inline static function deltaHour(d : Date, numHrs : Int) : Date
+    return DateTools.delta(d,numHrs*60*60*1000);
+
+  /** Return a new date, offset by `numDays` days */
+  public static inline function deltaDay(d : Date, numDays : Int):Date
+    return dateBasedDelta(d,0,0,numDays);
+
+  /** Return a new date, offset by `numWks` weeks */
+  public static inline function deltaWeek(d : Date, numWks : Int):Date
+    return dateBasedDelta(d,0,0,numWks*7);
+
+  /** Return a new date, offset by `numMonths` months */
+  public static inline function deltaMonth(d : Date, numMonths : Int):Date
+    return dateBasedDelta(d,0,numMonths);
+
+  /** Return a new date, offset by `numYrs` years */
+  public static inline function deltaYear(d : Date, numYrs : Int):Date
+    return dateBasedDelta(d,numYrs);
+
+  /** Returns a new date, exactly 1 year before the given date/time. */
+  inline public static function prevYear(d : Date) : Date
+    return deltaYear(d,-1);
+
+  /** Returns a new date, exactly 1 year after the given date/time. */
+  inline public static function nextYear(d : Date) : Date
+    return deltaYear(d,1);
+
+  /** Returns a new date, exactly 1 month before the given date/time. */
+  inline public static function prevMonth(d : Date) : Date
+    return deltaMonth(d,-1);
+
+  /** Returns a new date, exactly 1 month after the given date/time. */
+  inline public static function nextMonth(d : Date) : Date
+    return deltaMonth(d,1);
+
+  /** Returns a new date, exactly 1 week before the given date/time. */
+  inline public static function prevWeek(d : Date) : Date
+    return deltaWeek(d,-1);
+
+  /** Returns a new date, exactly 1 week after the given date/time. */
+  inline public static function nextWeek(d : Date) : Date
+    return deltaWeek(d,1);
+
+  /** Returns a new date, exactly 1 day before the given date/time. */
+  inline public static function prevDay(d : Date) : Date
+    return deltaDay(d,-1);
+
+  /** Returns a new date, exactly 1 day after the given date/time. */
+  inline public static function nextDay(d : Date) : Date
+    return deltaDay(d,1);
+
 }
 
 class Timestamps {
