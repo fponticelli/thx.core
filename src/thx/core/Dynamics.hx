@@ -1,5 +1,7 @@
 package thx.core;
 
+import thx.core.Objects;
+
 /**
 `Dynamics` provides additional extension methods on any type.
 **/
@@ -147,5 +149,48 @@ Structural and recursive equality.
         return throw "Unable to compare two unknown types";
     }
     return throw new Error('Unable to compare values: $a and $b');
+  }
+
+/**
+Clone the object.
+
+Null values, strings, dates, numbers, enums and functions are immutable so will be returned as is.
+Anonymous objects will be created and each field cloned recursively.
+Arrays will be recreated and each object cloned recursively.
+Class instances will either be cloned, or the reference copied, depending on the value of `cloneInstances`.
+
+@param v The object which will be cloned.
+@param cloneInstances If true, class instances will be cloned using `Type.createEmptyInstance` and `Reflect.setField`. If false, class instances will be re-used, not cloned. Default is false.
+**/
+  public static function clone(v : Dynamic, cloneInstances = false) : Dynamic {
+    switch(Type.typeof(v)) {
+      case TNull:
+        return null;
+      case TInt, TFloat, TBool, TEnum(_), TUnknown, TFunction:
+        return v;
+      case TObject:
+        return Objects.copyTo(v,{});
+      case TClass(c):
+        var name = Type.getClassName(c);
+        switch(name) {
+          case "Array":
+            var src : Array<Dynamic> = v,
+                a = [];
+            for (i in src)
+              a.push(clone(i, cloneInstances));
+            return a;
+          case "String", "Date":
+            return v;
+          default:
+            if(cloneInstances) {
+              var o = Type.createEmptyInstance(c);
+              for (field in Reflect.fields(v))
+                Reflect.setField(o, field, clone(Reflect.field(v, field), cloneInstances));
+              return o;
+            } else {
+              return v;
+            }
+        }
+    }
   }
 }
