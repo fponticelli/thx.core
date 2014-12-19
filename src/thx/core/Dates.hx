@@ -77,6 +77,51 @@ Tells how many days in the month of the given date.
 **/
   public static function numDaysInThisMonth(d : Date)
     return numDaysInMonth(d.getMonth(), d.getFullYear());
+
+  public static function snapTo(date : Date, period : TimePeriod) : Date
+    return Date.fromTime(Timestamps.snapTo(date.getTime(), period));
+}
+
+class Timestamps {
+  // 0 == Sunday
+  public static function snapTo(time : Float, period : TimePeriod) : Float
+    return switch period {
+      case Second:
+        r(time, 1000.0);
+      case Minute:
+        r(time, 60000.0);
+      case Hour:
+        r(time, 3600000.0);
+      case Day:
+        var d = Date.fromTime(time),
+            mod = (d.getHours() >= 12) ? 1 : 0;
+        new Date(d.getFullYear(), d.getMonth(), d.getDate() + mod, 0, 0, 0).getTime();
+      case Week:
+        var t = r(time, 7.0 * 24.0 * 3600000.0),
+            d = time - t;
+        t + (d < -5.0 * 3600000.0 ? -(17.0 + 3.0 * 24.0) * 3600000.0 : (7.0 + 3.0 * 24.0) * 3600000.0);
+      case Month:
+        var d = Date.fromTime(time),
+            mod = d.getDate() > Math.round(DateTools.getMonthDays(d) / 2) ? 1 : 0;
+        new Date(d.getFullYear(), d.getMonth() + mod, 1, 0, 0, 0).getTime();
+      case Year:
+        var d = Date.fromTime(time),
+            mod = time > new Date(d.getFullYear(), 6, 2, 0, 0, 0).getTime() ? 1 : 0;
+        new Date(d.getFullYear() + mod, 0, 1, 0, 0, 0).getTime();
+    };
+
+    inline static function r(t : Float, v : Float)
+      return Math.fround(t / v) * v;
+}
+
+enum TimePeriod {
+  Second;
+  Minute;
+  Hour;
+  Day;
+  Week;
+  Month;
+  Year;
 }
 
 /** Alias of `DateTools`, included so mixins work with `using thx.core.Dates;` **/
