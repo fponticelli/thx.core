@@ -5,6 +5,7 @@ class TestAll {
 	public static function addTests(runner : Runner) {
 		runner.addCase(new thx.core.TestAnonymousMap());
 		runner.addCase(new thx.core.TestArrays());
+		runner.addCase(new thx.core.TestDynamics());
 		runner.addCase(new thx.core.TestERegs());
 		runner.addCase(new thx.core.TestError());
 		runner.addCase(new thx.core.TestFloats());

@@ -1,5 +1,6 @@
 package thx.core;
 
+import thx.core.Dynamics;
 import thx.core.Tuple;
 using thx.core.Arrays;
 
@@ -44,6 +45,35 @@ If not set, `replacef` always returns the value from the `from` object.
     }
     return to;
   }
+
+/**
+`copyTo` copies the fields from `src` to `dst` using `Reflect.setField()` and `Dynamics.clone()`.
+Anonymous objects are entered into and copied recursively.
+**/
+  public static function copyTo(src : { }, dst : { }, cloneInstances = false) : {}
+  {
+    for (field in Reflect.fields(src))
+    {
+      var sv = Dynamics.clone(Reflect.field(src, field),cloneInstances);
+      var dv = Reflect.field(dst, field);
+      if (Types.isAnonymousObject(sv) && Types.isAnonymousObject(dv))
+      {
+        copyTo(sv, dv);
+      } else {
+        Reflect.setField(dst, field, sv);
+      }
+    }
+    return dst;
+  }
+
+/**
+Clone the current object by creating a new object and using `copyTo` to clone each field.
+**/
+  public static function clone<T:{}>(src : T, cloneInstances = false) : T
+  {
+    return Dynamics.clone(src,cloneInstances);
+  }
+
 
 /**
 `objectToMap` transforms an anonymous object into an instance of `Map<String, Dynamic>`.
