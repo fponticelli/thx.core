@@ -97,9 +97,10 @@ class Timestamps {
             mod = (d.getHours() >= 12) ? 1 : 0;
         new Date(d.getFullYear(), d.getMonth(), d.getDate() + mod, 0, 0, 0).getTime();
       case Week:
-        var t = r(time, 7.0 * 24.0 * 3600000.0),
-            d = time - t;
-        t + (d < -5.0 * 3600000.0 ? -(17.0 + 3.0 * 24.0) * 3600000.0 : (7.0 + 3.0 * 24.0) * 3600000.0);
+        var d = Date.fromTime(time),
+            wd = d.getDay(),
+            mod = wd < 3 ? -wd : (wd > 3 ? 7 - wd : d.getHours() < 12 ? -wd : 7 - wd);
+        new Date(d.getFullYear(), d.getMonth(), d.getDate() + mod, 0, 0, 0).getTime();
       case Month:
         var d = Date.fromTime(time),
             mod = d.getDate() > Math.round(DateTools.getMonthDays(d) / 2) ? 1 : 0;
@@ -112,6 +113,10 @@ class Timestamps {
 
     inline static function r(t : Float, v : Float)
       return Math.fround(t / v) * v;
+    inline static function f(t : Float, v : Float)
+      return Math.ffloor(t / v) * v;
+    inline static function c(t : Float, v : Float)
+      return Math.fceil(t / v) * v;
 }
 
 enum TimePeriod {
