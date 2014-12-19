@@ -31,4 +31,24 @@ class TestDates {
       pos
     );
   }
+
+  function assertSnapBefore(expected : String, date : String, period : TimePeriod, ?pos : PosInfos) {
+    var t = Dates.snapBefore(Date.fromString(date), period);
+    Assert.floatEquals(
+      Date.fromString(expected).getTime(),
+      t.getTime(),
+      'expected $date to snap before $expected for $period but it is ${t.toString()}',
+      pos
+    );
+  }
+
+  function assertSnapAfter(expected : String, date : String, period : TimePeriod, ?pos : PosInfos) {
+    var t = Dates.snapAfter(Date.fromString(date), period);
+    Assert.floatEquals(
+      Date.fromString(expected).getTime(),
+      t.getTime(),
+      'expected $date to snap after $expected for $period but it is ${t.toString()}',
+      pos
+    );
+  }
 }
