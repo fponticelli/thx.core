@@ -3,8 +3,6 @@ package thx.core;
 /**
 `Dates` provides additional extension methods on top of the `Date` type.
 
-Helpers for working with Date objects or timestampts
-
 ```
 using Dates;
 ```
@@ -190,39 +188,66 @@ Snaps a Date to the nearest second, minute, hour, day, week, month or year.
     return create(year, month, day, hour, min, sec);
   }
 
-  /** Returns a new date, exactly 1 year before the given date/time. */
+/**
+Returns a new date, exactly 1 year before the given date/time.
+**/
   inline public static function prevYear(d : Date) : Date
     return jump(d,Year,-1);
 
-  /** Returns a new date, exactly 1 year after the given date/time. */
+/**
+Returns a new date, exactly 1 year after the given date/time.
+**/
   inline public static function nextYear(d : Date) : Date
     return jump(d,Year,1);
 
-  /** Returns a new date, exactly 1 month before the given date/time. */
+/**
+Returns a new date, exactly 1 month before the given date/time.
+**/
   inline public static function prevMonth(d : Date) : Date
     return jump(d,Month,-1);
 
-  /** Returns a new date, exactly 1 month after the given date/time. */
+/**
+Returns a new date, exactly 1 month after the given date/time.
+**/
   inline public static function nextMonth(d : Date) : Date
     return jump(d,Month,1);
 
-  /** Returns a new date, exactly 1 week before the given date/time. */
+/**
+Returns a new date, exactly 1 week before the given date/time.
+**/
   inline public static function prevWeek(d : Date) : Date
     return jump(d,Week,-1);
 
-  /** Returns a new date, exactly 1 week after the given date/time. */
+/**
+Returns a new date, exactly 1 week after the given date/time.
+**/
   inline public static function nextWeek(d : Date) : Date
     return jump(d,Week,1);
 
-  /** Returns a new date, exactly 1 day before the given date/time. */
+/**
+Returns a new date, exactly 1 day before the given date/time.
+**/
   inline public static function prevDay(d : Date) : Date
     return jump(d,Day,-1);
 
-  /** Returns a new date, exactly 1 day after the given date/time. */
+/**
+Returns a new date, exactly 1 day after the given date/time.
+**/
   inline public static function nextDay(d : Date) : Date
     return jump(d,Day,1);
 }
 
+/**
+`Timestamps` provides additional extension methods on top of the `Float`
+type representing date values.
+
+```
+using Dates;
+```
+
+@author Jason O'Neil
+@author Franco Ponticelli
+**/
 class Timestamps {
 /**
 Creates a date (timestamp/float format) by using the passed year, month, day, hour, minute, second.
