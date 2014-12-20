@@ -40,6 +40,15 @@ and the method will normalize that value by offsetting the other arguments by th
     hour = hour % 24;
     if(hour < 0) hour += 24;
 
+    if(day == 0) {
+      month -=1;
+      if(month < 0) {
+        month = 11;
+        year -=1;
+      }
+      day = numDaysInMonth(month, year);
+    }
+
     year += Math.floor(month / 12);
     month = month % 12;
     if(month < 0) month += 12;
@@ -302,20 +311,20 @@ Snaps a time to the nearest second, minute, hour, day, week, month or year.
       case Day:
         var d = Date.fromTime(time),
             mod = (d.getHours() >= 12) ? 1 : 0;
-        new Date(d.getFullYear(), d.getMonth(), d.getDate() + mod, 0, 0, 0).getTime();
+        create(d.getFullYear(), d.getMonth(), d.getDate() + mod, 0, 0, 0);
       case Week:
         var d = Date.fromTime(time),
             wd = d.getDay(),
             mod = wd < 3 ? -wd : (wd > 3 ? 7 - wd : d.getHours() < 12 ? -wd : 7 - wd);
-        new Date(d.getFullYear(), d.getMonth(), d.getDate() + mod, 0, 0, 0).getTime();
+        create(d.getFullYear(), d.getMonth(), d.getDate() + mod, 0, 0, 0);
       case Month:
         var d = Date.fromTime(time),
             mod = d.getDate() > Math.round(DateTools.getMonthDays(d) / 2) ? 1 : 0;
-        new Date(d.getFullYear(), d.getMonth() + mod, 1, 0, 0, 0).getTime();
+        create(d.getFullYear(), d.getMonth() + mod, 1, 0, 0, 0);
       case Year:
         var d = Date.fromTime(time),
             mod = time > new Date(d.getFullYear(), 6, 2, 0, 0, 0).getTime() ? 1 : 0;
-        new Date(d.getFullYear() + mod, 0, 1, 0, 0, 0).getTime();
+        create(d.getFullYear() + mod, 0, 1, 0, 0, 0);
     };
 
     inline static function r(t : Float, v : Float)

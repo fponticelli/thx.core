@@ -33,7 +33,7 @@ class TestDates {
     ];
 
     expectations.map(function(o) {
-      Assert.same(o.expected, o.test, 'expected ${o.expected.toString()} but was  ${o.test.toString()}');
+      Assert.floatEquals(o.expected.getTime(), o.test.getTime(), 'expected ${o.expected.toString()} but was  ${o.test.toString()}');
     });
   }
 
