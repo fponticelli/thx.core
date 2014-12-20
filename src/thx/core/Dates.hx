@@ -85,8 +85,8 @@ Snaps a Date to the next second, minute, hour, day, week, month or year.
 @param period Either: Second, Minute, Hour, Day, Week, Month or Year
 @return The snapped date.
 **/
-  inline public static function snapAfter(date : Date, period : TimePeriod) : Date
-    return Date.fromTime(Timestamps.snapAfter(date.getTime(), period));
+  inline public static function snapNext(date : Date, period : TimePeriod) : Date
+    return Date.fromTime(Timestamps.snapNext(date.getTime(), period));
 
 /**
 Snaps a Date to the previous second, minute, hour, day, week, month or year.
@@ -95,8 +95,8 @@ Snaps a Date to the previous second, minute, hour, day, week, month or year.
 @param period Either: Second, Minute, Hour, Day, Week, Month or Year
 @return The snapped date.
 **/
-  inline public static function snapBefore(date : Date, period : TimePeriod) : Date
-    return Date.fromTime(Timestamps.snapBefore(date.getTime(), period));
+  inline public static function snapPrev(date : Date, period : TimePeriod) : Date
+    return Date.fromTime(Timestamps.snapPrev(date.getTime(), period));
 
 /**
 Snaps a Date to the nearest second, minute, hour, day, week, month or year.
@@ -204,7 +204,7 @@ Snaps a time to the next second, minute, hour, day, week, month or year.
 @param period Either: Second, Minute, Hour, Day, Week, Month or Year
 @return The unix time of the snapped date (In milliseconds).
 **/
-  public static function snapAfter(time : Float, period : TimePeriod) : Float
+  public static function snapNext(time : Float, period : TimePeriod) : Float
     return switch period {
       case Second:
         c(time, 1000.0);
@@ -234,7 +234,7 @@ Snaps a time to the previous second, minute, hour, day, week, month or year.
 @param period Either: Second, Minute, Hour, Day, Week, Month or Year
 @return The unix time of the snapped date (In milliseconds).
 **/
-  public static function snapBefore(time : Float, period : TimePeriod) : Float
+  public static function snapPrev(time : Float, period : TimePeriod) : Float
     return switch period {
       case Second:
         f(time, 1000.0);
