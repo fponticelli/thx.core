@@ -214,16 +214,6 @@ Snaps a Date to the nearest second, minute, hour, day, week, month or year.
     return jump(d,Day,1);
 }
 
-// TODO
-
-// implement Dates.create
-// implement Timestamps.create
-// add tests for Jump
-// replace implementation in Jump
-// replace implementation in snapTo
-// replace implementation in snapNext
-// replace implementation in snapPrev
-
 class Timestamps {
 /**
 Creates a date (timestamp/float format) by using the passed year, month, day, hour, minute, second.
@@ -251,17 +241,17 @@ Snaps a time to the next second, minute, hour, day, week, month or year.
         c(time, 3600000.0);
       case Day:
         var d = Date.fromTime(time);
-        new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1, 0, 0, 0).getTime();
+        create(d.getFullYear(), d.getMonth(), d.getDate() + 1, 0, 0, 0);
       case Week:
         var d = Date.fromTime(time),
             wd = d.getDay();
-        new Date(d.getFullYear(), d.getMonth(), d.getDate() + 7 - wd, 0, 0, 0).getTime();
+        create(d.getFullYear(), d.getMonth(), d.getDate() + 7 - wd, 0, 0, 0);
       case Month:
         var d = Date.fromTime(time);
-        new Date(d.getFullYear(), d.getMonth() + 1, 1, 0, 0, 0).getTime();
+        create(d.getFullYear(), d.getMonth() + 1, 1, 0, 0, 0);
       case Year:
         var d = Date.fromTime(time);
-        new Date(d.getFullYear() + 1, 0, 1, 0, 0, 0).getTime();
+        create(d.getFullYear() + 1, 0, 1, 0, 0, 0);
     };
 
 /**
@@ -281,17 +271,17 @@ Snaps a time to the previous second, minute, hour, day, week, month or year.
         f(time, 3600000.0);
       case Day:
         var d = Date.fromTime(time);
-        new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0).getTime();
+        create(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0);
       case Week:
         var d = Date.fromTime(time),
             wd = d.getDay();
-        new Date(d.getFullYear(), d.getMonth(), d.getDate() - wd, 0, 0, 0).getTime();
+        create(d.getFullYear(), d.getMonth(), d.getDate() - wd, 0, 0, 0);
       case Month:
         var d = Date.fromTime(time);
-        new Date(d.getFullYear(), d.getMonth(), 1, 0, 0, 0).getTime();
+        create(d.getFullYear(), d.getMonth(), 1, 0, 0, 0);
       case Year:
         var d = Date.fromTime(time);
-        new Date(d.getFullYear(), 0, 1, 0, 0, 0).getTime();
+        create(d.getFullYear(), 0, 1, 0, 0, 0);
     };
 
 /**
