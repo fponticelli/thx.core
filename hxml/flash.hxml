@@ -2,7 +2,8 @@
 -cp test
 -lib utest
 -swf bin/flash.swf
+-swf-version 11
 -main TestAll
 -D thx-core
--debug
--D fdb
+#-debug
+#-D fdb

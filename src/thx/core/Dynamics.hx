@@ -182,7 +182,7 @@ Class instances will either be cloned, or the reference copied, depending on the
           default:
             if(cloneInstances) {
               var o = Type.createEmptyInstance(c);
-              for (field in Reflect.fields(v))
+              for (field in Type.getInstanceFields(c))
                 Reflect.setField(o, field, clone(Reflect.field(v, field), cloneInstances));
               return o;
             } else {
