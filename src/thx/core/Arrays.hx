@@ -54,9 +54,18 @@ Finds the first occurrance of `element` and returns all the elements before it.
 /**
 Filters out all null elements in the array
 **/
-  public static function compact<T>(arr : Array<Null<T>>) : Array<T>
-    // the cast is required to compile safely to C#
-    return cast arr.filter(function(v : Null<T>) return null != v);
+  public static function compact<T>(arr : Array<Null<T>>) : Array<T> {
+#if cs
+    var result : Array<T> = [];
+    for(item in arr) {
+      if(null != item)
+        result.push(item);
+    }
+    return result;
+#else
+    return arr.filter(function(v : Null<T>) return null != v);
+#end
+  }
 
 /**
 Returns a Map containing the number of occurrances for each value in the array.

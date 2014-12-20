@@ -7,34 +7,64 @@ using thx.core.Dates;
 class TestDates {
   public function new() {}
 
-  public function testSnapAfter() {
-    assertSnapAfter("2014-01-01 10:07:00", "2014-01-01 10:06:10", Minute);
-    assertSnapAfter("2014-01-01 10:06:00", "2014-01-01 10:05:50", Minute);
-    assertSnapAfter("2014-01-01 11:00:00", "2014-01-01 10:10:10", Hour);
-    assertSnapAfter("2014-01-01 10:00:00", "2014-01-01 09:50:10", Hour);
-    assertSnapAfter("2014-01-02 00:00:00", "2014-01-01 10:00:00", Day);
-    assertSnapAfter("2014-01-01 00:00:00", "2013-12-31 20:00:00", Day);
-    assertSnapAfter("2014-12-21 00:00:00", "2014-12-17 11:00:00", Week);
-    assertSnapAfter("2014-12-21 00:00:00", "2014-12-18 00:00:00", Week);
-    assertSnapAfter("2015-01-01 00:00:00", "2014-12-12 00:00:00", Month);
-    assertSnapAfter("2015-01-01 00:00:00", "2014-12-18 00:00:00", Month);
-    assertSnapAfter("2015-01-01 00:00:00", "2014-05-12 00:00:00", Year);
-    assertSnapAfter("2015-01-01 00:00:00", "2014-12-18 00:00:00", Year);
+  public function testCreate() {
+    var expectations = [
+      // normal
+      { expected : Date.fromString("2014-12-01"), test : Dates.create(2014,11,1) },
+      // month overflow
+      { expected : Date.fromString("2015-04-01"), test : Dates.create(2014,15,1) },
+      { expected : Date.fromString("2013-12-01"), test : Dates.create(2014,-1,1) },
+
+      // day overflow
+      { expected : Date.fromString("2014-03-04"), test : Dates.create(2014,1,32) },
+      { expected : Date.fromString("2013-12-31"), test : Dates.create(2014,0,0) },
+
+      // hour overflow
+      { expected : Date.fromString("2014-02-02 02:00:00"), test : Dates.create(2014,1,1,26) },
+      { expected : Date.fromString("2013-12-31 23:00:00"), test : Dates.create(2014,0,1,-1) },
+
+      // minute overflow
+      { expected : Date.fromString("2014-02-01 01:05:00"), test : Dates.create(2014,1,1,0,65) },
+      { expected : Date.fromString("2013-12-31 23:59:00"), test : Dates.create(2014,0,1,0,-1) },
+
+      // second overflow
+      { expected : Date.fromString("2014-02-01 00:01:05"), test : Dates.create(2014,1,1,0,0,65) },
+      { expected : Date.fromString("2013-12-31 23:59:59"), test : Dates.create(2014,0,1,0,0,-1) }
+    ];
+
+    expectations.map(function(o) {
+      Assert.floatEquals(o.expected.getTime(), o.test.getTime(), 'expected ${o.expected.toString()} but was  ${o.test.toString()}');
+    });
   }
 
-  public function testSnapBefore() {
-    assertSnapBefore("2014-01-01 10:06:00", "2014-01-01 10:06:10", Minute);
-    assertSnapBefore("2014-01-01 10:05:00", "2014-01-01 10:05:50", Minute);
-    assertSnapBefore("2014-01-01 10:00:00", "2014-01-01 10:10:10", Hour);
-    assertSnapBefore("2014-01-01 09:00:00", "2014-01-01 09:50:10", Hour);
-    assertSnapBefore("2014-01-01 00:00:00", "2014-01-01 10:00:00", Day);
-    assertSnapBefore("2013-12-31 00:00:00", "2013-12-31 20:00:00", Day);
-    assertSnapBefore("2014-12-14 00:00:00", "2014-12-17 11:00:00", Week);
-    assertSnapBefore("2014-12-14 00:00:00", "2014-12-18 00:00:00", Week);
-    assertSnapBefore("2014-12-01 00:00:00", "2014-12-12 00:00:00", Month);
-    assertSnapBefore("2014-12-01 00:00:00", "2014-12-18 00:00:00", Month);
-    assertSnapBefore("2014-01-01 00:00:00", "2014-05-12 00:00:00", Year);
-    assertSnapBefore("2014-01-01 00:00:00", "2014-12-18 00:00:00", Year);
+  public function testSnapNext() {
+    assertSnapNext("2014-01-01 10:07:00", "2014-01-01 10:06:10", Minute);
+    assertSnapNext("2014-01-01 10:06:00", "2014-01-01 10:05:50", Minute);
+    assertSnapNext("2014-01-01 11:00:00", "2014-01-01 10:10:10", Hour);
+    assertSnapNext("2014-01-01 10:00:00", "2014-01-01 09:50:10", Hour);
+    assertSnapNext("2014-01-02 00:00:00", "2014-01-01 10:00:00", Day);
+    assertSnapNext("2014-01-01 00:00:00", "2013-12-31 20:00:00", Day);
+    assertSnapNext("2014-12-21 00:00:00", "2014-12-17 11:00:00", Week);
+    assertSnapNext("2014-12-21 00:00:00", "2014-12-18 00:00:00", Week);
+    assertSnapNext("2015-01-01 00:00:00", "2014-12-12 00:00:00", Month);
+    assertSnapNext("2015-01-01 00:00:00", "2014-12-18 00:00:00", Month);
+    assertSnapNext("2015-01-01 00:00:00", "2014-05-12 00:00:00", Year);
+    assertSnapNext("2015-01-01 00:00:00", "2014-12-18 00:00:00", Year);
+  }
+
+  public function testSnapPrev() {
+    assertSnapPrev("2014-01-01 10:06:00", "2014-01-01 10:06:10", Minute);
+    assertSnapPrev("2014-01-01 10:05:00", "2014-01-01 10:05:50", Minute);
+    assertSnapPrev("2014-01-01 10:00:00", "2014-01-01 10:10:10", Hour);
+    assertSnapPrev("2014-01-01 09:00:00", "2014-01-01 09:50:10", Hour);
+    assertSnapPrev("2014-01-01 00:00:00", "2014-01-01 10:00:00", Day);
+    assertSnapPrev("2013-12-31 00:00:00", "2013-12-31 20:00:00", Day);
+    assertSnapPrev("2014-12-14 00:00:00", "2014-12-17 11:00:00", Week);
+    assertSnapPrev("2014-12-14 00:00:00", "2014-12-18 00:00:00", Week);
+    assertSnapPrev("2014-12-01 00:00:00", "2014-12-12 00:00:00", Month);
+    assertSnapPrev("2014-12-01 00:00:00", "2014-12-18 00:00:00", Month);
+    assertSnapPrev("2014-01-01 00:00:00", "2014-05-12 00:00:00", Year);
+    assertSnapPrev("2014-01-01 00:00:00", "2014-12-18 00:00:00", Year);
   }
 
   public function testSnapTo() {
@@ -62,8 +92,8 @@ class TestDates {
     );
   }
 
-  function assertSnapBefore(expected : String, date : String, period : TimePeriod, ?pos : PosInfos) {
-    var t = Dates.snapBefore(Date.fromString(date), period);
+  function assertSnapPrev(expected : String, date : String, period : TimePeriod, ?pos : PosInfos) {
+    var t = Dates.snapPrev(Date.fromString(date), period);
     Assert.floatEquals(
       Date.fromString(expected).getTime(),
       t.getTime(),
@@ -72,8 +102,8 @@ class TestDates {
     );
   }
 
-  function assertSnapAfter(expected : String, date : String, period : TimePeriod, ?pos : PosInfos) {
-    var t = Dates.snapAfter(Date.fromString(date), period);
+  function assertSnapNext(expected : String, date : String, period : TimePeriod, ?pos : PosInfos) {
+    var t = Dates.snapNext(Date.fromString(date), period);
     Assert.floatEquals(
       Date.fromString(expected).getTime(),
       t.getTime(),
