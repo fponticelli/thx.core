@@ -194,6 +194,40 @@ Snaps a Date to the nearest second, minute, hour, day, week, month or year.
   inline public static function nextDay(d : Date) : Date
     return jump(d,Day,1);
 
+  @:noUsing
+  public static function create(year : Int, ?month : Int = 0, ?day : Int = 1, ?hour : Int = 0, ?minute : Int = 0, ?second : Int = 0) : Date {
+    // Wrap values that are too large or negative
+    minute += Math.floor(second / 60);
+    second = second % 60;
+    if(second < 0) second += 60;
+
+    hour += Math.floor(minute / 60);
+    minute = minute % 60;
+    if(minute < 0) minute += 60;
+
+    day += Math.floor(hour / 24);
+    hour = hour % 24;
+    if(hour < 0) hour += 24;
+
+    year += Math.floor(month / 12);
+    month = month % 12;
+    if(month < 0) month += 12;
+
+    var daysInMonth = numDaysInMonth(month,year);
+    while (day > daysInMonth) {
+        if (day > daysInMonth) {
+            day -= daysInMonth;
+            month++;
+        }
+        if (month > 11) {
+            month -= 12;
+            year++;
+        }
+        daysInMonth = numDaysInMonth(month,year);
+    }
+
+    return new Date(year, month, day, hour, minute, second);
+  }
 }
 
 class Timestamps {
@@ -297,6 +331,10 @@ Snaps a time to the nearest second, minute, hour, day, week, month or year.
       return Math.ffloor(t / v) * v;
     inline static function c(t : Float, v : Float)
       return Math.fceil(t / v) * v;
+
+    @:noUsing
+    inline public static function create(year : Int, ?month : Int, ?day : Int, ?hour : Int, ?minute : Int, ?second : Int) : Float
+      return Dates.create(year, month, day, hour, minute, second).getTime();
 }
 
 enum TimePeriod {
