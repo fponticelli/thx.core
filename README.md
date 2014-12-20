@@ -289,6 +289,32 @@ Extension methods for `String`. Some examples:
   * `stripTags` sanitize html string by removing any tag-like information
   * `wrapColumns` breaks a long string into consistently sized lines without breaking words apart.
 
+`Strings` also defines a type alias to `StringTools`. This way by including it,
+you also get all the `StringTools` extension methods:
+
+```haxe
+using thx.core.Strings;
+```
+
+### [Dates](http://thx-lib.org/api/thx/core/Dates.html)
+
+Extension methods for `Date` and `Float`s that represent date values.
+
+Some examples:
+
+  * `compare` to sort `Date` values.
+  * `isLeapYear`/`isInLeapYear` to find leap year about a spefici year or date.
+  * `numDaysInMonth`/`numDaysInThisMonth` return the number of days in a month for a specified date.
+  * `snapTo`/`snapPrev`/`snapNext` to force a date value to a close boundary (Minute, Hour, Day, Week, Month, Year).
+  * `jump`/`prevX`/`nextX` to skip forward/backward by a given time delta.
+
+`Dates` also defines a type alias to `DateTools`. This way by including it,
+you also get all the `DateTools` extension methods:
+
+```haxe
+using thx.core.Dates;
+```
+
 ### [Types](http://thx-lib.org/api/thx/core/Types.html)
 
 Extension methods to use on values, types and classes.

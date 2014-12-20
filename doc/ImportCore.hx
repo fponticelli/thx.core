@@ -1,5 +1,6 @@
 import thx.core.AnonymousMap;
 import thx.core.Arrays;
+import thx.core.Bools;
 import thx.core.Dates;
 import thx.core.Dynamics;
 import thx.core.Either;
