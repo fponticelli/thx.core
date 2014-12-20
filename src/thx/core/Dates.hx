@@ -20,6 +20,47 @@ It compares two dates.
     return Floats.compare(a.getTime(), b.getTime());
 
 /**
+Creates a Date by using the passed year, month, day, hour, minute, second.
+
+Note that each argument can overflow its normal boundaries (e.g. a month value of `-33` is perfectly valid)
+and the method will normalize that value by offsetting the other arguments by the right amount.
+**/
+  @:noUsing
+  public static function create(year : Int, ?month : Int = 0, ?day : Int = 1, ?hour : Int = 0, ?minute : Int = 0, ?second : Int = 0) : Date {
+    // Wrap values that are too large or negative
+    minute += Math.floor(second / 60);
+    second = second % 60;
+    if(second < 0) second += 60;
+
+    hour += Math.floor(minute / 60);
+    minute = minute % 60;
+    if(minute < 0) minute += 60;
+
+    day += Math.floor(hour / 24);
+    hour = hour % 24;
+    if(hour < 0) hour += 24;
+
+    year += Math.floor(month / 12);
+    month = month % 12;
+    if(month < 0) month += 12;
+
+    var daysInMonth = numDaysInMonth(month,year);
+    while (day > daysInMonth) {
+        if (day > daysInMonth) {
+            day -= daysInMonth;
+            month++;
+        }
+        if (month > 11) {
+            month -= 12;
+            year++;
+        }
+        daysInMonth = numDaysInMonth(month,year);
+    }
+
+    return new Date(year, month, day, hour, minute, second);
+  }
+
+/**
 Returns `true` if the passed dates are the same.
 **/
   inline public static function equals(a : Date, b : Date) : Bool
@@ -120,46 +161,24 @@ Snaps a Date to the nearest second, minute, hour, day, week, month or year.
   @param amount The multiple of `period` that you wish to jump by. A positive amount moves forward in time, a negative amount moves backward.
 **/
   public static function jump(date : Date, period : TimePeriod, amount : Int) {
-    var sec = date.getSeconds();
-    var min = date.getMinutes();
-    var hour = date.getHours();
-    var day = date.getDate();
-    var month = date.getMonth();
-    var year = date.getFullYear();
+    var sec   = date.getSeconds(),
+        min   = date.getMinutes(),
+        hour  = date.getHours(),
+        day   = date.getDate(),
+        month = date.getMonth(),
+        year  = date.getFullYear();
+
     switch period {
-      case Second: sec = sec+amount;
-      case Minute: min = min+amount;
-      case Hour: hour = hour+amount;
-      case Day: day = day+amount;
-      case Week: day = day+7*amount;
-      case Month: month = month+amount;
-      case Year: year = year+amount;
+      case Second: sec   += amount;
+      case Minute: min   += amount;
+      case Hour:   hour  += amount;
+      case Day:    day   += amount;
+      case Week:   day   += amount * 7;
+      case Month:  month += amount;
+      case Year:   year  += amount;
     }
 
-    // Wrap values that are too large
-    min += Math.floor(sec / 60);
-    sec = sec % 60;
-
-    hour += Math.floor(min / 60);
-    min = min % 60;
-
-    day += Math.floor(hour / 24);
-    hour = hour % 24;
-
-    var daysInMonth = numDaysInMonth(month,year);
-    while (day > daysInMonth || month > 11) {
-        if (day > daysInMonth) {
-            day -= daysInMonth;
-            month++;
-        }
-        if (month > 11) {
-            month -= 12;
-            year++;
-        }
-        daysInMonth = numDaysInMonth(month,year);
-    }
-
-    return new Date(year, month, day, hour, min, sec);
+    return create(year, month, day, hour, min, sec);
   }
 
   /** Returns a new date, exactly 1 year before the given date/time. */
@@ -193,44 +212,28 @@ Snaps a Date to the nearest second, minute, hour, day, week, month or year.
   /** Returns a new date, exactly 1 day after the given date/time. */
   inline public static function nextDay(d : Date) : Date
     return jump(d,Day,1);
-
-  @:noUsing
-  public static function create(year : Int, ?month : Int = 0, ?day : Int = 1, ?hour : Int = 0, ?minute : Int = 0, ?second : Int = 0) : Date {
-    // Wrap values that are too large or negative
-    minute += Math.floor(second / 60);
-    second = second % 60;
-    if(second < 0) second += 60;
-
-    hour += Math.floor(minute / 60);
-    minute = minute % 60;
-    if(minute < 0) minute += 60;
-
-    day += Math.floor(hour / 24);
-    hour = hour % 24;
-    if(hour < 0) hour += 24;
-
-    year += Math.floor(month / 12);
-    month = month % 12;
-    if(month < 0) month += 12;
-
-    var daysInMonth = numDaysInMonth(month,year);
-    while (day > daysInMonth) {
-        if (day > daysInMonth) {
-            day -= daysInMonth;
-            month++;
-        }
-        if (month > 11) {
-            month -= 12;
-            year++;
-        }
-        daysInMonth = numDaysInMonth(month,year);
-    }
-
-    return new Date(year, month, day, hour, minute, second);
-  }
 }
 
+// TODO
+
+// implement Dates.create
+// implement Timestamps.create
+// add tests for Jump
+// replace implementation in Jump
+// replace implementation in snapTo
+// replace implementation in snapNext
+// replace implementation in snapPrev
+
 class Timestamps {
+/**
+Creates a date (timestamp/float format) by using the passed year, month, day, hour, minute, second.
+
+Note that each argument can overflow its normal boundaries (e.g. a month value of `-33` is perfectly valid)
+and the method will normalize that value by offsetting the other arguments by the right amount.
+**/
+    @:noUsing
+    inline public static function create(year : Int, ?month : Int, ?day : Int, ?hour : Int, ?minute : Int, ?second : Int) : Float
+      return Dates.create(year, month, day, hour, minute, second).getTime();
 /**
 Snaps a time to the next second, minute, hour, day, week, month or year.
 
@@ -331,10 +334,6 @@ Snaps a time to the nearest second, minute, hour, day, week, month or year.
       return Math.ffloor(t / v) * v;
     inline static function c(t : Float, v : Float)
       return Math.fceil(t / v) * v;
-
-    @:noUsing
-    inline public static function create(year : Int, ?month : Int, ?day : Int, ?hour : Int, ?minute : Int, ?second : Int) : Float
-      return Dates.create(year, month, day, hour, minute, second).getTime();
 }
 
 enum TimePeriod {
