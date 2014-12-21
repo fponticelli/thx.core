@@ -133,6 +133,20 @@ Works the same as `underscore` but also replaces underscores with whitespaces.
 #end
 
 /**
+Returns `true` if the value string is composed of only lower cased characters
+or case neutral characters.
+**/
+  public static function isLowerCase(value : String) : Bool
+    return value.toLowerCase() == value;
+
+/**
+Returns `true` if the value string is composed of only upper cased characters
+or case neutral characters.
+**/
+  public static function isUpperCase(value : String) : Bool
+    return value.toUpperCase() == value;
+
+/**
 `ifEmpty` returns `value` if it is neither `null` or empty, otherwise it returns `alt`
 **/
   public static inline function ifEmpty(value : String, alt : String) : String
@@ -194,6 +208,15 @@ If present, it removes the `toremove` text from the beginning of `value`.
 **/
   public static function repeat(s : String, times : Int)
     return [for(i in 0...times) s].join('');
+
+/**
+Returns a new string whose characters are in reverse order.
+**/
+  public static function reverse(s : String) {
+    var arr = s.split("");
+    arr.reverse();
+    return arr.join("");
+  }
 
 /**
 `stripTags` removes any HTML/XML markup from the string leaving only the concatenation
