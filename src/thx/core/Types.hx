@@ -11,6 +11,30 @@ class Types {
     return Reflect.isObject(v) && null == Type.getClass(v);
 
 /**
+Return `true` if v is any of the following types: Int, Float, Bool or String.
+**/
+  public static function isPrimitive(v : Dynamic)
+    return switch Type.typeof(v) {
+      case TInt, TFloat, TBool: true;
+      case TNull, TFunction, TEnum(_), TObject, TUnknown : false;
+      case TClass(c): Type.getClassName(c) == "String";
+    };
+
+/**
+Returns `true` if `cls` extends `sup` or one of its children.
+
+It also returns `true` if `cls` and `sup` are the same.
+**/
+  public static function hasSuperClass(cls : Class<Dynamic>, sup : Class<Dynamic>) {
+    while(null != cls) {
+      if(cls == sup)
+        return true;
+      cls = Type.getSuperClass(cls);
+    }
+    return false;
+  }
+
+/**
 `sameType` returns true if the arguments `a` and `b` share exactly the same type.
 **/
   public static function sameType<A, B>(a : A, b : B) : Bool
