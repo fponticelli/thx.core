@@ -15,7 +15,7 @@ class Floats {
 /**
 Rounds a number up to the specified number of decimals.
 **/
-  static public function ceil(f : Float, decimals : Int) : Float {
+  static public function ceilTo(f : Float, decimals : Int) : Float {
     var p = Math.pow(10, decimals);
     return Math.fceil(f * p) / p;
   }
@@ -54,7 +54,7 @@ It returns the comparison value (an integer number) between two `float` values.
 /**
 Rounds a number down to the specified number of decimals.
 **/
-  static public function floor(f : Float, decimals : Int) : Float {
+  static public function floorTo(f : Float, decimals : Int) : Float {
     var p = Math.pow(10, decimals);
     return Math.ffloor(f * p) / p;
   }
@@ -79,7 +79,6 @@ as the tollerance value.
   inline public static function nearZero(n : Float)
     return Math.abs(n) <= EPSILON;
 
-
 /**
 `normalize` clamps the passwed value between 0 and 1.
 **/
@@ -98,7 +97,7 @@ as the tollerance value.
 /**
 Rounds a number to the specified number of decimals.
 **/
-  static public function round(f : Float, decimals : Int) : Float {
+  static public function roundTo(f : Float, decimals : Int) : Float {
     var p = Math.pow(10, decimals);
     return Math.fround(f * p) / p;
   }
@@ -131,3 +130,5 @@ Similar to `wrap`, it works for numbers between 0 and `max`.
     return v;
   }
 }
+
+typedef HaxeMath = Math;
