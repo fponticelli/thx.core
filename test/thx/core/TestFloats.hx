@@ -36,15 +36,15 @@ class TestFloats {
 
   public function testRound() {
     var value = 123.456;
-    Assert.floatEquals(123.5, value.round(1));
-    Assert.floatEquals(123.46, value.round(2));
-    Assert.floatEquals(123.456, value.round(3));
-    Assert.floatEquals(123.456, value.round(4));
+    Assert.floatEquals(123.5, value.roundTo(1));
+    Assert.floatEquals(123.46, value.roundTo(2));
+    Assert.floatEquals(123.456, value.roundTo(3));
+    Assert.floatEquals(123.456, value.roundTo(4));
 
     value = 1234567890.123456;
-    Assert.floatEquals(1234567890.1, value.round(1));
-    Assert.floatEquals(1234567890.12, value.round(2));
-    Assert.floatEquals(1234567890.123, value.round(3));
-    Assert.floatEquals(1234567890.1235, value.round(4));
+    Assert.floatEquals(1234567890.1, value.roundTo(1));
+    Assert.floatEquals(1234567890.12, value.roundTo(2));
+    Assert.floatEquals(1234567890.123, value.roundTo(3));
+    Assert.floatEquals(1234567890.1235, value.roundTo(4));
   }
 }
