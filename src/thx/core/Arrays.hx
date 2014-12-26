@@ -406,6 +406,19 @@ It applies a function against an accumulator and each value of the array (from l
   }
 
 /**
+Resizes an array of `T` to an arbitrary length by adding more elements to its end
+or by removing extra elements.
+
+Note that the function changes the passed array and doesn't create a copy.
+**/
+  public static function resize<T>(array : Array<T>, length : Int, fill : T) {
+    while(array.length < length)
+      array.push(fill);
+    array.splice(length, array.length - length);
+    return array;
+  }
+
+/**
 It is the same as `reduce` but with the extra integer `index` parameter.
 **/
   inline public static function reducei<TItem, TAcc>(array : Array<TItem>, callback : TAcc -> TItem -> Int -> TAcc, initial : TAcc) : TAcc {
@@ -666,6 +679,19 @@ Finds the min float element in the array.
     return arr.length == 0 ? null : Arrays.reduce(arr, function(min, v) return v < min ? v : min, arr[0]);
 
 /**
+Resizes an array of `Float` to an arbitrary length by adding more elements (default is `0.0`)
+to its end or by removing extra elements.
+
+Note that the function changes the passed array and doesn't create a copy.
+**/
+  public static function resize(array : Array<Float>, length : Int, fill : Float = 0.0) {
+    while(array.length < length)
+      array.push(fill);
+    array.splice(length, array.length - length);
+    return array;
+  }
+
+/**
 Finds the sum of all the elements in the array.
 **/
   public static function sum(arr : Array<Float>) : Null<Float>
@@ -693,6 +719,19 @@ Finds the min int element in the array.
 **/
   public static function min(arr : Array<Int>) : Null<Int>
     return arr.length == 0 ? null : Arrays.reduce(arr, function(min, v) return v < min ? v : min, arr[0]);
+
+/**
+Resizes an array of `Int` to an arbitrary length by adding more elements (default is `0`)
+to its end or by removing extra elements.
+
+Note that the function changes the passed array and doesn't create a copy.
+**/
+  public static function resize(array : Array<Int>, length : Int, fill : Int = 0) {
+    while(array.length < length)
+      array.push(fill);
+    array.splice(length, array.length - length);
+    return array;
+  }
 
 /**
 Finds the sum of all the elements in the array.
