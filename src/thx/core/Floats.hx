@@ -95,6 +95,12 @@ as the tollerance value.
   }
 
 /**
+Computes the nth root (`index`) of `base`.
+**/
+  inline public static function root(base : Float, index : Float)
+    return Math.pow(base, 1 / index);
+
+/**
 Rounds a number to the specified number of decimals.
 **/
   static public function roundTo(f : Float, decimals : Int) : Float {
