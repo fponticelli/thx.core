@@ -78,6 +78,23 @@ Rounds a number down to the specified number of decimals.
     return (b - a) * f + a;
 
 /**
+Interpolates values in a polar coordinate system looking for the narrowest delta angle.
+
+It can be either clock-wise or counter-clock-wise.
+**/
+  public static function interpolateAngle(f : Float, a : Float, b : Float, turn : Float = 360)
+    return wrapCircular(interpolate(f, a, a + angleDifference(a, b, turn)), turn);
+
+/**
+Interpolates values in a polar coordinate system looking for the wideset delta angle.
+
+It can be either clock-wise or counter-clock-wise.
+**/
+  public static function interpolateAngleWidest(f : Float, a : Float, b : Float, turn : Float = 360) {
+    return wrapCircular(interpolateAngle(f, a, b, turn) - turn / 2, turn);
+  }
+
+/**
 Float numbers can sometime introduce tiny errors even for simple operations. `nearEquals`
 comapres floats using a tiny tollerance defined as `EPSILON`.
 **/
