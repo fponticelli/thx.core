@@ -1,5 +1,8 @@
 package thx.core;
 
+#if (haxe_version >= 3.2)
+typedef Either = haxe.ds.Either;
+#else
 /**
 `Either` wraps one value of two possible types.
 */
@@ -13,3 +16,4 @@ Right contructors wrapping a value of type R
 */
   Right(value : R);
 }
+#end
