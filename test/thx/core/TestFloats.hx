@@ -63,4 +63,43 @@ class TestFloats {
       Assert.equals(test.d, d, 'expected distance between ${test.a} and ${test.b} to be ${test.d} but it is $d');
     }
   }
+
+  public function testInterpolateAngle() {
+    var tests = [
+      { a : 30,  b : 330, s : 0,   l : 180, cw : 180, ccw : 0   },
+      { a : 330, b : 30,  s : 0,   l : 180, cw : 0,   ccw : 180 },
+
+      { a : 30,  b : 120, s : 75,  l : 255, cw : 75,  ccw : 255 },
+      { a : 120, b : 30,  s : 75,  l : 255, cw : 255, ccw : 75  },
+
+      { a : 0,   b : 180, s : 90,  l : 270, cw : 90,  ccw : 270 },
+      { a : 180, b : 0,   s : 270, l : 90,  cw : 270, ccw : 90  },
+
+      { a : 10,  b : 200, s : 285, l : 105, cw : 105, ccw : 285 },
+      { a : 200, b : 10,  s : 285, l : 105, cw : 285, ccw : 105 },
+
+      { a : 170, b : 340, s : 255, l : 75,  cw : 255, ccw : 75  },
+      { a : 340, b : 170, s : 255, l : 75,  cw : 75,  ccw : 255 },
+
+      { a : 190, b : 350, s : 270, l : 90,  cw : 270, ccw : 90  },
+      { a : 350, b : 190, s : 270, l : 90,  cw : 90,  ccw : 270 },
+
+      { a : 160, b : 350, s : 75,  l : 255, cw : 255, ccw : 75  },
+      { a : 350, b : 160, s : 75,  l : 255, cw : 75,  ccw : 255 },
+    ];
+
+    for(test in tests) {
+      var r = Floats.interpolateAngle(0.5, test.a, test.b);
+      Assert.equals(test.s, r, 'circular interpolation (shortest) at 50% between ${test.a} and ${test.b} should be ${test.s} but it is ${r}');
+
+      r = Floats.interpolateAngleWidest(0.5, test.a, test.b);
+      Assert.equals(test.l, r, 'circular interpolation (longest) at 50% between ${test.a} and ${test.b} should be ${test.l} but it is ${r}');
+
+      r = Floats.interpolateAngleCW(0.5, test.a, test.b);
+      Assert.equals(test.cw, r, 'circular interpolation CW at 50% between ${test.a} and ${test.b} should be ${test.cw} but it is ${r}');
+
+      r = Floats.interpolateAngleCCW(0.5, test.a, test.b);
+      Assert.equals(test.ccw, r, 'circular interpolation CCW at 50% between ${test.a} and ${test.b} should be ${test.ccw} but it is ${r}');
+    }
+  }
 }
