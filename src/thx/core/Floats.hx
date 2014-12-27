@@ -95,6 +95,28 @@ It can be either clock-wise or counter-clock-wise.
   }
 
 /**
+Interpolates values in a polar coordinate system always in clock-wise direction.
+**/
+  public static function interpolateAngleCW(f : Float, a : Float, b : Float, turn : Float = 360) {
+    a = wrapCircular(a, turn);
+    b = wrapCircular(b, turn);
+    if(b < a)
+      b += turn;
+    return wrapCircular(interpolate(f, a, b), turn);
+  }
+
+/**
+Interpolates values in a polar coordinate system always in counter-clock-wise direction.
+**/
+  public static function interpolateAngleCCW(f : Float, a : Float, b : Float, turn : Float = 360) {
+    a = wrapCircular(a, turn);
+    b = wrapCircular(b, turn);
+    if(b > a)
+      b -= turn;
+    return wrapCircular(interpolate(f, a, b), turn);
+  }
+
+/**
 Float numbers can sometime introduce tiny errors even for simple operations. `nearEquals`
 comapres floats using a tiny tollerance defined as `EPSILON`.
 **/
