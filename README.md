@@ -37,6 +37,8 @@ var result : MyResult = Right("the answer is 42");
 
 Note that [`thx.core.Result`](http://thx-lib.org/api/thx/core/Result.html) is an abstract on top of `Either` with some additional features.
 
+NOTE: Haxe v.3.2.0 introduces its own `haxe.ds.Either` type. It is 100% compatible with the one provided by thx.core. For that reason, thx.core adopts the official one when available. In the future `thx.core.Either` will probably be deprecated.
+
 ### [Nil](http://thx-lib.org/api/thx/core/Nil.html)
 
 `Nil` is a special enum that only contains one constructor `nil` that takes no parameter. It denotes the absence of a value. It is very handy when you want to work on functions of arity 1 and you don't want to special case them to support an empty list of arguments.
