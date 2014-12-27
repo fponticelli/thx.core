@@ -12,6 +12,7 @@ class TestAll {
 		runner.addCase(new thx.core.TestFloats());
 		runner.addCase(new thx.core.TestFunctions());
 		runner.addCase(new thx.core.TestInts());
+		runner.addCase(new thx.core.TestMapList());
 		runner.addCase(new thx.core.TestMaps());
 		runner.addCase(new thx.core.TestNulls());
 		runner.addCase(new thx.core.TestObjects());
