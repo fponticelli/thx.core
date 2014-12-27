@@ -47,4 +47,20 @@ class TestFloats {
     Assert.floatEquals(1234567890.123, value.roundTo(3));
     Assert.floatEquals(1234567890.1235, value.roundTo(4));
   }
+
+  public function testAngleDifference() {
+    var tests = [
+      { a : 30,  b : 60,  d : 30 },
+      { a : 60,  b : 30,  d : -30 },
+      { a : 0,   b : 190, d : -170 },
+      { a : 190, b : 0,   d : 170 },
+      { a : 400, b : 40,  d : 0 },
+      { a : 760, b : 40,  d : 0 }
+    ];
+
+    for(test in tests) {
+      var d = Floats.angleDifference(test.a, test.b);
+      Assert.equals(test.d, d, 'expected distance between ${test.a} and ${test.b} to be ${test.d} but it is $d');
+    }
+  }
 }

@@ -13,6 +13,18 @@ class Floats {
   static var pattern_parse = ~/^(\+|-)?\d+(\.\d+)?(e-?\d+)?$/;
 
 /**
+Returns the angular distance between 2 angles.
+**/
+  static public function angleDifference(a : Float, b : Float, turn : Float = 360) {
+    var r = (b - a) % turn;
+    if(r < 0)
+      r += turn;
+    if(r > turn / 2)
+      r -= turn;
+    return r;
+  }
+
+/**
 Rounds a number up to the specified number of decimals.
 **/
   static public function ceilTo(f : Float, decimals : Int) : Float {
