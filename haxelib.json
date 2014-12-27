@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
-  "releasenote": "Added Arrays.resize() and Floats.root().",
-  "version": "0.17.2",
+  "releasenote": "Added Floats.angleDistance and angle interpolations.",
+  "version": "0.17.3",
   "contributors": ["fponticelli"]
 }
