@@ -134,6 +134,14 @@ class TestArrays {
   public function testReduceRight() {
     Assert.same('CBA', ['a','b','c'].reduceRight(function(acc, v) return acc + v.toUpperCase(), ''));
   }
+
+  public function testRotate() {
+    Assert.same(
+      [["a0", "a1", "a2"], ["b0", "b1", "b2"]],
+      Arrays.rotate(
+        [["a0", "b0"], ["a1", "b1"], ["a2", "b2"]]
+      ));
+  }
 }
 
 private class Sample {
