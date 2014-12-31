@@ -510,6 +510,22 @@ Returns the last `n` elements from the array.
     return arr.slice(arr.length - n);
 
 /**
+Transforms an array like `[[a0,b0],[a1,b1],[a2,b2]]` into
+`[[a0,a1,a2],[b0,b1,b2]]`.
+**/
+  public static function rotate<T>(arr : Array<Array<T>>) : Array<Array<T>> {
+    var result = [];
+    for(i in 0...arr[0].length) {
+      var row = [];
+      result.push(row);
+      for(j in 0...arr.length) {
+        row.push(arr[j][i]);
+      }
+    }
+    return result;
+  }
+
+/**
 Pairs the elements of two arrays in an array of `Tuple2`.
 **/
   public static function zip<T1, T2>(array1 : Array<T1>, array2 : Array<T2>) : Array<Tuple2<T1, T2>> {
