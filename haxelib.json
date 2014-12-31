@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
-  "releasenote": "Added Floats.angleDistance and angle interpolations.",
-  "version": "0.17.3",
+  "releasenote": "Added alias to Either, Arrays.rotate and guard in Timer (for neko).",
+  "version": "0.17.4",
   "contributors": ["fponticelli"]
 }
