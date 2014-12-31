@@ -84,6 +84,8 @@ cancel function.
     var timer = new java.util.Timer();
     timer.scheduleAtFixedRate(new TimerTask(callback), haxe.Int64.ofInt(delayms), haxe.Int64.ofInt(delayms));
     return timer.cancel;
+#elseif !lime
+    return throw "platform does not support delays (Timer.repeat)";
 #else
     var id = _id++,
         timer = new haxe.Timer(delayms);
@@ -111,6 +113,8 @@ canelled using the returned cancel function.
       callback();
     }), haxe.Int64.ofInt(delayms), haxe.Int64.ofInt(delayms));
     return timer.cancel;
+#elseif !lime
+    return throw "platform does not support delays (Timer.delay)";
 #else
     var id = _id++,
         timer = haxe.Timer.delay(function() {
@@ -230,6 +234,8 @@ the target platform.
     return untyped __global__["flash.utils.clearTimeout"](id);
 #elseif flash
     return untyped _global["clearTimeout"](id);
+#elseif !lime
+    return throw "platform does not support delays (Timer.clear)";
 #else
     var timer = timers.get(id);
     if(null != timer) {
@@ -255,7 +261,7 @@ Note that the initial value might change from platfomr to platform so only delta
 #elseif cpp
     return untyped __global__.__time_stamp() / 1000;
 #elseif sys
-    return Sys.time() / 1000;
+    return Sys.time() * 1000;
 #else
     return throw 'Timer.time() is not implemented in this target';
 #end
