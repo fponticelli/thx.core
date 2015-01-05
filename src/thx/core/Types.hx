@@ -68,6 +68,7 @@ Returns a string representation of a `ValueType`.
 **/
   public static function typeToString(type : Type.ValueType) {
     return switch type {
+      case TNull:     "Null";
       case TInt:      "Int";
       case TFloat:    "Float";
       case TBool:     "Bool";
