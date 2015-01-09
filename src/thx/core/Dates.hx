@@ -189,7 +189,7 @@ Snaps a Date to the nearest second, minute, hour, day, week, month or year.
   }
 
 /**
-Snaps a date to the closest given weekday.  The time within the day will stay the same.
+Snaps a date to the given weekday inside the current week.  The time within the day will stay the same.
 
 If you are already on the given day, the date will not change.
 
@@ -215,10 +215,9 @@ If you are already on the given day, the date will not change.
 
 @param date The date value to snap
 @param day Day to snap to.  Either `Sunday`, `Monday`, `Tuesday` etc.
-@param firstDayOfWk The first day of the week.  Default to `Sunday`.
 @return The date of the day you have snapped to.
 **/
-  public static function snapNextWeekDay(date : Date, day : Weekday, ?firstDayOfWk : Weekday = Sunday) {
+  public static function snapNextWeekDay(date : Date, day : Weekday) {
     var d = date.getDay(),
         s : Int = day;
 
@@ -234,10 +233,9 @@ If you are already on the given day, the date will not change.
 
 @param date The date value to snap
 @param day Day to snap to.  Either `Sunday`, `Monday`, `Tuesday` etc.
-@param firstDayOfWk The first day of the week.  Default to `Sunday`.
 @return The date of the day you have snapped to.
 **/
-  public static function snapPrevWeekDay(date : Date, day : Weekday, ?firstDayOfWk : Weekday = Sunday) {
+  public static function snapPrevWeekDay(date : Date, day : Weekday) {
     var d = date.getDay(),
         s : Int = day;
 
@@ -411,7 +409,7 @@ Snaps a time to the nearest second, minute, hour, day, week, month or year.
     };
 
 /**
-Snaps a time to the closes given weekday.  The time within the day will stay the same.
+Snaps a time to the given weekday inside the current week.  The time within the day will stay the same.
 
 If you are already on the given day, the date will not change.
 
@@ -424,17 +422,16 @@ If you are already on the given day, the date will not change.
     return Dates.snapToWeekDay(Date.fromTime(time), day, firstDayOfWk).getTime();
 
 /**
-Snaps a time to the next given weekday in the current week.  The time within the day will stay the same.
+Snaps a time to the next given weekday.  The time within the day will stay the same.
 
 If you are already on the given day, the date will not change.
 
 @param time The unix time in milliseconds.  See date.getTime()
 @param day Day to snap to.  Either `Sunday`, `Monday`, `Tuesday` etc.
-@param firstDayOfWk The first day of the week.  Default to `Sunday`.
 @return The unix time of the day you have snapped to.
 **/
-  inline public static function snapNextWeekDay(time : Float, day : Weekday, ?firstDayOfWk : Weekday) : Float
-    return Dates.snapNextWeekDay(Date.fromTime(time), day, firstDayOfWk).getTime();
+  inline public static function snapNextWeekDay(time : Float, day : Weekday) : Float
+    return Dates.snapNextWeekDay(Date.fromTime(time), day).getTime();
 
 /**
 Snaps a time to the previous given weekday.  The time within the day will stay the same.
@@ -443,11 +440,10 @@ If you are already on the given day, the date will not change.
 
 @param time The unix time in milliseconds.  See date.getTime()
 @param day Day to snap to.  Either `Sunday`, `Monday`, `Tuesday` etc.
-@param firstDayOfWk The first day of the week.  Default to `Sunday`.
 @return The unix time of the day you have snapped to.
 **/
-  inline public static function snapPrevWeekDay(time : Float, day : Weekday, ?firstDayOfWk : Weekday) : Float
-    return Dates.snapPrevWeekDay(Date.fromTime(time), day, firstDayOfWk).getTime();
+  inline public static function snapPrevWeekDay(time : Float, day : Weekday) : Float
+    return Dates.snapPrevWeekDay(Date.fromTime(time), day).getTime();
 
   inline static function r(t : Float, v : Float)
     return Math.fround(t / v) * v;
