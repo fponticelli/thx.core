@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
-  "releasenote": "Added alias to Either, Arrays.rotate and guard in Timer (for neko).",
-  "version": "0.17.4",
+  "releasenote": "Added support for `TNull` in Types and improved `Date` documentation.",
+  "version": "0.17.5",
   "contributors": ["fponticelli"]
 }
