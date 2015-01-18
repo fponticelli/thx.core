@@ -145,7 +145,7 @@ in milliseconds is passed since the latest time callback was invoked.
         };
 
     untyped __js__("requestAnimationFrame")(f);
-    return function() cancelled = false;
+    return function() cancelled = true;
 #elseif openfl
     var current = time(),
         next,

@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
-  "releasenote": "Added support for `TNull` in Types and improved `Date` documentation.",
-  "version": "0.17.5",
+  "releasenote": "Fixed `thx.core.Timer.frame()` for JS.",
+  "version": "0.17.6",
   "contributors": ["fponticelli"]
 }
