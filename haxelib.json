@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
-  "releasenote": "Fixed `thx.core.Timer.frame()` for JS.",
-  "version": "0.17.6",
+  "releasenote": "Added thx.macro.MacroFields.",
+  "version": "0.17.7",
   "contributors": ["fponticelli"]
 }
