@@ -12,4 +12,21 @@ Converts a boolean to an integer value (`true` => `1`, `false` => `0`).
 */
   public static function toInt(v : Bool)
     return v ? 1 : 0;
+
+/**
+Returns `true` if the passed value is either `true` or `false` (case insensitive).
+*/
+  public static function canParse(v : String) return switch v.toLowerCase() {
+    case "true", "false": true;
+    case _: false;
+  }
+
+/**
+Returns `true`/`false` if the passed value is `true`/`false` (case insensitive); with any other value it will return null.
+*/
+  public static function parse(v : String) return switch v.toLowerCase() {
+    case "true": true;
+    case "false": false;
+    case _: null;
+  }
 }
