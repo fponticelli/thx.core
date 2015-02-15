@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
-  "releasenote": "Added thx.macro.MacroFields.",
-  "version": "0.17.7",
+  "releasenote": "Added Bool.parse/tryParse.",
+  "version": "0.17.8",
   "contributors": ["fponticelli"]
 }
