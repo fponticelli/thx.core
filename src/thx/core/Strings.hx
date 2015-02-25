@@ -169,6 +169,12 @@ or case neutral characters.
     return value == null || value == '';
 
 /**
+Returns a random substring from the `value` argument. The length of such value is by default `1`.
+**/
+  public static function random(value : String, length = 1)
+    return value.substr(Math.floor((value.length - length + 1) * Math.random()), length);
+
+/**
 It returns an iterator holding in sequence one character of the string per iteration.
 **/
   public static function iterator(s : String) : Iterator<String>
