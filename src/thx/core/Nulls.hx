@@ -83,7 +83,7 @@ trace((o.a.b.c).opt()); // prints 'A'
         if(Context.defined("python"))
           Context.error("Nulls.opt doesn't support some method calls on Python", value.pos);
         var s = TypedExprTools.toString(e, true);
-        trace(s);
+        //trace(s);
         ids.push(s);
       case _:
         throw 'invalid expression $e';
