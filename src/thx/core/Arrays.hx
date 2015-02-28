@@ -138,6 +138,18 @@ trace(r); // [[1,3,5],[2,3,5],[1,4,5],[2,4,5],[1,3,6],[2,3,6],[1,4,6],[2,4,6]]
   }
 
 /**
+Returns a new array containing only unique values from the input array.
+**/
+  public static function distinct<T>(array : Array<T>) : Array<T> {
+    var result = [];
+    for(v in array) {
+      if(!contains(result, v))
+        result.push(v);
+    }
+    return result;
+  }
+
+/**
 It allows to iterate an array pairing each element with every other element in the array.
 
 The iteration ends as soon as the `callback` returns `false`.
