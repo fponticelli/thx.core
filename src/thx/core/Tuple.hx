@@ -60,6 +60,9 @@ Provides a string representation of the Tuple
 **/
   inline public function toString()
     return 'Tuple1(${this})';
+
+  @:from inline static public function arrayToTuple<T>(v : Array<T>)
+    return new Tuple1(v[0]);
 }
 
 /**
@@ -118,6 +121,9 @@ Provides a string representation of the Tuple
 **/
   inline public function toString()
     return 'Tuple2(${this._0},${this._1})';
+
+  @:from inline static public function arrayToTuple2<T>(v : Array<T>) : Tuple2<T, T>
+    return new Tuple2(v[0], v[1]);
 }
 
 /**
@@ -163,6 +169,9 @@ Provides a string representation of the Tuple
 **/
   inline public function toString()
     return 'Tuple3(${this._0},${this._1},${this._2})';
+
+  @:from inline static public function arrayToTuple3<T>(v : Array<T>) : Tuple3<T, T, T>
+    return new Tuple3(v[0], v[1], v[2]);
 }
 
 /**
@@ -208,6 +217,9 @@ Provides a string representation of the Tuple
 **/
   inline public function toString()
     return 'Tuple4(${this._0},${this._1},${this._2},${this._3})';
+
+  @:from inline static public function arrayToTuple4<T>(v : Array<T>) : Tuple4<T, T, T, T>
+    return new Tuple4(v[0], v[1], v[2], v[3]);
 }
 
 /**
@@ -253,6 +265,9 @@ Provides a string representation of the Tuple
 **/
   inline public function toString()
     return 'Tuple5(${this._0},${this._1},${this._2},${this._3},${this._4})';
+
+  @:from inline static public function arrayToTuple5<T>(v : Array<T>) : Tuple5<T, T, T, T, T>
+    return new Tuple5(v[0], v[1], v[2], v[3], v[4]);
 }
 
 /**
@@ -291,4 +306,7 @@ Provides a string representation of the Tuple
 **/
   inline public function toString()
     return 'Tuple6(${this._0},${this._1},${this._2},${this._3},${this._4},${this._5})';
+
+  @:from inline static public function arrayToTuple6<T>(v : Array<T>) : Tuple6<T, T, T, T, T, T>
+    return new Tuple6(v[0], v[1], v[2], v[3], v[4], v[5]);
 }
