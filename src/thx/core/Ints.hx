@@ -183,6 +183,12 @@ Transform an `Int` value to a `String` using the specified `base`
   }
 
 /**
+Converts and integer value into a boolean. Any value different from `0` will evaluate to `true`.
+**/
+  public static inline function toBool(v : Int)
+    return v != 0;
+
+/**
 `sign` returns `-1` if `value` is a negative number, `1` otherwise.
 */
   inline public static function sign(value : Int) : Int
