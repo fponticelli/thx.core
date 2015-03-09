@@ -27,6 +27,6 @@ Returns `true`/`false` if the passed value is `true`/`false` (case insensitive);
   public static function parse(v : String) : Bool return switch v.toLowerCase() {
     case "true", "1", "on": true;
     case "false", null, "0", "off": false;
-    case v: 'throw unable to parse "$v"';
+    case v: throw 'unable to parse "$v"';
   }
 }
