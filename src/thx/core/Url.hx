@@ -7,8 +7,8 @@ abstract Url(UrlType) from UrlType to UrlType {
   }
 
   public var host(get, set) : String;
-  public var isAbsolute;
-  public var isRelative;
+  public var isAbsolute(get, null) : Bool;
+  public var isRelative(get, null) : Bool;
   public var href(get, set) : String;
   public var protocol(get, set) : String;
   // concatenation of pathname and search
@@ -43,5 +43,6 @@ typedef UrlType = {
   port: Int,
   pathname: String,
   query: QueryString,
+  search: String, // for unparsable query string
   hash: String
 }
