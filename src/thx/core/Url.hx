@@ -2,6 +2,7 @@ package thx.core;
 
 @:forward(slashes)
 abstract Url(UrlType) from UrlType to UrlType {
+  static var pattern = ~/^(((([^:\/#\?]+:)?(?:(\/\/)((?:(([^:@\/#\?]+)(?:\:([^:@\/#\?]+))?)@)?(([^:\/#\?\]\[]+|\[[^\/\]@#?]+\])(?:\:([0-9]+))?))?)?)?((\/?(?:[^\/\?#]+\/+)*)([^\?#]*)))?(\?[^#]+)?)(#.*)?/;
   @:from public static function parse(s : String) : Url {
     // normalize ., .., //
   }
@@ -9,14 +10,18 @@ abstract Url(UrlType) from UrlType to UrlType {
   public var host(get, set) : String;
   public var isAbsolute(get, null) : Bool;
   public var isRelative(get, null) : Bool;
+  public var hasAuth(get, null) : Bool;
   public var href(get, set) : String;
   public var protocol(get, set) : String;
-  // concatenation of pathname and search
+  // concatenation of pathname and search || querystring
   public var path(get, set) : String;
 
-  @:to public function toString() {
-
-  }
+  @:to public function toString()
+    return if(isAbsolute) {
+      '$protocol:${slashes?"//":""}${hasAuth?auth+"@":""}$host$path${hasHash?"#"+hash:""}';
+    } else {
+      '$path${hasHash?"#"+hash:""}';
+    }
 
   function get_href()
     return toString();
