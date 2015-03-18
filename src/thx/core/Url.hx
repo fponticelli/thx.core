@@ -21,34 +21,32 @@ abstract Url(UrlType) from UrlType to UrlType {
     return o;
   }
 
-  public var host(get, set) : String;
-  public var hostName(get, set) : String;
-  public var isAbsolute(get, never) : Bool;
-  public var isRelative(get, never) : Bool;
-  public var hasAuth(get, never) : Bool;
-  public var hasHash(get, never) : Bool;
-  public var hasProtocol(get, never) : Bool;
-  public var hasSearch(get, never) : Bool;
-  public var hasQueryString(get, never) : Bool;
-  public var hasPort(get, never) : Bool;
-  public var href(get, set) : String;
-  public var protocol(get, set) : String;
-  public var port(get, set) : Int;
-  // concatenation of pathName and search || querystring
-  public var path(get, set) : String;
-  public var pathName(get, set) : String;
   public var auth(get, set) : String;
   public var hash(get, set) : String;
-  public var slashes(get, set) : Bool;
+  public var hasAuth(get, never) : Bool;
+  public var hasHash(get, never) : Bool;
+  public var hasPort(get, never) : Bool;
+  public var hasProtocol(get, never) : Bool;
+  public var hasQueryString(get, never) : Bool;
+  public var hasSearch(get, never) : Bool;
+  public var host(get, set) : String;
+  public var hostName(get, set) : String;
+  public var href(get, set) : String;
+  public var isAbsolute(get, never) : Bool;
+  public var isRelative(get, never) : Bool;
+  public var path(get, set) : String;
+  public var pathName(get, set) : String;
+  public var port(get, set) : Int;
+  public var protocol(get, set) : String;
   public var queryString(get, set) : QueryString;
   public var search(get, set) : String;
+  public var slashes(get, set) : Bool;
 
   @:to public function toString()
-    return if(isAbsolute) {
+    return if(isAbsolute)
       '${hasProtocol ? protocol + ":" : ""}${slashes?"//":""}${hasAuth?auth+"@":""}$host$path${hasHash?"#"+hash:""}';
-    } else {
+    else
       '$path${hasHash?"#"+hash:""}';
-    }
 
   inline function get_protocol()
     return this.protocol;
@@ -60,7 +58,14 @@ abstract Url(UrlType) from UrlType to UrlType {
     return this.hostName + (hasPort ? ':$port' : "");
 
   inline function set_host(host : String) {
-    // TODO
+    var p = host.indexOf(":");
+    if(p < 0) {
+      this.hostName = host;
+      this.port = null;
+    } else {
+      this.hostName = host.substring(0, p);
+      this.port = Std.parseInt(host.substring(p + 1));
+    }
     return host;
   }
 
@@ -115,6 +120,8 @@ inline function set_hostName(hostName : String)
     var p = value.indexOf("?");
     if(p < 0) {
       this.pathName = value;
+      this.search = null;
+      this.queryString = null;
     } else {
       this.pathName = value.substring(0, p);
       search = value.substring(p + 1);
