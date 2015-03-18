@@ -1,14 +1,33 @@
 package thx.core;
 
 abstract Url(UrlType) from UrlType to UrlType {
-  //static var pattern = ~/^(((([^:\/#\?]+:)?(?:(\/\/)((?:(([^:@\/#\?]+)(?:\:([^:@\/#\?]+))?)@)?(([^:\/#\?\]\[]+|\[[^\/\]@#?]+\])(?:\:([0-9]+))?))?)?)?((\/?(?:[^\/\?#]+\/+)*)([^\?#]*)))?(\?[^#]+)?)(#.*)?/;
-  static var pattern = ~/./;
+  static var pattern = ~/^((((?:([^:\/#\?]+):)?(?:(\/\/)?((?:(([^:@\/#\?]+)(?:[:]([^:@\/#\?]+))?)@)?(([^:\/#\?\]\[]+|\[[^\/\]@#?]+\])(?:[:]([0-9]+))?))?)?)?((\/?(?:[^\/\?#]+\/+)*)([^\?#]*)))?(?:\?([^#]+))?)(?:#(.*))?/;
   @:from public static function parse(s : String) : Url {
-    // normalize ., .., //
-    return null;
+    if(null == s) return null;
+    if(!pattern.match(s)) throw 'unable to parse "$s" to Url';
+    for(i in 1...18)
+      trace(pattern.matched(i));
+    var port = pattern.matched(12),
+        search = pattern.matched(16),
+        qs = try QueryString.parse(search) catch(e : Dynamic) null;
+    if(null != qs) {
+      search = null;
+    }
+    return {
+      protocol : pattern.matched(4),
+      slashes: pattern.matched(5) == "//",
+      auth: pattern.matched(7),
+      hostname: pattern.matched(11),
+      port: null == port ? null : Std.parseInt(port),
+      pathname: pattern.matched(13),
+      query: qs,
+      search: search,
+      hash: pattern.matched(17)
+    };
   }
 
   public var host(get, set) : String;
+  public var hostname(get, set) : String;
   public var isAbsolute(get, never) : Bool;
   public var isRelative(get, never) : Bool;
   public var hasAuth(get, never) : Bool;
@@ -19,6 +38,7 @@ abstract Url(UrlType) from UrlType to UrlType {
   // concatenation of pathname and search || querystring
   public var port(get, set) : Int;
   public var path(get, set) : String;
+  public var pathname(get, set) : String;
   public var auth(get, set) : String;
   public var hash(get, set) : String;
   public var slashes(get, set) : Bool;
@@ -43,6 +63,12 @@ abstract Url(UrlType) from UrlType to UrlType {
     // TODO
     return host;
   }
+
+inline function get_hostname()
+  return this.hostname;
+
+inline function set_hostname(hostname : String)
+  return this.hostname = hostname;
 
   function get_href()
     return toString();
@@ -98,6 +124,13 @@ abstract Url(UrlType) from UrlType to UrlType {
     return null;
 
   inline function set_path(value) {
+    return value;
+  }
+
+  inline function get_pathname()
+    return null;
+
+  inline function set_pathname(value) {
     return value;
   }
 
