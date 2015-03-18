@@ -27,6 +27,7 @@ abstract Url(UrlType) from UrlType to UrlType {
   public var isRelative(get, never) : Bool;
   public var hasAuth(get, never) : Bool;
   public var hasHash(get, never) : Bool;
+  public var hasProtocol(get, never) : Bool;
   public var hasSearch(get, never) : Bool;
   public var hasQueryString(get, never) : Bool;
   public var hasPort(get, never) : Bool;
@@ -44,7 +45,7 @@ abstract Url(UrlType) from UrlType to UrlType {
 
   @:to public function toString()
     return if(isAbsolute) {
-      '$protocol:${slashes?"//":""}${hasAuth?auth+"@":""}$host$path${hasHash?"#"+hash:""}';
+      '${hasProtocol ? protocol + ":" : ""}${slashes?"//":""}${hasAuth?auth+"@":""}$host$path${hasHash?"#"+hash:""}';
     } else {
       '$path${hasHash?"#"+hash:""}';
     }
@@ -80,6 +81,9 @@ inline function set_hostName(hostName : String)
   inline function get_hasPort()
     return this.port != null;
 
+  inline function get_hasProtocol()
+    return this.protocol != null;
+
   inline function get_hasHash()
     return this.hash != null;
 
@@ -93,10 +97,10 @@ inline function set_hostName(hostName : String)
     return this.search != null || hasQueryString;
 
   inline function get_isRelative()
-  return this.protocol == null;
+  return this.hostName == null;
 
   inline function get_isAbsolute()
-    return this.protocol != null;
+    return this.hostName != null;
 
   inline function get_port()
     return this.port;
