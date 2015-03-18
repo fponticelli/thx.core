@@ -42,17 +42,29 @@ abstract Url(UrlType) from UrlType to UrlType {
   public var search(get, set) : String;
   public var slashes(get, set) : Bool;
 
-  @:to public function toString()
-    return if(isAbsolute)
-      '${hasProtocol ? protocol + ":" : ""}${slashes?"//":""}${hasAuth?auth+"@":""}$host$path${hasHash?"#"+hash:""}';
-    else
-      '$path${hasHash?"#"+hash:""}';
+  inline function get_auth()
+    return this.auth;
 
-  inline function get_protocol()
-    return this.protocol;
+  inline function set_auth(value : String)
+    return this.auth = value;
 
-  function set_protocol(value : String)
-    return this.protocol = null == value ? null : value.toLowerCase();
+  inline function get_hasAuth()
+    return this.auth != null;
+
+  inline function get_hasHash()
+    return this.hash != null;
+
+  inline function get_hasPort()
+    return this.port != null;
+
+  inline function get_hasProtocol()
+    return this.protocol != null;
+
+  inline function get_hasQueryString()
+    return this.queryString != null;
+
+  inline function get_hasSearch()
+    return this.search != null || hasQueryString;
 
   inline function get_host()
     return this.hostName + (hasPort ? ':$port' : "");
@@ -69,11 +81,11 @@ abstract Url(UrlType) from UrlType to UrlType {
     return host;
   }
 
-inline function get_hostName()
-  return this.hostName;
+  inline function get_hostName()
+    return this.hostName;
 
-inline function set_hostName(hostName : String)
-  return this.hostName = hostName;
+  inline function set_hostName(hostName : String)
+    return this.hostName = hostName;
 
   function get_href()
     return toString();
@@ -83,35 +95,16 @@ inline function set_hostName(hostName : String)
     return value;
   }
 
-  inline function get_hasPort()
-    return this.port != null;
-
-  inline function get_hasProtocol()
-    return this.protocol != null;
-
-  inline function get_hasHash()
-    return this.hash != null;
-
-  inline function get_hasAuth()
-    return this.auth != null;
-
-  inline function get_hasQueryString()
-    return this.queryString != null;
-
-  inline function get_hasSearch()
-    return this.search != null || hasQueryString;
-
-  inline function get_isRelative()
-  return this.hostName == null;
-
   inline function get_isAbsolute()
     return this.hostName != null;
 
-  inline function get_port()
-    return this.port;
-
-  inline function set_port(value)
-    return this.port = value;
+  inline function get_isRelative()
+  return this.hostName == null;
+  @:to public function toString()
+    return if(isAbsolute)
+      '${hasProtocol ? protocol + ":" : ""}${slashes?"//":""}${hasAuth?auth+"@":""}$host$path${hasHash?"#"+hash:""}';
+    else
+      '$path${hasHash?"#"+hash:""}';
 
   inline function get_path()
     return this.pathName + (hasSearch ? '?$search' : "");
@@ -135,11 +128,17 @@ inline function set_hostName(hostName : String)
   inline function set_pathName(value : String)
     return this.pathName = value;
 
-  inline function get_auth()
-    return this.auth;
+  inline function get_port()
+    return this.port;
 
-  inline function set_auth(value : String)
-    return this.auth = value;
+  inline function set_port(value)
+    return this.port = value;
+  inline function get_protocol()
+    return this.protocol;
+
+  function set_protocol(value : String)
+    return this.protocol = null == value ? null : value.toLowerCase();
+
 
   inline function get_hash()
     return this.hash;
