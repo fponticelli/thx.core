@@ -15,12 +15,14 @@ class TestAll {
 		runner.addCase(new thx.core.TestMaps());
 		runner.addCase(new thx.core.TestNulls());
 		runner.addCase(new thx.core.TestObjects());
+		runner.addCase(new thx.core.TestQueryString());
 		runner.addCase(new thx.core.TestSet());
 		runner.addCase(new thx.core.TestStrings());
 #if (js || flash || java)
 		runner.addCase(new thx.core.TestTimer());
 #end
 		runner.addCase(new thx.core.TestTuple());
+		runner.addCase(new thx.core.TestUrl());
 	}
 
 	public static function main() {
