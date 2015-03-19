@@ -5,5 +5,5 @@
 -swf-version 11
 -main TestAll
 -D thx-core
--debug
--D fdb
+#-debug
+#-D fdb
