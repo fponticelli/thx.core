@@ -2,6 +2,7 @@ package thx.core;
 
 import haxe.PosInfos;
 import haxe.CallStack;
+import thx.core.error.ErrorWrapper;
 
 /**
 Defines a generic Error type. When the target platform is JS, `Error` extends the native
@@ -16,7 +17,7 @@ If `err` is already an instance of `Error`, it is returned and nothing is create
   public static function fromDynamic(err : Dynamic, ?pos : PosInfos) : Error {
     if(Std.is(err, Error))
       return cast err;
-    return new Error(""+err, null, pos);
+    return new ErrorWrapper(""+err, err, null, pos);
   }
 
 #if !js
