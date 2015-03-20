@@ -8,32 +8,32 @@ class TestQueryString {
 
   public function testParse() {
     Assert.same(
-      { foo : ["bar"] },
+      { foo : "bar" },
       QueryString.parse("?foo=bar").object()
     );
 
     Assert.same(
-      { foo : ["bar"] },
+      { foo : "bar" },
       QueryString.parse("#foo=bar").object()
     );
 
     Assert.same(
-      { foo : ["bar"] },
+      { foo : "bar" },
       QueryString.parse("foo=bar").object()
     );
 
     Assert.same(
-      { foo : [] },
+      { foo : null },
       QueryString.parse("foo").object()
     );
 
     Assert.same(
-      { foo : [], key : [] },
+      { foo : null, key : null },
       QueryString.parse("foo&key").object()
     );
 
     Assert.same(
-      { foo : ["bar"], key : [] },
+      { foo : "bar", key : null },
       QueryString.parse("foo=bar&key").object()
     );
 
@@ -58,7 +58,7 @@ class TestQueryString {
     );
 
     Assert.same(
-      { foo : ["foo faz"], key : ["bar baz  "] },
+      { foo : "foo faz", key : "bar baz  " },
       QueryString.parse("foo+faz=bar+baz++").object()
     );
 
