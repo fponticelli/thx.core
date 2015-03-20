@@ -1,8 +1,10 @@
 package thx.core;
 
 import thx.core.Tuple;
+using thx.core.Arrays;
 using thx.core.Strings;
 using thx.core.Iterators;
+import thx.core.Objects;
 
 abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryStringValue> to Map<String, QueryStringValue>{
   public static var separator = "&";
@@ -20,15 +22,22 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
     s.split(separator)
       .map(function(v) {
         var parts = v.split(assignment);
+        if(parts[0] == "") return;
         qs.add(decodeURIComponent(parts[0]), null == parts[1] ? null : decodeURIComponent(parts[1]));
       });
     return qs;
   }
 
   @:from public static function fromObject(o : {}) : QueryString {
-    var map = new Map();
-
-    return map;
+    var qs : QueryString = new Map();
+    Objects.tuples(o).map(function(t) {
+        if(Std.is(t.right, Array)) {
+          qs.setMany(t.left, (cast t.right : Array<Dynamic>).pluck('$_'));
+        } else {
+          qs.set(t.left, '${t.right}');
+        }
+      });
+    return qs;
   }
 
   @:from public static function parse(s : String) : QueryString
@@ -72,6 +81,7 @@ public function add(name : String, value : String) : QueryString {
   var arr : Array<String> = this.get(name);
   if(null == arr) {
     arr = value == null ? [] : [value];
+    this.set(name, arr);
   } else if(null != value) {
     arr.push(value);
   }
@@ -85,9 +95,14 @@ public function add(name : String, value : String) : QueryString {
     if(null == encodeURIComponent)
       encodeURIComponent = QueryString.encodeURIComponent;
     return this.keys().map(function(k) {
-        var v : String = this.get(k);
-        return encodeURIComponent(k) + (null == v ? "" : assignment+encodeURIComponent(v));
-      }).join(separator);
+        var vs : Array<String> = this.get(k),
+            ek = encodeURIComponent(k);
+        if(vs.length == 0)
+          return [ek];
+        else {
+          return vs.pluck('$ek$assignment${encodeURIComponent(_)}');
+        }
+      }).flatten().join(separator);
   }
 
   @:to inline public function toString()

@@ -27,6 +27,11 @@ class TestQueryString {
       QueryString.parse("foo").object()
     );
 
+    Assert.equals(
+      "foo",
+      QueryString.parse("foo").toString()
+    );
+
     Assert.same(
       { foo : null, key : null },
       QueryString.parse("foo&key").object()
@@ -58,7 +63,7 @@ class TestQueryString {
     );
 
     Assert.same(
-      { foo : "foo faz", key : "bar baz  " },
+      { "foo faz" : "bar baz  " },
       QueryString.parse("foo+faz=bar+baz++").object()
     );
 
