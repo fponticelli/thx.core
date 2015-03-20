@@ -16,9 +16,13 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
     if(s.startsWith("?") || s.startsWith("#"))
       s = s.substring(1);
     s = s.ltrim();
-    var map = new Map();
-
-    return map;
+    var qs : QueryString = new Map();
+    s.split(separator)
+      .map(function(v) {
+        var parts = v.split(assignment);
+        qs.add(decodeURIComponent(parts[0]), null == parts[1] ? null : decodeURIComponent(parts[1]));
+      });
+    return qs;
   }
 
   @:from public static function fromObject(o : {}) : QueryString {
@@ -60,14 +64,19 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
     return this.get(name);
 
   public function set(name : String, value : String) : QueryString {
-    var arr : Array<String> = this.get(name);
-    if(null == arr) {
-      arr = [value];
-    } else {
-      arr.push(value);
-    }
+    this.set(name, [value]);
     return this;
   }
+
+public function add(name : String, value : String) : QueryString {
+  var arr : Array<String> = this.get(name);
+  if(null == arr) {
+    arr = value == null ? [] : [value];
+  } else if(null != value) {
+    arr.push(value);
+  }
+  return this;
+}
 
   inline public function setMany(name : String, values : Array<String>)
     return this.set(name, values);
@@ -75,7 +84,10 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
   public function toStringWithSymbols(separator : String, assignment : String, ?encodeURIComponent : String -> String) {
     if(null == encodeURIComponent)
       encodeURIComponent = QueryString.encodeURIComponent;
-    return this.keys().pluck(encodeURIComponent(_)+assignment+encodeURIComponent(this.get(_))).join(separator);
+    return this.keys().map(function(k) {
+        var v : String = this.get(k);
+        return encodeURIComponent(k) + (null == v ? "" : assignment+encodeURIComponent(v));
+      }).join(separator);
   }
 
   @:to inline public function toString()
@@ -84,5 +96,5 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
 
 abstract QueryStringValue(Array<String>) from Array<String> to Array<String> {
   @:to function toString() : String
-    return this.join(",");
+    return this.length == 0 ? null : this.join(",");
 }
