@@ -13,12 +13,14 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
   public static var decodeURIComponent = StringTools.urlDecode;
 
   public static function parseWithSymbols(s : String, separator : String, assignment : String, ?decodeURIComponent : String -> String) : QueryString {
+    var qs : QueryString = new Map();
+    if(null == s)
+      return qs;
     if(null == decodeURIComponent)
       decodeURIComponent = QueryString.decodeURIComponent;
     if(s.startsWith("?") || s.startsWith("#"))
       s = s.substring(1);
     s = s.ltrim();
-    var qs : QueryString = new Map();
     s.split(separator)
       .map(function(v) {
         var parts = v.split(assignment);
@@ -92,6 +94,8 @@ public function add(name : String, value : String) : QueryString {
     return this.set(name, values);
 
   public function toStringWithSymbols(separator : String, assignment : String, ?encodeURIComponent : String -> String) {
+    if(null == this)
+      return null;
     if(null == encodeURIComponent)
       encodeURIComponent = QueryString.encodeURIComponent;
     return this.keys().map(function(k) {
@@ -111,5 +115,5 @@ public function add(name : String, value : String) : QueryString {
 
 abstract QueryStringValue(Array<String>) from Array<String> to Array<String> {
   @:to function toString() : String
-    return this.length == 0 ? null : this.join(",");
+    return this == null || this.length == 0 ? null : this.join(",");
 }
