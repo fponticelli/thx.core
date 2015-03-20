@@ -59,6 +59,9 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
     return o;
   }
 
+  inline public function isEmpty() : Bool
+    return !this.iterator().hasNext();
+
   inline public function exist(name : String) : Bool
     return this.exists(name);
 
