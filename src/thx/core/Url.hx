@@ -61,7 +61,7 @@ abstract Url(UrlType) from UrlType to UrlType {
     return this.protocol != null;
 
   inline function get_hasQueryString()
-    return this.queryString != null;
+    return this.queryString != null && !this.queryString.isEmpty();
 
   inline function get_hasSearch()
     return this.search != null || hasQueryString;
@@ -156,20 +156,22 @@ abstract Url(UrlType) from UrlType to UrlType {
     return this.queryString;
 
   inline function set_queryString(value : QueryString) {
-    if(null != value && null != search)
+    if(null != value)
       this.search = null;
     return this.queryString = value;
   }
 
-  inline function get_search()
-    return this.search;
+  function get_search() : String
+    return null != this.search && "" != this.search ? this.search : this.queryString;
 
   function set_search(value : String) {
-    var qs = try QueryString.parse(search) catch(e : Dynamic) null;
-    if(qs == null) {
+    var qs = try QueryString.parse(value) catch(e : Dynamic) null;
+    if(qs == null || qs.isEmptyOrMono()) {
       this.search = value;
+      this.queryString = null;
     } else {
-      queryString = qs;
+      this.queryString = qs;
+      this.search = null;
     }
     return value;
   }

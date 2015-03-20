@@ -30,8 +30,12 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
     return qs;
   }
 
+  @:from inline public static function parse(s : String) : QueryString
+    return parseWithSymbols(s, separator, assignment, decodeURIComponent);
+
   @:from public static function fromObject(o : {}) : QueryString {
     var qs : QueryString = new Map();
+    if(!Reflect.isObject(o)) throw 'unable to convert $o to QueryString';
     Objects.tuples(o).map(function(t) {
         if(Std.is(t.right, Array)) {
           qs.setMany(t.left, (cast t.right : Array<Dynamic>).pluck('$_'));
@@ -41,9 +45,6 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
       });
     return qs;
   }
-
-  @:from public static function parse(s : String) : QueryString
-    return parseWithSymbols(s, separator, assignment, decodeURIComponent);
 
   @:to public function object() : {} {
     var o = {};
@@ -61,6 +62,15 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
 
   inline public function isEmpty() : Bool
     return !this.iterator().hasNext();
+
+  inline public function isEmptyOrMono() : Bool {
+    var arr = this.keys().toArray();
+    if(arr.length == 0)
+      return true;
+    if(arr.length != 1)
+      return false;
+    return (this.get(arr[0]) : Array<String>).length == 0;
+  }
 
   inline public function exist(name : String) : Bool
     return this.exists(name);
@@ -82,16 +92,16 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
     return this;
   }
 
-public function add(name : String, value : String) : QueryString {
-  var arr : Array<String> = this.get(name);
-  if(null == arr) {
-    arr = value == null ? [] : [value];
-    this.set(name, arr);
-  } else if(null != value) {
-    arr.push(value);
+  public function add(name : String, value : String) : QueryString {
+    var arr : Array<String> = this.get(name);
+    if(null == arr) {
+      arr = value == null ? [] : [value];
+      this.set(name, arr);
+    } else if(null != value) {
+      arr.push(value);
+    }
+    return this;
   }
-  return this;
-}
 
   inline public function setMany(name : String, values : Array<String>)
     return this.set(name, values);
