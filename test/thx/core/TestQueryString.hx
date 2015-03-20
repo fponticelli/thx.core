@@ -6,7 +6,7 @@ using thx.core.QueryString;
 class TestQueryString {
   public function new() { }
 
-  public function testParse() {
+  public function testBasics() {
     Assert.same(
       { foo : "bar" },
       QueryString.parse("?foo=bar").object()
@@ -85,6 +85,11 @@ class TestQueryString {
     Assert.equals(
       "abc=abc&foo=bar&foo=baz",
       ({abc: 'abc', foo: ['bar', 'baz']} : QueryString).toString()
+    );
+
+    Assert.equals(
+      "a=b&c=d",
+      ("a=b&c=d" : QueryString).toString()
     );
   }
 }
