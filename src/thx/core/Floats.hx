@@ -61,7 +61,7 @@ and the opposite (additive inverse or `-max`) as the lower limit.
 It returns the comparison value (an integer number) between two `float` values.
 **/
   inline public static function compare(a : Float, b : Float) : Int
-    return a < b ? -1 : (b > a ? 1 : 0);
+    return a < b ? -1 : (a > b ? 1 : 0);
 
 /**
 Rounds a number down to the specified number of decimals.

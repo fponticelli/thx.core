@@ -346,6 +346,13 @@ It works the same as `Array.sort()` but doesn't change the original array and re
   }
 
 /**
+Uses the pluck strategy to order an array.  Returns an ordered copy of the Array, leaving the original unchanged.
+Arguments for pluck are `_0` and `_1`.
+**/
+  macro public static function orderPluck<T>(array : ExprOf<Array<T>>, expr : ExprOf<Int>)
+    return macro $e{array}.order(function(_0, _1) return $e{expr});
+
+/**
 The method works like a normal `Array.map()` but instead of passing a function that
 receives an item, you can pass an expression that defines how to access to a member
 of the item itself.
@@ -507,7 +514,7 @@ It returns a copy of the array with its elements randomly changed in position.
 /**
 Uses the plcuk strategy to sort an array. Arguments for pluck are `_0` and `_1`.
 **/
-  macro public static function sortPluck<T>(array : ExprOf<Array<T>>, expr : ExprOf<Bool>)
+  macro public static function sortPluck<T>(array : ExprOf<Array<T>>, expr : ExprOf<Int>)
     return macro $e{array}.sort(function(_0, _1) return $e{expr});
 
 /**
