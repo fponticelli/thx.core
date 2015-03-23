@@ -7,6 +7,7 @@ package thx.core;
 
 import utest.Assert;
 using thx.core.Arrays;
+using thx.core.Floats;
 
 class TestArrays {
   public function new() { }
@@ -98,6 +99,36 @@ class TestArrays {
 
   public function testCompactInt() {
     Assert.same([1, 0, 2], [null, 1, null, 0, 2].compact());
+  }
+
+  public function testOrder() {
+    var arr = [2,3,1];
+    Assert.same([1,2,3], arr.order(function(_0, _1) return _0 - _1));
+    Assert.same([2,3,1], arr);
+  }
+
+  public function testOrderPluck() {
+    var arr = [2,3,1];
+    Assert.same([1,2,3], arr.orderPluck(_0 - _1));
+    Assert.same([2,3,1], arr);
+  }
+
+  public function testOrderPluckObjectOfInt() {
+    var obj1 = { key: 1 };
+    var obj2 = { key: 2 };
+    var obj3 = { key: 3 };
+    var arr = [obj2, obj3, obj1];
+    Assert.same([obj1, obj2, obj3], arr.orderPluck(_0.key - _1.key));
+    Assert.same([obj2, obj3, obj1], arr);
+  }
+
+  public function testOrderPluckObjectOfFloat() {
+    var obj1 = { key: 1.0 };
+    var obj2 = { key: 2.0 };
+    var obj3 = { key: 3.0 };
+    var arr = [obj2, obj3, obj1];
+    Assert.same([obj1, obj2, obj3], arr.orderPluck(_0.key.compare(_1.key)));
+    Assert.same([obj2, obj3, obj1], arr);
   }
 
   public function testSortPluck() {

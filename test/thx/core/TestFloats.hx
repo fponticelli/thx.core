@@ -34,6 +34,24 @@ class TestFloats {
     Assert.floatEquals( 0, Floats.clampSym( 0, 10));
   }
 
+  public function testCompare() {
+    Assert.equals(-1, (1.0).compare(2.0));
+    Assert.equals(-1, (1.0).compare(3.0));
+    Assert.equals(-1, (-1.0).compare(3.0));
+    Assert.equals(-1, (-2.0).compare(-1.0));
+    Assert.equals(-1, (-Math.PI).compare(Math.PI));
+
+    Assert.equals(0, (1.0).compare(1.0));
+    Assert.equals(0, (2.0).compare(2.0));
+    Assert.equals(0, (-2.0).compare(-2.0));
+    Assert.equals(0, (Math.PI).compare(Math.PI));
+
+    Assert.equals(1, (1.0).compare(-1.0));
+    Assert.equals(1, (2.0).compare(1.0));
+    Assert.equals(1, (-3.0).compare(-56.0));
+    Assert.equals(1, (Math.PI).compare(-Math.PI));
+  }
+
   public function testRound() {
     var value = 123.456;
     Assert.floatEquals(123.5, value.roundTo(1));
