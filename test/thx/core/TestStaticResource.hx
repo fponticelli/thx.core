@@ -2,7 +2,7 @@ package thx.core;
 
 import utest.Assert;
 
-class TestResource {
+class TestStaticResource {
 	public function new() {}
 
 	public function testBasics() {
