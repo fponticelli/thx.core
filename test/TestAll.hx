@@ -16,6 +16,7 @@ class TestAll {
 		runner.addCase(new thx.core.TestNulls());
 		runner.addCase(new thx.core.TestObjects());
 		runner.addCase(new thx.core.TestQueryString());
+		runner.addCase(new thx.core.TestResource());
 		runner.addCase(new thx.core.TestSet());
 		runner.addCase(new thx.core.TestStrings());
 #if (js || flash || java)
