@@ -23,7 +23,7 @@ class TestUrl {
 
   public function testToString() {
     var urls : Array<String> = [
-      "http://user:password@www.example.com:8888/some/path/name.ext?a=b&c=d#hashtag/is/here",
+      "http://user:password@www.example.com:8888/some/path/name.ext?a=b#hashtag/is/here",
       "http://example.com",
       "irc://irc.example.com/channel",
       "www.example.com/foo",
