@@ -16,17 +16,23 @@ import thx.core.Nil;
 import thx.core.Nulls;
 import thx.core.Objects;
 import thx.core.Options;
+import thx.core.QueryString;
 import thx.core.Result;
 import thx.core.Set;
+import thx.core.StaticResource;
 import thx.core.Strings;
 #if (java || js || flash)
 import thx.core.Timer;
 #end
 import thx.core.Tuple;
 import thx.core.Types;
+import thx.core.Url;
 import thx.core.UUID;
 import thx.core.error.AbstractMethod;
+import thx.core.error.ErrorWrapper;
 import thx.core.error.NotImplemented;
 import thx.core.error.NullArgument;
+import thx.macro.BuildResource;
+import thx.macro.MacroFields;
 import thx.macro.Macros;
 import thx.macro.MacroTypes;
