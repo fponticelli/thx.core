@@ -47,7 +47,7 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
   }
 
   @:to public function object() : {} {
-    var o = {};
+    var o : Dynamic = {};
     this.keys().map(function(key) {
         var v : Array<String> = this.get(key);
         if(v.length == 0)
@@ -55,8 +55,9 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
         else if(v.length == 1)
           Reflect.setField(o, key, v[0]);
         else
-        Reflect.setField(o, key, v);
+          Reflect.setField(o, key, v);
       });
+    trace(o);
     return o;
   }
 
