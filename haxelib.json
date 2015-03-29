@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
-  "releasenote": "Added Strings.random, Arrays.distinct, Tuple from array, more permissive bool parsing, Ints.toBool, .",
-  "version": "0.18.0",
+  "releasenote": "Added Url and QueryString, Error wrapper (thanks Michael), added Arrays.orderPluck (thanks Andy), and added StaticResource",
+  "version": "0.19.0",
   "contributors": ["fponticelli"]
 }
