@@ -42,6 +42,18 @@ abstract Url(UrlType) from UrlType to UrlType {
   public var search(get, set) : String;
   public var slashes(get, set) : Bool;
 
+  @:op(A == B) public function equals(other : Url) : Bool
+    return
+      this.protocol == other.protocol &&
+      this.slashes == other.slashes &&
+      this.auth == other.auth &&
+      this.hostName == other.hostName &&
+      this.port == other.port &&
+      this.pathName == other.pathName &&
+      this.queryString.equals(other.queryString) &&
+      this.search == other.search &&
+      this.hash == other.hash;
+
   inline function get_auth()
     return this.auth;
 

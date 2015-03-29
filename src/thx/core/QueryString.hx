@@ -122,6 +122,19 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
       }).flatten().join(separator);
   }
 
+  @:op(A == B) public function equals(other : QueryString) {
+    var tuples : Array<Tuple2<String, QueryStringValue>> = thx.core.Maps.tuples((other : Map<String, QueryStringValue>));
+    for(key in this.keys()) {
+      var t = tuples.find(function(item) return item.left == key);
+      if(null == t)
+        return false;
+      if(!this.get(key).equals(t.right))
+        return false;
+      tuples.remove(t);
+    }
+    return tuples.length == 0;
+  }
+
   @:to inline public function toString()
     return toStringWithSymbols(separator, assignment, encodeURIComponent);
 }

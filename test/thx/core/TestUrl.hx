@@ -12,7 +12,11 @@ class TestUrl {
 		Assert.equals("user:password", url.auth);
 		Assert.equals("www.example.com:8888", url.host);
 		Assert.equals("www.example.com", url.hostName);
-		Assert.equals("/some/path/name.ext?a=b&c=d", url.path);
+
+		Assert.isTrue(
+      "/some/path/name.ext?a=b&c=d" == url.path ||
+      "/some/path/name.ext?c=d&a=b" == url.path
+    );
 		Assert.equals("/some/path/name.ext", url.pathName);
 		Assert.equals("hashtag/is/here", url.hash);
 	}

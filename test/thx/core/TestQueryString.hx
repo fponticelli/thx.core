@@ -81,14 +81,20 @@ class TestQueryString {
       ({'foo bar': 'baz faz'} : QueryString).toString()
     );
 
-    Assert.equals(
-      "abc=abc&foo=bar&foo=baz",
-      ({abc: 'abc', foo: ['bar', 'baz']} : QueryString).toString()
+    var qs = ({abc: 'abc', foo: ['bar', 'baz']} : QueryString).toString();
+    Assert.isTrue(
+      "abc=abc&foo=bar&foo=baz" == qs ||
+      "foo=bar&abc=abc&foo=baz" == qs ||
+      "foo=bar&foo=baz&abc=abc" == qs ||
+      "abc=abc&foo=baz&foo=bar" == qs ||
+      "foo=bar&abc=abc&foo=baz" == qs ||
+      "foo=bar&foo=baz&abc=abc" == qs
     );
 
-    Assert.equals(
-      "a=b&c=d",
-      ("a=b&c=d" : QueryString).toString()
+    var qs = ("a=b&c=d" : QueryString).toString();
+    Assert.isTrue(
+      "a=b&c=d" == qs ||
+      "c=d&a=b" == qs
     );
   }
 }
