@@ -32,7 +32,6 @@ import thx.core.error.AbstractMethod;
 import thx.core.error.ErrorWrapper;
 import thx.core.error.NotImplemented;
 import thx.core.error.NullArgument;
-import thx.macro.BuildResource;
 import thx.macro.MacroFields;
 import thx.macro.Macros;
 import thx.macro.MacroTypes;
