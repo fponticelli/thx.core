@@ -36,7 +36,7 @@ abstract Url(UrlType) from UrlType to UrlType {
   public var isRelative(get, never) : Bool;
   public var path(get, set) : String;
   public var pathName(get, set) : String;
-  public var port(get, set) : Int;
+  public var port(get, set) : Null<Int>;
   public var protocol(get, set) : String;
   public var queryString(get, set) : QueryString;
   public var search(get, set) : String;
@@ -183,7 +183,7 @@ typedef UrlType = {
   slashes: Bool,
   auth: String,
   hostName: String,
-  port: Int,
+  port: Null<Int>,
   pathName: String,
   queryString: QueryString,
   search: String, // for unparsable query string

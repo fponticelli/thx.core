@@ -72,10 +72,9 @@ class TestQueryString {
       ({foo: 'bar'} : QueryString).toString()
     );
 
-    Assert.equals(
-      "foo=bar&bar=baz",
-      ({foo: 'bar', bar: 'baz'} : QueryString).toString()
-    );
+    var qs : QueryString = {foo: 'bar', bar: 'baz'};
+    Assert.same(["bar"], qs.get("foo"));
+    Assert.same(["baz"], qs.get("bar"));
 
     Assert.equals(
       "foo%20bar=baz%20faz",
