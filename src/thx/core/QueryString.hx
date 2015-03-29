@@ -9,8 +9,8 @@ import thx.core.Objects;
 abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryStringValue> to Map<String, QueryStringValue>{
   public static var separator = "&";
   public static var assignment = "=";
-  public static var encodeURIComponent = StringTools.urlEncode;
-  public static var decodeURIComponent = StringTools.urlDecode;
+  public static var encodeURIComponent = function(s : String) return s.urlEncode().replace("%20", "+");
+  public static var decodeURIComponent = function(s : String) return s.urlDecode().replace("+", " ");
 
   public static function parseWithSymbols(s : String, separator : String, assignment : String, ?decodeURIComponent : String -> String) : QueryString {
     var qs : QueryString = new Map();
@@ -57,7 +57,6 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
         else
           Reflect.setField(o, key, v);
       });
-    trace(o);
     return o;
   }
 
