@@ -173,6 +173,19 @@ class TestArrays {
         [["a0", "b0"], ["a1", "b1"], ["a2", "b2"]]
       ));
   }
+
+  public function testDistinct() {
+    Assert.same([1, 2, 3, 4, 5, 6, 7, 8], [1, 2, 2, 3, 4, 5, 5, 6, 7, 8, 8].distinct());
+    Assert.same([8, 1, 2, 7, 3, 4, 5, 6], [8, 8, 1, 2, 7, 2, 3, 4, 5, 1, 5, 6, 7, 8, 2, 8].distinct());
+    Assert.same(["one", "two", "three"], ["one", "two", "one", "two", "three", "one", "two"].distinct());
+    Assert.same([false, true], [false, false, true, false, true, true].distinct());
+
+    var array = [{ key: "one" }, { key: "two" }, { key: "one" }, { key: "three" }, { key: "two" }];
+    var result = array.distinct(function(a, b) {
+      return a.key == b.key;
+    });
+    Assert.same([{ key: "one" }, { key: "two" }, { key: "three" }], result);
+  }
 }
 
 private class Sample {
