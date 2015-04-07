@@ -1,6 +1,7 @@
 package thx.core;
 
 import thx.core.Functions.Functions in F;
+import thx.core.Functions;
 
 #if macro
 import haxe.macro.Expr;
@@ -150,7 +151,7 @@ comparison is ==.
       return array;
 
     if (null == predicate)
-      predicate = function(a, b) return a == b;
+      predicate = Functions.equality;
 
     for (v in array) {
       var keep = !any(result, function(r) {
