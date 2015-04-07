@@ -139,13 +139,26 @@ trace(r); // [[1,3,5],[2,3,5],[1,4,5],[2,4,5],[1,3,6],[2,3,6],[1,4,6],[2,4,6]]
 
 /**
 Returns a new array containing only unique values from the input array.
+Input array does not need to be sorted.
+A predicate comparison function can be provided for comparing values.  Default
+comparison is ==.
 **/
-  public static function distinct<T>(array : Array<T>) : Array<T> {
+  public static function distinct<T>(array : Array<T>, ?predicate : T -> T -> Bool) : Array<T> {
     var result = [];
-    for(v in array) {
-      if(!contains(result, v))
-        result.push(v);
+
+    if (array.length <= 1)
+      return array;
+
+    if (null == predicate)
+      predicate = function(a, b) return a == b;
+
+    for (v in array) {
+      var keep = !any(result, function(r) {
+        return predicate(r, v);
+      });
+      if (keep) result.push(v);
     }
+
     return result;
   }
 
