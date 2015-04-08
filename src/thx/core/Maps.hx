@@ -31,6 +31,15 @@ Converts a Map<TKey, TValue> into an Array<Tuple2<TKey, TValue>>
     }, {});
 
 /**
+Given a `key` returns the associated value from `map`. If the key doesn't exist or the associated value is `null`,
+it returns the provided `alt` value instead.
+**/
+  public static function getAlt<TKey, TValue>(map : Map<TKey, TValue>, key : TKey, alt : TValue) : TValue {
+    var v = map.get(key);
+    return null == v ? alt : v;
+  }
+
+/**
 Returns true if a value is of any type of Map. Equivalent to `Std.is(v, IMap)`.
 **/
   inline public static function isMap(v : Dynamic)
