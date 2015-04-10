@@ -21,6 +21,15 @@ If the type is not found, an exception is thrown.
     };
 
 /**
+Given a fully qualified path to a type, it returns the path to the directory
+containing the module that contains that type.
+
+If the type is not found, an exception is thrown.
+**/
+  public static function getModuleDirectory(type : String) : String
+    return getModulePath(type).split("/").slice(0, -1).join("/");
+
+/**
 Given a relative file path, it returns the absolute path to that file if it is encountered
 within any of the available class path.
 
