@@ -11,12 +11,15 @@ class TestStaticResource {
 		Assert.equals("thx", ResourceTest.b.s);
 		Assert.isTrue(ResourceTest.c);
 		Assert.equals("haxe", ResourceTest.d);
+		Assert.equals("value", ResourceTest.fileJson.some);
+		Assert.equals("some text\n", ResourceTest.fileText);
 	}
 }
 
 @:content({ a : 1 })
 @:json("test/thx/core/other-resource")
 @:file("test/thx/core/resource.json")
+@:resolve("&")
 class ResourceTest implements StaticResource {
 
 }
