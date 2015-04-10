@@ -18,6 +18,7 @@ class BuildResource {
 	}
 
 	static var formats = ["json" #if yaml , "yaml" #end];
+	static var prefixSymbol = "&";
 
 	static function generateFieldsFromObjectLiteral(o : {}) : Array<Field> {
 		return Objects.tuples(o).map(function(t) {
@@ -34,15 +35,47 @@ class BuildResource {
 			});
 	}
 
+	static function resolveReferences(o : {}, prefix : String, module : String, path : String) {
+		if(null == prefix || !Reflect.isObject(o))
+			return;
+		var length = prefix.length;
+		o.tuples().map(function(t) {
+			if(t.left.startsWith(prefix)) {
+				if(!Std.is(t.right, String))
+					return;
+				var key = t.left.substring(length),
+				 		value : String = path.isEmpty() ? t.right : '$path/${t.right}',
+						newvalue = getFromFile(value, module, prefix, true);
+				Reflect.deleteField(o, t.left);
+				Reflect.setField(o, key, newvalue);
+			} else if(Reflect.isObject(t.right)) {
+				resolveReferences(t.right, prefix, module, path);
+			}
+		});
+	}
+
+	static function resolvePrefix(meta : MetaAccess) : String {
+		if(!meta.has(":resolve"))
+			return null;
+		var values = meta.extract(":resolve")
+				.map(function(v) return v.params)
+				.flatten()
+				.map(function(p) return ExprTools.getValue(p));
+		if(values.length == 0 || !Std.is(values[0], String))
+			return prefixSymbol;
+		return values[0];
+	}
+
 	static function getResourceObject(cls : ClassType) {
-		var o = {};
-		Objects.merge(o, getContentMeta(cls.meta));
-		Objects.merge(o, getMatchingFile(cls.name, cls.module, formats));
-		Objects.merge(o, getContentFile(cls.meta, cls.module));
+		var o = {},
+				prefix = resolvePrefix(cls.meta);
+		Objects.merge(o, getContentMeta(cls.meta, cls.module, prefix));
+		Objects.merge(o, getMatchingFile(cls.name, cls.module, formats, prefix));
+		Objects.merge(o, getContentFile(cls.meta, cls.module, prefix));
 		return o;
 	}
 
-	static function getContentMeta(meta : MetaAccess) : {} {
+	static function getContentMeta(meta : MetaAccess, module : String, prefix : String) : {} {
 		if(!meta.has(":content"))
 			return {};
 		var o = {};
@@ -51,10 +84,12 @@ class BuildResource {
 			.flatten()
 			.map(function(p) return ExprTools.getValue(p))
 			.map(function(n) Objects.merge(o, n));
+		var path = thx.macro.Macros.getModuleDirectory(module);
+		resolveReferences(o, prefix, module, path);
 		return o;
 	}
 
-	static function getMatchingFile(type : String, module : String, formats : Array<String>) {
+	static function getMatchingFile(type : String, module : String, formats : Array<String>, prefix : String) {
 		var path = Macros.getModulePath(module);
 		if(null == path) return {};
 		// strip extension
@@ -65,10 +100,10 @@ class BuildResource {
 			.map(function(format) return '$path.$format')
 			.filter(function(path) return sys.FileSystem.exists(path) && !sys.FileSystem.isDirectory(path))
 			.map(function(path) return { file : path, format : null });
-		return getFromFiles(list, module);
+		return getFromFiles(list, module, prefix);
 	}
 
-	static function getContentFile(meta : MetaAccess, module : String) {
+	static function getContentFile(meta : MetaAccess, module : String, prefix : String) {
 		return getFromFiles(
 			formats
 				.map(function(f) return { format : f, meta : ':$f'})
@@ -85,31 +120,38 @@ class BuildResource {
 				)
 				.flatten()
 				.filter(function(item) return item != null),
-			module);
+			module,
+			prefix);
 	}
 
-	static function getFromFiles(list : Array<{ file : String, format : String }>, module : String) {
+	static function getFromFiles(list : Array<{ file : String, format : String }>, module : String, prefix : String) {
 		var o = {};
-		list.map(function(item) Objects.merge(o, getFromFile(item.file, module, item.format)));
+		list.map(function(item) Objects.merge(o, getFromFile(item.file, module, prefix, item.format, false)));
 		return o;
 	}
 
 	// TODO: add XML? Is anyone using that anymore?
-	static function getFromFile(file : String, module : String, ?format : String) {
+	static function getFromFile(file : String, module : String, prefix : String, ?format : String, ?allowText : Bool = false) : Dynamic {
 		if(null == format)
 			format = file.split(".").pop();
-		var content = sys.io.File.getContent(file);
+		var content : String = sys.io.File.getContent(file);
 		Context.registerModuleDependency(module, file);
-		return switch format.toLowerCase() {
+		var o = switch format.toLowerCase() {
 			case "json":
-				haxe.Json.parse(content);
+				(haxe.Json.parse(content) : Dynamic);
 #if yaml
 			case "yml", "yaml":
 				var options = new yaml.Parser.ParserOptions();
 				options.maps = false;
 				yaml.Yaml.parse(content, options);
 #end
-			case _: Context.error('Invalid format $format', Context.currentPos());
-		}
+			case _:
+				if(allowText)
+					content;
+				else
+					Context.error('Invalid format $format', Context.currentPos());
+		};
+		resolveReferences(o, prefix, module, file.split("/").slice(0, -1).join("/"));
+		return o;
 	}
 }
