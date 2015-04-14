@@ -95,7 +95,7 @@ class BuildResource {
 		// strip extension
 		path = path.split(".").slice(0, -1).join(".");
 		// change file name
-		path = path.replace("\\", "/").split("/").slice(0, -1).concat([type.split(".").pop()]).join("/");
+		path = path.replace("\\", "/").split("/").slice(0, -1).concat([type.split(".").pop().toLowerCase()]).join("/");
 		var list = formats
 			.map(function(format) return '$path.$format')
 			.filter(function(path) return sys.FileSystem.exists(path) && !sys.FileSystem.isDirectory(path))
