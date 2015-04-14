@@ -68,7 +68,11 @@ trace((o.a.b.c).opt()); // prints 'A'
         switch v {
           case FAnon(id):
             ids.push(id.toString());
+          #if (haxe_ver >= "3.2")
+          case FInstance(_, _, n):
+          #else
           case FInstance(_, n):
+          #end
             ids.push(n.toString());
           case _:
             throw 'invalid expression $e';
