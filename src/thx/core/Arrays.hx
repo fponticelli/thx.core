@@ -281,13 +281,17 @@ Finds the first occurrance of `element` and returns all the elements from that p
 /**
 Returns a Map of arrays. Each value in the array is passed to `resolver` that returns a key to use
 to group such element.
+
+This method is tagged with `@:generic` and needs a compatible type to be used (ex: no anonymous objects).
+
+In case you have to use a type that is not supported by `@:generic`, please use `groupByAppend`.
 **/
   @:generic
   public static function groupBy<TKey, TValue>(arr : Array<TValue>, resolver : TValue -> TKey) : Map<TKey, Array<TValue>> {
-    var map = new Map<TKey, Array<TValue>>();
-    arr.map(function(v) {
-      var key = resolver(v),
-          arr = map.get(key);
+    var map : Map<TKey, Array<TValue>> = new Map<TKey, Array<TValue>>();
+    arr.map(function(v : TValue) {
+      var key : TKey = resolver(v),
+          arr : Array<TValue> = map.get(key);
       if(null == arr) {
         arr = [v];
         map.set(key, arr);
@@ -297,6 +301,25 @@ to group such element.
     });
     return map;
   }
+
+  /**
+  Each value in the array is passed to `resolver` that returns a key to use to group such element.
+  Groups are appended to the passed map.
+  **/
+  public static function groupByAppend<TKey, TValue>(arr : Array<TValue>, resolver : TValue -> TKey, map : Map<TKey, Array<TValue>>) : Map<TKey, Array<TValue>> {
+    arr.map(function(v : TValue) {
+      var key : TKey = resolver(v),
+          arr : Array<TValue> = map.get(key);
+      if(null == arr) {
+        arr = [v];
+        map.set(key, arr);
+      } else {
+        arr.push(v);
+      }
+    });
+    return map;
+  }
+
 
 /**
 It returns the first element of the array or null if the array is empty. Same as `first`.

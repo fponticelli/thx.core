@@ -154,6 +154,33 @@ class TestArrays {
     Assert.same([1.4], map.get(1));
   }
 
+  public function testGroupByArray() {
+    var arr = [[0,1],[0,2],[1,1]],
+        map = arr.groupBy(function(f) return f[0]);
+    Assert.same([
+        0 => [[0,1], [0,2]],
+        1 => [[1,1]]
+      ], map);
+  }
+
+  public function testGroupByInstance() {
+    var arr = [new Sample(1),new Sample(1),new Sample(2)],
+        map = arr.groupBy(function(f) return f.v);
+    Assert.same([
+        1 => [new Sample(1), new Sample(1)],
+        2 => [new Sample(2)]
+      ], map);
+  }
+
+  public function testGroupByAnonymous() {
+    var panels = [{ level : 1 }, { level : 2 }];
+    var results = panels.groupByAppend(function(el) : Int return el.level, new Map());
+    Assert.same([
+      1 => [{ level : 1 }],
+      2 => [{ level : 2 }],
+    ], results);
+  }
+
   public function testMapRight() {
     Assert.same([6,4,2], [1,2,3].mapRight(function(v) return v * 2));
   }
@@ -189,7 +216,7 @@ class TestArrays {
 }
 
 private class Sample {
-  var v : Int;
+  public var v : Int;
   public function new(v : Int)
     this.v = v;
   public function multiply(by : Int)
