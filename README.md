@@ -384,7 +384,7 @@ Note that calling the cancel function multiple times have no effect after the fi
 Helper class to generate [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier) strings (version 4).
 
 ```haxe
-UUID.create(); // generates something like f47ac10b-58cc-4372-a567-0e02b2c3d479
+Uuid.create(); // generates something like f47ac10b-58cc-4372-a567-0e02b2c3d479
 ```
 
 ## Errors

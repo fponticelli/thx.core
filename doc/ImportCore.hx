@@ -27,7 +27,7 @@ import thx.core.Timer;
 import thx.core.Tuple;
 import thx.core.Types;
 import thx.core.Url;
-import thx.core.UUID;
+import thx.core.Uuid;
 import thx.core.error.AbstractMethod;
 import thx.core.error.ErrorWrapper;
 import thx.core.error.NotImplemented;

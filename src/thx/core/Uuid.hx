@@ -1,9 +1,10 @@
 package thx.core;
 
 /**
-Helper class to generate [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier) strings (version 4).
+Helper class to generate [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier)
+strings (version 4).
 **/
-class UUID {
+class Uuid {
   static inline function random()
     return Math.floor(Math.random()*0x10);
 
@@ -11,7 +12,7 @@ class UUID {
     return '${random()}';
 
 /**
-`UUID.create()` returns a string value representing a UUID value.
+`Uuid.create()` returns a string value representing a UUID value.
 **/
   public static function create() {
     var s = [];
