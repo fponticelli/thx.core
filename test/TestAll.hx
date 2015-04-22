@@ -3,27 +3,27 @@ import utest.ui.Report;
 
 class TestAll {
 	public static function addTests(runner : Runner) {
-		runner.addCase(new thx.core.TestAnonymousMap());
-		runner.addCase(new thx.core.TestArrays());
-		runner.addCase(new thx.core.TestDates());
-		runner.addCase(new thx.core.TestDynamics());
-		runner.addCase(new thx.core.TestERegs());
-		runner.addCase(new thx.core.TestError());
-		runner.addCase(new thx.core.TestFloats());
-		runner.addCase(new thx.core.TestFunctions());
-		runner.addCase(new thx.core.TestInts());
-		runner.addCase(new thx.core.TestMaps());
-		runner.addCase(new thx.core.TestNulls());
-		runner.addCase(new thx.core.TestObjects());
-		runner.addCase(new thx.core.TestQueryString());
-		runner.addCase(new thx.core.TestSet());
-		runner.addCase(new thx.core.TestStaticResource());
-		runner.addCase(new thx.core.TestStrings());
+		runner.addCase(new thx.TestAnonymousMap());
+		runner.addCase(new thx.TestArrays());
+		runner.addCase(new thx.TestDates());
+		runner.addCase(new thx.TestDynamics());
+		runner.addCase(new thx.TestERegs());
+		runner.addCase(new thx.TestError());
+		runner.addCase(new thx.TestFloats());
+		runner.addCase(new thx.TestFunctions());
+		runner.addCase(new thx.TestInts());
+		runner.addCase(new thx.TestMaps());
+		runner.addCase(new thx.TestNulls());
+		runner.addCase(new thx.TestObjects());
+		runner.addCase(new thx.TestQueryString());
+		runner.addCase(new thx.TestSet());
+		runner.addCase(new thx.TestStaticResource());
+		runner.addCase(new thx.TestStrings());
 #if (js || flash || java)
-		runner.addCase(new thx.core.TestTimer());
+		runner.addCase(new thx.TestTimer());
 #end
-		runner.addCase(new thx.core.TestTuple());
-		runner.addCase(new thx.core.TestUrl());
+		runner.addCase(new thx.TestTuple());
+		runner.addCase(new thx.TestUrl());
 	}
 
 	public static function main() {
