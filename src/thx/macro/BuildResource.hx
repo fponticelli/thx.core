@@ -6,8 +6,8 @@ import haxe.macro.Type;
 using haxe.macro.TypeTools;
 using haxe.macro.ExprTools;
 using thx.macro.MacroFields;
-using thx.core.Objects;
-using thx.core.Arrays;
+using thx.Objects;
+using thx.Arrays;
 using StringTools;
 
 class BuildResource {
