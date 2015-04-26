@@ -555,6 +555,26 @@ Uses the plcuk strategy to sort an array. Arguments for pluck are `_0` and `_1`.
     return macro $e{array}.sort(function(_0, _1) return $e{expr});
 
 /**
+Splits an array into a specified number of `parts`.
+**/
+  public static function split<T>(array : Array<T>, parts : Int) {
+    var len = Math.ceil(array.length / parts);
+    return splitBy(array, len);
+  }
+
+/**
+Splits an array into smaller arrays at most of length equal to `len`.
+**/
+  public static function splitBy<T>(array : Array<T>, len : Int) {
+    var res = [];
+    len = Ints.min(len, array.length);
+    for(p in 0...Math.ceil(array.length / len)) {
+      res.push(array.slice(p * len, (p+1) * len));
+    }
+    return res;
+  }
+
+/**
 Returns the first `n` elements from the array.
 **/
   inline public static function take<T>(arr : Array<T>, n : Int) : Array<T>

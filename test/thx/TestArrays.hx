@@ -213,6 +213,26 @@ class TestArrays {
     });
     Assert.same([{ key: "one" }, { key: "two" }, { key: "three" }], result);
   }
+
+  public function testSplit() {
+    var arr = [1,2,3,4,5,6,7,8,9,0];
+    Assert.same([[1,2,3,4,5,6,7,8,9,0]], arr.split(1));
+    Assert.same([[1,2,3,4,5],[6,7,8,9,0]], arr.split(2));
+    Assert.same([[1,2,3,4],[5,6,7,8],[9,0]], arr.split(3));
+    Assert.same([[1,2,3],[4,5,6],[7,8,9],[0]], arr.split(4));
+    Assert.same([[1],[2],[3],[4],[5],[6],[7],[8],[9],[0]], arr.split(10));
+    Assert.same([[1],[2],[3],[4],[5],[6],[7],[8],[9],[0]], arr.split(20));
+  }
+
+  public function testSplitBy() {
+    var arr = [1,2,3,4,5,6,7,8,9,0];
+    Assert.same([[1],[2],[3],[4],[5],[6],[7],[8],[9],[0]], arr.splitBy(1));
+    Assert.same([[1,2],[3,4],[5,6],[7,8],[9,0]], arr.splitBy(2));
+    Assert.same([[1,2,3],[4,5,6],[7,8,9],[0]], arr.splitBy(3));
+    Assert.same([[1,2,3,4],[5,6,7,8],[9,0]], arr.splitBy(4));
+    Assert.same([[1,2,3,4,5,6,7,8,9,0]], arr.splitBy(10));
+    Assert.same([[1,2,3,4,5,6,7,8,9,0]], arr.splitBy(20));
+  }
 }
 
 private class Sample {
