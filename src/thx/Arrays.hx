@@ -97,6 +97,18 @@ An optional equality function can be passed as the last argument. If not provide
   }
 
 /**
+Returns `true` if any element in `elements` is found in the array.
+
+An optional equality function can be passed as the last argument. If not provided, strict equality is adopted.
+**/
+ public static function containsAny<T>(array : Array<T>, elements : Iterable<T>, ?eq : T -> T -> Bool) : Bool {
+  for (el in elements) {
+    if (contains(array, el, eq)) return true;
+  }
+  return false;
+ }
+
+/**
 It returns the cross product between two arrays.
 
 ```haxe
