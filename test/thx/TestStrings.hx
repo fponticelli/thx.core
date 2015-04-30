@@ -12,6 +12,35 @@ using thx.Strings;
 class TestStrings {
   public function new(){}
 
+  public function testContains() {
+    Assert.isTrue("test".contains(""));
+    Assert.isTrue("test".contains("t"));
+    Assert.isTrue("test".contains("te"));
+    Assert.isTrue("test".contains("tes"));
+    Assert.isTrue("test".contains("test"));
+    Assert.isTrue("one two three".contains("one"));
+    Assert.isTrue("one two three".contains("two"));
+    Assert.isTrue("one two three".contains("three"));
+    Assert.isFalse("test".contains("test "));
+    Assert.isFalse("test".contains(" test"));
+    Assert.isFalse("test".contains("tes "));
+  }
+
+  public function testContainsAny() {
+    Assert.isTrue("test".containsAny(["t", "x", "y"]));
+    Assert.isTrue("test".containsAny(["e", "x", "y"]));
+    Assert.isTrue("test".containsAny(["s", "x", "y"]));
+    Assert.isTrue("test".containsAny(["x", "t", "y"]));
+    Assert.isTrue("test".containsAny(["x", "e", "y"]));
+    Assert.isTrue("test".containsAny(["x", "s", "y"]));
+    Assert.isTrue("test".containsAny(["x", "y", "t"]));
+    Assert.isTrue("test".containsAny(["x", "y", "e"]));
+    Assert.isTrue("test".containsAny(["x", "y", "s"]));
+    Assert.isTrue("one two three".containsAny(["zero", "one", "two"]));
+    Assert.isTrue("one two three".containsAny(["one", "two", "three"]));
+    Assert.isTrue("one two three".containsAny(["one two", "x", "three"]));
+  }
+
   public function testUcwordsws() {
     var tests = [
       { expected : "Test", test : "test" },
