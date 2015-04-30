@@ -1,6 +1,7 @@
 package thx;
 
 using StringTools;
+using thx.Arrays;
 
 /**
 Extension methods for strings.
@@ -60,10 +61,17 @@ or otherwise a positive non-sero number.
     return a < b ? -1 : a > b ? 1 : 0;
 
 /**
-`contains` returns `true` is `s` contains one or more occurrences of `test`.
+`contains` returns `true` if `s` contains one or more occurrences of `test`.
 **/
   inline public static function contains(s : String, test : String)
     return s.indexOf(test) >= 0;
+
+/**
+`contains` returns `true` if `s` contains any of the strings in `tests`
+**/
+  inline public static function containsAny(s : String, tests : Array<String>)
+    return tests.any(contains.bind(s, _));
+
 
 /**
 `dasherize` replaces all the occurrances of `_` with `-`;
