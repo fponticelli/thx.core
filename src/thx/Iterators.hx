@@ -1,5 +1,6 @@
 package thx;
 
+import thx.Tuple;
 #if macro
 import haxe.macro.Expr;
 #end
@@ -163,4 +164,43 @@ Refer to `thx.Arrays.reducei`.
     return items;
   }
 
+/**
+Pairs the elements of two iterators in an array of `Tuple2`.
+**/
+  public static function zip<T1, T2>(it1 : Iterator<T1>, it2 : Iterator<T2>) : Array<Tuple2<T1, T2>> {
+    var array  = [];
+    while(it1.hasNext() && it2.hasNext())
+      array.push(new Tuple2(it1.next(), it2.next()));
+    return array;
+  }
+
+/**
+Pairs the elements of three iterators in an array of `Tuple3`.
+**/
+  public static function zip3<T1, T2, T3>(it1 : Iterator<T1>, it2 : Iterator<T2>, it3 : Iterator<T3>) : Array<Tuple3<T1, T2, T3>> {
+    var array  = [];
+    while(it1.hasNext() && it2.hasNext() && it3.hasNext())
+      array.push(new Tuple3(it1.next(), it2.next(), it3.next()));
+    return array;
+  }
+
+/**
+Pairs the elements of four iterators in an array of `Tuple4`.
+**/
+  public static function zip4<T1, T2, T3, T4>(it1 : Iterator<T1>, it2 : Iterator<T2>, it3 : Iterator<T3>, it4 : Iterator<T4>) : Array<Tuple4<T1, T2, T3, T4>> {
+    var array  = [];
+    while(it1.hasNext() && it2.hasNext() && it3.hasNext() && it4.hasNext())
+      array.push(new Tuple4(it1.next(), it2.next(), it3.next(), it4.next()));
+    return array;
+  }
+
+/**
+Pairs the elements of five iterators in an array of `Tuple5`.
+**/
+  public static function zip5<T1, T2, T3, T4, T5>(it1 : Iterator<T1>, it2 : Iterator<T2>, it3 : Iterator<T3>, it4 : Iterator<T4>, it5 : Iterator<T5>) : Array<Tuple5<T1, T2, T3, T4, T5>> {
+    var array  = [];
+    while(it1.hasNext() && it2.hasNext() && it3.hasNext() && it4.hasNext() && it5.hasNext())
+      array.push(new Tuple5(it1.next(), it2.next(), it3.next(), it4.next(), it5.next()));
+    return array;
+  }
 }

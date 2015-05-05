@@ -1,5 +1,6 @@
 package thx;
 
+import thx.Tuple;
 #if macro
 import haxe.macro.Expr;
 #end
@@ -123,4 +124,28 @@ Refer to `thx.Arrays.reducei`.
 **/
   public inline static function toArray<T>(it : Iterable<T>) : Array<T>
     return Iterators.toArray(it.iterator());
+
+/**
+Pairs the elements of two iterables in an array of `Tuple2`.
+**/
+  public static function zip<T1, T2>(it1 : Iterable<T1>, it2 : Iterable<T2>) : Array<Tuple2<T1, T2>>
+    return Iterators.zip(it1.iterator(), it2.iterator());
+
+/**
+Pairs the elements of three iterables in an array of `Tuple3`.
+**/
+  public static function zip3<T1, T2, T3>(it1 : Iterable<T1>, it2 : Iterable<T2>, it3 : Iterable<T3>) : Array<Tuple3<T1, T2, T3>>
+    return Iterators.zip3(it1.iterator(), it2.iterator(), it3.iterator());
+
+/**
+Pairs the elements of four iterables in an array of `Tuple4`.
+**/
+  public static function zip4<T1, T2, T3, T4>(it1 : Iterable<T1>, it2 : Iterable<T2>, it3 : Iterable<T3>, it4 : Iterable<T4>) : Array<Tuple4<T1, T2, T3, T4>>
+    return Iterators.zip4(it1.iterator(), it2.iterator(), it3.iterator(), it4.iterator());
+
+/**
+Pairs the elements of five iterables in an array of `Tuple5`.
+**/
+  public static function zip5<T1, T2, T3, T4, T5>(it1 : Iterable<T1>, it2 : Iterable<T2>, it3 : Iterable<T3>, it4 : Iterable<T4>, it5 : Iterable<T5>) : Array<Tuple5<T1, T2, T3, T4, T5>>
+    return Iterators.zip5(it1.iterator(), it2.iterator(), it3.iterator(), it4.iterator(), it5.iterator());
 }
