@@ -3,6 +3,7 @@ package thx;
 import thx.Dynamics;
 import thx.Tuple;
 using thx.Arrays;
+using thx.Strings;
 
 /**
 Helper methods for generic objects.
@@ -100,4 +101,71 @@ tuple is the field name and the right value (_1) is the field value.
     return Reflect.fields(o).map(function(key)
         return new Tuple2(key, Reflect.field(o, key))
     );
+
+/**
+Gets a value from an object by a string path.  The path can contain object keys and array indices separated
+by ".".  Returns null for a path that does not exist.
+
+E.g. { key1: { key2: [1, 2, 3] } }.getPath("key1.key2.2") -> returns 3
+*/
+  public static function getPath<T>(o : {}, path : String) : T {
+    var paths = path.split(".");
+    var current : Dynamic = o;
+    for (currentPath in paths) {
+      if (Reflect.hasField(current, currentPath)) {
+        var arr = Std.instance(current, Array);
+        if (arr != null) {
+          var index = Std.parseInt(currentPath);
+          current = arr[index];
+        } else {
+          current = Reflect.field(current, currentPath);
+        }
+      } else {
+        return null;
+      }
+    }
+    return current;
+  }
+
+/**
+Sets a value in an object by a string path.  The path can contain object keys and array indices separated
+by ".".  Returns the original object, for optional chaining of other object methods.
+
+Inner objects and arrays will be created as needed when traversing the path.
+
+E.g. { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.2", 4) -> returns { key1: { key2: [ 1, 2, 4 ] } }
+*/
+  public static function setPath<T>(o : {}, path : String, val : T) : {} {
+    var paths = path.split(".");
+    var current : Dynamic = o;
+
+    for (i in 0...(paths.length - 1)) {
+      var currentPath = paths[i];
+      var nextPath = paths[i + 1];
+
+      if (currentPath.isDigitsOnly()) {
+        var index = Std.parseInt(currentPath);
+        if (current[index] == null) {
+          if (nextPath.isDigitsOnly()) {
+            current[index] = [];
+          } else {
+            Reflect.setField(current, currentPath, {});
+          }
+        }
+        current = current[index];
+      } else {
+        if (!Reflect.hasField(current, currentPath)) {
+          if (nextPath.isDigitsOnly()) {
+            Reflect.setField(current, currentPath, []);
+          } else {
+            Reflect.setField(current, currentPath, {});
+          }
+        }
+        current = Reflect.field(current, currentPath);
+      }
+    }
+    var p = paths.last();
+    Reflect.setField(current, p, val);
+    return o;
+  }
 }
