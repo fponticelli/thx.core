@@ -4,7 +4,7 @@ package thx;
 `ERegs` provides helper methods to use together with `EReg`.
 **/
 class ERegs {
-  static var ESCAPE_PATTERN = ~/([-\[\]{}()*+?\.,\\^$|#\s])/g;
+  static var ESCAPE_PATTERN = ~/([-\[\]{}()*+?\.,\\^$|# \t\r\n\f])/g;
 
 /**
 It escapes any characer in a string that has a special meaning when used in a regular expression.
