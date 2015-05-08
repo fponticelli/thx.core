@@ -126,6 +126,29 @@ Refer to `thx.Arrays.reducei`.
     return Iterators.toArray(it.iterator());
 
 /**
+Unzip an iterable of Tuple2<T1, T2> to a Tuple2<Array<T1>, Array<T2>>.
+**/
+  public static function unzip<T1, T2>(it : Iterable<Tuple2<T1, T2>>)
+    return Iterators.unzip(it.iterator());
+/**
+Unzip an iterable of Tuple3<T1, T2, T3> to a Tuple3<Array<T1>, Array<T2>, Array<T3>>.
+**/
+  public static function unzip3<T1, T2, T3>(it : Iterable<Tuple3<T1, T2, T3>>)
+  return Iterators.unzip3(it.iterator());
+
+/**
+Unzip an iterable of Tuple4<T1, T2, T3, T4> to a Tuple4<Array<T1>, Array<T2>, Array<T3>, Array<T4>>.
+**/
+  public static function unzip4<T1, T2, T3, T4>(it : Iterable<Tuple4<T1, T2, T3, T4>>)
+    return Iterators.unzip4(it.iterator());
+
+/**
+Unzip an iterable of Tuple5<T1, T2, T3, T4, T5> to a Tuple5<Array<T1>, Array<T2>, Array<T3>, Array<T4>, Array<T5>>.
+**/
+  public static function unzip5<T1, T2, T3, T4, T5>(it : Iterable<Tuple5<T1, T2, T3, T4, T5>>)
+    return Iterators.unzip5(it.iterator());
+
+/**
 Pairs the elements of two iterables in an array of `Tuple2`.
 **/
   public static function zip<T1, T2>(it1 : Iterable<T1>, it2 : Iterable<T2>) : Array<Tuple2<T1, T2>>

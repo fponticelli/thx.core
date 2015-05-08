@@ -614,50 +614,6 @@ Transforms an array like `[[a0,b0],[a1,b1],[a2,b2]]` into
   }
 
 /**
-Pairs the elements of two arrays in an array of `Tuple2`.
-**/
-  public static function zip<T1, T2>(array1 : Array<T1>, array2 : Array<T2>) : Array<Tuple2<T1, T2>> {
-    var length = Ints.min(array1.length, array2.length),
-        array  = [];
-    for(i in 0...length)
-      array.push(new Tuple2(array1[i], array2[i]));
-    return array;
-  }
-
-/**
-Pairs the elements of three arrays in an array of `Tuple3`.
-**/
-  public static function zip3<T1, T2, T3>(array1 : Array<T1>, array2 : Array<T2>, array3 : Array<T3>) : Array<Tuple3<T1, T2, T3>> {
-    var length = ArrayInts.min([array1.length, array2.length, array3.length]),
-        array  = [];
-    for(i in 0...length)
-      array.push(new Tuple3(array1[i], array2[i], array3[i]));
-    return array;
-  }
-
-/**
-Pairs the elements of four arrays in an array of `Tuple4`.
-**/
-  public static function zip4<T1, T2, T3, T4>(array1 : Array<T1>, array2 : Array<T2>, array3 : Array<T3>, array4 : Array<T4>) : Array<Tuple4<T1, T2, T3, T4>> {
-    var length = ArrayInts.min([array1.length, array2.length, array3.length, array4.length]),
-        array  = [];
-    for(i in 0...length)
-      array.push(new Tuple4(array1[i], array2[i], array3[i], array4[i]));
-    return array;
-  }
-
-/**
-Pairs the elements of five arrays in an array of `Tuple5`.
-**/
-  public static function zip5<T1, T2, T3, T4, T5>(array1 : Array<T1>, array2 : Array<T2>, array3 : Array<T3>, array4 : Array<T4>, array5 : Array<T5>) : Array<Tuple5<T1, T2, T3, T4, T5>> {
-    var length = ArrayInts.min([array1.length, array2.length, array3.length, array4.length, array5.length]),
-        array  = [];
-    for(i in 0...length)
-      array.push(new Tuple5(array1[i], array2[i], array3[i], array4[i], array5[i]));
-    return array;
-  }
-
-/**
 Unzip an array of Tuple2<T1, T2> to a Tuple2<Array<T1>, Array<T2>>.
 **/
   public static function unzip<T1, T2>(array : Array<Tuple2<T1, T2>>) {
@@ -709,6 +665,50 @@ Unzip an array of Tuple5<T1, T2, T3, T4, T5> to a Tuple5<Array<T1>, Array<T2>, A
       a5.push(t._4);
     });
     return new Tuple5(a1, a2, a3, a4, a5);
+  }
+
+/**
+Pairs the elements of two arrays in an array of `Tuple2`.
+**/
+  public static function zip<T1, T2>(array1 : Array<T1>, array2 : Array<T2>) : Array<Tuple2<T1, T2>> {
+    var length = Ints.min(array1.length, array2.length),
+        array  = [];
+    for(i in 0...length)
+      array.push(new Tuple2(array1[i], array2[i]));
+    return array;
+  }
+
+/**
+Pairs the elements of three arrays in an array of `Tuple3`.
+**/
+  public static function zip3<T1, T2, T3>(array1 : Array<T1>, array2 : Array<T2>, array3 : Array<T3>) : Array<Tuple3<T1, T2, T3>> {
+    var length = ArrayInts.min([array1.length, array2.length, array3.length]),
+        array  = [];
+    for(i in 0...length)
+      array.push(new Tuple3(array1[i], array2[i], array3[i]));
+    return array;
+  }
+
+/**
+Pairs the elements of four arrays in an array of `Tuple4`.
+**/
+  public static function zip4<T1, T2, T3, T4>(array1 : Array<T1>, array2 : Array<T2>, array3 : Array<T3>, array4 : Array<T4>) : Array<Tuple4<T1, T2, T3, T4>> {
+    var length = ArrayInts.min([array1.length, array2.length, array3.length, array4.length]),
+        array  = [];
+    for(i in 0...length)
+      array.push(new Tuple4(array1[i], array2[i], array3[i], array4[i]));
+    return array;
+  }
+
+/**
+Pairs the elements of five arrays in an array of `Tuple5`.
+**/
+  public static function zip5<T1, T2, T3, T4, T5>(array1 : Array<T1>, array2 : Array<T2>, array3 : Array<T3>, array4 : Array<T4>, array5 : Array<T5>) : Array<Tuple5<T1, T2, T3, T4, T5>> {
+    var length = ArrayInts.min([array1.length, array2.length, array3.length, array4.length, array5.length]),
+        array  = [];
+    for(i in 0...length)
+      array.push(new Tuple5(array1[i], array2[i], array3[i], array4[i], array5[i]));
+    return array;
   }
 
 #if js

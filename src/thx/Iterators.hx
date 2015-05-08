@@ -165,6 +165,60 @@ Refer to `thx.Arrays.reducei`.
   }
 
 /**
+Unzip an iterator of Tuple2<T1, T2> to a Tuple2<Array<T1>, Array<T2>>.
+**/
+  public static function unzip<T1, T2>(it : Iterator<Tuple2<T1, T2>>) {
+    var a1 = [], a2 = [];
+    Iterators.map(it, function(t) {
+      a1.push(t._0);
+      a2.push(t._1);
+    });
+    return new Tuple2(a1, a2);
+  }
+
+/**
+Unzip an iterator of Tuple3<T1, T2, T3> to a Tuple3<Array<T1>, Array<T2>, Array<T3>>.
+**/
+  public static function unzip3<T1, T2, T3>(it : Iterator<Tuple3<T1, T2, T3>>) {
+    var a1 = [], a2 = [], a3 = [];
+    Iterators.map(it, function(t) {
+      a1.push(t._0);
+      a2.push(t._1);
+      a3.push(t._2);
+    });
+    return new Tuple3(a1, a2, a3);
+  }
+
+/**
+Unzip an iterator of Tuple4<T1, T2, T3, T4> to a Tuple4<Array<T1>, Array<T2>, Array<T3>, Array<T4>>.
+**/
+  public static function unzip4<T1, T2, T3, T4>(it : Iterator<Tuple4<T1, T2, T3, T4>>) {
+    var a1 = [], a2 = [], a3 = [], a4 = [];
+    Iterators.map(it, function(t) {
+      a1.push(t._0);
+      a2.push(t._1);
+      a3.push(t._2);
+      a4.push(t._3);
+    });
+    return new Tuple4(a1, a2, a3, a4);
+  }
+
+/**
+Unzip an iterator of Tuple5<T1, T2, T3, T4, T5> to a Tuple5<Array<T1>, Array<T2>, Array<T3>, Array<T4>, Array<T5>>.
+**/
+  public static function unzip5<T1, T2, T3, T4, T5>(it : Iterator<Tuple5<T1, T2, T3, T4, T5>>) {
+    var a1 = [], a2 = [], a3 = [], a4 = [], a5 = [];
+    Iterators.map(it, function(t) {
+      a1.push(t._0);
+      a2.push(t._1);
+      a3.push(t._2);
+      a4.push(t._3);
+      a5.push(t._4);
+    });
+    return new Tuple5(a1, a2, a3, a4, a5);
+  }
+
+/**
 Pairs the elements of two iterators in an array of `Tuple2`.
 **/
   public static function zip<T1, T2>(it1 : Iterator<T1>, it2 : Iterator<T2>) : Array<Tuple2<T1, T2>> {
