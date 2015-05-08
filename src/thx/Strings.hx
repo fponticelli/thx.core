@@ -402,7 +402,7 @@ Words whose length exceeds `columns` are not split.
   static var UCWORDSWS = ~/[ \t\r\n][a-z]/g;
   static var ALPHANUM = ~/^[a-z0-9]+$/i;
   static var DIGITS = ~/^[0-9]+$/;
-  static var STRIPTAGS = ~/<\/?[a-z]+[^>]*?\/?>/gi;
+  static var STRIPTAGS = ~/<\/?[a-z]+[^>]*>/gi;
 #end
   static var WSG = ~/[ \t\r\n]+/g;
   static var SPLIT_LINES = ~/\r\n|\n\r|\n|\r/g;
