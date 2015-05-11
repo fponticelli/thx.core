@@ -252,6 +252,19 @@ If none is found it returns null.
   }
 
 /**
+It returns the same result as `find`, but using the pluck strategy.
+**/
+  macro public static function findPluck<T>(a : ExprOf<Array<T>>, expr : ExprOf<Bool>) : ExprOf<Array<T>>
+    return macro $e{a}.find(function(_) return $e{expr});
+
+
+/**
+It returns the same result as `findLast`, but using the pluck strategy.
+**/
+  macro public static function findPluckLast<T>(a : ExprOf<Array<T>>, expr : ExprOf<Bool>) : ExprOf<Array<T>>
+    return macro $e{a}.findLast(function(_) return $e{expr});
+
+/**
 It returns the first element of the array or null if the array is empty.
 **/
   inline public static function first<T>(array : Array<T>) : Null<T>
