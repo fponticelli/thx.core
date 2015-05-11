@@ -61,6 +61,14 @@ class TestArrays {
     Assert.equals(9, [1,3,5,7,9].findLast(function(item) return item % 3 == 0));
   }
 
+  public function testFindPluck() {
+    Assert.equals(3, [1,3,5,7,9].findPluck(_ % 3 == 0));
+  }
+
+  public function testFindPluckLast() {
+    Assert.equals(9, [1,3,5,7,9].findPluckLast(_ % 3 == 0));
+  }
+
   public function testPluck() {
     Assert.same([2,4,8], [1,2,4].pluck(_ * 2));
   }
