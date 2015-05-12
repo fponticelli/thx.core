@@ -327,6 +327,7 @@ In case you have to use a type that is not supported by `@:generic`, please use 
     return map;
   }
 
+#if !cs
   /**
   Each value in the array is passed to `resolver` that returns a key to use to group such element.
   Groups are appended to the passed map.
@@ -344,7 +345,7 @@ In case you have to use a type that is not supported by `@:generic`, please use 
     });
     return map;
   }
-
+#end
 
 /**
 It returns the first element of the array or null if the array is empty. Same as `first`.

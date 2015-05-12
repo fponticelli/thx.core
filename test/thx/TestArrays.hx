@@ -188,15 +188,17 @@ class TestArrays {
       ], map);
   }
 
+#if !cs
   public function testGroupByAnonymous() {
     var panels = [{ level : 1 }, { level : 2 }];
-    var results = panels.groupByAppend(function(el) : Int return el.level, new Map());
+    var map = new Map();
+    var results = panels.groupByAppend(function(el) : Int return el.level, map);
     Assert.same([
       1 => [{ level : 1 }],
       2 => [{ level : 2 }],
     ], results);
   }
-
+#end
   public function testMapRight() {
     Assert.same([6,4,2], [1,2,3].mapRight(function(v) return v * 2));
   }
