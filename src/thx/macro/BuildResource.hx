@@ -91,21 +91,17 @@ class BuildResource {
 
 	static function getMatchingFile(type : String, module : String, formats : Array<String>, prefix : String) {
 		var path = Macros.getModulePath(module);
-		trace('module path: $path');
 		if(null == path) return {};
 		// strip extension
 		path = path.split(".").slice(0, -1).join(".");
-		trace('strip path: $path');
 		// change file name
-		path = path.replace("\\", "/").split("/").slice(0, -1).concat([type.split(".").pop().toLowerCase()]).join("/");
-		trace('change filename: $path');
+		path = path.replace("\\", "/").split("/").slice(0, -1).concat([type.split(".").pop()]).join("/");
 		var list = formats
 			.map(function(format) return './$path.$format')
 			.filter(function(path) {
-				trace('$path (1): ${sys.FileSystem.exists(path)}');
-				if(sys.FileSystem.exists(path))
-					trace('$path (2): ${!sys.FileSystem.isDirectory(path)}');
-				return sys.FileSystem.exists(path) && !sys.FileSystem.isDirectory(path);
+				// lower case file name
+				var lc = path.split("/").slice(0, -1).concat([path.split("/").pop().toLowerCase()]).join("/");
+				return (sys.FileSystem.exists(path) && !sys.FileSystem.isDirectory(path)) || (sys.FileSystem.exists(lc) && !sys.FileSystem.isDirectory(lc));
 			})
 			.map(function(path) return { file : path, format : null });
 		return getFromFiles(list, module, prefix);

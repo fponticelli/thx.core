@@ -1,7 +1,7 @@
 language: haxe
 
 haxe:
-  #- "3.1.3"
+  - "3.1.3"
   - development
 
 env:
@@ -19,9 +19,12 @@ addons:
       - nodejs
 
 install:
-  - haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git
-  - haxelib git hxjava https://github.com/HaxeFoundation/hxjava.git
-  - haxelib git hxcs https://github.com/HaxeFoundation/hxcs.git
+  - if [[ $TRAVIS_HAXE_VERSION == "development" ]]; then haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git fi
+  - if [[ $TRAVIS_HAXE_VERSION == "3.1.3" ]]; then haxelib install hxcpp:3.1.3 fi
+  - if [[ $TRAVIS_HAXE_VERSION == "development" ]]; then haxelib git hxjava https://github.com/HaxeFoundation/hxjava.git fi
+  - if [[ $TRAVIS_HAXE_VERSION == "3.1.3" ]]; then haxelib install hxjava:3.1.3 fi
+  #- if [[ $TRAVIS_HAXE_VERSION == "development" ]]; then haxelib git hxcs https://github.com/HaxeFoundation/hxcs.git fi
+  #- if [[ $TRAVIS_HAXE_VERSION == "3.1.3" ]]; then haxelib install hxcs:3.1.3 fi
   - haxelib install utest
   - haxelib list
 
