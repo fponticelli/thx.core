@@ -108,18 +108,17 @@ by ".".  Returns null for a path that does not exist.
 
 E.g. { key1: { key2: [1, 2, 3] } }.getPath("key1.key2.2") -> returns 3
 */
-  public static function getPath<T>(o : {}, path : String) : T {
+  public static function getPath(o : {}, path : String) : Dynamic {
     var paths = path.split(".");
     var current : Dynamic = o;
     for (currentPath in paths) {
-      if (Reflect.hasField(current, currentPath)) {
-        var arr = Std.instance(current, Array);
-        if (arr != null) {
-          var index = Std.parseInt(currentPath);
-          current = arr[index];
-        } else {
-          current = Reflect.field(current, currentPath);
-        }
+      if(currentPath.isDigitsOnly()) {
+        var index = Std.parseInt(currentPath),
+            arr = Std.instance(current, Array);
+        if(null == arr) return null;
+        current = arr[index];
+      } else if (Reflect.hasField(current, currentPath)) {
+        current = Reflect.field(current, currentPath);
       } else {
         return null;
       }
@@ -149,7 +148,7 @@ E.g. { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.2", 4) -> returns { key1: 
           if (nextPath.isDigitsOnly()) {
             current[index] = [];
           } else {
-            Reflect.setField(current, currentPath, {});
+            current[index] = {};
           }
         }
         current = current[index];
@@ -165,7 +164,12 @@ E.g. { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.2", 4) -> returns { key1: 
       }
     }
     var p = paths.last();
-    Reflect.setField(current, p, val);
+    if (p.isDigitsOnly()) {
+      var index = Std.parseInt(p);
+      current[index] = val;
+    } else {
+      Reflect.setField(current, p, val);
+    }
     return o;
   }
 }
