@@ -27,7 +27,7 @@ install:
   - install_hxcs
   - haxelib install utest
   - haxelib list
-  #- install_flashplayer
+  - install_flashplayer
 
 script:
   - haxe hxml/cpp.hxml && ./bin/cpp/TestAll
