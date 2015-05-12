@@ -100,10 +100,12 @@ class BuildResource {
 		path = path.replace("\\", "/").split("/").slice(0, -1).concat([type.split(".").pop().toLowerCase()]).join("/");
 		trace('change filename: $path');
 		var list = formats
-			.map(function(format) return '$path.$format')
+			.map(function(format) return './$path.$format')
 			.filter(function(path) {
-				trace('$path: ${sys.FileSystem.exists(path)}');
-				return sys.FileSystem.exists(path);
+				trace('$path (1): ${sys.FileSystem.exists(path)}');
+				if(sys.FileSystem.exists(path))
+					trace('$path (2): ${!sys.FileSystem.isDirectory(path)}');
+				return sys.FileSystem.exists(path) && !sys.FileSystem.isDirectory(path);
 			})
 			.map(function(path) return { file : path, format : null });
 		return getFromFiles(list, module, prefix);

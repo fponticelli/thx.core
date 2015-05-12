@@ -12,26 +12,26 @@ env:
 addons:
   apt:
     packages:
-      - python3
-      - php5-cli
-      - mono-devel
-      - mono-mcs
+      #- python3
+      #- php5-cli
+      #- mono-devel
+      #- mono-mcs
       - nodejs
 
 install:
-  - haxelib install hxcpp
-  - haxelib install hxjava
-  - haxelib install hxcs
+  - haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git
+  - haxelib git hxjava https://github.com/HaxeFoundation/hxjava.git
+  - haxelib git hxcs https://github.com/HaxeFoundation/hxcs.git
   - haxelib install utest
   - haxelib list
 
 script:
-  #- haxe hxml/cpp.hxml && ./bin/cpp/TestAll
+  - haxe hxml/cpp.hxml && ./bin/cpp/TestAll
   #- haxe hxml/cs.hxml && mono bin/cs/bin/TestAll.exe
   #- haxe hxml/flash.hxml # TODO
-  #- haxe hxml/java.hxml # TODO
+  - haxe hxml/java.hxml && java -jar bin/java/TestAll.jar
   #- haxe hxml/js.hxml # TODO + saucelabs
   - haxe hxml/js.hxml && node bin/js.js
   #- haxe hxml/php.hxml && php bin/php/index.php
-  #- haxe hxml/neko.hxml && neko bin/neko.n
+  - haxe hxml/neko.hxml && neko bin/neko.n
   #- haxe hxml/python.hxml && python3 bin/python.py
