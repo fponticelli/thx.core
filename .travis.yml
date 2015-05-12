@@ -30,12 +30,12 @@ install:
   #- install_flashplayer
 
 script:
-  - haxe hxml/cpp.hxml && ./bin/cpp/TestAll
-  - haxe hxml/cs.hxml && mono bin/cs/bin/TestAll.exe
-  #- haxe hxml/flash.hxml && run_flash bin/flash.swf
-  - haxe hxml/java.hxml && java -jar bin/java/TestAll.jar
-  #- haxe hxml/js.hxml # TODO + saucelabs
-  - haxe hxml/js.hxml && node bin/js.js
-  #- haxe hxml/php.hxml && php bin/php/index.php
-  - haxe hxml/neko.hxml && neko bin/neko.n
+  - haxe hxml/cpp.hxml -D travis && ./bin/cpp/TestAll
+  - haxe hxml/cs.hxml -D travis && mono bin/cs/bin/TestAll.exe
+  #- haxe hxml/flash.hxml -D travis && run_flash bin/flash.swf
+  - haxe hxml/java.hxml -D travis && java -jar bin/java/TestAll.jar
+  #- haxe hxml/js.hxml -D travis # TODO + saucelabs
+  - haxe hxml/js.hxml -D travis && node bin/js.js
+  #- haxe hxml/php.hxml -D travis && php bin/php/index.php
+  - haxe hxml/neko.hxml -D travis && neko bin/neko.n
   #- haxe hxml/python.hxml && python3 bin/python.py
