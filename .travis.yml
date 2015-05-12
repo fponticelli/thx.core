@@ -22,45 +22,17 @@ before_install:
   - source hxml/haxe_travis_scripts/scripts.sh
 
 install:
-  # hxcpp
-  - if [ $TRAVIS_HAXE_VERSION == "development" ]; then
-    git clone https://github.com/HaxeFoundation/hxcpp.git;
-    haxelib dev hxcpp ./hxcpp;
-    cd hxcpp/tools/hxcpp;
-    haxe compile.hxml;
-    cd ../../project;
-    neko build.n;
-    cd ../../;
-    fi
-  - if [ $TRAVIS_HAXE_VERSION == "3.2.0" ]; then
-    haxelib install hxcpp 3.2.94;
-    fi
-  # hxjava
-  - if [ $TRAVIS_HAXE_VERSION == "development" ]; then
-    haxelib git hxjava https://github.com/HaxeFoundation/hxjava.git;
-    fi
-  - if [ $TRAVIS_HAXE_VERSION == "3.2.0" ];
-    then haxelib install hxjava 3.2.0;
-    fi
-  # hxcs
-  - if [ $TRAVIS_HAXE_VERSION == "development" ]; then
-    haxelib git hxcs https://github.com/HaxeFoundation/hxcs.git;
-    fi
-  - if [ $TRAVIS_HAXE_VERSION == "3.2.0" ]; then
-    haxelib install hxcs 3.2.0;
-    fi
+  - install_hxcpp
+  - install_hxjava
+  - install_hxcs
   - haxelib install utest
   - haxelib list
-  # flash player
-  #- wget http://fpdownload.macromedia.com/pub/flashplayer/updaters/11/flashplayer_11_sa_debug.i386.tar.gz
-  #- sudo apt-get install libgtk2.0-0:i386 libxt6:i386 libnss3:i386 libcurl3:i386
-  #- [ -f /etc/init.d/xvfb ] || sudo apt-get install xvfb
-  #- tar -xf flashplayer* -C $HOME/
+  #- install_flashplayer
 
 script:
   - haxe hxml/cpp.hxml && ./bin/cpp/TestAll
   - haxe hxml/cs.hxml && mono bin/cs/bin/TestAll.exe
-  #- haxe hxml/flash.hxml && xvfb-run -a $HOME/flashplayerdebugger bin/flash.swf # TODO
+  #- haxe hxml/flash.hxml && run_flash bin/flash.swf # TODO
   - haxe hxml/java.hxml && java -jar bin/java/TestAll.jar
   - haxe hxml/js.hxml # TODO + saucelabs
   - haxe hxml/js.hxml && node bin/js.js
