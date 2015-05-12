@@ -32,6 +32,6 @@ script:
   #- haxe hxml/java.hxml # TODO
   #- haxe hxml/js.hxml # TODO + saucelabs
   - haxe hxml/js.hxml && node bin/js.js
-  - haxe hxml/php.hxml && php bin/php/index.php
-  - haxe hxml/neko.hxml && neko bin/neko.n
-  - haxe hxml/python.hxml && python3 bin/python.py
+  #- haxe hxml/php.hxml && php bin/php/index.php
+  #- haxe hxml/neko.hxml && neko bin/neko.n
+  #- haxe hxml/python.hxml && python3 bin/python.py
