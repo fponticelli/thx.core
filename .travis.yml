@@ -20,18 +20,18 @@ addons:
 
 install:
   # hxcpp
-  #- if [ $TRAVIS_HAXE_VERSION == "development" ]; then
-  #  git clone https://github.com/HaxeFoundation/hxcpp.git;
-  #  haxelib dev hxcpp ./hxcpp;
-  #  cd hxcpp/tools/hxcpp;
-  #  haxe compile.hxml;
-  #  cd ../../project;
-  #  neko build.n;
-  #  cd ../../;
-  #  fi
-  #- if [ $TRAVIS_HAXE_VERSION == "3.1.3" ]; then
-  #  haxelib install hxcpp 3.1.68;
-  #  fi
+  - if [ $TRAVIS_HAXE_VERSION == "development" ]; then
+    git clone https://github.com/HaxeFoundation/hxcpp.git;
+    haxelib dev hxcpp ./hxcpp;
+    cd hxcpp/tools/hxcpp;
+    haxe compile.hxml;
+    cd ../../project;
+    neko build.n;
+    cd ../../;
+    fi
+  - if [ $TRAVIS_HAXE_VERSION == "3.1.3" ]; then
+    haxelib install hxcpp 3.1.68;
+    fi
   # hxjava
   - if [ $TRAVIS_HAXE_VERSION == "development" ]; then
     haxelib git hxjava https://github.com/HaxeFoundation/hxjava.git;
@@ -55,7 +55,7 @@ install:
   #- tar -xf flashplayer* -C $HOME/
 
 script:
-  #- haxe hxml/cpp.hxml && ./bin/cpp/TestAll
+  - haxe hxml/cpp.hxml && ./bin/cpp/TestAll
   #- haxe hxml/cs.hxml && mono bin/cs/bin/TestAll.exe
   #- haxe hxml/flash.hxml && xvfb-run -a $HOME/flashplayerdebugger bin/flash.swf # TODO
   - haxe hxml/java.hxml && java -jar bin/java/TestAll.jar
