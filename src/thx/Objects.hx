@@ -107,7 +107,7 @@ Gets a value from an object by a string path.  The path can contain object keys 
 by ".".  Returns null for a path that does not exist.
 
 E.g. { key1: { key2: [1, 2, 3] } }.getPath("key1.key2.2") -> returns 3
-*/
+**/
   public static function getPath(o : {}, path : String) : Dynamic {
     var paths = path.split(".");
     var current : Dynamic = o;
@@ -133,7 +133,7 @@ by ".".  Returns the original object, for optional chaining of other object meth
 Inner objects and arrays will be created as needed when traversing the path.
 
 E.g. { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.2", 4) -> returns { key1: { key2: [ 1, 2, 4 ] } }
-*/
+**/
   public static function setPath<T>(o : {}, path : String, val : T) : {} {
     var paths = path.split(".");
     var current : Dynamic = o;
@@ -170,6 +170,29 @@ E.g. { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.2", 4) -> returns { key1: 
     } else {
       Reflect.setField(current, p, val);
     }
+    return o;
+  }
+
+/**
+Delete an object's property, given a string path to that property.
+**/
+  public static function deletePath(o : {}, path : String) : {} {
+    var paths = path.split(".");
+
+    // the last item in the list of paths is the target field
+    var target = paths.pop();
+
+    // iterate over all remaining fields to find the sub-object containing
+    // the target field to be removed
+    try {
+      var sub = paths.reduce(function(existing, nextLayer) {
+        return Reflect.field(existing, nextLayer);
+      }, o);
+
+      if (null != sub)
+        Reflect.deleteField(sub, target);
+    } catch (e : Dynamic) { }
+
     return o;
   }
 }
