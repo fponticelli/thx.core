@@ -1,34 +1,19 @@
-language: c
+language: haxe
+
+haxe:
+  - "3.1.3"
+  - development
 
 env:
   global:
     - TARGET_DIR=bin
     - secure: UUVsPXSN6eOaKoUaTbGuK7OeaglIkkvNqkkZgR5ZttJ/d8hkRLDVD6rJntL/clHTOvpwxINCesa+sp8t4fFJuCA4PWrQg2cBrkx1FcmgzurQhsSoiqVUfWn56wzvHCVW7GhieLpINSEFZXMG1qt7RbsOHcs15SImJ2V+ik91zuE=
     - secure: GtWMwFaNAmEq+ubx28jg32N40mIPAm5tTxD5TJlF5eFONpnVNV78p/E2CeHSgpMqrAiRTAyT/4KrjimIRs0XB6R5aW470/DHTgercwTzP+SzcHjqDm6fHnkiqemH9f+xS/JZvc1xs/2KoVm8uLokBrIJBSuW21yy+BrEhnBECUo=
-  matrix:
-    - TARGET=cpp
-    - TARGET=cs
-    - TARGET=flash
-    - TARGET=java
-    - TARGET=js TOOLCHAIN="browser"
-    - TARGET=js TOOLCHAIN="nodejs"
-    - TARGET=neko
-    - TARGET=php
-    - TARGET=python
 
-matrix:
-  fast_finish: true
-
-before_install: # clone travis-hx repo
-  - travis_retry git clone --depth=50 --branch=master git://github.com/fponticelli/travis-hx.git ~/travis-hx
-
-install: # setup the target
-  - ~/travis-hx/setup.sh
+install:
   - haxelib install utest
 
 script:
+  - haxe hxml/neko.hxml -D travis
   - cd $TRAVIS_BUILD_DIR
-  # build the tests
-  - haxe hxml/$TARGET.hxml -D travis
-  # run the tests
-  - ~/travis-hx/runtests.sh $FILENAME
+  - neko bin/neko.n
