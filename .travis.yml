@@ -32,7 +32,7 @@ install:
 script:
   - haxe hxml/cpp.hxml && ./bin/cpp/TestAll
   - haxe hxml/cs.hxml && mono bin/cs/bin/TestAll.exe
-  #- haxe hxml/flash.hxml && run_flash bin/flash.swf # TODO
+  - haxe hxml/flash.hxml && run_flash bin/flash.swf
   - haxe hxml/java.hxml && java -jar bin/java/TestAll.jar
   - haxe hxml/js.hxml # TODO + saucelabs
   - haxe hxml/js.hxml && node bin/js.js
