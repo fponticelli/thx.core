@@ -18,6 +18,9 @@ addons:
       - mono-mcs
       - nodejs
 
+before_install:
+  - source hxml/haxe_travis_scripts/scripts.sh
+
 install:
   # hxcpp
   - if [ $TRAVIS_HAXE_VERSION == "development" ]; then
