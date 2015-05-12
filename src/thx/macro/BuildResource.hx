@@ -102,8 +102,8 @@ class BuildResource {
 		var list = formats
 			.map(function(format) return '$path.$format')
 			.filter(function(path) {
-				trace('$path: ${sys.FileSystem.exists(path)} ${!sys.FileSystem.isDirectory(path)}');
-				return sys.FileSystem.exists(path) && !sys.FileSystem.isDirectory(path);
+				trace('$path: ${sys.FileSystem.exists(path)}');
+				return sys.FileSystem.exists(path);
 			})
 			.map(function(path) return { file : path, format : null });
 		return getFromFiles(list, module, prefix);
