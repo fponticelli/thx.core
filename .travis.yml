@@ -4,6 +4,20 @@ haxe:
   - "3.2.0"
   - development
 
+env:
+  - TEST=cpp.run.hxml
+  - TEST=cs.run.hxml
+  - TEST=java.run.hxml
+  - TEST=js.run.hxml
+  - TEST=php.run.hxml
+  - TEST=neko.run.hxml
+  - TEST=python.run.hxml
+  global:
+    - CI_NODE_TOTAL=2
+  matrix:
+    - CI_NODE_INDEX=0
+    - CI_NODE_INDEX=1
+
 addons:
   apt:
     packages:
@@ -22,14 +36,6 @@ install:
   - install_hxcs
   - haxelib install utest
   - haxelib list
-  #- install_flashplayer
 
 script:
-  - haxe hxml/cpp.hxml -D travis && ./bin/cpp/TestAll
-  - haxe hxml/cs.hxml -D travis && mono bin/cs/bin/TestAll.exe
-  #- haxe hxml/flash.hxml -D travis -D exit && run_flash bin/flash.swf
-  - haxe hxml/java.hxml -D travis && java -jar bin/java/TestAll.jar
-  - haxe hxml/js.hxml -D travis && node bin/js.js && phantomjs bin/js.js
-  - haxe hxml/php.hxml -D travis && php bin/php/index.php
-  - haxe hxml/neko.hxml -D travis && neko bin/neko.n
-  - haxe hxml/python.hxml -D travis && python3 bin/python.py
+  - haxe "hxml/$TEST" -D travis
