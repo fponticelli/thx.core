@@ -72,7 +72,7 @@ class TestObjects {
     Assert.same({ key1: 123, newKey: "val" }, { key1: 123 }.setPath("newKey", "val"));
   }
 
-  public function testDeletePath() {
+  public function testRemovePath() {
     var simple = { foo: "bar" };
     var nested = {
       foo: {
@@ -83,10 +83,10 @@ class TestObjects {
       }
     };
 
-    Assert.same({}, simple.deletePath('foo'));
+    Assert.same({}, simple.removePath('foo'));
     Assert.same({}, simple);
-    Assert.same(simple, simple.deletePath('a.b.c.d'));
+    Assert.same(simple, simple.removePath('a.b.c.d'));
 
-    Assert.same({ foo: { bar: { baz: "qux"}}}, nested.deletePath('foo.bar.other'));
+    Assert.same({ foo: { bar: { baz: "qux"}}}, nested.removePath('foo.bar.other'));
   }
 }

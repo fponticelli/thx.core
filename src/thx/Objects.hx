@@ -176,7 +176,7 @@ E.g. { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.2", 4) -> returns { key1: 
 /**
 Delete an object's property, given a string path to that property.
 **/
-  public static function deletePath(o : {}, path : String) : {} {
+  public static function removePath(o : {}, path : String) : {} {
     var paths = path.split(".");
 
     // the last item in the list of paths is the target field
