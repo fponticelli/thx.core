@@ -113,7 +113,12 @@ E.g. { key1: { key2: [1, 2, 3] } }.hasPath("key1.key2.2") -> returns true
     var current : Dynamic = o;
 
     for (currentPath in paths) {
-      if (Reflect.hasField(current, currentPath)) {
+      if(currentPath.isDigitsOnly()) {
+        var index = Std.parseInt(currentPath),
+            arr = Std.instance(current, Array);
+        if(null == arr || arr.length <= index) return false;
+        current = arr[index];
+      } else if (Reflect.hasField(current, currentPath)) {
         current = Reflect.field(current, currentPath);
       } else {
         return false;
