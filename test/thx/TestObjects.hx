@@ -30,6 +30,31 @@ class TestObjects {
     Assert.same([{ _0 : 'a', _1 : 'A'}, { _0 : 'b', _1 : 'B'}], tuples);
   }
 
+  public function testHasPath() {
+    var o = {
+      key1: {
+        key2: 123,
+        key3: "abc",
+        key4: [
+          "one",
+          "two"
+        ],
+        key5: [
+          { key6: "test1" },
+          { key6: "test2" },
+        ],
+        key6: null
+      }
+    };
+
+    Assert.isTrue(o.hasPath('key1.key2'));
+    Assert.isTrue(o.hasPath('key1.key4.1'));
+    Assert.isTrue(o.hasPath('key1.key6'));
+
+    Assert.isFalse(o.hasPath('key1.key4.2'));
+    Assert.isFalse(o.hasPath('key1.key7'));
+  }
+
   public function testGetPath() {
     var o = {
       key1: {

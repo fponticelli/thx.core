@@ -103,6 +103,26 @@ tuple is the field name and the right value (_1) is the field value.
     );
 
 /**
+Determines whether an object has fields represented by a string path.  The path
+can contain object keys and array indices separated by ".".
+
+E.g. { key1: { key2: [1, 2, 3] } }.hasPath("key1.key2.2") -> returns true
+**/
+  public static function hasPath(o : {}, path : String, ?nonNullValue : Bool = false) : Bool {
+    var paths = path.split(".");
+    var current : Dynamic = o;
+
+    for (currentPath in paths) {
+      if (Reflect.hasField(current, currentPath)) {
+        current = Reflect.field(current, currentPath);
+      } else {
+        return false;
+      }
+    }
+    return true;
+  }
+
+/**
 Gets a value from an object by a string path.  The path can contain object keys and array indices separated
 by ".".  Returns null for a path that does not exist.
 
