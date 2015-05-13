@@ -6,13 +6,13 @@ haxe:
 
 env:
   matrix:
-    - TEST=cpp.run.hxml
-    - TEST=cs.run.hxml
-    - TEST=java.run.hxml
-    - TEST=js.run.hxml
-    - TEST=php.run.hxml
-    - TEST=neko.run.hxml
-    - TEST=python.run.hxml
+    - TEST=cpp
+    - TEST=cs
+    - TEST=java
+    - TEST=js
+    - TEST=php
+    - TEST=neko
+    - TEST=python
 
 addons:
   apt:
@@ -27,11 +27,10 @@ before_install:
   - source hxml/haxe_travis_scripts/scripts.sh
 
 install:
-  - install_hxcpp
-  - install_hxjava
-  - install_hxcs
+  - if [[ $TEST == "cpp" ]]; then install_hxcpp; fi
+  - if [[ $TEST == "java" ]]; then install_hxjava; fi
+  - if [[ $TEST == "cs" ]]; then install_hxcs; fi
   - haxelib install utest
-  - haxelib list
 
 script:
-  - haxe "hxml/$TEST" -D travis
+  - haxe "hxml/$TEST.run.hxml" -D travis
