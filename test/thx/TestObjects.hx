@@ -55,6 +55,29 @@ class TestObjects {
     Assert.isFalse(o.hasPath('key1.key7'));
   }
 
+  public function testHasPathValue() {
+    var o = {
+      key1: {
+        key2: 123,
+        key3: "abc",
+        key4: [
+          "one",
+          "two",
+          null
+        ],
+        key5: [
+          { key6: "test1" },
+          { key6: "test2" },
+        ],
+        key6: null
+      }
+    };
+
+    Assert.isFalse(o.hasPathValue('key1.key6'));
+    Assert.isFalse(o.hasPathValue('key1.key4.2'));
+    Assert.isFalse(o.hasPathValue('key1.key7'));
+  }
+
   public function testGetPath() {
     var o = {
       key1: {

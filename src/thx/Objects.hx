@@ -119,7 +119,16 @@ E.g. { key1: { key2: [1, 2, 3] } }.hasPath("key1.key2.2") -> returns true
         return false;
       }
     }
-    return true;
+    return nonNullValue ? current != null : true;
+  }
+
+/**
+Like `hasPath`, but will return `false` for null values, even if the key exists.
+
+E.g. { key1 : { key2: null } }.hasPathValue("key1.key2") -> returns false
+**/
+  public static function hasPathValue(o : {}, path : String) : Bool {
+    return hasPath(o, path, true);
   }
 
 /**
@@ -195,6 +204,8 @@ E.g. { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.2", 4) -> returns { key1: 
 
 /**
 Delete an object's property, given a string path to that property.
+
+E.g. { foo : 'bar' }.removePath('foo') -> returns {}
 **/
   public static function removePath(o : {}, path : String) : {} {
     var paths = path.split(".");
