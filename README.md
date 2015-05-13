@@ -3,8 +3,6 @@
 
 [![Build Status](https://travis-ci.org/fponticelli/thx.core.svg?branch=master)](https://travis-ci.org/fponticelli/thx.core)
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/thx-core.svg)](https://saucelabs.com/u/thx-core)
-
 Generic multi-purpose library. `thx.core` aims to be the [lodash](http://lodash.com/) library for Haxe.
 
 ## Data Structures

@@ -64,7 +64,11 @@ or otherwise a positive non-sero number.
 `contains` returns `true` if `s` contains one or more occurrences of `test`.
 **/
   inline public static function contains(s : String, test : String)
+  #if php
+    return test == "" || s.indexOf(test) >= 0;
+  #else
     return s.indexOf(test) >= 0;
+  #end
 
 /**
 `contains` returns `true` if `s` contains any of the strings in `tests`

@@ -103,8 +103,10 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
     return this;
   }
 
-  inline public function setMany(name : String, values : Array<String>)
-    return this.set(name, values);
+  public function setMany(name : String, values : Array<String>) {
+    this.set(name, values);
+    return this;
+  }
 
   public function toStringWithSymbols(separator : String, assignment : String, ?encodeURIComponent : String -> String) {
     if(null == this)
