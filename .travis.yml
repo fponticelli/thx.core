@@ -4,33 +4,38 @@ haxe:
   - "3.2.0"
   - development
 
+matrix:
+  include:
+    - env: TARGET=cpp
+    - env: TARGET=cs
+      addons: {apt: {packages: [mono-devel, mono-mcs]}}
+    - env: TARGET=java
+    - env: TARGET=js
+      addons: {apt: {packages: [nodejs]}}
+    - env: TARGET=php
+      addons: {apt: {packages: [php5-cli]}}
+    - env: TARGET=neko
+    - env: TARGET=python
+      addons: {apt: {packages: [python3]}}
+
 env:
   matrix:
-    - TEST=cpp
-    - TEST=cs
-    - TEST=java
-    - TEST=js
-    - TEST=php
-    - TEST=neko
-    - TEST=python
-
-addons:
-  apt:
-    packages:
-      - python3
-      - php5-cli
-      - mono-devel
-      - mono-mcs
-      - nodejs
+    - TARGET=cpp
+    - TARGET=cs
+    - TARGET=java
+    - TARGET=js
+    - TARGET=php
+    - TARGET=neko
+    - TARGET=python
 
 before_install:
   - source hxml/haxe_travis_scripts/scripts.sh
 
 install:
-  - if [[ $TEST == "cpp" ]]; then install_hxcpp; fi
-  - if [[ $TEST == "java" ]]; then install_hxjava; fi
-  - if [[ $TEST == "cs" ]]; then install_hxcs; fi
+  - if [[ $TARGET == "cpp"  ]]; then install_hxcpp;  fi
+  - if [[ $TARGET == "java" ]]; then install_hxjava; fi
+  - if [[ $TARGET == "cs"   ]]; then install_hxcs;   fi
   - haxelib install utest
 
 script:
-  - haxe "hxml/$TEST.run.hxml" -D travis
+  - haxe "hxml/$TARGET.run.hxml" -D travis
