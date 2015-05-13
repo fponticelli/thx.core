@@ -5,18 +5,18 @@ haxe:
   - development
 
 env:
-  - TEST=cpp.run.hxml
-  - TEST=cs.run.hxml
-  - TEST=java.run.hxml
-  - TEST=js.run.hxml
-  - TEST=php.run.hxml
-  - TEST=neko.run.hxml
-  - TEST=python.run.hxml
   global:
     - CI_NODE_TOTAL=2
   matrix:
     - CI_NODE_INDEX=0
     - CI_NODE_INDEX=1
+    - TEST=cpp.run.hxml
+    - TEST=cs.run.hxml
+    - TEST=java.run.hxml
+    - TEST=js.run.hxml
+    - TEST=php.run.hxml
+    - TEST=neko.run.hxml
+    - TEST=python.run.hxml
 
 addons:
   apt:
