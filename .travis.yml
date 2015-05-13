@@ -12,7 +12,7 @@ env:
 addons:
   apt:
     packages:
-      #- python3
+      - python3
       - php5-cli
       - mono-devel
       - mono-mcs
@@ -38,4 +38,4 @@ script:
   - haxe hxml/js.hxml -D travis && node bin/js.js
   - haxe hxml/php.hxml -D travis && php bin/php/index.php
   - haxe hxml/neko.hxml -D travis && neko bin/neko.n
-  #- haxe hxml/python.hxml && python3 bin/python.py
+  - haxe hxml/python.hxml && python3 bin/python.py
