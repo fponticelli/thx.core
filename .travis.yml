@@ -3,36 +3,40 @@ language: haxe
 matrix:
   include:
     - env: TARGET=cpp
-      haxe:
-        - 3.2.0
-        - development
+      haxe: 3.2.0
+    - env: TARGET=cpp
+      haxe: development
     - env: TARGET=cs
-      haxe:
-        - 3.2.0
-        - development
+      haxe: 3.2.0
+      addons: {apt: {packages: [mono-devel, mono-mcs]}}
+    - env: TARGET=cs
+      haxe: development
       addons: {apt: {packages: [mono-devel, mono-mcs]}}
     - env: TARGET=java
-      haxe:
-        - 3.2.0
-        - development
+      haxe: 3.2.0
+    - env: TARGET=java
+      haxe: development
     - env: TARGET=js
-      haxe:
-        - 3.2.0
-        - development
+      haxe: 3.2.0
+      addons: {apt: {packages: [nodejs]}}
+    - env: TARGET=js
+      haxe: development
       addons: {apt: {packages: [nodejs]}}
     - env: TARGET=php
-      haxe:
-        - 3.2.0
-        - development
+      haxe: 3.2.0
+      addons: {apt: {packages: [php5-cli]}}
+    - env: TARGET=php
+      haxe: development
       addons: {apt: {packages: [php5-cli]}}
     - env: TARGET=neko
-      haxe:
-        - 3.2.0
-        - development
+      haxe: 3.2.0
+    - env: TARGET=neko
+      haxe: development
     - env: TARGET=python
-      haxe:
-        - 3.2.0
-        - development
+      haxe: 3.2.0
+      addons: {apt: {packages: [python3]}}
+    - env: TARGET=python
+      haxe: development
       addons: {apt: {packages: [python3]}}
 
 before_install:
