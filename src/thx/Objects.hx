@@ -103,11 +103,45 @@ tuple is the field name and the right value (_1) is the field value.
     );
 
 /**
+Determines whether an object has fields represented by a string path.  The path
+can contain object keys and array indices separated by ".".
+
+E.g. { key1: { key2: [1, 2, 3] } }.hasPath("key1.key2.2") -> returns true
+**/
+  public static function hasPath(o : {}, path : String) : Bool {
+    var paths = path.split(".");
+    var current : Dynamic = o;
+
+    for (currentPath in paths) {
+      if(currentPath.isDigitsOnly()) {
+        var index = Std.parseInt(currentPath),
+            arr = Std.instance(current, Array);
+        if(null == arr || arr.length <= index) return false;
+        current = arr[index];
+      } else if (Reflect.hasField(current, currentPath)) {
+        current = Reflect.field(current, currentPath);
+      } else {
+        return false;
+      }
+    }
+    return true;
+  }
+
+/**
+Like `hasPath`, but will return `false` for null values, even if the key exists.
+
+E.g. { key1 : { key2: null } }.hasPathValue("key1.key2") -> returns false
+**/
+  public static function hasPathValue(o : {}, path : String) : Bool {
+    return getPath(o, path) != null;
+  }
+
+/**
 Gets a value from an object by a string path.  The path can contain object keys and array indices separated
 by ".".  Returns null for a path that does not exist.
 
 E.g. { key1: { key2: [1, 2, 3] } }.getPath("key1.key2.2") -> returns 3
-*/
+**/
   public static function getPath(o : {}, path : String) : Dynamic {
     var paths = path.split(".");
     var current : Dynamic = o;
@@ -133,7 +167,7 @@ by ".".  Returns the original object, for optional chaining of other object meth
 Inner objects and arrays will be created as needed when traversing the path.
 
 E.g. { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.2", 4) -> returns { key1: { key2: [ 1, 2, 4 ] } }
-*/
+**/
   public static function setPath<T>(o : {}, path : String, val : T) : {} {
     var paths = path.split(".");
     var current : Dynamic = o;
@@ -170,6 +204,38 @@ E.g. { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.2", 4) -> returns { key1: 
     } else {
       Reflect.setField(current, p, val);
     }
+    return o;
+  }
+
+/**
+Delete an object's property, given a string path to that property.
+
+E.g. { foo : 'bar' }.removePath('foo') -> returns {}
+**/
+  public static function removePath(o : {}, path : String) : {} {
+    var paths = path.split(".");
+
+    // the last item in the list of paths is the target field
+    var target = paths.pop();
+
+    // iterate over all remaining fields to find the sub-object containing
+    // the target field to be removed
+    try {
+      var sub = paths.reduce(function(existing, nextPath) {
+
+        if (nextPath.isDigitsOnly()) {
+          var current : Dynamic = existing;
+          var index = Std.parseInt(nextPath);
+          return current[index];
+        } else {
+          return Reflect.field(existing, nextPath);
+        }
+      }, o);
+
+      if (null != sub)
+        Reflect.deleteField(sub, target);
+    } catch (e : Dynamic) { }
+
     return o;
   }
 }

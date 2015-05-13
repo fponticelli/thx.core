@@ -30,6 +30,54 @@ class TestObjects {
     Assert.same([{ _0 : 'a', _1 : 'A'}, { _0 : 'b', _1 : 'B'}], tuples);
   }
 
+  public function testHasPath() {
+    var o = {
+      key1: {
+        key2: 123,
+        key3: "abc",
+        key4: [
+          "one",
+          "two"
+        ],
+        key5: [
+          { key6: "test1" },
+          { key6: "test2" },
+        ],
+        key6: null
+      }
+    };
+
+    Assert.isTrue(o.hasPath('key1.key2'));
+    Assert.isTrue(o.hasPath('key1.key4.1'));
+    Assert.isTrue(o.hasPath('key1.key6'));
+
+    Assert.isFalse(o.hasPath('key1.key4.2'));
+    Assert.isFalse(o.hasPath('key1.key7'));
+  }
+
+  public function testHasPathValue() {
+    var o = {
+      key1: {
+        key2: 123,
+        key3: "abc",
+        key4: [
+          "one",
+          "two",
+          null
+        ],
+        key5: [
+          { key6: "test1" },
+          { key6: "test2" },
+        ],
+        key6: null
+      }
+    };
+
+    Assert.isFalse(o.hasPathValue('key1.key6'));
+    Assert.isFalse(o.hasPathValue('key1.key4.2'));
+    Assert.isFalse(o.hasPathValue('key1.key7'));
+  }
+
   public function testGetPath() {
     var o = {
       key1: {
@@ -70,5 +118,31 @@ class TestObjects {
     Assert.same({ key1: { key2: "val" } }, { key1: { key2: "before" } }.setPath("key1.key2", "val"));
     Assert.same({ key1: { key2: [ 1, 55, 3 ] } }, { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.1", 55));
     Assert.same({ key1: 123, newKey: "val" }, { key1: 123 }.setPath("newKey", "val"));
+  }
+
+  public function testRemovePath() {
+    var simple = { foo: "bar" };
+    var nested = {
+      foo: {
+        bar: {
+          baz: "qux",
+          other: "other"
+        }
+      }
+    };
+    var arr = {
+      foo: [{}, {
+        bar: 'baz'
+      }]
+    };
+
+    Assert.same({}, simple.removePath('foo'));
+    Assert.same({}, simple);
+    Assert.same(simple, simple.removePath('a.b.c.d'));
+
+    Assert.same({ foo: { bar: { baz: "qux"}}}, nested.removePath('foo.bar.other'));
+
+    Assert.same(arr, arr.removePath('foo.0.bar'));
+    Assert.same({ foo: [{}, {}]}, arr.removePath('foo.1.bar'));
   }
 }
