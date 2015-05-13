@@ -185,8 +185,15 @@ Delete an object's property, given a string path to that property.
     // iterate over all remaining fields to find the sub-object containing
     // the target field to be removed
     try {
-      var sub = paths.reduce(function(existing, nextLayer) {
-        return Reflect.field(existing, nextLayer);
+      var sub = paths.reduce(function(existing, nextPath) {
+
+        if (nextPath.isDigitsOnly()) {
+          var current : Dynamic = existing;
+          var index = Std.parseInt(nextPath);
+          return current[index];
+        } else {
+          return Reflect.field(existing, nextPath);
+        }
       }, o);
 
       if (null != sub)

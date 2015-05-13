@@ -82,11 +82,19 @@ class TestObjects {
         }
       }
     };
+    var arr = {
+      foo: [{}, {
+        bar: 'baz'
+      }]
+    };
 
     Assert.same({}, simple.removePath('foo'));
     Assert.same({}, simple);
     Assert.same(simple, simple.removePath('a.b.c.d'));
 
     Assert.same({ foo: { bar: { baz: "qux"}}}, nested.removePath('foo.bar.other'));
+
+    Assert.same(arr, arr.removePath('foo.0.bar'));
+    Assert.same({ foo: [{}, {}]}, arr.removePath('foo.1.bar'));
   }
 }
