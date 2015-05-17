@@ -40,7 +40,8 @@ matrix:
       addons: {apt: {packages: [python3]}}
 
 before_install:
-  - source hxml/haxe_travis_scripts/scripts.sh
+  - git clone --branch=master git://github.com/fponticelli/haxe_travis_scripts
+  - source haxe_travis_scripts/scripts.sh
 
 install:
   - if [[ $TARGET == "cpp"  ]]; then install_hxcpp;  fi
