@@ -1,6 +1,8 @@
 package thx;
 
+using thx.Arrays;
 import thx.Objects;
+import thx.Tuple;
 
 /**
 `Dynamics` provides additional extension methods on any type.
@@ -191,4 +193,75 @@ Class instances will either be cloned, or the reference copied, depending on the
         }
     }
   }
+}
+
+class DynamicsT {
+  /**
+  `isEmpty` returns `true` if the object doesn't have any field.
+  **/
+    inline public static function isEmpty<T>(o : Dynamic<T>) : Bool
+      return size(o) == 0;
+
+  /**
+  `exists` returns true if `o` contains a field named `name`.
+  **/
+    inline public static function exists<T>(o : Dynamic<T>, name : String) : Bool
+      return Reflect.hasField(o, name);
+
+  /**
+  `fields` returns an array of string containing the field names of the argument object.
+  **/
+    inline public static function fields<T>(o : Dynamic<T>) : Array<String>
+      return Reflect.fields(o);
+
+  /**
+  Copies the values from the fields of `from` to `to`. If `to` already contains those fields, then it replace
+  those values with the return value of the function `replacef`.
+
+  If not set, `replacef` always returns the value from the `from` object.
+  **/
+    public static function merge<T>(to : Dynamic<T>, from : Dynamic<T>, ?replacef : String -> Dynamic -> Dynamic -> Dynamic) : Dynamic<T> {
+      if(null == replacef)
+        replacef = function(field : String, oldv : Dynamic, newv : Dynamic) return newv;
+      for(field in Reflect.fields(from)) {
+        var newv = Reflect.field(from, field);
+        if(Reflect.hasField(to, field)) {
+          Reflect.setField(to, field, replacef(field, Reflect.field(to, field), newv));
+        } else {
+          Reflect.setField(to, field, newv);
+        }
+      }
+      return to;
+    }
+
+  /**
+  `objectToMap` transforms an anonymous object into an instance of `Map<String, Dynamic>`.
+  **/
+    @:generic
+    public static function objectToMap<T>(o : Dynamic<T>) : Map<String, T>
+      return tuples(o).reduce(function(map : Map<String, T>, t) {
+        map.set(t._0, t._1);
+        return map;
+      }, new Map());
+
+  /**
+  `size` returns how many fields are present in the object.
+  **/
+    inline public static function size<T>(o : Dynamic<T>) : Int
+      return Reflect.fields(o).length;
+
+  /**
+  `values` returns an array of dynamic values containing the values of each field in the argument object.
+  **/
+    inline public static function values<T>(o : Dynamic<T>) : Array<Dynamic>
+      return Reflect.fields(o).map(function(key) return Reflect.field(o, key));
+
+  /**
+  Converts an object into an Array<Tuple2<String, Dynamic>> where the left value (_0) of the
+  tuple is the field name and the right value (_1) is the field value.
+  **/
+    public static function tuples<T>(o : Dynamic<T>): Array<Tuple2<String, T>>
+      return Reflect.fields(o).map(function(key)
+          return new Tuple2(key, Reflect.field(o, key))
+      );
 }
