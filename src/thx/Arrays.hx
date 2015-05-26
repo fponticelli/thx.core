@@ -214,6 +214,16 @@ If no element satisfies `predicate` the array is left unmodified and `null` is r
   }
 
 /**
+Filters out all `null` values from an array.
+**/
+  public static function filterNull<T>(a : Array<Null<T>>) : Array<T> {
+    var arr : Array<T> = [];
+    for(v in a)
+      if(null != v) arr.push(v);
+    return arr;
+  }
+
+/**
 Filters an array according to the expression passed as the second argument.
 
 The special symbol `_` refers to the current item.
