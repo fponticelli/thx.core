@@ -3,7 +3,8 @@ package thx.macro;
 #if (neko || macro)
 import haxe.macro.Context;
 import haxe.macro.Expr;
-
+using StringTools;
+using haxe.macro.ExprTools;
 /**
 Helper methods to use inside macro context.
 **/
@@ -43,5 +44,19 @@ It returns null if the file is not found in the class paths.
     }
     return null;
   }
+/**
+Given an expression expr, a String symbol and an expression withExpr, it returns a new expression
+with the substituion of symbol with witnExpr expression.
+**/
+  public static function replaceSymbol(expr:Expr,symbol:String,withExpr:Expr):Expr {
+    return switch expr {
+      case macro $i{name} if (name.startsWith("_")):
+        return withExpr;
+      default: return expr.map(function(expr) {
+        return replaceSymbol(expr,symbol,withExpr);
+      });
+    }
+  }
+
 }
 #end
