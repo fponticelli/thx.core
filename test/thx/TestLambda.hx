@@ -1,6 +1,7 @@
 package thx;
 import utest.Assert;
 import thx.macro.lambda.Functions.*;
+import thx.macro.lambda.Forms.*;
 
 class TestLambda {
   public function new() { }
@@ -16,6 +17,49 @@ class TestLambda {
     Assert.equals(6, fn5(_1+_2+_3)(1,2,3,4,5));
   }
 
+  public function testForms() {
+    with(Assert,{
+      _.equals(1,1);
 
+      var check1 = 0;
+      when(1==1,{
+        _.equals(1,1);
+        check1 = 1;
+      });
+      _.equals(check1,1);
+
+      var check2 = 0;
+      unless(1==1,{
+        _.equals(1,1);
+        check2 = 1;
+      });
+      _.equals(check2,0);
+
+      var check3 = 0;
+      unless(1!=1,{
+        _.equals(1,1);
+        check3 = 1;
+      });
+      _.equals(check3,1);
+
+      var check5 = 0;
+      when(and(1==1,2==2),{
+        _.equals(1,1);
+        check5 = 1;
+      });
+      _.equals(check5,1);
+
+      var check6 = 0;
+      when(or(1==2,2==2),{
+        _.equals(1,1);
+        check6 = 1;
+      });
+      _.equals(check6,1);
+
+      _.equals(false,not(true));
+      _.equals(true,not(false));
+      
+    });
+  }
 
 }
