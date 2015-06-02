@@ -3,7 +3,10 @@ package thx;
 #if macro
 import haxe.macro.Expr;
 import haxe.macro.ExprTools;
+using haxe.macro.ExprTools;
 #end
+
+
 
 /**
 Extension methods for functions with arity 0 (functions that do not take arguments).
@@ -58,6 +61,9 @@ Callback takes an additional argument `index`.
   public inline static function timesi<T>(n : Int, callback : Int -> T)
     return function()
       return Ints.range(n).map(function(i) return callback(i));
+
+  macro public static function fn0(filter:Expr) return macro function() { return $filter;  };
+
 }
 
 /**
@@ -135,6 +141,12 @@ Returns a function that behaves the same as `callback` but has its arguments inv
   public inline static function swapArguments<T1, T2, TReturn>(callback : T1 -> T2 -> TReturn) : T2 -> T1 -> TReturn
     return function(a2 : T2, a1 : T1)
       return callback(a1, a2);
+
+  macro public static function fn1(filter:Expr) {
+    var new_filter = filter.map(thx.macro.lambda.MacroHelper.replace0());
+    return macro function(__tmp0) { return $new_filter;  };
+  }
+
 }
 
 /**
@@ -167,6 +179,14 @@ Wraps `callback` in a function that negates its results.
   public inline static function negate<T1, T2>(callback : T1 -> T2 -> Bool)
     return function(v1 : T1, v2 : T2)
       return !callback(v1, v2);
+
+  macro public static function fn2(filter:Expr) {
+    var new_filter = filter
+      .map(thx.macro.lambda.MacroHelper.replace0())
+      .map(thx.macro.lambda.MacroHelper.replace1());
+    return macro function(__tmp0,__tmp1) { return $new_filter;  };
+  }
+
 }
 
 /**
@@ -199,6 +219,15 @@ Wraps `callback` in a function that negates its results.
   public inline static function negate<T1, T2, T3>(callback : T1 -> T2 -> T3 -> Bool)
     return function(v1 : T1, v2 : T2, v3 : T3)
       return !callback(v1, v2, v3);
+
+  macro public static function fn3(filter:Expr) {
+    var new_filter = filter
+      .map(thx.macro.lambda.MacroHelper.replace0())
+      .map(thx.macro.lambda.MacroHelper.replace1())
+      .map(thx.macro.lambda.MacroHelper.replace2());
+    return macro function(__tmp0,__tmp1,__tmp2) { return $new_filter;  };
+  }
+
 }
 
 /**
@@ -227,4 +256,48 @@ The `identity` function returns the value of its argument.
 `noop` is a function that has no side effects and doesn't return any value.
 **/
   public static function noop() : Void {}
+
+
+  macro public static function fn(filter:Expr) {
+    var new_filter = thx.macro.lambda.MacroHelper.replaceWildCard(filter);
+    var occurrences = thx.macro.lambda.MacroHelper.countMaxWildcard(filter);
+    trace(occurrences);
+    return switch occurrences {
+      case 0:macro function(__tmp0) { return $new_filter;  };
+      case 1:macro function(__tmp0,__tmp1) { return $new_filter;  };
+      case 2:macro function(__tmp0,__tmp1,__tmp2) { return $new_filter;  };
+      case 3:macro function(__tmp0,__tmp1,__tmp2,__tmp3) { return $new_filter;  };
+      case 4:macro function(__tmp0,__tmp1,__tmp2,__tmp3,__tmp4) { return $new_filter;  };
+      default: macro null;
+    };
+  }
+
+  public macro static function with(context:Expr,body:Expr) {
+    var new_body = thx.macro.Macros.replaceSymbol(body,"_",macro $context);
+    return macro $new_body;
+  }
+
+
+}
+
+class Conditions {
+  public macro static function when(cond:Expr,then:Expr) {
+    return macro if ($cond) { $then; };
+  }
+
+  public macro static function unless(cond:Expr,then:Expr) {
+    return macro if (!$cond) { $then; };
+  }
+
+  public macro static function and(cond1:Expr,cond2:Expr) {
+    return macro ($cond1 && $cond2);
+  }
+
+  public macro static function or(cond1:Expr,cond2:Expr) {
+    return macro ($cond1 || $cond2);
+  }
+
+  public macro static function not(cond:Expr) {
+    return macro !($cond);
+  }
 }
