@@ -62,8 +62,6 @@ Callback takes an additional argument `index`.
     return function()
       return Ints.range(n).map(function(i) return callback(i));
 
-  macro public static function fn0(filter:Expr) return macro function() { return $filter;  };
-
 }
 
 /**
@@ -141,12 +139,6 @@ Returns a function that behaves the same as `callback` but has its arguments inv
   public inline static function swapArguments<T1, T2, TReturn>(callback : T1 -> T2 -> TReturn) : T2 -> T1 -> TReturn
     return function(a2 : T2, a1 : T1)
       return callback(a1, a2);
-
-  macro public static function fn1(filter:Expr) {
-    var new_filter = filter.map(thx.macro.lambda.MacroHelper.replace0());
-    return macro function(__tmp0) { return $new_filter;  };
-  }
-
 }
 
 /**
@@ -179,14 +171,6 @@ Wraps `callback` in a function that negates its results.
   public inline static function negate<T1, T2>(callback : T1 -> T2 -> Bool)
     return function(v1 : T1, v2 : T2)
       return !callback(v1, v2);
-
-  macro public static function fn2(filter:Expr) {
-    var new_filter = filter
-      .map(thx.macro.lambda.MacroHelper.replace0())
-      .map(thx.macro.lambda.MacroHelper.replace1());
-    return macro function(__tmp0,__tmp1) { return $new_filter;  };
-  }
-
 }
 
 /**
@@ -219,15 +203,6 @@ Wraps `callback` in a function that negates its results.
   public inline static function negate<T1, T2, T3>(callback : T1 -> T2 -> T3 -> Bool)
     return function(v1 : T1, v2 : T2, v3 : T3)
       return !callback(v1, v2, v3);
-
-  macro public static function fn3(filter:Expr) {
-    var new_filter = filter
-      .map(thx.macro.lambda.MacroHelper.replace0())
-      .map(thx.macro.lambda.MacroHelper.replace1())
-      .map(thx.macro.lambda.MacroHelper.replace2());
-    return macro function(__tmp0,__tmp1,__tmp2) { return $new_filter;  };
-  }
-
 }
 
 /**
@@ -271,32 +246,50 @@ The `identity` function returns the value of its argument.
     };
   }
 
+  macro public static function fn0(filter:Expr) return macro function() { return $filter;  };
+
+  macro public static function fn1(filter:Expr) {
+    var new_filter = filter.map(thx.macro.lambda.MacroHelper.replace0());
+    return macro function(__tmp0) { return $new_filter;  };
+  }
+
+  macro public static function fn2(filter:Expr) {
+    var new_filter = filter
+      .map(thx.macro.lambda.MacroHelper.replace0())
+      .map(thx.macro.lambda.MacroHelper.replace1());
+    return macro function(__tmp0,__tmp1) { return $new_filter;  };
+  }
+
+  macro public static function fn3(filter:Expr) {
+    var new_filter = filter
+      .map(thx.macro.lambda.MacroHelper.replace0())
+      .map(thx.macro.lambda.MacroHelper.replace1())
+      .map(thx.macro.lambda.MacroHelper.replace2());
+    return macro function(__tmp0,__tmp1,__tmp2) { return $new_filter;  };
+  }
+
+  macro public static function fn4(filter:Expr) {
+    var new_filter = filter
+      .map(thx.macro.lambda.MacroHelper.replace0())
+      .map(thx.macro.lambda.MacroHelper.replace1())
+      .map(thx.macro.lambda.MacroHelper.replace2())
+      .map(thx.macro.lambda.MacroHelper.replace3());
+    return macro function(__tmp0,__tmp1,__tmp2,__tmp3) { return $new_filter;  };
+  }
+
+  macro public static function fn5(filter:Expr) {
+    var new_filter = filter
+      .map(thx.macro.lambda.MacroHelper.replace0())
+      .map(thx.macro.lambda.MacroHelper.replace1())
+      .map(thx.macro.lambda.MacroHelper.replace2())
+      .map(thx.macro.lambda.MacroHelper.replace3())
+      .map(thx.macro.lambda.MacroHelper.replace4());
+    return macro function(__tmp0,__tmp1,__tmp2,__tmp3,__tmp4) { return $new_filter;  };
+  }
+
   public macro static function with(context:Expr,body:Expr) {
     var new_body = thx.macro.Macros.replaceSymbol(body,"_",macro $context);
     return macro $new_body;
   }
 
-
-}
-
-class Conditions {
-  public macro static function when(cond:Expr,then:Expr) {
-    return macro if ($cond) { $then; };
-  }
-
-  public macro static function unless(cond:Expr,then:Expr) {
-    return macro if (!$cond) { $then; };
-  }
-
-  public macro static function and(cond1:Expr,cond2:Expr) {
-    return macro ($cond1 && $cond2);
-  }
-
-  public macro static function or(cond1:Expr,cond2:Expr) {
-    return macro ($cond1 || $cond2);
-  }
-
-  public macro static function not(cond:Expr) {
-    return macro !($cond);
-  }
 }

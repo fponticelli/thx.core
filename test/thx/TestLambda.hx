@@ -1,12 +1,7 @@
 package thx;
 import utest.Assert;
-import thx.Functions.fn;
-import thx.Functions.with;
-import thx.Functions.Functions0.fn0;
-import thx.Functions.Functions1.fn1;
-import thx.Functions.Functions2.fn2;
-import thx.Functions.Functions3.fn3;
-import thx.Functions.Conditions.*;
+import thx.Functions.*;
+import thx.Conditions.*;
 
 class TestLambda {
   public function new() { }
@@ -18,6 +13,8 @@ class TestLambda {
     Assert.equals(2, fn1((_0))(2));
     Assert.equals(3, fn2(_0+_1)(1,2));
     Assert.equals(6, fn3(_0+_1+_2)(1,2,3));
+    Assert.equals(10, fn4(_0+_1+_2+_3)(1,2,3,4));
+    Assert.equals(15, fn5(_0+_1+_2+_3+_4)(1,2,3,4,5));
 
     Assert.equals(1, fn(Std.parseInt(_0))("1"));
     Assert.equals(1, fn(Std.parseInt(_))("1"));
@@ -32,8 +29,6 @@ class TestLambda {
     Assert.equals(6, fn(_+_1+_2)(1,2,3));
     Assert.equals(10, fn(_+_1+_2+_3)(1,2,3,4));
     Assert.equals(15, fn(_+_1+_2+_3+_4)(1,2,3,4,5));
-
-
   }
 
 
