@@ -261,7 +261,6 @@ The `identity` function returns the value of its argument.
   macro public static function fn(filter:Expr) {
     var new_filter = thx.macro.lambda.MacroHelper.replaceWildCard(filter);
     var occurrences = thx.macro.lambda.MacroHelper.countMaxWildcard(filter);
-    trace(occurrences);
     return switch occurrences {
       case 0:macro function(__tmp0) { return $new_filter;  };
       case 1:macro function(__tmp0,__tmp1) { return $new_filter;  };
