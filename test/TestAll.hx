@@ -19,6 +19,7 @@ class TestAll {
 		runner.addCase(new thx.TestSet());
 		runner.addCase(new thx.TestStaticResource());
 		runner.addCase(new thx.TestStrings());
+		runner.addCase(new thx.TestLambda());
 #if (js || flash || java)
 		runner.addCase(new thx.TestTimer());
 #end

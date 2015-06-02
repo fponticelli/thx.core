@@ -50,7 +50,7 @@ with the substituion of symbol with witnExpr expression.
 **/
   public static function replaceSymbol(expr:Expr,symbol:String,withExpr:Expr):Expr {
     return switch expr {
-      case macro $i{name} if (name.startsWith(symbol)):
+      case macro $i{name} if (name.startsWith(symbol) || name == ""):
         return withExpr;
       default: return expr.map(function(expr) {
         return replaceSymbol(expr,symbol,withExpr);
