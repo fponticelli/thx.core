@@ -3,7 +3,10 @@ package thx;
 #if macro
 import haxe.macro.Expr;
 import haxe.macro.ExprTools;
+using haxe.macro.ExprTools;
 #end
+
+
 
 /**
 Extension methods for functions with arity 0 (functions that do not take arguments).
@@ -58,6 +61,7 @@ Callback takes an additional argument `index`.
   public inline static function timesi<T>(n : Int, callback : Int -> T)
     return function()
       return Ints.range(n).map(function(i) return callback(i));
+
 }
 
 /**
@@ -227,4 +231,65 @@ The `identity` function returns the value of its argument.
 `noop` is a function that has no side effects and doesn't return any value.
 **/
   public static function noop() : Void {}
+
+
+  macro public static function fn(filter:Expr) {
+    var new_filter = thx.macro.lambda.MacroHelper.replaceWildCard(filter);
+    var occurrences = thx.macro.lambda.MacroHelper.countMaxWildcard(filter);
+    return switch occurrences {
+      case 0:macro function(__tmp0) { return $new_filter;  };
+      case 1:macro function(__tmp0,__tmp1) { return $new_filter;  };
+      case 2:macro function(__tmp0,__tmp1,__tmp2) { return $new_filter;  };
+      case 3:macro function(__tmp0,__tmp1,__tmp2,__tmp3) { return $new_filter;  };
+      case 4:macro function(__tmp0,__tmp1,__tmp2,__tmp3,__tmp4) { return $new_filter;  };
+      default: macro null;
+    };
+  }
+
+  macro public static function fn0(filter:Expr) return macro function() { return $filter;  };
+
+  macro public static function fn1(filter:Expr) {
+    var new_filter = filter.map(thx.macro.lambda.MacroHelper.replace0());
+    return macro function(__tmp0) { return $new_filter;  };
+  }
+
+  macro public static function fn2(filter:Expr) {
+    var new_filter = filter
+      .map(thx.macro.lambda.MacroHelper.replace0())
+      .map(thx.macro.lambda.MacroHelper.replace1());
+    return macro function(__tmp0,__tmp1) { return $new_filter;  };
+  }
+
+  macro public static function fn3(filter:Expr) {
+    var new_filter = filter
+      .map(thx.macro.lambda.MacroHelper.replace0())
+      .map(thx.macro.lambda.MacroHelper.replace1())
+      .map(thx.macro.lambda.MacroHelper.replace2());
+    return macro function(__tmp0,__tmp1,__tmp2) { return $new_filter;  };
+  }
+
+  macro public static function fn4(filter:Expr) {
+    var new_filter = filter
+      .map(thx.macro.lambda.MacroHelper.replace0())
+      .map(thx.macro.lambda.MacroHelper.replace1())
+      .map(thx.macro.lambda.MacroHelper.replace2())
+      .map(thx.macro.lambda.MacroHelper.replace3());
+    return macro function(__tmp0,__tmp1,__tmp2,__tmp3) { return $new_filter;  };
+  }
+
+  macro public static function fn5(filter:Expr) {
+    var new_filter = filter
+      .map(thx.macro.lambda.MacroHelper.replace0())
+      .map(thx.macro.lambda.MacroHelper.replace1())
+      .map(thx.macro.lambda.MacroHelper.replace2())
+      .map(thx.macro.lambda.MacroHelper.replace3())
+      .map(thx.macro.lambda.MacroHelper.replace4());
+    return macro function(__tmp0,__tmp1,__tmp2,__tmp3,__tmp4) { return $new_filter;  };
+  }
+
+  public macro static function with(context:Expr,body:Expr) {
+    var new_body = thx.macro.Macros.replaceSymbol(body,"_",macro $context);
+    return macro $new_body;
+  }
+
 }
