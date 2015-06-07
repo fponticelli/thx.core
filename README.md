@@ -3,15 +3,13 @@
 
 [![Build Status](https://travis-ci.org/fponticelli/thx.core.svg?branch=master)](https://travis-ci.org/fponticelli/thx.core)
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/thx-core.svg)](https://saucelabs.com/u/thx-core)
-
 Generic multi-purpose library. `thx.core` aims to be the [lodash](http://lodash.com/) library for Haxe.
 
 ## Data Structures
 
 `thx.core` provides a few data types to complete the standard library.
 
-### [AnonymousMap](http://thx-lib.org/api/thx/core/AnonymousMap.html)
+### [AnonymousMap](http://thx-lib.org/api/thx/AnonymousMap.html)
 
 Wraps an anonymous object in `Map<String, T>` compatible structure.
 
@@ -23,7 +21,7 @@ map.get("name"); // "Franco"
 
 The intention of this class is not to encourage anonymous objects as data containers but to simplify the approach to untyped data like JSON results.
 
-### [Either](http://thx-lib.org/api/thx/core/Either.html)
+### [Either](http://thx-lib.org/api/thx/Either.html)
 
 `Either` is a value container. It can contain values from two different types but only one per instance. It can be handy when you want to manage values that can be in one of two possible states. A classic example is a Result where the wrapped value can be either a success or a failure.
 
@@ -35,9 +33,11 @@ var result : MyResult = Left(new Error("something smells"));
 var result : MyResult = Right("the answer is 42");
 ```
 
-Note that [`thx.core.Result`](http://thx-lib.org/api/thx/core/Result.html) is an abstract on top of `Either` with some additional features.
+Note that [`thx.Result`](http://thx-lib.org/api/thx/Result.html) is an abstract on top of `Either` with some additional features.
 
-### [Nil](http://thx-lib.org/api/thx/core/Nil.html)
+NOTE: Haxe v.3.2.0 introduces its own `haxe.ds.Either` type. It is 100% compatible with the one provided by thx. For that reason, thx adopts the official one when available. In the future `thx.Either` will probably be deprecated.
+
+### [Nil](http://thx-lib.org/api/thx/Nil.html)
 
 `Nil` is a special enum that only contains one constructor `nil` that takes no parameter. It denotes the absence of a value. It is very handy when you want to work on functions of arity 1 and you don't want to special case them to support an empty list of arguments.
 
@@ -54,9 +54,9 @@ typedef F<T> = T -> String;
 function myF(_ : Nil) : String { /* ... */ }
 ```
 
-### [Result](http://thx-lib.org/api/thx/core/Result.html)
+### [Result](http://thx-lib.org/api/thx/Result.html)
 
-`Result` is a wrapper (abstract) on top of `thx.core.Either`. It semantically represents the result of an operation that can either a success or a failure.
+`Result` is a wrapper (abstract) on top of `thx.Either`. It semantically represents the result of an operation that can either a success or a failure.
 
 ```haxe
 var success : Result<String, String> = Right("victory!");
@@ -80,7 +80,7 @@ failure.optionError(); // Some("oh, no ...")
 
 `thx.promise.Future` always bring a result and `thx.promise.Promise` extend the concept by adding the possibility of a failure.
 
-### [Set](http://thx-lib.org/api/thx/core/Set.html)
+### [Set](http://thx-lib.org/api/thx/Set.html)
 
 A `Set` is a list of unique values. Values are unique in a way that no duplicates can exist in the same `Set`. Note that uniqueness is enforced by strict phisical equality. That means that is perfectly possible to have a `Set` of class instances where the instances contain exactly the same values but are referring different objects. Primitive values like `Int`, `Float`, `String` do not incur in such cases.
 
@@ -112,15 +112,15 @@ var s = ([1,2,3] : Set<Int>).union([2,3,4]).difference([2,3]);
 
 Note that boolean operations return new `Set` instances and do not change the original instances.
 
-### [Tuple](http://thx-lib.org/api/thx/core/Tuple2.html)
+### [Tuple](http://thx-lib.org/api/thx/Tuple2.html)
 
 A `Tuple` is a value containing multiple values of potentially different types. All tuples are immutable; that means that any tuple operation that seems to change the Tuple it is creating a new structure instead.
 
-A [`Tuple0`](http://thx-lib.org/api/thx/core/Tuple0.html) contains no value and it is equivalent to `thx.core.Nil.nil`.
+A [`Tuple0`](http://thx-lib.org/api/thx/Tuple0.html) contains no value and it is equivalent to `thx.Nil.nil`.
 
-A [`Tuple1`](http://thx-lib.org/api/thx/core/Tuple1.html) contains one value and it is a wrapper to the value type itself.
+A [`Tuple1`](http://thx-lib.org/api/thx/Tuple1.html) contains one value and it is a wrapper to the value type itself.
 
-A [`Tuple2`](http://thx-lib.org/api/thx/core/Tuple2.html), the most conventional of the tuples, is an abstract wrapper around an object of type `{ _0 : T0, _1 : T1 }`.
+A [`Tuple2`](http://thx-lib.org/api/thx/Tuple2.html), the most conventional of the tuples, is an abstract wrapper around an object of type `{ _0 : T0, _1 : T1 }`.
 
 ```haxe
 var t = new Tuple2("thx", 1);
@@ -134,7 +134,7 @@ t.dropRight(); // return a Tuple1 which in this case results in "thx"
 t.with("0.123") // appends a new value to the right creating a new Tuple3
 ```
 
-[`Tuple3`](http://thx-lib.org/api/thx/core/Tuple3.html), [`Tuple4`](http://thx-lib.org/api/thx/core/Tuple4.html), [`Tuple5`](http://thx-lib.org/api/thx/core/Tuple5.html) and [`Tuple6`](http://thx-lib.org/api/thx/core/Tuple6.html) work much like [`Tuple`](http://thx-lib.org/api/thx/core/Tuple2.html) but bring more values.
+[`Tuple3`](http://thx-lib.org/api/thx/Tuple3.html), [`Tuple4`](http://thx-lib.org/api/thx/Tuple4.html), [`Tuple5`](http://thx-lib.org/api/thx/Tuple5.html) and [`Tuple6`](http://thx-lib.org/api/thx/Tuple6.html) work much like [`Tuple`](http://thx-lib.org/api/thx/Tuple2.html) but bring more values.
 
 ## Type Helpers
 
@@ -162,7 +162,7 @@ Some examples of the common features:
 [1,2,3].pluck(_ * 2); // [2,4,6]
 ```
 
-### [Arrays](http://thx-lib.org/api/thx/core/Arrays.html)
+### [Arrays](http://thx-lib.org/api/thx/Arrays.html)
 
 Beside the usual methods to traverse, reduce, slice and arrange arrays, `Arrays` contains peculiar things like:
 
@@ -175,21 +175,21 @@ Beside the usual methods to traverse, reduce, slice and arrange arrays, `Arrays`
   * `shuffle` to reorder randomly an array
   * `zip`/`unzip` to create/deconstruct arrays of `Tuple`
 
-In the `thx.core.Arrays` module are also defined a few specialized operations for specific type of arrays: [ArrayFloats](http://thx-lib.org/api/thx/core/ArrayFloats.html), [ArrayInts](http://thx-lib.org/api/thx/core/ArrayInts.html) and [ArrayStrings](http://thx-lib.org/api/thx/core/ArrayStrings.html). The numeric array variations provide methods for `average`, `sum`, `min` and `max` (plus `compact` for `Float` that removes non-finite numbers).
+In the `thx.Arrays` module are also defined a few specialized operations for specific type of arrays: [ArrayFloats](http://thx-lib.org/api/thx/ArrayFloats.html), [ArrayInts](http://thx-lib.org/api/thx/ArrayInts.html) and [ArrayStrings](http://thx-lib.org/api/thx/ArrayStrings.html). The numeric array variations provide methods for `average`, `sum`, `min` and `max` (plus `compact` for `Float` that removes non-finite numbers).
 
-### [Iterators](http://thx-lib.org/api/thx/core/Iterators.html)
+### [Iterators](http://thx-lib.org/api/thx/Iterators.html)
 
 ```haxe
 it.isIterator() // checks that the instance has the right members to be an Iterator
 ```
 
-### [Iterables](http://thx-lib.org/api/thx/core/Iterables.html)
+### [Iterables](http://thx-lib.org/api/thx/Iterables.html)
 
 ```haxe
 it.isIterable() // checks that the instance has the right members to be an Iterable
 ```
 
-### [Floats](http://thx-lib.org/api/thx/core/Floats.html)
+### [Floats](http://thx-lib.org/api/thx/Floats.html)
 
 `Floats` contains extension methods to work with `Float` values. Some examples:
 
@@ -200,9 +200,9 @@ it.isIterable() // checks that the instance has the right members to be an Itera
   * `nearEquals` compare two values with a small margin to account for floating precision issues
   * `wrap` ensure that the passed valeu will be included in the boundaries. If the value exceeds `max`, the value is reduced by `min` repeatedely until it falls within the range. Similar and inverted treatment is performed if the value is below `min`
 
-### [Functions](http://thx-lib.org/api/thx/core/Functions.html)
+### [Functions](http://thx-lib.org/api/thx/Functions.html)
 
-Extension methods for functions. Methods are roughly distributed between [`Functions`](http://thx-lib.org/api/thx/core/Functions.html),  [`Functions0`](http://thx-lib.org/api/thx/core/Functions0.html),  [`Functions1`](http://thx-lib.org/api/thx/core/Functions1.html),  [`Functions2`](http://thx-lib.org/api/thx/core/Functions2.html) and  [`Functions3`](http://thx-lib.org/api/thx/core/Functions3.html) where the number suffix denotes the arity (number of arguments) of the function that are going to be extended.
+Extension methods for functions. Methods are roughly distributed between [`Functions`](http://thx-lib.org/api/thx/Functions.html),  [`Functions0`](http://thx-lib.org/api/thx/Functions0.html),  [`Functions1`](http://thx-lib.org/api/thx/Functions1.html),  [`Functions2`](http://thx-lib.org/api/thx/Functions2.html) and  [`Functions3`](http://thx-lib.org/api/thx/Functions3.html) where the number suffix denotes the arity (number of arguments) of the function that are going to be extended.
 
   * `after` returns a function that wraps the passed function. The original function will be executed only after it has been called `n` times
   * `compose` returns a function that calls the first arguemnt function with the result of the following one.
@@ -215,18 +215,18 @@ Extension methods for functions. Methods are roughly distributed between [`Funct
   * `once` wraps and returns the argument function. `once` ensures that `f` will be called at most once even if the returned function is invoked multiple times
   * `times` creates a function that calls `callback` `n` times and returns an array of results.
 
-### [Ints](http://thx-lib.org/api/thx/core/Ints.html)
+### [Ints](http://thx-lib.org/api/thx/Ints.html)
 
-Extension methods for integer values. Many methods are implemented the same as in `thx.core.Floats` but specialized for `Int` values. Some are methods available in `Std` or `Math` but only available for `Float`.
+Extension methods for integer values. Many methods are implemented the same as in `thx.Floats` but specialized for `Int` values. Some are methods available in `Std` or `Math` but only available for `Float`.
 
-### [Maps](http://thx-lib.org/api/thx/core/Maps.html)
+### [Maps](http://thx-lib.org/api/thx/Maps.html)
 
 Extension methods for Maps.
 
   * `tuples` transforms a `Map<TKey, TValue>` in an `Array` of `Tuple2<TKey, TValue>`
   * `mapToObject` transforms a `Map<String, T>` into an anonymous object.
 
-### [Objects](http://thx-lib.org/api/thx/core/Objects.html)
+### [Objects](http://thx-lib.org/api/thx/Objects.html)
 
 Extension methods for objects.
 
@@ -236,7 +236,7 @@ Extension methods for objects.
   * `values` returns an array with the values of each field (order is not guaranteed)
   * `tuples` returns an array of `Tuple2<String, Dynamic>` containing pairs of fields/values (order is not guaranteed)
 
-### [Options](http://thx-lib.org/api/thx/core/Options.html)
+### [Options](http://thx-lib.org/api/thx/Options.html)
 
 Extension methods for the `haxe.ds.Option` type.
 
@@ -248,7 +248,7 @@ Extension methods for the `haxe.ds.Option` type.
   * `toOption` transforms any type T into `Option<T>`
   * `toValue` extracts the value from `Option` or returns `null`
 
-### [Nulls](http://thx-lib.org/api/thx/core/Nulls.html)
+### [Nulls](http://thx-lib.org/api/thx/Nulls.html)
 
 `Nulls` provides extension methods that help to deal with nullable values.
 
@@ -274,7 +274,7 @@ Note that the parenthesis wrap the entire chain of identifiers. That means that 
 
 Identifiers can also be getters and methods (both are invoked only once and only if the check reaches them). `Python` seems to struggle with some native methods like methods on strings.
 
-### [Strings](http://thx-lib.org/api/thx/core/Strings.html)
+### [Strings](http://thx-lib.org/api/thx/Strings.html)
 
 Extension methods for `String`. Some examples:
 
@@ -293,10 +293,10 @@ Extension methods for `String`. Some examples:
 you also get all the `StringTools` extension methods:
 
 ```haxe
-using thx.core.Strings;
+using thx.Strings;
 ```
 
-### [Dates](http://thx-lib.org/api/thx/core/Dates.html)
+### [Dates](http://thx-lib.org/api/thx/Dates.html)
 
 Extension methods for `Date` and `Float`s that represent date values.
 
@@ -312,10 +312,10 @@ Some examples:
 you also get all the `DateTools` extension methods:
 
 ```haxe
-using thx.core.Dates;
+using thx.Dates;
 ```
 
-### [Types](http://thx-lib.org/api/thx/core/Types.html)
+### [Types](http://thx-lib.org/api/thx/Types.html)
 
 Extension methods to use on values, types and classes.
 
@@ -330,7 +330,7 @@ Types.isAnonymousObject({}); // true
 ```haxe
 Types.valueTypeToString("thx"); // "String"
 Types.valueTypeToString(1); // "Int"
-Types.valueTypeToString(Left("some")); // "thx.core.Either"
+Types.valueTypeToString(Left("some")); // "thx.Either"
 ```
 
 `valueTypeInheritance` returns an array of string describing the entire inheritance
@@ -344,7 +344,7 @@ class B extends A {};
 Types.valueTypeInheritance(new B()); // ["B", "A"]
 ```
 
-### [Dynamics](http://thx-lib.org/api/thx/core/Dynamics.html).equals
+### [Dynamics](http://thx-lib.org/api/thx/Dynamics.html).equals
 
 Compares any two values checking their type first and recursively all their members for structural equality. It should work on any type. If the values passed are objects and they contain a method `equals`, it will be used to decide if the two objects match.
 
@@ -353,7 +353,7 @@ Dynamics.equals({ a : 1 }, { a : 1 }); // true
 Dynamics.equals(1, 2); // false
 ```
 
-### [ERegs](http://thx-lib.org/api/thx/core/ERegs.html).escape
+### [ERegs](http://thx-lib.org/api/thx/ERegs.html).escape
 
 It escapes any characer in a string that has a special meaning when used in a regular expression.
 
@@ -361,7 +361,7 @@ It escapes any characer in a string that has a special meaning when used in a re
 
 The following utilities have no direct relationship with standard types and just provides commonly required functionalities.
 
-### [Timer](http://thx-lib.org/api/thx/core/Timer.html)
+### [Timer](http://thx-lib.org/api/thx/Timer.html)
 
 `Timer` provides several meaning to delay the execution of code. At the moment it is only implemented for platforms that have a native concept of Timer like Swf and JavaScript or c++/Neko with OpenFL or NME.
 
@@ -377,19 +377,19 @@ cancel();
 
 Note that calling the cancel function multiple times have no effect after the first execution.
 
-### [UUID](http://thx-lib.org/api/thx/core/UUID.html)
+### [Uuid](http://thx-lib.org/api/thx/Uuid.html)
 
 Helper class to generate [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier) strings (version 4).
 
 ```haxe
-UUID.create(); // generates something like f47ac10b-58cc-4372-a567-0e02b2c3d479
+Uuid.create(); // generates something like f47ac10b-58cc-4372-a567-0e02b2c3d479
 ```
 
 ## Errors
 
-Haxe brings the power of being able to use any type to throw an exception. It is not uncommon to find code that simply does `throw "my error`. There is nothing wrong with that approach except that some times, most commonly in bigger applications that use many libraries, you need to be conservative when you want to catch an exception and introduce a `catch(e : Dynamic)` to be sure to not forget any possible error. The problem with Dynamic is that you don't really know how to access the error info. The type `thx.core.Error` described below tries to solve this problem providing a common and generic implementation.
+Haxe brings the power of being able to use any type to throw an exception. It is not uncommon to find code that simply does `throw "my error`. There is nothing wrong with that approach except that some times, most commonly in bigger applications that use many libraries, you need to be conservative when you want to catch an exception and introduce a `catch(e : Dynamic)` to be sure to not forget any possible error. The problem with Dynamic is that you don't really know how to access the error info. The type `thx.Error` described below tries to solve this problem providing a common and generic implementation.
 
-### [Error](http://thx-lib.org/api/thx/core/Error.html)
+### [Error](http://thx-lib.org/api/thx/Error.html)
 
 Represent a Runtime error or exception. When used with JS it inherits from the native `Error` type. It tries to bring information like error message and error location. Usage is super easy:
 
@@ -399,9 +399,9 @@ throw new Error('my error message');
 
 Note that `Error` will try to collect (if possible) information about the error stack and the error location using `haxe.PosInfos`.
 
-On top of `thx.core.Error` a few definitions are built for very common situations.
+On top of `thx.Error` a few definitions are built for very common situations.
 
-### [AbstractMethod](http://thx-lib.org/api/thx/core/error/AbstractMethod.html)
+### [AbstractMethod](http://thx-lib.org/api/thx/error/AbstractMethod.html)
 
 Mark a method as `abstract`. If it is not implemented by a sub-type a runtime exception is thrown indicating the class/method name that is abstract and has no implementation.
 
@@ -411,7 +411,7 @@ function myAbstract() {
 }
 ```
 
-### [NotImplemented](http://thx-lib.org/api/thx/core/error/NotImplemented.html)
+### [NotImplemented](http://thx-lib.org/api/thx/error/NotImplemented.html)
 
 Similarly to `AbstracMethod` it is used to mark method that have not been implementd yet.
 
@@ -421,7 +421,7 @@ function myNotImplemented() {
 }
 ```
 
-### [NullArgument](http://thx-lib.org/api/thx/core/error/NullArgument.html)
+### [NullArgument](http://thx-lib.org/api/thx/error/NullArgument.html)
 
 Checks that a certain argument of a function is not `null` and throws an exception otherwise.
 

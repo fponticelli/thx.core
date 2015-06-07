@@ -5,3 +5,4 @@
 -cs bin/cs
 -main TestAll
 -D thx-core
+#-debug

@@ -1,0 +1,3 @@
+[submodule "hxml/haxe_travis_scripts"]
+	path = hxml/haxe_travis_scripts
+	url = https://github.com/fponticelli/haxe_travis_scripts.git

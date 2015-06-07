@@ -1,34 +1,53 @@
-language: c
-
-env:
-  global:
-    - TARGET_DIR=bin
-    - secure: UUVsPXSN6eOaKoUaTbGuK7OeaglIkkvNqkkZgR5ZttJ/d8hkRLDVD6rJntL/clHTOvpwxINCesa+sp8t4fFJuCA4PWrQg2cBrkx1FcmgzurQhsSoiqVUfWn56wzvHCVW7GhieLpINSEFZXMG1qt7RbsOHcs15SImJ2V+ik91zuE=
-    - secure: GtWMwFaNAmEq+ubx28jg32N40mIPAm5tTxD5TJlF5eFONpnVNV78p/E2CeHSgpMqrAiRTAyT/4KrjimIRs0XB6R5aW470/DHTgercwTzP+SzcHjqDm6fHnkiqemH9f+xS/JZvc1xs/2KoVm8uLokBrIJBSuW21yy+BrEhnBECUo=
-  matrix:
-    - TARGET=cpp
-    - TARGET=cs
-    - TARGET=flash
-    - TARGET=java
-    - TARGET=js TOOLCHAIN="browser"
-    - TARGET=js TOOLCHAIN="nodejs"
-    - TARGET=neko
-    - TARGET=php
-    - TARGET=python
+language: haxe
 
 matrix:
-  fast_finish: true
+  include:
+    - env: TARGET=cpp
+      haxe: 3.2.0
+    - env: TARGET=cpp
+      haxe: development
+    - env: TARGET=cs
+      haxe: 3.2.0
+      addons: {apt: {packages: [mono-devel, mono-mcs]}}
+    - env: TARGET=cs
+      haxe: development
+      addons: {apt: {packages: [mono-devel, mono-mcs]}}
+    - env: TARGET=java
+      haxe: 3.2.0
+    - env: TARGET=java
+      haxe: development
+    - env: TARGET=js
+      haxe: 3.2.0
+      addons: {apt: {packages: [nodejs]}}
+    - env: TARGET=js
+      haxe: development
+      addons: {apt: {packages: [nodejs]}}
+    - env: TARGET=php
+      haxe: 3.2.0
+      addons: {apt: {packages: [php5-cli]}}
+    - env: TARGET=php
+      haxe: development
+      addons: {apt: {packages: [php5-cli]}}
+    - env: TARGET=neko
+      haxe: 3.2.0
+    - env: TARGET=neko
+      haxe: development
+    - env: TARGET=python
+      haxe: 3.2.0
+      addons: {apt: {packages: [python3]}}
+    - env: TARGET=python
+      haxe: development
+      addons: {apt: {packages: [python3]}}
 
-before_install: # clone travis-hx repo
-  - travis_retry git clone --depth=50 --branch=master git://github.com/fponticelli/travis-hx.git ~/travis-hx
+before_install:
+  - git clone --branch=master git://github.com/fponticelli/haxe_travis_scripts
+  - source haxe_travis_scripts/scripts.sh
 
-install: # setup the target
-  - ~/travis-hx/setup.sh
+install:
+  - if [[ $TARGET == "cpp"  ]]; then install_hxcpp;  fi
+  - if [[ $TARGET == "java" ]]; then install_hxjava; fi
+  - if [[ $TARGET == "cs"   ]]; then install_hxcs;   fi
   - haxelib install utest
 
 script:
-  - cd $TRAVIS_BUILD_DIR
-  # build the tests
-  - haxe hxml/$TARGET.hxml -D travis
-  # run the tests
-  - ~/travis-hx/runtests.sh $FILENAME
+  - haxe "hxml/$TARGET.run.hxml" -D travis

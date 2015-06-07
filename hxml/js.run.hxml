@@ -1,0 +1,9 @@
+-cp src
+-cp test
+-lib utest
+-js bin/js.js
+-main TestAll
+-D thx-core
+
+-cmd node bin/js.js
+-cmd phantomjs bin/js.js
