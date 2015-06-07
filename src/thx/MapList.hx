@@ -2,6 +2,7 @@ package thx;
 
 import haxe.Constraints.IMap;
 
+@:forward(length, set, insert, exists, remove, keys, iterator, toArray, toString, keyAt, keyIndex, valueIndex, removeAt)
 abstract MapList<K, V>(MapListImpl<K, V>) to IMap<K, V> {
   inline public static function stringMap<V>() : MapList<String, V>
     return new MapList(new StringMapList());
@@ -18,22 +19,12 @@ abstract MapList<K, V>(MapListImpl<K, V>) to IMap<K, V> {
   inline function new(inst : MapListImpl<K, V>)
     this = inst;
 
-  public inline function set(key : K, value : V) this.set(key, value);
-  public inline function insert(index : Int, k : K, v : V) : Void this.insert(index, k, v);
-  @:arrayAccess public inline function get(key : K) return this.get(key);
-  @:arrayAccess public inline function at(index : Int) : Null<V> return this.at(index);
-  public inline function exists(key : K) return this.exists(key);
-  public inline function remove(key : K) return this.remove(key);
-  public inline function keys():Iterator<K> return this.keys();
-  public inline function iterator():Iterator<V> return this.iterator();
-  public inline function toArray() : Array<V> return this.toArray();
-  public inline function toString():String return this.toString();
+  @:arrayAccess public inline function get(key : K)
+    return this.get(key);
+  @:arrayAccess public inline function at(index : Int) : Null<V>
+    return this.at(index);
   @:arrayAccess @:noCompletion inline public function arrayWrite(k : K, v : V) : V
     return this.setValue(k, v);
-  public inline function keyAt(index : Int) : Null<K> return this.keyAt(index);
-  public inline function keyIndex(k : K) : Int return this.keyIndex(k);
-  public inline function valueIndex(v : V) : Int return this.valueIndex(v);
-  public inline function removeAt(index : Int) : Bool return this.removeAt(index);
 
   public inline function self() : MapListImpl<K, V>
     return this;

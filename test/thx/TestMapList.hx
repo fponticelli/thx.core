@@ -1,7 +1,7 @@
-package thx.core;
+package thx;
 
-using thx.core.MapList;
-using thx.core.Iterators;
+using thx.MapList;
+using thx.Iterators;
 import utest.Assert;
 
 class TestMapList {
@@ -9,8 +9,7 @@ class TestMapList {
 
   @:access(thx.core.MapListImpl.new)
   public function testBasics() {
-    var map = new Map<String, String>(),
-        ml = new MapListImpl(map);
+    var ml = MapList.stringMap();
 
     Assert.equals(0, ml.length);
     Assert.equals("[]", ml.toString());
