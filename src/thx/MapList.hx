@@ -149,7 +149,7 @@ class MapListImpl<K, V> implements IMap<K, V> {
   }
 
   public function toArray() : Array<V> {
-    var values = [];
+    var values : Array<V> = [];
     for(k in arr)
       values.push(map.get(k));
     return values;
