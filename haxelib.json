@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
-  "releasenote": "Added MapList (API is still sbuject to change).",
-  "version": "0.22.0",
+  "releasenote": "Added short-lambda (kind of) in thx.Functions. Thanks Andreas (@ciscoheat)!.",
+  "version": "0.23.0",
   "contributors": ["fponticelli"]
 }
