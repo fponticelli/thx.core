@@ -31,11 +31,11 @@ class TestLambda {
     Assert.equals(15, fn(_+_1+_2+_3+_4)(1,2,3,4,5));
 
     Assert.equals("Test 1", fn('Test $_')('1'));
-    Assert.equals("Test 1+2", fn('Test $_1+$_2')('1', '2'));
-    Assert.equals("BA", fn('$_2$_1')("A", "B"));    
-    Assert.equals("21", fn({ var _2a = 2; '$_2a$_1'; })("1"));
-    Assert.equals("$_2$_1", fn("$_2$_1")());
-    Assert.equals("$_1", fn('$$_1')());
+    Assert.equals("Test 1+2", fn('Test $_0+$_1')('1', '2'));
+    Assert.equals("BA", fn('$_1$_0')("A", "B"));
+    Assert.equals("21", fn({ var _2a = 2; '$_2a$_0'; })("1"));
+    Assert.equals("$_1$_0", fn("$_1$_0")());
+    Assert.equals("$_0", fn('$$_0')());
   }
 
 

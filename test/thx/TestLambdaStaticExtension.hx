@@ -1,7 +1,7 @@
 package thx;
 import utest.Assert;
 
-using Lambda;
+using thx.Arrays;
 using thx.Functions;
 
 class TestLambdaStaticExtension {
@@ -10,7 +10,7 @@ class TestLambdaStaticExtension {
   public function testFunctions() {
     Assert.same([2,3], [1,2].map.fn(_+1));
     Assert.same([2,3], [1,2,3].filter.fn(_>1));
-    Assert.equals(16, [1,2,3].fold.fn(_1+_2, 10));
+    Assert.equals(16, [1,2,3].reduce.fn(_0 + _1, 10));
     Assert.same(["Test 1"], [1].map.fn('Test $_'));
   }
 
@@ -20,5 +20,9 @@ class TestLambdaStaticExtension {
     Assert.same(["X1","X2"], [1,2].map.fn('X$_'));
     Assert.same(["1X","2X"], [1,2].map.fn('${_}X'));
     Assert.same(["X2X","X4X"], [1,2].map.fn('X${_*2}X'));
+  }
+
+  public function testFillEmpty() {
+    Assert.same([0,1,2], [1,2,3].mapi.fn(_1));
   }
 }

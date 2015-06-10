@@ -1,9 +1,11 @@
 package thx.macro.lambda;
 
+import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.ExprTools;
 using haxe.macro.ExprTools;
-using StringTools;
+using thx.Strings;
+using thx.Ints;
 
 /**
 Lambda expressions. Standalone version: https://github.com/ciscoheat/slambda
@@ -23,35 +25,48 @@ class SlambdaMacro {
       : untyped haxe.macro.Context.error('Rest arguments can only be used in static extensions.', restArgs[restArgs.length - 1].pos);
   }
 
-  static var underscoreParam = ~/^_\d*$/;
+  static var underscoreParam = ~/^_\d+$/;
   static function createLambdaExpression(isExtension : Bool, e : Expr) : Expr {
 
     // If no arrow syntax, detect underscore parameters.
     switch e.expr {
       case EBinop(OpArrow, _, _):
       case _:
-        var params = new Map<String, Expr>();
+        var counter = 0,
+            useUnderscore = false,
+            hasUnderscoreZero = false;
         function findParams(e2 : Expr) {
           switch e2.expr {
             // Detect in single-quoted strings
-            case EConst(CString(s)) if(e2.toString().startsWith("'") && e2.toString().endsWith("'")):
+            case EConst(CString(s)) if(e2.toString().startsWith("'")):
               var s = haxe.macro.Format.format(e2);
               s.iter(findParams);
+            case EConst(CIdent(v)) if ("_" == v):
+              if(hasUnderscoreZero) Context.error('You need to use "_" or "_0" not both', e2.pos);
+              useUnderscore = true;
+              counter = counter.max(1);
+            case EConst(CIdent(v)) if ("_0" == v):
+              if(useUnderscore) Context.error('You need to use "_" or "_0" not both', e2.pos);
+              hasUnderscoreZero = true;
+              counter = counter.max(1);
             case EConst(CIdent(v)) if (underscoreParam.match(v)):
-              params.set(v, e2);
+              counter = counter.max(Std.parseInt(v.substring(1))+1);
             case _:
               e2.iter(findParams);
           }
         }
         findParams(e);
 
-        var paramArray = [for (p in params) p];
-
-        if (paramArray.length > 0) {
-          // If underscore parameters found, create an arrow syntax of the expression.
-          // Sorted so the parameters are in the correct order in the function definition.
-          paramArray.sort(function(x, y) return x.toString() > y.toString() ? 1 : 0);
+        // If underscore parameters found, create an arrow syntax of the expression.
+        // Sorted so the parameters are in the correct order in the function definition.
+        var paramArray = [for(i in 0...counter) {
+            expr : EConst(CIdent(i == 0 && useUnderscore ? "_" : '_$i')),
+            pos : e.pos
+          }];
+        if(paramArray.length > 0) {
+          var pos = e.pos;
           e = macro $a{paramArray} => $e;
+          e.pos = pos;
         }
     }
 
