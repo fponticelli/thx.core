@@ -216,7 +216,6 @@ If no element satisfies `predicate` the array is left unmodified and `null` is r
 /**
 Filters out all `null` values from an array.
 **/
-  @:deprecated("`filterNull` is deprecated, use `using thx.Functions` and `arr.filter.fn(...)` instead.")
   public static function filterNull<T>(a : Array<Null<T>>) : Array<T> {
     var arr : Array<T> = [];
     for(v in a)
