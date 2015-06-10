@@ -98,12 +98,14 @@ Refer to `thx.Arrays.order`.
 /**
 Refer to `thx.Arrays.pluck`.
 **/
+  @:deprecated("Use `thx.Functions.fn` instead.")
   macro public static function pluck<T, TOut>(it : ExprOf<Iterable<T>>, expr : ExprOf<TOut>) : ExprOf<Array<TOut>>
     return macro thx.Iterators.map($e{it}.iterator(), function(_) return ${expr});
 
 /**
 Refer to `thx.Arrays.plucki`.
 **/
+  @:deprecated("Use `thx.Functions.fn` instead.")
   macro public static function plucki<T, TOut>(it : ExprOf<Iterable<T>>, expr : ExprOf<TOut>) : ExprOf<Array<TOut>>
     return macro thx.Iterators.mapi($e{it}.iterator(), function(_, i) return ${expr});
 
