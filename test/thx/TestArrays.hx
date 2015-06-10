@@ -7,6 +7,7 @@ package thx;
 
 import utest.Assert;
 using thx.Arrays;
+using thx.Functions;
 using thx.Floats;
 
 class TestArrays {
@@ -19,22 +20,22 @@ class TestArrays {
 
   public function testMapField() {
     var arr  = [{a:1},{a:2},{a:3}],
-        test = Arrays.pluck(arr, _.a);
+        test = arr.map(Functions.fn(_.a));
     Assert.same([1,2,3], test);
   }
 
   public function testMapFieldOnFunction() {
-    var test = Arrays.pluck([
+    var test = [
           new Sample(2),
           new Sample(3),
           new Sample(4)
-        ], _.multiply(2));
+        ].map.fn(_.multiply(2));
     Assert.same([4,6,8], test);
   }
 
   public function testUsingMapField() {
     var arr  = [{a:1},{a:2},{a:3}],
-        test = arr.pluck(_.a);
+        test = arr.map.fn(_.a);
     Assert.same([1,2,3], test);
   }
 
@@ -45,12 +46,12 @@ class TestArrays {
           new Sample(2),
           new Sample(3),
           new Sample(4)
-        ].plucki(_.multiply(i))
+        ].mapi.fn(_.multiply(_1))
       );
   }
 
   public function testFilterPluck() {
-    Assert.same([1,3,5], [1,2,3,4,5,6].filterPluck(_ % 2 != 0));
+    Assert.same([1,3,5], [1,2,3,4,5,6].filter.fn(_ % 2 != 0));
   }
 
   public function testFind() {
@@ -62,15 +63,15 @@ class TestArrays {
   }
 
   public function testFindPluck() {
-    Assert.equals(3, [1,3,5,7,9].findPluck(_ % 3 == 0));
+    Assert.equals(3, [1,3,5,7,9].find.fn(_ % 3 == 0));
   }
 
   public function testFindPluckLast() {
-    Assert.equals(9, [1,3,5,7,9].findPluckLast(_ % 3 == 0));
+    Assert.equals(9, [1,3,5,7,9].findLast.fn(_ % 3 == 0));
   }
 
   public function testPluck() {
-    Assert.same([2,4,8], [1,2,4].pluck(_ * 2));
+    Assert.same([2,4,8], [1,2,4].map.fn(_ * 2));
   }
 
   public function testMinFloats() {
@@ -125,7 +126,7 @@ class TestArrays {
 
   public function testOrderPluck() {
     var arr = [2,3,1];
-    Assert.same([1,2,3], arr.orderPluck(_0 - _1));
+    Assert.same([1,2,3], arr.order.fn(_0 - _1));
     Assert.same([2,3,1], arr);
   }
 
@@ -134,7 +135,7 @@ class TestArrays {
     var obj2 = { key: 2 };
     var obj3 = { key: 3 };
     var arr = [obj2, obj3, obj1];
-    Assert.same([obj1, obj2, obj3], arr.orderPluck(_0.key - _1.key));
+    Assert.same([obj1, obj2, obj3], arr.order.fn(_0.key - _1.key));
     Assert.same([obj2, obj3, obj1], arr);
   }
 
@@ -143,13 +144,13 @@ class TestArrays {
     var obj2 = { key: 2.0 };
     var obj3 = { key: 3.0 };
     var arr = [obj2, obj3, obj1];
-    Assert.same([obj1, obj2, obj3], arr.orderPluck(_0.key.compare(_1.key)));
+    Assert.same([obj1, obj2, obj3], arr.order.fn(_0.key.compare(_1.key)));
     Assert.same([obj2, obj3, obj1], arr);
   }
 
   public function testSortPluck() {
     var arr = [2,3,1];
-    arr.sortPluck(_0 - _1);
+    arr.sort.fn(_0 - _1);
     Assert.same([1,2,3], arr);
   }
 
@@ -204,7 +205,7 @@ class TestArrays {
   }
 
   public function testPluckRight() {
-    Assert.same([6,4,2], [1,2,3].pluckRight(_ * 2));
+    Assert.same([6,4,2], [1,2,3].mapRight.fn(_ * 2));
   }
 
   public function testReduceRight() {
