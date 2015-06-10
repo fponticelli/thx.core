@@ -155,11 +155,11 @@ Some examples of the common features:
 // filter works for any Iterator/Iterable like the normal Array.filter
 [1,2,3].filter(Ints.isOdd); // [1,3]
 
-[1,2,3].filterPluck(_ != 2); // equivalent to [1,2,3].filter(function(i) return i != 2)
+[1,2,3].filter.fn(_ != 2); // equivalent to [1,2,3].filter(function(i) return i != 2)
 
 [1,2,3].isEmpty(); // false
 
-[1,2,3].pluck(_ * 2); // [2,4,6]
+[1,2,3].map.fn(_ * 2); // [2,4,6]
 ```
 
 ### [Arrays](http://thx-lib.org/api/thx/Arrays.html)
