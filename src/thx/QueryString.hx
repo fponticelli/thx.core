@@ -120,9 +120,7 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
         if(vs.length == 0)
           return [ek];
         else {
-          return vs.map(function(c) return '$ek$assignment${encodeURIComponent(c)}');
-          //return vs.map.fn('$ek$assignment${encodeURIComponent(_)}');
-          //return vs.pluck('$ek$assignment${encodeURIComponent(_)}');return vs.pluck('$ek$assignment${encodeURIComponent(_)}');
+          return vs.map.fn('$ek$assignment${encodeURIComponent(_)}');
         }
       }).flatten().join(separator);
   }
