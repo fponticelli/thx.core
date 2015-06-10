@@ -29,6 +29,12 @@ class TestLambda {
     Assert.equals(6, fn(_+_1+_2)(1,2,3));
     Assert.equals(10, fn(_+_1+_2+_3)(1,2,3,4));
     Assert.equals(15, fn(_+_1+_2+_3+_4)(1,2,3,4,5));
+
+    Assert.equals("Test 1", fn('Test $_')('1'));
+    Assert.equals("Test 1+2", fn('Test $_1+$_2')('1', '2'));
+    Assert.equals("BA", fn('$_2$_1')("A", "B"));    
+    Assert.equals("21", fn({ var _2a = 2; '$_2a$_1'; })("1"));
+    Assert.equals("$_2$_1", fn("$_2$_1")());
   }
 
 
