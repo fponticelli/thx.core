@@ -9,14 +9,14 @@ using StringTools;
 Lambda expressions. Standalone version: https://github.com/ciscoheat/slambda
 **/
 class SlambdaMacro {
-  
+
   public static function f(fn : Expr, restArgs : Array<Expr>) {
     // If called through a static extension, fn contains the special "@:this this" expression:
     // http://haxe.org/manual/macro-limitations-static-extension.html
     var isExtension = fn.expr.match(EMeta({ name: ":this", params: _, pos: _}, {expr: EConst(CIdent("this")), pos: _}));
 
     if (isExtension) return {expr: ECall(fn, restArgs.map(createLambdaExpression.bind(true))), pos: fn.pos};
-    
+
     // If not an extension, return only fn. Rest arguments won't make sense here.
     return restArgs.length == 0
       ? createLambdaExpression(false, fn)
@@ -30,18 +30,14 @@ class SlambdaMacro {
     // If no arrow syntax, detect underscore parameters.
     switch e.expr {
       case EBinop(OpArrow, _, _):
-      case _: 
+      case _:
         var params = new Map<String, Expr>();
         function findParams(e2 : Expr) {
           switch e2.expr {
             // Detect in single-quoted strings
-            case EConst(CString(s)) if(e2.toString().startsWith("'") && e2.toString().endsWith("'")): 
-              while (underscoreStringParam.match(s)) {
-                var m = underscoreStringParam.matched(1);
-                params.set(m, macro $i{m});
-                s = underscoreStringParam.matchedRight();
-              }
-              e2.iter(findParams);
+            case EConst(CString(s)) if(e2.toString().startsWith("'") && e2.toString().endsWith("'")):
+              var s = haxe.macro.Format.format(e2);
+              s.iter(findParams);
             case EConst(CIdent(v)) if (underscoreParam.match(v)):
               params.set(v, e2);
             case _:
@@ -51,7 +47,7 @@ class SlambdaMacro {
         findParams(e);
 
         var paramArray = [for (p in params) p];
-        
+
         if (paramArray.length > 0) {
           // If underscore parameters found, create an arrow syntax of the expression.
           // Sorted so the parameters are in the correct order in the function definition.
@@ -68,7 +64,7 @@ class SlambdaMacro {
           case EArrayDecl(values) if(values.length > 0): [for (v in values) v.toString()];
           case _: untyped Context.error("Invalid lambda argument, use x => ... or [x,y] => ...", e1.pos);
         }
-        
+
         {
           expr: EFunction(null, {
             ret: null,
