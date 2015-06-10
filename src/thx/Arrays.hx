@@ -216,7 +216,7 @@ If no element satisfies `predicate` the array is left unmodified and `null` is r
 /**
 Filters out all `null` values from an array.
 **/
-  @:deprecated("Use `thx.Functions.fn` instead.")
+  @:deprecated("`filterNull` is deprecated, use `using thx.Functions` and `arr.filter.fn(...)` instead.")
   public static function filterNull<T>(a : Array<Null<T>>) : Array<T> {
     var arr : Array<T> = [];
     for(v in a)
@@ -233,7 +233,7 @@ The special symbol `_` refers to the current item.
 [1,2,3,4,5,6].filterPluck(_ % 2 != 0); // holds [1,3,5]
 ```
 **/
-  @:deprecated("Use `thx.Functions.fn` instead.")
+  @:deprecated("`filterPluck` is deprecated, use `using thx.Functions` and `arr.filter.fn(...)` instead.")
   macro public static function filterPluck<T>(a : ExprOf<Array<T>>, expr : ExprOf<Bool>) : ExprOf<Array<T>>
     return macro $e{a}.filter(function(_) return $e{expr});
 
@@ -266,7 +266,7 @@ If none is found it returns null.
 /**
 It returns the same result as `find`, but using the pluck strategy.
 **/
-  @:deprecated("Use `thx.Functions.fn` instead.")
+  @:deprecated("`findPluck` is deprecated, use `using thx.Functions` and `arr.find.fn(...)` instead.")
   macro public static function findPluck<T>(a : ExprOf<Array<T>>, expr : ExprOf<Bool>) : ExprOf<Array<T>>
     return macro $e{a}.find(function(_) return $e{expr});
 
@@ -274,7 +274,7 @@ It returns the same result as `find`, but using the pluck strategy.
 /**
 It returns the same result as `findLast`, but using the pluck strategy.
 **/
-  @:deprecated("Use `thx.Functions.fn` instead.")
+  @:deprecated("`findPluckLast` is deprecated, use `using thx.Functions` and `arr.findLast.fn(...)` instead.")
   macro public static function findPluckLast<T>(a : ExprOf<Array<T>>, expr : ExprOf<Bool>) : ExprOf<Array<T>>
     return macro $e{a}.findLast(function(_) return $e{expr});
 
@@ -426,7 +426,7 @@ It works the same as `Array.sort()` but doesn't change the original array and re
 Uses the pluck strategy to order an array.  Returns an ordered copy of the Array, leaving the original unchanged.
 Arguments for pluck are `_0` and `_1`.
 **/
-  @:deprecated("Use `thx.Functions.fn` instead.")
+  @:deprecated("`orderPluck` is deprecated, use `using thx.Functions` and `arr.order.fn(...)` instead.")
   macro public static function orderPluck<T>(array : ExprOf<Array<T>>, expr : ExprOf<Int>)
     return macro $e{array}.order(function(_0, _1) return $e{expr});
 
@@ -454,14 +454,14 @@ to such functions.
 
 The method is a macro method that guarantees that the correct types and identifiers are used.
 **/
-  @:deprecated("Use `thx.Functions.fn` instead.")
+  @:deprecated("`pluck` is deprecated, use `using thx.Functions` and `arr.map.fn(...)` instead.")
   macro public static function pluck<T, TOut>(a : ExprOf<Array<T>>, expr : ExprOf<TOut>) : ExprOf<Array<TOut>>
     return macro $e{a}.map(function(_) return ${expr});
 
 /**
 Same as pluck but in reverse order.
 **/
-  @:deprecated("Use `thx.Functions.fn` instead.")
+  @:deprecated("`pluckRight` is deprecated, use `using thx.Functions` and `arr.mapRight.fn(...)` instead.")
   macro public static function pluckRight<T, TOut>(a : ExprOf<Array<T>>, expr : ExprOf<TOut>) : ExprOf<Array<TOut>>
     return macro thx.Arrays.mapRight($e{a}, function(_) return ${expr});
 
@@ -472,7 +472,7 @@ Like `pluck` but with an extra argument `i` that can be used to infer the index 
 var r = arr.plucki(_.increment(i)); // where increment() is a method of the elements in the array
 ```
 **/
-  @:deprecated("Use `thx.Functions.fn` instead.")
+  @:deprecated("`plucki` is deprecated, use `using thx.Functions` and `arr.mapi.fn(...)` instead.")
   macro public static function plucki<T>(a : ExprOf<Array<T>>, expr : Expr)
     return macro thx.Arrays.mapi($e{a}, function(_, i) return ${expr});
 
@@ -595,7 +595,7 @@ It returns a copy of the array with its elements randomly changed in position.
 /**
 Uses the plcuk strategy to sort an array. Arguments for pluck are `_0` and `_1`.
 **/
- 	@:deprecated("Use `thx.Functions.fn` instead.")
+ 	@:deprecated("`sortPluck` is deprecated, use `using thx.Functions` and `arr.sort.fn(...)` instead.")
   macro public static function sortPluck<T>(array : ExprOf<Array<T>>, expr : ExprOf<Int>)
     return macro $e{array}.sort(function(_0, _1) return $e{expr});
 
