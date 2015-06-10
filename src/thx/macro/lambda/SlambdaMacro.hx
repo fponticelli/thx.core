@@ -24,7 +24,7 @@ class SlambdaMacro {
   }
 
   static var underscoreParam = ~/^_\d*$/;
-  static var underscoreStringParam = ~/\$(_\d*)\b/;
+  static var underscoreStringParam = ~/(?<!\$)\$(_\d*)\b/;
   static function createLambdaExpression(isExtension : Bool, e : Expr) : Expr {
 
     // If no arrow syntax, detect underscore parameters.

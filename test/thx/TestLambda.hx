@@ -35,6 +35,7 @@ class TestLambda {
     Assert.equals("BA", fn('$_2$_1')("A", "B"));    
     Assert.equals("21", fn({ var _2a = 2; '$_2a$_1'; })("1"));
     Assert.equals("$_2$_1", fn("$_2$_1")());
+    Assert.equals("$_1", fn('$$_1')());
   }
 
 
