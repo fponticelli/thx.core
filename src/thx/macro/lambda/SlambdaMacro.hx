@@ -20,7 +20,7 @@ class SlambdaMacro {
     // If not an extension, return only fn. Rest arguments won't make sense here.
     return restArgs.length == 0
       ? createLambdaExpression(false, fn)
-      : untyped Context.error('Rest arguments can only be used in static extensions.', restArgs[restArgs.length - 1].pos);
+      : untyped haxe.macro.Context.error('Rest arguments can only be used in static extensions.', restArgs[restArgs.length - 1].pos);
   }
 
   static var underscoreParam = ~/^_\d*$/;
