@@ -25,4 +25,13 @@ class TestLambdaStaticExtension {
   public function testFillEmpty() {
     Assert.same([0,1,2], [1,2,3].mapi.fn(_1));
   }
+
+  public function testOptionalArgs() {
+    function f(callback : Int -> ?Int -> Int) : Int {
+      return callback(2, 3);
+    }
+
+    Assert.equals(6, f.fn([_0, _1] => _0 * 3));
+    Assert.equals(6, f.fn(_0 * _1));
+  }
 }

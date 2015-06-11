@@ -84,7 +84,7 @@ class SlambdaMacro {
             ret: null,
             params: [],
             expr: macro return $e2,
-            args: [for(arg in lambdaArgs) { name: arg, type: null, opt: false }]
+            args: [for(arg in lambdaArgs) { name: arg, type: null, opt: true }]
           }),
           pos: e.pos
         };
