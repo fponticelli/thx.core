@@ -69,6 +69,24 @@ Filters out all null elements in the array
   }
 
 /**
+Compares two arrays returning a negative integer, zero or a positive integer.
+
+The first comparison is made on the array length.
+
+If they match each pair of elements is compared using `thx.Dynamics.compare`.
+**/
+  public static function compare<T>(a : Array<T>, b : Array<T>) {
+		var v : Int;
+		if ((v = Ints.compare(a.length, b.length)) != 0)
+			return v;
+		for (i in 0...a.length) {
+			if ((v = Dynamics.compare(a[i], b[i])) != 0)
+				return v;
+		}
+		return 0;
+	}
+
+/**
 Returns a Map containing the number of occurrances for each value in the array.
 **/
   @:generic
