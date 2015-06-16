@@ -577,6 +577,12 @@ Returns one element at random from the array or null if the array is empty.
     return array[Std.random(array.length)];
 
 /**
+Converts an `Array<T>` into a string.
+**/
+  public static function string<T>(arr : Array<T>) : String
+    return "[" + arr.map(Dynamics.string).join(", ") + "]";
+
+/**
 It returns a copy of the array with its elements randomly changed in position.
 **/
   public static function shuffle<T>(a : Array<T>) : Array<T> {
