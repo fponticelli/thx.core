@@ -10,6 +10,23 @@ Helper methods for generic objects.
 **/
 class Objects {
 /**
+Compares two objects assuming that the object with less fields will come first.
+
+If both objects have the same number of fields, each field value is compared
+using `thx.Dynamics.compare`.
+**/
+  public static function compare(a : {}, b : {}) {
+		var v, fields;
+		if ((v = Arrays.compare((fields = Reflect.fields(a)), Reflect.fields(b))) != 0)
+			return v;
+		for (field in fields) {
+			if ((v = Dynamics.compare(Reflect.field(a, field), Reflect.field(b, field))) != 0)
+				return v;
+		}
+		return 0;
+	}
+
+/**
 `isEmpty` returns `true` if the object doesn't have any field.
 **/
   inline public static function isEmpty(o : {}) : Bool
