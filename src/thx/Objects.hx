@@ -88,6 +88,20 @@ Clone the current object by creating a new object and using `copyTo` to clone ea
     return Reflect.fields(o).length;
 
 /**
+Returns a string representation of the object containing each field and value.
+
+The function is recursive so it might generate infinite loops if used with
+circular references.
+**/
+  public static function string(o : {}) : String {
+    return "{" +
+      Reflect.fields(o)
+        .map(function(key) return '$key : ${string(Reflect.field(o, key))}')
+        .join(", ") +
+      "}";
+  }
+
+/**
 `values` returns an array of dynamic values containing the values of each field in the argument object.
 **/
   inline public static function values(o : {}) : Array<Dynamic>
