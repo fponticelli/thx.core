@@ -195,6 +195,44 @@ Class instances will either be cloned, or the reference copied, depending on the
   }
 
 /**
+Compares two runtime values trying to match values.
+**/
+  public static function compare(a : Dynamic, b : Dynamic) {
+    if (null == a && null == b)
+			return 0;
+		if (null == a)
+			return -1;
+		if (null == b)
+			return 1;
+    if(!Types.sameType(a, b))
+      return Strings.compare(Types.valueTypeToString(a), Types.valueTypeToString(b));
+    switch(Type.typeof(a)) {
+      case TInt:    return Ints.compare(a, b);
+      case TFloat:  return Floats.compare(a, b);
+			case TBool:   return Bools.compare(a, b);
+			case TObject: return Objects.compare(a, b);
+			case TClass(c):
+				var name = Type.getClassName(c);
+				switch(name) {
+					case "Array":
+						return Arrays.compare(a, b);
+					case "String":
+						return Strings.compare(a, b);
+					case "Date":
+						return Dates.compare(a, b);
+          case _ if(Reflect.hasField(a, "compare")):
+            return Reflect.callMethod(a, Reflect.field(a, "compare"), [b]);
+					default:
+						return Strings.compare(Std.string(a), Std.string(b));
+				}
+			case TEnum(e):
+				return Enums.compare(a, b);
+			default:
+				return 0;
+		}
+  }
+
+/**
 Convert any value into a `String`.
 **/
 	public static function string(v : Dynamic) {
