@@ -193,6 +193,38 @@ Class instances will either be cloned, or the reference copied, depending on the
         }
     }
   }
+
+/**
+Convert any value into a `String`.
+**/
+	public static function string(v : Dynamic) {
+		switch Type.typeof(v) {
+			case TNull:
+        return "null";
+      case TInt, TFloat, TBool:
+        return '$v';
+			case TObject:
+        return Objects.string(v);
+			case TClass(c):
+				var name = Type.getClassName(c);
+				switch name {
+					case "Array":
+						return Arrays.string(v);
+					case "String":
+					  return Strings.string(v);
+					case "Date":
+						return (v : Date).toString();
+					default:
+						return Std.string(v);
+				}
+			case TEnum(e):
+				return Enums.string(v);
+			case TUnknown:
+				return "<unknown>";
+			case TFunction:
+				return "<function>";
+		}
+	}
 }
 
 class DynamicsT {
