@@ -76,15 +76,15 @@ The first comparison is made on the array length.
 If they match each pair of elements is compared using `thx.Dynamics.compare`.
 **/
   public static function compare<T>(a : Array<T>, b : Array<T>) {
-		var v : Int;
-		if ((v = Ints.compare(a.length, b.length)) != 0)
-			return v;
-		for (i in 0...a.length) {
-			if ((v = Dynamics.compare(a[i], b[i])) != 0)
-				return v;
-		}
-		return 0;
-	}
+    var v : Int;
+    if ((v = Ints.compare(a.length, b.length)) != 0)
+      return v;
+    for (i in 0...a.length) {
+      if ((v = Dynamics.compare(a[i], b[i])) != 0)
+        return v;
+    }
+    return 0;
+  }
 
 /**
 Returns a Map containing the number of occurrances for each value in the array.
@@ -618,7 +618,7 @@ It returns a copy of the array with its elements randomly changed in position.
 /**
 Uses the plcuk strategy to sort an array. Arguments for pluck are `_0` and `_1`.
 **/
- 	@:deprecated("`sortPluck` is deprecated, use `using thx.Functions` and `arr.sort.fn(...)` instead.")
+  @:deprecated("`sortPluck` is deprecated, use `using thx.Functions` and `arr.sort.fn(...)` instead.")
   macro public static function sortPluck<T>(array : ExprOf<Array<T>>, expr : ExprOf<Int>)
     return macro $e{array}.sort(function(_0, _1) return $e{expr});
 
