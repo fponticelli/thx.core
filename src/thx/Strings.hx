@@ -239,7 +239,7 @@ Returns a new string whose characters are in reverse order.
 /**
 Converts a string in a quoted string.
 **/
-  public static function string(s : String) {
+  public static function quote(s : String) {
     if (s.indexOf('"') < 0)
       return '"' + s + '"';
     else if (s.indexOf("'") < 0)

@@ -249,7 +249,7 @@ Convert any value into a `String`.
           case "Array":
             return Arrays.string(v);
           case "String":
-            return Strings.string(v);
+            return Strings.quote(v);
           case "Date":
             return (v : Date).toString();
           default:
