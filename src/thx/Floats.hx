@@ -125,6 +125,15 @@ argument). By default it is defined as `EPSILON`.
     return Math.abs(a - b) <= tollerance;
 
 /**
+Float numbers can sometime introduce tiny errors even for simple operations.
+`nearEqualAngles` compares two angles (default is 360deg) using a tiny
+tollerance (last optional argument). By default the tollerance is defined as
+`EPSILON`.
+**/
+  inline public static function nearEqualAngles(a : Float, b : Float, ?turn = 360.0, ?tollerance = EPSILON)
+    return angleDifference(a, b, turn) <= tollerance;
+
+/**
 `nearZero` finds if the passed number is zero or very close to it. By default
 `EPSILON` is used as the tollerance value.
 **/
