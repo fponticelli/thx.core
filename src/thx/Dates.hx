@@ -70,8 +70,32 @@ and the method will normalize that value by offsetting the other arguments by th
 /**
 Returns `true` if the passed dates are the same.
 **/
-  inline public static function equals(a : Date, b : Date) : Bool
-    return a.getTime() == b.getTime();
+  inline public static function equals(self : Date, other : Date) : Bool
+    return self.getTime() == other.getTime();
+
+/**
+Returns `true` if the `self` date is greater than `other`.
+**/
+  inline public static function more(self : Date, other : Date) : Bool
+    return self.getTime() > other.getTime();
+
+/**
+Returns `true` if the `self` date is lesser than `other`.
+**/
+  inline public static function less(self : Date, other : Date) : Bool
+    return self.getTime() < other.getTime();
+
+/**
+Returns `true` if the `self` date is greater than or equal to `other`.
+**/
+  inline public static function moreEqual(self : Date, other : Date) : Bool
+    return self.getTime() >= other.getTime();
+
+/**
+Returns `true` if the `self` date is lesser than or equal to `other`.
+**/
+  inline public static function lessEqual(self : Date, other : Date) : Bool
+    return self.getTime() <= other.getTime();
 
 /**
 Tells if a year is a leap year.
