@@ -117,23 +117,24 @@ Interpolates values in a polar coordinate system always in counter-clock-wise di
   }
 
 /**
-Float numbers can sometime introduce tiny errors even for simple operations. `nearEquals`
-comapres floats using a tiny tollerance defined as `EPSILON`.
+Float numbers can sometime introduce tiny errors even for simple operations.
+`nearEquals` compares two floats using a tiny tollerance (last optional
+argument). By default it is defined as `EPSILON`.
 **/
-  inline public static function nearEquals(a : Float, b : Float)
-    return Math.abs(a - b) <= EPSILON;
+  inline public static function nearEquals(a : Float, b : Float, ?tollerance = EPSILON)
+    return Math.abs(a - b) <= tollerance;
 
 /**
-`nearZero` finds if the passed number is zero or very close to it. `EPSILON` is used
-as the tollerance value.
+`nearZero` finds if the passed number is zero or very close to it. By default
+`EPSILON` is used as the tollerance value.
 **/
-  inline public static function nearZero(n : Float)
-    return Math.abs(n) <= EPSILON;
+  inline public static function nearZero(n : Float, ?tollerance = EPSILON)
+    return Math.abs(n) <= tollerance;
 
 /**
 `normalize` clamps the passwed value between 0 and 1.
 **/
-  public static inline function normalize(v : Float) : Float
+  inline public static function normalize(v : Float) : Float
     return clamp(v, 0, 1);
 
 /**
