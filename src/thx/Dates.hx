@@ -189,6 +189,18 @@ Snaps a Date to the nearest second, minute, hour, day, week, month or year.
   }
 
 /**
+Finds and returns which of the two passed dates is the newest.
+**/
+  public static function max(self : Date, other : Date)
+    return self.getTime() > other.getTime() ? self : other;
+
+/**
+Finds and returns which of the two passed dates is the oldest.
+**/
+  public static function min(self : Date, other : Date)
+    return self.getTime() < other.getTime() ? self : other;
+
+/**
 Snaps a date to the given weekday inside the current week.  The time within the day will stay the same.
 
 If you are already on the given day, the date will not change.
