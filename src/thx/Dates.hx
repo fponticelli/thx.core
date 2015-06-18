@@ -327,6 +327,42 @@ Returns a new date, exactly 1 day after the given date/time.
 **/
   inline public static function nextDay(d : Date) : Date
     return jump(d,Day,1);
+
+/**
+Returns a new date that is modified only by the year.
+**/
+  public static function withYear(date : Date, year : Int)
+    return Dates.create(year, date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
+
+/**
+Returns a new date that is modified only by the month (remember that month indexes begin at zero).
+**/
+  public static function withMonth(date : Date, month : Int)
+    return Dates.create(date.getFullYear(), month, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
+
+/**
+Returns a new date that is modified only by the day.
+**/
+  public static function withDay(date : Date, day : Int)
+    return Dates.create(date.getFullYear(), date.getMonth(), day, date.getHours(), date.getMinutes(), date.getSeconds());
+
+/**
+Returns a new date that is modified only by the hour.
+**/
+  public static function withHour(date : Date, hour : Int)
+    return Dates.create(date.getFullYear(), date.getMonth(), date.getDate(), hour, date.getMinutes(), date.getSeconds());
+
+/**
+Returns a new date that is modified only by the minute.
+**/
+  public static function withMinute(date : Date, minute : Int)
+    return Dates.create(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), minute, date.getSeconds());
+
+/**
+Returns a new date that is modified only by the second.
+**/
+  public static function withSecond(date : Date, second : Int)
+    return Dates.create(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), second);
 }
 
 /**
