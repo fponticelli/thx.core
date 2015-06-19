@@ -68,6 +68,23 @@ and the method will normalize that value by offsetting the other arguments by th
   }
 
 /**
+Creates an array of dates that begin at `start` and end at `end` included.
+
+Time values are pick from the `start` value except for the last value that will
+match `end`. No interpolation is made.
+**/
+  public static function daysRange(start : Date, end : Date) {
+    if(less(end, start)) return [];
+    var days = [];
+    while(!sameDay(start, end)) {
+      days.push(start);
+      start = nextDay(start);
+    }
+    days.push(end);
+    return days;
+  }
+
+/**
 Returns `true` if the passed dates are the same.
 **/
   inline public static function equals(self : Date, other : Date) : Bool
