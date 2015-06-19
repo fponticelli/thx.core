@@ -151,6 +151,36 @@ Tells how many days in the month of the given date.
     return numDaysInMonth(d.getMonth(), d.getFullYear());
 
 /**
+Returns true if the 2 dates share the same year.
+**/
+  public static function sameYear(self : Date, other : Date)
+      return self.getFullYear() == other.getFullYear();
+
+/**
+Returns true if the 2 dates share the same year and month.
+**/
+  public static function sameMonth(self : Date, other : Date)
+      return sameYear(self, other) && self.getFullYear() == other.getFullYear();
+
+/**
+Returns true if the 2 dates share the same year, month and day.
+**/
+  public static function sameDay(self : Date, other : Date)
+    return sameMonth(self, other) && self.getDate() == other.getDate();
+
+/**
+Returns true if the 2 dates share the same year, month, day and hour.
+**/
+  public static function sameHour(self : Date, other : Date)
+    return sameDay(self, other) && self.getHours() == other.getHours();
+
+/**
+Returns true if the 2 dates share the same year, month, day, hour and minute.
+**/
+  public static function sameMinute(self : Date, other : Date)
+    return sameHour(self, other) && self.getMinutes() == other.getMinutes();
+
+/**
 Snaps a Date to the next second, minute, hour, day, week, month or year.
 
 @param date The date to snap.  See Date.
