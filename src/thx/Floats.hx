@@ -15,7 +15,7 @@ class Floats {
 /**
 Returns the angular distance between 2 angles.
 **/
-  static public function angleDifference(a : Float, b : Float, turn : Float = 360) {
+  static public function angleDifference(a : Float, b : Float, ?turn : Float = 360.0) {
     var r = (b - a) % turn;
     if(r < 0)
       r += turn;
@@ -131,7 +131,7 @@ tollerance (last optional argument). By default the tollerance is defined as
 `EPSILON`.
 **/
   inline public static function nearEqualAngles(a : Float, b : Float, ?turn = 360.0, ?tollerance = EPSILON)
-    return angleDifference(a, b, turn) <= tollerance;
+    return Math.abs(angleDifference(a, b, turn)) <= tollerance;
 
 /**
 `nearZero` finds if the passed number is zero or very close to it. By default
