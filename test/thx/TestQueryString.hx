@@ -9,22 +9,22 @@ class TestQueryString {
   public function testBasics() {
     Assert.same(
       { foo : "bar" },
-      QueryString.parse("?foo=bar").object()
+      QueryString.parse("?foo=bar").toObject()
     );
 
     Assert.same(
       { foo : "bar" },
-      QueryString.parse("#foo=bar").object()
+      QueryString.parse("#foo=bar").toObject()
     );
 
     Assert.same(
       { foo : "bar" },
-      QueryString.parse("foo=bar").object()
+      QueryString.parse("foo=bar").toObject()
     );
 
     Assert.same(
       { foo : null },
-      QueryString.parse("foo").object()
+      QueryString.parse("foo").toObject()
     );
 
     Assert.equals(
@@ -34,37 +34,37 @@ class TestQueryString {
 
     Assert.same(
       { foo : null, key : null },
-      QueryString.parse("foo&key").object()
+      QueryString.parse("foo&key").toObject()
     );
 
     Assert.same(
       { foo : "bar", key : null },
-      QueryString.parse("foo=bar&key").object()
+      QueryString.parse("foo=bar&key").toObject()
     );
 
     Assert.same(
       {  },
-      QueryString.parse("?").object()
+      QueryString.parse("?").toObject()
     );
 
     Assert.same(
       {  },
-      QueryString.parse("#").object()
+      QueryString.parse("#").toObject()
     );
 
     Assert.same(
       {  },
-      QueryString.parse(" ").object()
+      QueryString.parse(" ").toObject()
     );
 
     Assert.same(
       { foo : ["bar", "baz"] },
-      QueryString.parse("foo=bar&foo=baz").object()
+      QueryString.parse("foo=bar&foo=baz").toObject()
     );
 
     Assert.same(
       { "foo faz" : "bar baz  " },
-      QueryString.parse("foo+faz=bar+baz++").object()
+      QueryString.parse("foo+faz=bar+baz++").toObject()
     );
 
     Assert.equals(
