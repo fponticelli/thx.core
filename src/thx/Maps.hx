@@ -24,7 +24,7 @@ Converts a Map<TKey, TValue> into an Array<Tuple2<TKey, TValue>>
 /**
 `mapToObject` transforms a `Map<String, T>` into an anonymous object.
 **/
-  public static function mapToObject<T>(map : Map<String, T>) : {}
+  public static function toObject<T>(map : Map<String, T>) : {}
     return tuples(map).reduce(function(o, t) {
       Reflect.setField(o, t._0, t._1);
       return o;

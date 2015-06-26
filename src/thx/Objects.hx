@@ -92,7 +92,7 @@ Clone the current object by creating a new object and using `copyTo` to clone ea
 /**
 `objectToMap` transforms an anonymous object into an instance of `Map<String, Dynamic>`.
 **/
-  public static function objectToMap(o : {}) : Map<String, Dynamic>
+  public static function toMap(o : {}) : Map<String, Dynamic>
     return tuples(o).reduce(function(map : Map<String, Dynamic>, t) {
       map.set(t._0, t._1);
       return map;
