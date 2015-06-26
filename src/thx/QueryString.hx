@@ -47,7 +47,7 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
     return qs;
   }
 
-  @:to public function object() : {} {
+  @:to public function toObject() : {} {
     var o : Dynamic = {};
     this.keys().map(function(key) {
         var v : Array<String> = this.get(key);
