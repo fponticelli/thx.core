@@ -91,5 +91,5 @@ chain of the passed `value`.
 Returns a string describing the type of any `value`.
 **/
   inline public static function valueTypeToString<T>(value : T)
-    return typeToString(Type.typeof(value));
+    return toString(Type.typeof(value));
 }
