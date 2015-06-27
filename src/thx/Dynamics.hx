@@ -308,7 +308,7 @@ class DynamicsT {
   `objectToMap` transforms an anonymous object into an instance of `Map<String, Dynamic>`.
   **/
     @:generic
-    public static function objectToMap<T>(o : Dynamic<T>) : Map<String, T>
+    public static function toMap<T>(o : Dynamic<T>) : Map<String, T>
       return tuples(o).reduce(function(map : Map<String, T>, t) {
         map.set(t._0, t._1);
         return map;

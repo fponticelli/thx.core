@@ -66,7 +66,7 @@ chain of the passed `ValueType`.
 /**
 Returns a string representation of a `ValueType`.
 **/
-  public static function typeToString(type : Type.ValueType) {
+  public static function toString(type : Type.ValueType) {
     return switch type {
       case TNull:     "Null";
       case TInt:      "Int";
