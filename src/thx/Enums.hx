@@ -1,5 +1,8 @@
 package thx;
 
+/**
+Helper class for enums.
+**/
 class Enums {
 /**
 Converts an enum value into a `String` representation.
