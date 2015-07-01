@@ -47,14 +47,14 @@ trace(0.8.clamp(0, 1)); // prints 0.8
 trace(-0.5.clamp(0, 1)); // prints 0.0
 ```
 **/
-  public static inline function clamp(v : Float, min : Float, max : Float) : Float
+  public static inline function clamp<T : Float>(v : T, min : T, max : T) : T
     return v < min ? min : (v > max ? max : v);
 
 /**
 Like clamp but you only pass one argument (`max`) that is used as the upper limit
 and the opposite (additive inverse or `-max`) as the lower limit.
 **/
-  public static inline function clampSym(v : Float, max : Float) : Float
+  public static inline function clampSym<T : Float>(v : T, max : T) : T
     return clamp(v, -max, max);
 
 /**
@@ -117,6 +117,18 @@ Interpolates values in a polar coordinate system always in counter-clock-wise di
   }
 
 /**
+Return the maximum value between two integers or floats.
+**/
+  inline public static function max<T : Float>(a : T, b : T) : T
+    return a > b ? a : b;
+
+/**
+Return the minimum value between two integers or floats.
+**/
+  inline public static function min<T : Float>(a : T, b : T) : T
+    return a < b ? a : b;
+
+/**
 Float numbers can sometime introduce tiny errors even for simple operations.
 `nearEquals` compares two floats using a tiny tollerance (last optional
 argument). By default it is defined as `EPSILON`.
@@ -172,7 +184,7 @@ Rounds a number to the specified number of decimals.
 /**
 `sign` returns `-1` if `value` is a negative number, `1` otherwise.
 */
-  inline public static function sign(value : Float) : Int
+  inline public static function sign<T : Float>(value : T) : Int
     return value < 0 ? -1 : 1;
 
 /**
