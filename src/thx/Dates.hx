@@ -91,6 +91,23 @@ Returns `true` if the passed dates are the same.
     return self.getTime() == other.getTime();
 
 /**
+Returns `true` if the dates are approximately equals. The amount of delta
+allowed is determined by `units` and it spans that amount equally before and
+after the `self` date. The default `unit` value is `1`.
+
+The default `period` range is `Second`.
+**/
+  public static function nearEquals(self : Date, other : Date, ?units : Int = 1, ?period : TimePeriod) {
+    if(null == period)
+      period = Second;
+    if(units < 0)
+      units = -units;
+    var min = jump(self, period, -units),
+        max = jump(self, period, units);
+    return lessEqual(min, other) && moreEqual(max, other);
+  }
+
+/**
 Returns `true` if the `self` date is greater than `other`.
 **/
   inline public static function more(self : Date, other : Date) : Bool
