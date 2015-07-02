@@ -393,6 +393,42 @@ Returns a new date, exactly 1 day after the given date/time.
     return jump(d,Day,1);
 
 /**
+Returns a new date, exactly 1 hour before the given date/time.
+**/
+  inline public static function prevHour(d : Date) : Date
+    return jump(d,Hour,-1);
+
+/**
+Returns a new date, exactly 1 hour after the given date/time.
+**/
+  inline public static function nextHour(d : Date) : Date
+    return jump(d,Hour,1);
+
+/**
+Returns a new date, exactly 1 minute before the given date/time.
+**/
+  inline public static function prevMinute(d : Date) : Date
+    return jump(d,Minute,-1);
+
+/**
+Returns a new date, exactly 1 minute after the given date/time.
+**/
+  inline public static function nextMinute(d : Date) : Date
+    return jump(d,Minute,1);
+
+/**
+Returns a new date, exactly 1 second before the given date/time.
+**/
+  inline public static function prevSecond(d : Date) : Date
+    return jump(d,Second,-1);
+
+/**
+Returns a new date, exactly 1 second after the given date/time.
+**/
+  inline public static function nextSecond(d : Date) : Date
+    return jump(d,Second,1);
+
+/**
 Returns a new date that is modified only by the year.
 **/
   public static function withYear(date : Date, year : Int)
