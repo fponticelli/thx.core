@@ -222,7 +222,7 @@ Snaps a Date to the next second, minute, hour, day, week, month or year.
 @return The snapped date.
 **/
   inline public static function snapNext(date : Date, period : TimePeriod) : Date
-    return Date.fromTime(Timestamps.snapNext(date.getTime(), period));
+    return (date : Timestamp).snapNext(period);
 
 /**
 Snaps a Date to the previous second, minute, hour, day, week, month or year.
@@ -232,7 +232,7 @@ Snaps a Date to the previous second, minute, hour, day, week, month or year.
 @return The snapped date.
 **/
   inline public static function snapPrev(date : Date, period : TimePeriod) : Date
-    return Date.fromTime(Timestamps.snapPrev(date.getTime(), period));
+    return (date : Timestamp).snapPrev(period);
 
 /**
 Snaps a Date to the nearest second, minute, hour, day, week, month or year.
@@ -242,7 +242,7 @@ Snaps a Date to the nearest second, minute, hour, day, week, month or year.
 @return The snapped date.
 **/
   inline public static function snapTo(date : Date, period : TimePeriod) : Date
-    return Date.fromTime(Timestamps.snapTo(date.getTime(), period));
+    return (date : Timestamp).snapTo(period);
 
 /**
   Get a date relative to the current date, shifting by a set period of time.
