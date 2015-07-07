@@ -493,7 +493,7 @@ unless you know what you are doing.
         }
 
         // iterator
-        if(isIterator(expected, false)) {
+        if(Iterators.isIterator(expected)) {
           if(status.recursive || status.path == '') {
             var evalues = Iterators.toArray(expected),
                 vvalues = Iterators.toArray(value);
@@ -514,7 +514,7 @@ unless you know what you are doing.
         }
 
         // iterable
-        if(isIterable(expected, false)) {
+        if(Iterables.isIterable(expected)) {
           if(status.recursive || status.path == '') {
             var evalues = Iterables.toArray(expected),
                 vvalues = Iterables.toArray(value);
@@ -598,8 +598,8 @@ unless you know what you are doing.
         }
 
         // iterator
-        if(isIterator(expected, true)) {
-          if(!(isIterator(value, true))) {
+        if(Iterators.isIterator(expected)) {
+          if(!(Iterators.isIterator(value))) {
             status.error = withPath('expected an Iterable');
             return false;
           }
@@ -623,8 +623,8 @@ unless you know what you are doing.
         }
 
         // iterable
-        if(isIterable(expected, true)) {
-          if(!(isIterable(value, true))) {
+        if(Iterables.isIterable(expected)) {
+          if(!(Iterables.isIterable(value))) {
             status.error = withPath('expected an Iterator');
             return false;
           }
@@ -649,18 +649,6 @@ unless you know what you are doing.
         return throw "Unable to compare two unknown types";
     }
     return throw 'Unable to compare values: $expected and $value';
-  }
-
-  static function isIterable(v : Dynamic, isAnonym : Bool) {
-    var fields = isAnonym ? Reflect.fields(v) : Type.getInstanceFields(Type.getClass(v));
-    if(!Arrays.contains(fields, "iterator")) return false;
-    return Reflect.isFunction(Reflect.field(v, "iterator"));
-  }
-
-  static function isIterator(v : Dynamic, isAnonym : Bool) {
-    var fields = isAnonym ? Reflect.fields(v) : Type.getInstanceFields(Type.getClass(v));
-    if(!Arrays.contains(fields, "next") || !Arrays.contains(fields, "hasNext")) return false;
-    return Reflect.isFunction(Reflect.field(v, "next")) && Reflect.isFunction(Reflect.field(v, "hasNext"));
   }
 }
 
