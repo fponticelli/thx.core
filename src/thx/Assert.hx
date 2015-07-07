@@ -20,7 +20,7 @@ unless you know what you are doing.
   public static function containedIn<T>(possibilities : Array<T>, value : T, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
     if(Arrays.contains(possibilities, value)) {
-      isTrue(true, msg, pos);
+      pass(msg, pos);
     } else {
       fail(msg == null ? 'value $value not found in the expected possibilities $possibilities' : msg, pos);
     }
@@ -39,7 +39,7 @@ unless you know what you are doing.
   public static function contains<T>(match : T, values : Array<T>, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
     if(Arrays.contains(values, match)) {
-      isTrue(true, msg, pos);
+      pass(msg, pos);
     } else {
       fail(msg == null ? 'values $values do not contain $match' : msg, pos);
     }
@@ -77,7 +77,7 @@ unless you know what you are doing.
   public static function excludes<T>(match : T, values : Array<T>, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
     if(!Arrays.contains(values, match)) {
-      isTrue(true, msg, pos);
+      pass(msg, pos);
     } else {
       fail(msg == null ? 'values $values do contain $match' : msg, pos);
     }
@@ -292,6 +292,32 @@ unless you know what you are doing.
   }
 
 /**
+Check that value is an object with the same fields and values found in expected.
+The default behavior is to check nested objects in fields recursively.
+```haxe
+Assert.same({ name : "utest"}, ob);
+```
+@param expected: The expected value to check against
+@param value: The value to test
+@param recursive: States whether or not the test will apply also to sub-objects.
+Defaults to true
+@param msg: An optional error message. If not passed a default one will be used
+@param pos: Code position where the Assert call has been executed. Don't fill it
+unless you know what you are doing.
+*/
+  #if no_asserts inline #end
+  public static function same(expected : Dynamic, value : Dynamic, ?recursive : Bool = true, ?msg : String, ?pos : PosInfos) {
+    #if !no_asserts
+    var status = { recursive : recursive, path : '', error : null };
+    if(sameAs(expected, value, status)) {
+      pass(msg, pos);
+    } else {
+      fail(msg == null ? status.error : msg, pos);
+    }
+    #end
+  }
+
+/**
 Checks that the expected values is contained in value.
 @param match: the string value that must be contained in value
 @param value: the value to test
@@ -302,7 +328,7 @@ Checks that the expected values is contained in value.
   public static function stringContains(match : String, value : String, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
     if (value != null && value.indexOf(match) >= 0) {
-      isTrue(true, msg, pos);
+      pass(msg, pos);
     } else {
       fail(msg == null ? 'value ${Strings.quote(value)} does not contain ${Strings.quote(match)}' : msg, pos);
     }
@@ -344,7 +370,7 @@ they are defined.
       }
       p = p2 + s.length;
     }
-    isTrue(true, msg, pos);
+    pass(msg, pos);
     #end
   }
 
@@ -361,6 +387,7 @@ unless you know what you are doing.
     #end
   }
 
+// helper methods
   static function sameAs(expected : Dynamic, value : Dynamic, status : SameStatus) {
     function withPath(msg : String) {
       return msg + (Strings.isEmpty(status.path) ? '' : ' at ${status.path}');
