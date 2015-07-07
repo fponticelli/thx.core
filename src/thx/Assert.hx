@@ -468,8 +468,8 @@ unless you know what you are doing.
         // iterator
         if(isIterator(expected, false)) {
           if(status.recursive || status.path == '') {
-            var evalues = Lambda.array({ iterator : function() return expected });
-            var vvalues = Lambda.array({ iterator : function() return value });
+            var evalues = Iterators.toArray(expected);
+            var vvalues = Iterators.toArray(value);
             if(evalues.length != vvalues.length) {
               status.error = withPath('expected ${evalues.length} values in Iterator but they are ${vvalues.length}');
               return false;
@@ -489,8 +489,8 @@ unless you know what you are doing.
         // iterable
         if(isIterable(expected, false)) {
           if(status.recursive || status.path == '') {
-            var evalues = Lambda.array(expected);
-            var vvalues = Lambda.array(value);
+            var evalues = Iterables.toArray(expected);
+            var vvalues = Iterables.toArray(value);
             if(evalues.length != vvalues.length) {
               status.error = withPath('expected ${evalues.length} values in Iterable but they are ${vvalues.length}');
               return false;
@@ -577,8 +577,8 @@ unless you know what you are doing.
             return false;
           }
           if(status.recursive || status.path == '') {
-            var evalues = Lambda.array({ iterator : function() return expected });
-            var vvalues = Lambda.array({ iterator : function() return value });
+            var evalues = Iterators.toArray(expected);
+            var vvalues = Iterators.toArray(value);
             if(evalues.length != vvalues.length) {
               status.error = withPath('expected ${evalues.length} values in Iterator but they are ${vvalues.length}');
               return false;
@@ -602,8 +602,8 @@ unless you know what you are doing.
             return false;
           }
           if(status.recursive || status.path == '') {
-            var evalues = Lambda.array(expected);
-            var vvalues = Lambda.array(value);
+            var evalues = Iterables.toArray(expected);
+            var vvalues = Iterables.toArray(value);
             if(evalues.length != vvalues.length) {
               status.error = withPath('expected ${evalues.length} values in Iterable but they are ${vvalues.length}');
               return false;
@@ -626,13 +626,13 @@ unless you know what you are doing.
 
   static function isIterable(v : Dynamic, isAnonym : Bool) {
     var fields = isAnonym ? Reflect.fields(v) : Type.getInstanceFields(Type.getClass(v));
-    if(!Lambda.has(fields, "iterator")) return false;
+    if(!Arrays.contains(fields, "iterator")) return false;
     return Reflect.isFunction(Reflect.field(v, "iterator"));
   }
 
   static function isIterator(v : Dynamic, isAnonym : Bool) {
     var fields = isAnonym ? Reflect.fields(v) : Type.getInstanceFields(Type.getClass(v));
-    if(!Lambda.has(fields, "next") || !Lambda.has(fields, "hasNext")) return false;
+    if(!Arrays.contains(fields, "next") || !Arrays.contains(fields, "hasNext")) return false;
     return Reflect.isFunction(Reflect.field(v, "next")) && Reflect.isFunction(Reflect.field(v, "hasNext"));
   }
 }
