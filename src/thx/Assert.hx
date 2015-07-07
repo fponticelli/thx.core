@@ -363,7 +363,7 @@ unless you know what you are doing.
 
   static function sameAs(expected : Dynamic, value : Dynamic, status : SameStatus) {
     function withPath(msg : String) {
-      return msg + (Strings.isEmpty(status.path) ? '' : ' for field ${status.path}');
+      return msg + (Strings.isEmpty(status.path) ? '' : ' at ${status.path}');
     }
     if(!Types.sameType(expected, value)) {
       var texpected = Types.valueTypeToString(expected),
@@ -429,8 +429,8 @@ unless you know what you are doing.
         // bytes
         if(Std.is(expected, Bytes)) {
           if(status.recursive || status.path == '') {
-            var ebytes : Bytes = expected;
-            var vbytes : Bytes = value;
+            var ebytes : Bytes = expected,
+                vbytes : Bytes = value;
             if (ebytes.length != vbytes.length) return false;
             for (i in 0...ebytes.length)
               if (ebytes.get(i) != vbytes.get(i)) {
@@ -444,10 +444,10 @@ unless you know what you are doing.
         // hash, inthash
         if (Std.is(expected, #if (haxe_ver >= 3.200) haxe.Constraints.IMap #else Map.IMap #end)) {
           if(status.recursive || status.path == '') {
-            var map = cast(expected, Map.IMap<Dynamic, Dynamic>);
-            var vmap = cast(value, Map.IMap<Dynamic, Dynamic>);
-            var keys:Array<Dynamic> = [for (k in map.keys()) k];
-            var vkeys:Array<Dynamic> = [for (k in vmap.keys()) k];
+            var map = cast(expected, Map.IMap<Dynamic, Dynamic>),
+                vmap = cast(value, Map.IMap<Dynamic, Dynamic>),
+                keys : Array<Dynamic> = [for (k in map.keys()) k],
+                vkeys : Array<Dynamic> = [for (k in vmap.keys()) k];
 
             if(keys.length != vkeys.length) {
               status.error = withPath('expected ${keys.length} keys but they are ${vkeys.length}');
@@ -468,8 +468,8 @@ unless you know what you are doing.
         // iterator
         if(isIterator(expected, false)) {
           if(status.recursive || status.path == '') {
-            var evalues = Iterators.toArray(expected);
-            var vvalues = Iterators.toArray(value);
+            var evalues = Iterators.toArray(expected),
+                vvalues = Iterators.toArray(value);
             if(evalues.length != vvalues.length) {
               status.error = withPath('expected ${evalues.length} values in Iterator but they are ${vvalues.length}');
               return false;
@@ -489,8 +489,8 @@ unless you know what you are doing.
         // iterable
         if(isIterable(expected, false)) {
           if(status.recursive || status.path == '') {
-            var evalues = Iterables.toArray(expected);
-            var vvalues = Iterables.toArray(value);
+            var evalues = Iterables.toArray(expected),
+                vvalues = Iterables.toArray(value);
             if(evalues.length != vvalues.length) {
               status.error = withPath('expected ${evalues.length} values in Iterable but they are ${vvalues.length}');
               return false;
@@ -507,8 +507,8 @@ unless you know what you are doing.
 
         // custom class
         if(status.recursive || status.path == '') {
-          var fields = Type.getInstanceFields(Type.getClass(expected));
-          var path = status.path;
+          var fields = Type.getInstanceFields(Type.getClass(expected)),
+              path = status.path;
           for(field in fields) {
             status.path = path == '' ? field : '$path.$field';
             var e = Reflect.field(expected, field);
@@ -521,8 +521,8 @@ unless you know what you are doing.
 
         return true;
       case TEnum(e) :
-        var eexpected = Type.getEnumName(e);
-        var evalue = Type.getEnumName(Type.getEnum(value));
+        var eexpected = Type.getEnumName(e),
+            evalue = Type.getEnumName(Type.getEnum(value));
         if (eexpected != evalue) {
           status.error = withPath('expected enumeration of $eexpected but it is $evalue');
           return false;
@@ -532,9 +532,9 @@ unless you know what you are doing.
             status.error = withPath('expected ${Type.enumConstructor(expected)} but it is ${Type.enumConstructor(value)}');
             return false;
           }
-          var eparams = Type.enumParameters(expected);
-          var vparams = Type.enumParameters(value);
-          var path = status.path;
+          var eparams = Type.enumParameters(expected),
+              vparams = Type.enumParameters(value),
+              path = status.path;
           for (i in 0...eparams.length) {
             status.path = path == '' ? 'enum[$i]' : path + '[$i]';
             if (!sameAs(eparams[i], vparams[i], status)) {
@@ -547,9 +547,9 @@ unless you know what you are doing.
       case TObject:
         // anonymous object
         if(status.recursive || status.path == '') {
-          var tfields = Reflect.fields(value);
-          var fields = Reflect.fields(expected);
-          var path = status.path;
+          var tfields = Reflect.fields(value),
+              fields = Reflect.fields(expected),
+              path = status.path;
           for(field in fields) {
             tfields.remove(field);
             status.path = path == '' ? field : '$path.$field';
@@ -577,8 +577,8 @@ unless you know what you are doing.
             return false;
           }
           if(status.recursive || status.path == '') {
-            var evalues = Iterators.toArray(expected);
-            var vvalues = Iterators.toArray(value);
+            var evalues = Iterators.toArray(expected),
+                vvalues = Iterators.toArray(value);
             if(evalues.length != vvalues.length) {
               status.error = withPath('expected ${evalues.length} values in Iterator but they are ${vvalues.length}');
               return false;
@@ -602,8 +602,8 @@ unless you know what you are doing.
             return false;
           }
           if(status.recursive || status.path == '') {
-            var evalues = Iterables.toArray(expected);
-            var vvalues = Iterables.toArray(value);
+            var evalues = Iterables.toArray(expected),
+                vvalues = Iterables.toArray(value);
             if(evalues.length != vvalues.length) {
               status.error = withPath('expected ${evalues.length} values in Iterable but they are ${vvalues.length}');
               return false;
