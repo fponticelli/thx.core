@@ -21,7 +21,7 @@ unless you know what you are doing.
   #if no_asserts inline #end
   public static function equals(expected : Dynamic, value : Dynamic, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
-    if(msg == null) msg = "expected " + q(expected) + " but was " + q(value);
+    if(msg == null) msg = "expected " + Strings.quote(expected) + " but was " + Strings.quote(value);
     isTrue(expected == value, msg, pos);
     #end
   }
@@ -53,7 +53,7 @@ unless you know what you are doing.
   #if no_asserts inline #end
   public static function is(value : Dynamic, type : Dynamic, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
-    if (msg == null) msg = "expected type " + typeToString(type) + " but was " + typeToString(value);
+    if (msg == null) msg = "expected type " + Types.toString(type) + " but was " + Types.valueTypeToString(value);
     isTrue(Std.is(value, type), msg, pos);
     #end
   }
@@ -103,7 +103,7 @@ Assert.match(~/x/i, "haXe");
 unless you know what you are doing.
 */
   public static function match(pattern : EReg, value : Dynamic, ?msg : String , ?pos : PosInfos) {
-    if(msg == null) msg = "the value " + q(value) + "does not match the provided pattern";
+    if(msg == null) msg = "the value " + Strings.quote(value) + "does not match the provided pattern";
     isTrue(pattern.match(value), msg, pos);
   }
 
@@ -121,7 +121,7 @@ unless you know what you are doing.
   #if no_asserts inline #end
   public static function notEquals(expected : Dynamic, value : Dynamic, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
-    if(msg == null) msg = "expected " + q(expected) + " and testa value " + q(value) + " should be different";
+    if(msg == null) msg = "expected " + Strings.quote(expected) + " and test value " + Strings.quote(value) + " should be different";
     isFalse(expected == value, msg, pos);
     #end
   }
