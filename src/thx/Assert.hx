@@ -15,12 +15,15 @@ Checks that the test value matches at least one of the possibilities.
 @param pos: Code position where the Assert call has been executed. Don't fill it
 unless you know what you are doing.
 */
+  #if no_asserts inline #end
   public static function containedIn<T>(possibilities : Array<T>, value : T, ?msg : String , ?pos : PosInfos) {
+    #if !no_asserts
     if(Arrays.contains(possibilities, value)) {
       isTrue(true, msg, pos);
     } else {
       fail(msg == null ? 'value $value not found in the expected possibilities $possibilities' : msg, pos);
     }
+    #end
   }
 
 /**
@@ -31,12 +34,15 @@ Checks that the test array contains the match parameter.
 @param pos: Code position where the Assert call has been executed. Don't fill it
 unless you know what you are doing.
 */
+  #if no_asserts inline #end
   public static function contains<T>(match : T, values : Array<T>, ?msg : String , ?pos : PosInfos) {
+    #if !no_asserts
     if(Arrays.contains(values, match)) {
       isTrue(true, msg, pos);
     } else {
       fail(msg == null ? 'values $values do not contain $match' : msg, pos);
     }
+    #end
   }
 
 /**
@@ -66,12 +72,15 @@ Checks that the test array does not contain the match parameter.
 @param pos: Code position where the Assert call has been executed. Don't fill it
 unless you know what you are doing.
 */
+  #if no_asserts inline #end
   public static function excludes<T>(match : T, values : Array<T>, ?msg : String , ?pos : PosInfos) {
+    #if !no_asserts
     if(!Arrays.contains(values, match)) {
       isTrue(true, msg, pos);
     } else {
       fail(msg == null ? 'values $values do contain $match' : msg, pos);
     }
+    #end
   }
 
 /**
@@ -80,8 +89,12 @@ Forces a failure.
 @param pos: Code position where the Assert call has been executed. Don't fill it
 unless you know what you are doing.
 */
-  public static function fail(msg = "failure expected", ?pos : PosInfos)
+  #if no_asserts inline #end
+  public static function fail(msg = "failure expected", ?pos : PosInfos) {
+    #if !no_asserts
     isTrue(false, msg, pos);
+    #end
+  }
 
 /**
 Same as Assert.equals but considering an approximation error.
@@ -96,9 +109,12 @@ Assert.floatEquals(Math.PI, value);
 unless you know what you are doing.
 @todo test the approximation argument
 */
+  #if no_asserts inline #end
   public static function floatEquals(expected : Float, value : Float, ?approx : Float, ?msg : String , ?pos : PosInfos) : Void {
+    #if !no_asserts
     if (msg == null) msg = 'expected $expected but was $value';
     return isTrue(Floats.nearEquals(expected, value, approx), msg, pos);
+    #end
   }
 
 /**
@@ -226,8 +242,11 @@ Adds a successful assertion for cases where there are no values to assert.
 @param pos: Code position where the Assert call has been executed. Don't fill it
 unless you know what you are doing.
 */
+  #if no_asserts inline #end
   public static function pass(msg = "pass expected", ?pos : PosInfos) {
+    #if !no_asserts
     isTrue(true, msg, pos);
+    #end
   }
 
 /**
@@ -247,7 +266,9 @@ Assert.raises(function() { throw "Error!"; }, String);
 unless you know what you are doing.
 @todo test the optional type parameter
 */
+  #if no_asserts inline #end
   public static function raises(method:Void -> Void, ?type : Dynamic, ?msgNotThrown : String , ?msgWrongType : String, ?pos : PosInfos) {
+    #if !no_asserts
     try {
       method();
       if (null == msgNotThrown) {
@@ -266,6 +287,7 @@ unless you know what you are doing.
         isTrue(Std.is(ex, type), msgWrongType, pos);
       }
     }
+    #end
   }
 
 /**
@@ -275,12 +297,15 @@ Checks that the expected values is contained in value.
 @param msg: An optional error message. If not passed a default one is be used
 @param pos: Code position where the Assert call has been executed.
 */
+  #if no_asserts inline #end
   public static function stringContains(match : String, value : String, ?msg : String , ?pos : PosInfos) {
+    #if !no_asserts
     if (value != null && value.indexOf(match) >= 0) {
       isTrue(true, msg, pos);
     } else {
       fail(msg == null ? "value " + Strings.quote(value) + " does not contain " + Strings.quote(match) : msg, pos);
     }
+    #end
   }
 
 /**
@@ -291,7 +316,9 @@ they are defined.
 @param msg: An optional error message. If not passed a default one is be used
 @param pos: Code position where the Assert call has been executed.
 */
+  #if no_asserts inline #end
   public static function stringSequence(sequence : Array<String>, value : String, ?msg : String , ?pos : PosInfos) {
+    #if !no_asserts
     if (null == value) {
       fail(msg == null ? "null argument value" : msg, pos);
       return;
@@ -317,6 +344,7 @@ they are defined.
       p = p2 + s.length;
     }
     isTrue(true, msg, pos);
+    #end
   }
 
 /**
@@ -325,8 +353,12 @@ Creates a warning message.
 @param pos: Code position where the Assert call has been executed. Don't fill it
 unless you know what you are doing.
 */
-  public static function warn(msg, ?pos : haxe.PosInfos)
+  #if no_asserts inline #end
+  public static function warn(msg, ?pos : haxe.PosInfos) {
+    #if !no_asserts
     behavior.warn(msg, pos);
+    #end
+  }
 }
 
 interface IAssertBehavior {
