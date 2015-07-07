@@ -59,7 +59,7 @@ unless you know what you are doing.
   #if no_asserts inline #end
   public static function equals(expected : Dynamic, value : Dynamic, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
-    if(msg == null) msg = "expected " + Strings.quote(expected) + " but was " + Strings.quote(value);
+    if(msg == null) msg = 'expected $expected but was $value';
     isTrue(expected == value, msg, pos);
     #end
   }
@@ -144,7 +144,7 @@ unless you know what you are doing.
   #if no_asserts inline #end
   public static function is(value : Dynamic, type : Dynamic, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
-    if (msg == null) msg = "expected type " + Types.toString(type) + " but was " + Types.valueTypeToString(value);
+    if (msg == null) msg = 'expected type ${Types.toString(type)} but was ${Types.valueTypeToString(value)}';
     isTrue(Std.is(value, type), msg, pos);
     #end
   }
@@ -160,7 +160,7 @@ unless you know what you are doing.
   public static function isNull(value : Dynamic, ?msg : String, ?pos : PosInfos) {
     #if !no_asserts
     if (msg == null)
-      msg = "expected null but was " + Strings.quote(value);
+      msg = 'expected null but was $value';
     isTrue(value == null, msg, pos);
     #end
   }
@@ -196,7 +196,7 @@ unless you know what you are doing.
   #if no_asserts inline #end
   public static function match(pattern : EReg, value : Dynamic, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
-    if(msg == null) msg = "the value " + Strings.quote(value) + "does not match the provided pattern";
+    if(msg == null) msg = 'the value $value does not match the provided pattern';
     isTrue(pattern.match(value), msg, pos);
     #end
   }
@@ -215,7 +215,7 @@ unless you know what you are doing.
   #if no_asserts inline #end
   public static function notEquals(expected : Dynamic, value : Dynamic, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
-    if(msg == null) msg = "expected " + Strings.quote(expected) + " and test value " + Strings.quote(value) + " should be different";
+    if(msg == null) msg = 'expected $expected and test value $value should be different';
     isFalse(expected == value, msg, pos);
     #end
   }
@@ -273,13 +273,13 @@ unless you know what you are doing.
       method();
       if (null == msgNotThrown) {
         var name = Types.toString(type);
-        msgNotThrown = "exception of type " + name + " not raised";
+        msgNotThrown = 'exception of type $name not raised';
       }
       fail(msgNotThrown, pos);
     } catch (ex : Dynamic) {
       if (null == msgWrongType) {
         var name = Types.toString(type);
-        msgWrongType = "expected throw of type " + name + " but was "  + ex;
+        msgWrongType = 'expected throw of type $name but was $ex';
       }
       if(null == type) {
         pass(pos);
@@ -303,7 +303,7 @@ Checks that the expected values is contained in value.
     if (value != null && value.indexOf(match) >= 0) {
       isTrue(true, msg, pos);
     } else {
-      fail(msg == null ? "value " + Strings.quote(value) + " does not contain " + Strings.quote(match) : msg, pos);
+      fail(msg == null ? 'value ${Strings.quote(value)} does not contain ${Strings.quote(match)}' : msg, pos);
     }
     #end
   }
@@ -329,12 +329,12 @@ they are defined.
       if (p2 < 0) {
         if (msg == null)
         {
-          msg = "expected '" + s + "' after ";
+          msg = 'expected ${Strings.quote(s)} after ';
           if (p > 0) {
             var cut = value.substr(0, p);
             if (cut.length > 30)
               cut = '...' + cut.substr( -27);
-            msg += " '" + cut + "'" ;
+            msg += ' ${Strings.quote(cut)}';
           } else
             msg += " begin";
         }
