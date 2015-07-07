@@ -60,7 +60,7 @@ unless you know what you are doing.
   #if no_asserts inline #end
   public static function equals(expected : Dynamic, value : Dynamic, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
-    if(msg == null) msg = 'expected $expected but was $value';
+    if(msg == null) msg = 'expected $expected but it is $value';
     isTrue(expected == value, msg, pos);
     #end
   }
@@ -113,7 +113,7 @@ unless you know what you are doing.
   #if no_asserts inline #end
   public static function floatEquals(expected : Float, value : Float, ?approx : Float, ?msg : String , ?pos : PosInfos) : Void {
     #if !no_asserts
-    if (msg == null) msg = 'expected $expected but was $value';
+    if (msg == null) msg = 'expected $expected but it is $value';
     return isTrue(Floats.nearEquals(expected, value, approx), msg, pos);
     #end
   }
@@ -145,7 +145,7 @@ unless you know what you are doing.
   #if no_asserts inline #end
   public static function is(value : Dynamic, type : Dynamic, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
-    if (msg == null) msg = 'expected type ${Types.toString(type)} but was ${Types.valueTypeToString(value)}';
+    if (msg == null) msg = 'expected type ${Types.toString(type)} but it is ${Types.valueTypeToString(value)}';
     isTrue(Std.is(value, type), msg, pos);
     #end
   }
@@ -161,7 +161,7 @@ unless you know what you are doing.
   public static function isNull(value : Dynamic, ?msg : String, ?pos : PosInfos) {
     #if !no_asserts
     if (msg == null)
-      msg = 'expected null but was $value';
+      msg = 'expected null but it is $value';
     isTrue(value == null, msg, pos);
     #end
   }
@@ -280,7 +280,7 @@ unless you know what you are doing.
     } catch (ex : Dynamic) {
       if (null == msgWrongType) {
         var name = Types.toString(type);
-        msgWrongType = 'expected throw of type $name but was $ex';
+        msgWrongType = 'expected throw of type $name but it is $ex';
       }
       if(null == type) {
         pass(pos);
@@ -580,7 +580,7 @@ unless you know what you are doing.
             var evalues = Lambda.array({ iterator : function() return expected });
             var vvalues = Lambda.array({ iterator : function() return value });
             if(evalues.length != vvalues.length) {
-              status.error = withPath('expected ${evalues.length} values in Iterator but they were ${vvalues.length}');
+              status.error = withPath('expected ${evalues.length} values in Iterator but they are ${vvalues.length}');
               return false;
             }
             var path = status.path;
@@ -605,7 +605,7 @@ unless you know what you are doing.
             var evalues = Lambda.array(expected);
             var vvalues = Lambda.array(value);
             if(evalues.length != vvalues.length) {
-              status.error = withPath('expected ${evalues.length} values in Iterable but they were ${vvalues.length}');
+              status.error = withPath('expected ${evalues.length} values in Iterable but they are ${vvalues.length}');
               return false;
             }
             var path = status.path;
