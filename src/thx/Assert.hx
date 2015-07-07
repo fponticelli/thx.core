@@ -19,7 +19,7 @@ unless you know what you are doing.
     if(Arrays.contains(possibilities, value)) {
       isTrue(true, msg, pos);
     } else {
-      fail(msg == null ? "value " + q(value) + " not found in the expected possibilities " + possibilities : msg, pos);
+      fail(msg == null ? 'value $value not found in the expected possibilities $possibilities' : msg, pos);
     }
   }
 
@@ -35,7 +35,7 @@ unless you know what you are doing.
     if(Arrays.contains(values, match)) {
       isTrue(true, msg, pos);
     } else {
-      fail(msg == null ? "values " + q(values) + " do not contain "+match: msg, pos);
+      fail(msg == null ? 'values $values do not contain $match' : msg, pos);
     }
   }
 
@@ -67,10 +67,10 @@ Checks that the test array does not contain the match parameter.
 unless you know what you are doing.
 */
   public static function excludes<T>(match : T, values : Array<T>, ?msg : String , ?pos : PosInfos) {
-    if(!Array.contains(values, match)) {
+    if(!Arrays.contains(values, match)) {
       isTrue(true, msg, pos);
     } else {
-      fail(msg == null ? "values " + q(values) + " do contain "+match: msg, pos);
+      fail(msg == null ? 'values $values do contain $match' : msg, pos);
     }
   }
 
@@ -97,8 +97,8 @@ unless you know what you are doing.
 @todo test the approximation argument
 */
   public static function floatEquals(expected : Float, value : Float, ?approx : Float, ?msg : String , ?pos : PosInfos) : Void {
-    if (msg == null) msg = "expected " + q(expected) + " but was " + q(value);
-    return isTrue(_floatEquals(expected, value, approx), msg, pos);
+    if (msg == null) msg = 'expected $expected but was $value';
+    return isTrue(Floats.nearEquals(expected, value, approx), msg, pos);
   }
 
 /**
@@ -279,7 +279,7 @@ Checks that the expected values is contained in value.
     if (value != null && value.indexOf(match) >= 0) {
       isTrue(true, msg, pos);
     } else {
-      fail(msg == null ? "value " + q(value) + " does not contain " + q(match) : msg, pos);
+      fail(msg == null ? "value " + Strings.quote(value) + " does not contain " + Strings.quote(match) : msg, pos);
     }
   }
 
@@ -325,13 +325,14 @@ Creates a warning message.
 @param pos: Code position where the Assert call has been executed. Don't fill it
 unless you know what you are doing.
 */
-  public static function warn(msg)
-    results.add(Warning(msg));
+  public static function warn(msg, ?pos : haxe.PosInfos)
+    behavior.warn(msg, pos);
 }
 
 interface IAssertBehavior {
   function success(pos : PosInfos) : Void;
   function fail(message : String, pos : PosInfos) : Void;
+  function warn(message : String, pos : PosInfos) : Void;
 }
 
 #if !no_asserts
@@ -343,6 +344,9 @@ class DefaultAssertBehavior implements IAssertBehavior {
     haxe.Log.trace('assert success', pos);
     #end
   }
+
+  public function warn(message : String, pos : PosInfos)
+    haxe.Log.trace(message, pos);
 
   public function fail(message : String, pos : PosInfos)
     throw new thx.error.AssertError(message, pos);
