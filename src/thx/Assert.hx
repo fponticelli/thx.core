@@ -6,6 +6,26 @@ class Assert {
   #if !no_asserts
   public static var behavior : IAssertBehavior = new DefaultAssertBehavior();
   #end
+
+/**
+Asserts successfully when the value parameter is equal to the expected one.
+```haxe
+Assert.equals(10, age);
+```
+@param expected: The expected value to check against
+@param value: The value to test
+@param msg: An optional error message. If not passed a default one will be used
+@param pos: Code position where the Assert call has been executed. Don't fill it
+unless you know what you are doing.
+*/
+  #if no_asserts inline #end
+  public static function equals(expected : Dynamic, value : Dynamic, ?msg : String , ?pos : PosInfos) {
+    #if !no_asserts
+    if(msg == null) msg = "expected " + q(expected) + " but was " + q(value);
+    isTrue(expected == value, msg, pos);
+    #end
+  }
+
 /**
 Asserts successfully when the condition is false.
 @param cond: The condition to test
@@ -69,6 +89,22 @@ unless you know what you are doing.
     else
       behavior.fail(msg, pos);
     #end
+  }
+
+/**
+Asserts successfully when the value parameter does match against the passed EReg instance.
+```haxe
+Assert.match(~/x/i, "haXe");
+```
+@param pattern: The pattern to match against
+@param value: The value to test
+@param msg: An optional error message. If not passed a default one will be used
+@param pos: Code position where the Assert call has been executed. Don't fill it
+unless you know what you are doing.
+*/
+  public static function match(pattern : EReg, value : Dynamic, ?msg : String , ?pos : PosInfos) {
+    if(msg == null) msg = "the value " + q(value) + "does not match the provided pattern";
+    isTrue(pattern.match(value), msg, pos);
   }
 
 /**
