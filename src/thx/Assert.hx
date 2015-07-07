@@ -354,14 +354,10 @@ they are defined.
     for (s in sequence) {
       var p2 = value.indexOf(s, p);
       if (p2 < 0) {
-        if (msg == null)
-        {
+        if (msg == null) {
           msg = 'expected ${Strings.quote(s)} after ';
           if (p > 0) {
-            var cut = value.substr(0, p);
-            if (cut.length > 30)
-              cut = '...' + cut.substr( -27);
-            msg += ' ${Strings.quote(cut)}';
+            msg += ' ${Strings.quote(Strings.ellipsis(value, 30))}';
           } else
             msg += " begin";
         }
