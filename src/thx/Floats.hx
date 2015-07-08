@@ -134,8 +134,13 @@ Float numbers can sometime introduce tiny errors even for simple operations.
 argument). By default it is defined as `EPSILON`.
 **/
   public static function nearEquals(a : Float, b : Float, ?tollerance = EPSILON) {
-    if(Math.isFinite(a))
+    if(Math.isFinite(a)) {
+      #if (php || java)
+      if(!Math.isFinite(b))
+        return false;
+      #end
       return Math.abs(a - b) <= tollerance;
+    }
     if(Math.isNaN(a))
       return Math.isNaN(b);
     if(Math.isNaN(b))
