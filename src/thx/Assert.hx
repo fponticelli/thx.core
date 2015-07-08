@@ -124,7 +124,7 @@ unless you know what you are doing.
   #if no_asserts inline #end
   public static function is(value : Dynamic, type : Dynamic, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
-    if (msg == null) msg = 'expected type ${Types.toString(type)} but it is ${Types.valueTypeToString(value)}';
+    if (msg == null) msg = 'expected type ${Types.anyValueToString(type)} but it is ${Types.valueTypeToString(value)}';
     isTrue(Std.is(value, type), msg, pos);
     #end
   }
@@ -273,13 +273,13 @@ unless you know what you are doing.
     try {
       method();
       if (null == msgNotThrown) {
-        var name = Types.toString(type);
+        var name = Types.anyValueToString(type);
         msgNotThrown = 'exception of type $name not raised';
       }
       fail(msgNotThrown, pos);
     } catch (ex : Dynamic) {
       if (null == msgWrongType) {
-        var name = Types.toString(type);
+        var name = Types.anyValueToString(type);
         msgWrongType = 'expected throw of type $name but it is $ex';
       }
       if(null == type) {
