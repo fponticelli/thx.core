@@ -174,7 +174,7 @@ Assert.match(~/x/i, "haXe");
 unless you know what you are doing.
 */
   #if no_asserts inline #end
-  public static function match(pattern : EReg, value : Dynamic, ?msg : String , ?pos : PosInfos) {
+  public static function matches(pattern : EReg, value : Dynamic, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
     if(msg == null) msg = 'the value $value does not match the provided pattern';
     isTrue(pattern.match(value), msg, pos);
