@@ -133,8 +133,18 @@ Float numbers can sometime introduce tiny errors even for simple operations.
 `nearEquals` compares two floats using a tiny tollerance (last optional
 argument). By default it is defined as `EPSILON`.
 **/
-  inline public static function nearEquals(a : Float, b : Float, ?tollerance = EPSILON)
-    return Math.abs(a - b) <= tollerance;
+  public static function nearEquals(a : Float, b : Float, ?tollerance = EPSILON) {
+    if(Math.isFinite(a))
+      return Math.abs(a - b) <= tollerance;
+    if(Math.isNaN(a))
+      return Math.isNaN(b);
+    if(Math.isNaN(b))
+      return false;
+    if(!Math.isFinite(b))
+      return (a > 0) == (b > 0);
+    // a is Infinity and b is finite
+    return false;
+  }
 
 /**
 Float numbers can sometime introduce tiny errors even for simple operations.
