@@ -265,7 +265,7 @@ class TestAssert {
     expect(expectedsuccess, i-expectedsuccess);
   }
 
-  public function testFloatEqualsSuccess() {
+  public function testNearEqualsSuccess() {
     var counter = 0,
         tests = [
           { expected : 0.1, tests : [0.1, 0.100000000000000000000000000001, 0.099999999999999999999999999999] },
@@ -278,13 +278,13 @@ class TestAssert {
     for(test in tests) {
       for(value in test.tests) {
         counter++;
-        Assert.floatEquals(test.expected, value);
+        Assert.nearEquals(test.expected, value);
       }
     }
     expect(counter, 0);
   }
 
-  public function testFloatEqualsFail() {
+  public function testNearEqualsFail() {
     var counter = 0,
         tests = [
           { expected : 0.1, tests : [0.2, 0.10000001, 0.0999998, Math.NaN, Math.POSITIVE_INFINITY, Math.NEGATIVE_INFINITY] },
@@ -296,7 +296,7 @@ class TestAssert {
     for(test in tests) {
       for(value in test.tests) {
         counter++;
-        Assert.floatEquals(test.expected, value);
+        Assert.nearEquals(test.expected, value);
       }
     }
     expect(0, counter);
