@@ -17,31 +17,12 @@ Checks that the test value matches at least one of the possibilities.
 unless you know what you are doing.
 */
   #if no_asserts inline #end
-  public static function containedIn<T>(possibilities : Array<T>, value : T, ?msg : String , ?pos : PosInfos) {
+  public static function contains<T>(possibilities : Array<T>, value : T, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
     if(Arrays.contains(possibilities, value)) {
       pass(msg, pos);
     } else {
       fail(msg == null ? 'value $value not found in the expected possibilities $possibilities' : msg, pos);
-    }
-    #end
-  }
-
-/**
-Checks that the test array contains the match parameter.
-@param match: The element that must be included in the tested array
-@param values: The values to test
-@param msg: An optional error message. If not passed a default one will be used
-@param pos: Code position where the Assert call has been executed. Don't fill it
-unless you know what you are doing.
-*/
-  #if no_asserts inline #end
-  public static function contains<T>(match : T, values : Array<T>, ?msg : String , ?pos : PosInfos) {
-    #if !no_asserts
-    if(Arrays.contains(values, match)) {
-      pass(msg, pos);
-    } else {
-      fail(msg == null ? 'values $values do not contain $match' : msg, pos);
     }
     #end
   }
@@ -98,23 +79,21 @@ unless you know what you are doing.
   }
 
 /**
-Same as Assert.equals but considering an approximation error.
-```haxe
-Assert.floatEquals(Math.PI, value);
-```
-@param expected: The expected value to check against
-@param value: The value to test
-@param approx: The approximation tollerance. Default is 1e-5
+Checks that the test array contains the match parameter.
+@param match: The element that must be included in the tested array
+@param values: The values to test
 @param msg: An optional error message. If not passed a default one will be used
 @param pos: Code position where the Assert call has been executed. Don't fill it
 unless you know what you are doing.
-@todo test the approximation argument
 */
   #if no_asserts inline #end
-  public static function floatEquals(expected : Float, value : Float, ?approx : Float, ?msg : String , ?pos : PosInfos) : Void {
+  public static function isContainedIn<T>(match : T, values : Array<T>, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
-    if (msg == null) msg = 'expected $expected but it is $value';
-    return isTrue(Floats.nearEquals(expected, value, approx), msg, pos);
+    if(Arrays.contains(values, match)) {
+      pass(msg, pos);
+    } else {
+      fail(msg == null ? 'values $values do not contain $match' : msg, pos);
+    }
     #end
   }
 
@@ -199,6 +178,27 @@ unless you know what you are doing.
     #if !no_asserts
     if(msg == null) msg = 'the value $value does not match the provided pattern';
     isTrue(pattern.match(value), msg, pos);
+    #end
+  }
+
+/**
+Same as Assert.equals but accounting for an approximation error.
+```haxe
+Assert.nearEquals(Math.PI, value);
+```
+@param expected: The expected value to check against
+@param value: The value to test
+@param approx: The approximation tollerance. Default is 1e-5
+@param msg: An optional error message. If not passed a default one will be used
+@param pos: Code position where the Assert call has been executed. Don't fill it
+unless you know what you are doing.
+@todo test the approximation argument
+*/
+  #if no_asserts inline #end
+  public static function nearEquals(expected : Float, value : Float, ?approx : Float, ?msg : String , ?pos : PosInfos) : Void {
+    #if !no_asserts
+    if (msg == null) msg = 'expected $expected but it is $value';
+    return isTrue(Floats.nearEquals(expected, value, approx), msg, pos);
     #end
   }
 
