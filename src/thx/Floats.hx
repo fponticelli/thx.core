@@ -47,14 +47,14 @@ trace(0.8.clamp(0, 1)); // prints 0.8
 trace(-0.5.clamp(0, 1)); // prints 0.0
 ```
 **/
-  public static inline function clamp<T : Float>(v : T, min : T, max : T) : T
+  public static inline function clamp(v : Float, min : Float, max : Float) : Float
     return v < min ? min : (v > max ? max : v);
 
 /**
 Like clamp but you only pass one argument (`max`) that is used as the upper limit
 and the opposite (additive inverse or `-max`) as the lower limit.
 **/
-  public static inline function clampSym<T : Float>(v : T, max : T) : T
+  public static inline function clampSym(v : Float, max : Float) : Float
     return clamp(v, -max, max);
 
 /**

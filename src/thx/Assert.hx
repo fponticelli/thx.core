@@ -457,7 +457,7 @@ unless you know what you are doing.
 
         // date
         if(Std.is(expected, Date)) {
-          if(expected.getTime() != value.getTime()) {
+          if((expected : Date).getTime() != (value : Date).getTime()) {
             status.error = withPath('expected $expected but it is $value');
             return false;
           }
