@@ -54,7 +54,7 @@ Assert.equals(10, age);
 unless you know what you are doing.
 */
   #if no_asserts inline #end
-  public static function equals(expected : Dynamic, value : Dynamic, ?msg : String , ?pos : PosInfos) {
+  public static function equals<TA, TB : TA>(expected : TA, value : TB, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
     if(msg == null) msg = 'expected $expected but it is $value';
     isTrue(expected == value, msg, pos);
@@ -137,7 +137,7 @@ Asserts successfully when the 'value' parameter is of the of the passed `type`.
 unless you know what you are doing.
 */
   #if no_asserts inline #end
-  public static function is(value : Dynamic, type : Dynamic, ?msg : String , ?pos : PosInfos) {
+  public static function is<T>(value : T, type : Dynamic, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
     if (msg == null) msg = 'expected type ${Types.anyValueToString(type)} but it is ${Types.valueTypeToString(value)}';
     isTrue(Std.is(value, type), msg, pos);
@@ -152,7 +152,7 @@ Asserts successfully when the value is null.
 unless you know what you are doing.
 */
   #if no_asserts inline #end
-  public static function isNull(value : Dynamic, ?msg : String, ?pos : PosInfos) {
+  public static function isNull<T>(value : Null<T>, ?msg : String, ?pos : PosInfos) {
     #if !no_asserts
     if (msg == null)
       msg = 'expected null but it is $value';
@@ -189,7 +189,7 @@ Assert.match(~/x/i, "haXe");
 unless you know what you are doing.
 */
   #if no_asserts inline #end
-  public static function matches(pattern : EReg, value : Dynamic, ?msg : String , ?pos : PosInfos) {
+  public static function matches(pattern : EReg, value : String, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
     if(msg == null) msg = 'the value $value does not match the provided pattern';
     isTrue(pattern.match(value), msg, pos);
@@ -229,7 +229,7 @@ Assert.notEquals(10, age);
 unless you know what you are doing.
 */
   #if no_asserts inline #end
-  public static function notEquals(expected : Dynamic, value : Dynamic, ?msg : String , ?pos : PosInfos) {
+  public static function notEquals<TA, TB : TA>(expected : TA, value : TB, ?msg : String , ?pos : PosInfos) {
     #if !no_asserts
     if(msg == null) msg = 'expected $expected and test value $value should be different';
     isFalse(expected == value, msg, pos);
@@ -244,7 +244,7 @@ Asserts successfully when the value is not null.
 unless you know what you are doing.
 */
   #if no_asserts inline #end
-  public static function notNull(value : Dynamic, ?msg : String, ?pos : PosInfos) {
+  public static function notNull<T>(value : T, ?msg : String, ?pos : PosInfos) {
     #if !no_asserts
     if (null == msg)
       msg = "expected not null";
