@@ -3,6 +3,21 @@ package thx;
 import haxe.PosInfos;
 import haxe.io.Bytes;
 
+/**
+This class contains only static members used to perform assertions.
+Its use is straight forward:
+```haxe
+Assert.equals(1, 0); // fails
+Assert.isFalse(1 == 1, "guess what?"); // fails and log the passed message
+Assert.isTrue(true); // successfull
+```
+
+The default behavior for `Assert` static methods is determined by the
+implementation of `Assert.behavior` and defaults to `thx.DefaultAssertBehavior`.
+
+If you want to entirely remove assertions from your generated output, just add
+the directive `-D no-asserts` (useful for production builds).
+*/
 class Assert {
   #if !no_asserts
   public static var behavior : IAssertBehavior = new DefaultAssertBehavior();
@@ -648,6 +663,12 @@ unless you know what you are doing.
   }
 }
 
+/**
+Defines a protocol to interact with the `thx.Assert` static methods.
+
+To use a custom `IAssertBehavior` with `Assert` simply assing your instance to
+`thx.Assert.behavior`.
+*/
 interface IAssertBehavior {
   function success(pos : PosInfos) : Void;
   function fail(message : String, pos : PosInfos) : Void;
@@ -655,6 +676,13 @@ interface IAssertBehavior {
 }
 
 #if !no_asserts
+/**
+Defines the defaiult behavior when `thx.Assert` static methods are invoked.
+
+  * Failures throw exceptions of type `thx.error.AssertError`.
+  * Successes do nothing or trace messages if `-D trace-asserts` is defined.
+  * Warnings go directly to trace.
+*/
 class DefaultAssertBehavior implements IAssertBehavior {
   public function new() {}
 
