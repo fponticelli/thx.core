@@ -447,7 +447,7 @@ unless you know what you are doing.
               status.path = path == '' ? 'array[$i]' : path + '[$i]';
               if (!sameAs(expected[i], value[i], status))
               {
-                status.error = withPath('expected ${expected[i]} but it is ${value[i]}');
+                status.error = withPath('expected ${Std.string(expected[i])} but it is ${Std.string(value[i])}');
                 return false;
               }
             }
