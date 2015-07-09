@@ -397,9 +397,9 @@ Words whose length exceeds `columns` are not split.
 
   static function wrapLine(s : String, columns : Int, indent : String, newline : String) {
     var parts = [],
-      pos = 0,
-      len = s.length,
-      ilen = indent.length;
+        pos   = 0,
+        len   = s.length,
+        ilen  = indent.length;
     columns -= ilen;
     while(true) {
       if(pos + columns >= len - ilen) {
