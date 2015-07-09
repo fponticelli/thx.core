@@ -88,12 +88,12 @@ or otherwise a positive non-sero number.
 of `symbol`.
 
 ```haxe
-'thx is a nice linrary'.ellipsis(7); // returns 'thx is ...'
+'thx is a nice library'.ellipsis(8); // returns 'thx is …'
 ```
 **/
-  public static function ellipsis(s : String, maxlen = 20, symbol = "...")
+  public static function ellipsis(s : String, maxlen = 20, symbol = "…")
     return if (s.length > maxlen)
-      s.substring(0, symbol.length > maxlen - symbol.length ? symbol.length : maxlen - symbol.length) + symbol;
+      s.substring(0, maxlen - symbol.length) + symbol;
     else
       s;
 
