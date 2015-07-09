@@ -113,13 +113,13 @@ Refer to `thx.Arrays.plucki`.
 /**
 Refer to `thx.Arrays.reduce`.
 **/
-  public inline static function reduce<TItem, TAcc>(it : Iterable<TItem>, callback : TAcc -> TItem -> TAcc, initial : TAcc) : TAcc
+  public inline static function reduce<TElement, TAcc>(it : Iterable<TElement>, callback : TAcc -> TElement -> TAcc, initial : TAcc) : TAcc
     return Iterators.reduce(it.iterator(), callback, initial);
 
 /**
 Refer to `thx.Arrays.reducei`.
 **/
-  public inline static function reducei<TItem, TAcc>(it : Iterable<TItem>, callback : TAcc -> TItem -> Int -> TAcc, initial : TAcc) : TAcc
+  public inline static function reducei<TElement, TAcc>(it : Iterable<TElement>, callback : TAcc -> TElement -> Int -> TAcc, initial : TAcc) : TAcc
     return Iterators.reducei(it.iterator(), callback, initial);
 
 /**

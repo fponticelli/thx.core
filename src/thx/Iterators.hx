@@ -15,8 +15,8 @@ class Iterators {
 Checks if `predicate` returns true for all elements in the iterator.
 **/
   public static function all<T>(it : Iterator<T>, predicate : T -> Bool) {
-    for(item in it)
-      if(!predicate(item))
+    for(element in it)
+      if(!predicate(element))
         return false;
     return true;
   }
@@ -25,8 +25,8 @@ Checks if `predicate` returns true for all elements in the iterator.
 Checks if `predicate` returns true for at least one element in the iterator.
 **/
   public static function any<T>(it : Iterator<T>, predicate : T -> Bool) {
-    for(item in it)
-      if(predicate(item))
+    for(element in it)
+      if(predicate(element))
         return true;
     return false;
   }
@@ -40,10 +40,10 @@ Refer to `thx.Arrays.eachPair`.
 /**
 Refer to `Array.filter`.
 **/
-  public static function filter<TItem>(it : Iterator<TItem>, predicate : TItem -> Bool) : Array<TItem>
-    return reduce(it, function(acc : Array<TItem>, item) {
-        if(predicate(item))
-          acc.push(item);
+  public static function filter<TElement>(it : Iterator<TElement>, predicate : TElement -> Bool) : Array<TElement>
+    return reduce(it, function(acc : Array<TElement>, element) {
+        if(predicate(element))
+          acc.push(element);
         return acc;
       }, []);
 
@@ -58,9 +58,9 @@ Refer to `thx.Arrays.filterPluck`.
 Refer to `thx.Arrays.find`.
 **/
   public static function find<T, TFind>(it : Iterator<T>, f : T -> Bool) : Null<T> {
-    for(item in it)
-      if(f(item))
-        return item;
+    for(element in it)
+      if(f(element))
+        return element;
     return null;
   }
 
@@ -144,7 +144,7 @@ Refer to `thx.Arrays.plucki`.
 /**
 Refer to `thx.Arrays.reduce`.
 **/
-  public static function reduce<TItem, TAcc>(it : Iterator<TItem>, callback : TAcc -> TItem -> TAcc, initial : TAcc) : TAcc {
+  public static function reduce<TElement, TAcc>(it : Iterator<TElement>, callback : TAcc -> TElement -> TAcc, initial : TAcc) : TAcc {
     map(it, function(v) initial = callback(initial, v));
     return initial;
   }
@@ -152,7 +152,7 @@ Refer to `thx.Arrays.reduce`.
 /**
 Refer to `thx.Arrays.reducei`.
 **/
-  public static function reducei<TItem, TAcc>(it : Iterator<TItem>, callback : TAcc -> TItem -> Int -> TAcc, initial : TAcc) : TAcc {
+  public static function reducei<TElement, TAcc>(it : Iterator<TElement>, callback : TAcc -> TElement -> Int -> TAcc, initial : TAcc) : TAcc {
     mapi(it, function(v, i) initial = callback(initial, v, i));
     return initial;
   }
@@ -161,10 +161,10 @@ Refer to `thx.Arrays.reducei`.
 `toArray` transforms an `Iterator<T>` into an `Array<T>`.
 **/
   public static function toArray<T>(it : Iterator<T>) : Array<T> {
-    var items = [];
-    for(item in it)
-      items.push(item);
-    return items;
+    var elements = [];
+    for(element in it)
+      elements.push(element);
+    return elements;
   }
 
 /**

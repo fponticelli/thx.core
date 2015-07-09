@@ -24,8 +24,8 @@ Finds the first occurrance of `element` and returns all the elements after it.
 Checks if `predicate` returns true for all elements in the array.
 **/
   public static function all<T>(arr : Array<T>, predicate : T -> Bool) {
-    for(item in arr)
-      if(!predicate(item))
+    for(element in arr)
+      if(!predicate(element))
         return false;
     return true;
   }
@@ -34,8 +34,8 @@ Checks if `predicate` returns true for all elements in the array.
 Checks if `predicate` returns true for at least one element in the array.
 **/
   public static function any<T>(arr : Array<T>, predicate : T -> Bool) {
-    for(item in arr)
-      if(predicate(item))
+    for(element in arr)
+      if(predicate(element))
         return true;
     return false;
   }
@@ -58,9 +58,9 @@ Filters out all null elements in the array
   public static function compact<T>(arr : Array<Null<T>>) : Array<T> {
 #if cs
     var result : Array<T> = [];
-    for(item in arr) {
-      if(null != item)
-        result.push(item);
+    for(element in arr) {
+      if(null != element)
+        result.push(element);
     }
     return result;
 #else
@@ -244,7 +244,7 @@ Filters out all `null` values from an array.
 /**
 Filters an array according to the expression passed as the second argument.
 
-The special symbol `_` refers to the current item.
+The special symbol `_` refers to the current element.
 
 ```haxe
 [1,2,3,4,5,6].filterPluck(_ % 2 != 0); // holds [1,3,5]
@@ -259,9 +259,9 @@ It returns the first element of the array that matches the provided predicate fu
 If none is found it returns null.
 **/
   public static function find<T>(array : Array<T>, predicate : T -> Bool) : Null<T> {
-    for(item in array)
-      if(predicate(item))
-        return item;
+    for(element in array)
+      if(predicate(element))
+        return element;
     return null;
   }
 
@@ -325,7 +325,7 @@ trace(arr); // [1,2,3,4,5,6,7,8,9]
     #if js
       return untyped __js__('Array.prototype.concat.apply')([], array);
     #else
-      return reduce(array, function(acc : Array<T>, item) return acc.concat(item), []);
+      return reduce(array, function(acc : Array<T>, element) return acc.concat(element), []);
     #end
 
 /**
@@ -449,8 +449,8 @@ Arguments for pluck are `_0` and `_1`.
 
 /**
 The method works like a normal `Array.map()` but instead of passing a function that
-receives an item, you can pass an expression that defines how to access to a member
-of the item itself.
+receives an element, you can pass an expression that defines how to access to a member
+of the element itself.
 
 The following two examples are equivalent:
 
@@ -498,8 +498,8 @@ Pulls from `array` all occurrences of all the elements in `toRemove`. Optionally
 an `equality` function.
 **/
   public static function pull<T>(array : Array<T>, toRemove : Array<T>, ?equality : T -> T -> Bool)
-    for(item in toRemove)
-      removeAll(array, item, equality);
+    for(element in toRemove)
+      removeAll(array, element, equality);
 
 /**
 It pushes `value` onto the array if `condition` is true. Also returns the array for easy method chaining.
@@ -513,7 +513,7 @@ It pushes `value` onto the array if `condition` is true. Also returns the array 
 /**
 It applies a function against an accumulator and each value of the array (from left-to-right) has to reduce it to a single value.
 **/
-  inline public static function reduce<TItem, TAcc>(array : Array<TItem>, callback : TAcc -> TItem -> TAcc, initial : TAcc) : TAcc {
+  inline public static function reduce<TElement, TAcc>(array : Array<TElement>, callback : TAcc -> TElement -> TAcc, initial : TAcc) : TAcc {
     #if js
       return untyped array.reduce(callback, initial);
     #else
@@ -538,7 +538,7 @@ Note that the function changes the passed array and doesn't create a copy.
 /**
 It is the same as `reduce` but with the extra integer `index` parameter.
 **/
-  inline public static function reducei<TItem, TAcc>(array : Array<TItem>, callback : TAcc -> TItem -> Int -> TAcc, initial : TAcc) : TAcc {
+  inline public static function reducei<TElement, TAcc>(array : Array<TElement>, callback : TAcc -> TElement -> Int -> TAcc, initial : TAcc) : TAcc {
     #if js
       return untyped array.reduce(callback, initial);
     #else
@@ -550,7 +550,7 @@ It is the same as `reduce` but with the extra integer `index` parameter.
 /**
 Same as `Arrays.reduce` but starting from the last element and traversing to the first
 **/
-  inline public static function reduceRight<TItem, TAcc>(array : Array<TItem>, callback : TAcc -> TItem -> TAcc, initial : TAcc) : TAcc {
+  inline public static function reduceRight<TElement, TAcc>(array : Array<TElement>, callback : TAcc -> TElement -> TAcc, initial : TAcc) : TAcc {
     var i = array.length;
     while(--i >= 0)
       initial = callback(initial, array[i]);
