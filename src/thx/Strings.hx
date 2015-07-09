@@ -147,6 +147,12 @@ If `searchFor` is not found, an empty string is returned.
   }
 
 /**
+Returns `true` if `value` is not `null` and contains at least one character.
+**/
+  public static inline function hasContent(value : String) : Bool
+    return value != null && value.length > 0;
+
+/**
 Works the same as `underscore` but also replaces underscores with whitespaces.
 **/
   public static function humanize(s : String)
