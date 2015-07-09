@@ -391,10 +391,10 @@ It returns the first element of the array or null if the array is empty. Same as
     return array[0];
 
 /**
-`ifEmpty` returns `value` if it is neither `null` or empty, otherwise it returns `alt`
+`ifEmpty` returns `array` if it is neither `null` or empty, otherwise it returns `alt`
 **/
-  public static inline function ifEmpty<T>(value : Array<T>, alt : Array<T>) : Array<T>
-    return null != value && 0 != value.length ? value : alt;
+  public static inline function ifEmpty<T>(array : Array<T>, alt : Array<T>) : Array<T>
+    return null != array && 0 != array.length ? array : alt;
 
 /**
 Get all the elements from `array` except for the last one.
