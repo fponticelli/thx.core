@@ -61,6 +61,12 @@ Refer to `thx.Arrays.last`.
     return Iterators.last(it.iterator());
 
 /**
+Returns `true` if the iterable contains at least one element.
+**/
+  inline public static function hasElements<T>(it : Iterable<T>) : Bool
+    return Iterators.hasElements(it.iterator());
+
+/**
 Refer to `thx.Arrays.isEmpty`.
 **/
   public inline static function isEmpty<T>(it : Iterable<T>) : Bool

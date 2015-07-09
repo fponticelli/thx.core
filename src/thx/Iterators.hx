@@ -71,6 +71,12 @@ Refer to `thx.Arrays.first`.
     return it.hasNext() ? it.next() : null;
 
 /**
+Returns `true` if the iterator contains at least one element.
+**/
+  inline public static function hasElements<T>(it : Iterator<T>) : Bool
+    return it.hasNext();
+
+/**
 Refer to `thx.Arrays.isEmpty`.
 **/
   inline public static function isEmpty<T>(it : Iterator<T>) : Bool

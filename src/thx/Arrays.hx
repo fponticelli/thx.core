@@ -379,6 +379,12 @@ In case you have to use a type that is not supported by `@:generic`, please use 
 #end
 
 /**
+Returns `true` if the array contains at least one element.
+**/
+  inline public static function hasElements<T>(array : Array<T>) : Bool
+    return array.length > 0;
+
+/**
 It returns the first element of the array or null if the array is empty. Same as `first`.
 **/
   inline public static function head<T>(array : Array<T>) : Null<T>
