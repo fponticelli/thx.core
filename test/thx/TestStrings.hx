@@ -54,12 +54,12 @@ class TestStrings {
 
   public function testEllipsis() {
     var test = 'abcdefghijkl',
-        tests = [
+        tests : Array<{ expected : String, len : Null<Int>, symbol : String }> = [
       { expected : "abcdefghijkl", len : null, symbol : null },
       { expected : "abcdefghijkl", len : 100, symbol : null },
       { expected : "abcd…", len : 5, symbol : null },
       { expected : "a ...", len : 5, symbol : " ..." },
-      { expected : " ...", len : 2, symbol : " ..." },
+      { expected : "..", len : 2, symbol : " ..." },
       { expected : "abcdef ...", len : 10, symbol : " ..." },
     ];
     for (item in tests)
