@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
-  "releasenote": "added `thx.Assert`, some minor changes, additions and fixes.",
-  "version": "0.26.0",
+  "releasenote": "Updated `thx.Strings` to use Utf8 where appropriated and added `Strings.count()`.",
+  "version": "0.27.0",
   "contributors": ["fponticelli"]
 }
