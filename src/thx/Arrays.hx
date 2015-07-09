@@ -382,7 +382,7 @@ In case you have to use a type that is not supported by `@:generic`, please use 
 Returns `true` if the array contains at least one element.
 **/
   inline public static function hasElements<T>(array : Array<T>) : Bool
-    return array.length > 0;
+    return null != array && array.length > 0;
 
 /**
 It returns the first element of the array or null if the array is empty. Same as `first`.
@@ -406,7 +406,7 @@ Get all the elements from `array` except for the last one.
 It returns `true` if the array contains zero elements.
 **/
   inline public static function isEmpty<T>(array : Array<T>) : Bool
-    return array.length == 0;
+    return null == array || array.length == 0;
 
 /**
 It returns the last element of the array or null if the array is empty.
