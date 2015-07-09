@@ -97,11 +97,18 @@ of `symbol`.
 'thx is a nice library'.ellipsis(8); // returns 'thx is …'
 ```
 **/
-  public static function ellipsis(s : String, maxlen = 20, symbol = "…")
-    return if (s.length > maxlen)
-      s.substring(0, maxlen - symbol.length) + symbol;
-    else
-      s;
+  public static function ellipsis(s : String, maxlen = 20, symbol = "…") {
+    var sl = Utf8.length(s),
+        symboll = Utf8.length(symbol);
+    if (sl > maxlen) {
+      if(maxlen < symboll ) {
+        return Utf8.sub(symbol, symboll - maxlen, maxlen);
+      } else {
+        return Utf8.sub(s, 0, maxlen - symboll) + symbol;
+      }
+    } else
+      return s;
+  }
 
 /**
 `filter` applies `predicate` character by character to `s` and it returns a filtered
