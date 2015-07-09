@@ -71,6 +71,12 @@ or otherwise a positive non-sero number.
   #end
 
 /**
+Return the number of occurances of `test` in `s`.
+**/
+  public static function count(s : String, test : String)
+    return s.split(test).length - 1;
+
+/**
 `contains` returns `true` if `s` contains any of the strings in `tests`
 **/
   inline public static function containsAny(s : String, tests : Array<String>)

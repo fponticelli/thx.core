@@ -25,6 +25,19 @@ class TestStrings {
     Assert.isFalse("test".contains("tes "));
   }
 
+  public function testCount() {
+    Assert.equals(3, "one two three four five six seven eight nine ten".count("o"));
+    Assert.equals(2, "one two three four five six seven eight nine ten".count("en"));
+    Assert.equals(3, "one two three four five six seven eight nine ten".count(" t"));
+    Assert.equals(2, "one two three four five six seven eight nine ten".count("ve"));
+    Assert.equals(0, "xxxxxx".count("y"));
+    Assert.equals(6, "xxxxxx".count("x"));
+    Assert.equals(3, "xxxxxx".count("xx"));
+    Assert.equals(2, "xxxxxx".count("xxx"));
+    Assert.equals(1, "xxxxxx".count("xxxx"));
+    Assert.equals(0, "x".count("xx"));
+  }
+
   public function testContainsAny() {
     Assert.isTrue("test".containsAny(["t", "x", "y"]));
     Assert.isTrue("test".containsAny(["e", "x", "y"]));
