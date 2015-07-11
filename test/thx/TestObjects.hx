@@ -27,6 +27,7 @@ class TestObjects {
     var tuples = ob.tuples();
 
     tuples.sort(function(a, b) return Strings.compare(a._0, b._0));
+
     Assert.same([{ _0 : 'a', _1 : 'A'}, { _0 : 'b', _1 : 'B'}], tuples);
   }
 

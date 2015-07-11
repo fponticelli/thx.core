@@ -1,5 +1,4 @@
 /**
- * ...
  * @author Franco Ponticelli
  */
 
@@ -24,6 +23,19 @@ class TestStrings {
     Assert.isFalse("test".contains("test "));
     Assert.isFalse("test".contains(" test"));
     Assert.isFalse("test".contains("tes "));
+  }
+
+  public function testCount() {
+    Assert.equals(3, "one two three four five six seven eight nine ten".count("o"));
+    Assert.equals(2, "one two three four five six seven eight nine ten".count("en"));
+    Assert.equals(3, "one two three four five six seven eight nine ten".count(" t"));
+    Assert.equals(2, "one two three four five six seven eight nine ten".count("ve"));
+    Assert.equals(0, "xxxxxx".count("y"));
+    Assert.equals(6, "xxxxxx".count("x"));
+    Assert.equals(3, "xxxxxx".count("xx"));
+    Assert.equals(2, "xxxxxx".count("xxx"));
+    Assert.equals(1, "xxxxxx".count("xxxx"));
+    Assert.equals(0, "x".count("xx"));
   }
 
   public function testContainsAny() {
@@ -51,6 +63,20 @@ class TestStrings {
     ];
     for (item in tests)
       Assert.equals(item.expected, item.test.capitalizeWords(true));
+  }
+
+  public function testEllipsis() {
+    var test = 'abcdefghijkl',
+        tests : Array<{ expected : String, len : Null<Int>, symbol : String }> = [
+      { expected : "abcdefghijkl", len : null, symbol : null },
+      { expected : "abcdefghijkl", len : 100, symbol : null },
+      { expected : "abcd…", len : 5, symbol : null },
+      { expected : "a ...", len : 5, symbol : " ..." },
+      { expected : "..", len : 2, symbol : " ..." },
+      { expected : "abcdef ...", len : 10, symbol : " ..." },
+    ];
+    for (item in tests)
+      Assert.equals(item.expected, test.ellipsis(item.len, item.symbol));
   }
 
   public function testUcwords() {
@@ -82,7 +108,7 @@ class TestStrings {
     Assert.equals("my long string", Strings.humanize("my_long_string"));
     Assert.equals("ignore many", Strings.humanize("ignoreMANY"));
   }
-/*
+
   public function testWrapColumn() {
     var text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
 
@@ -124,14 +150,14 @@ text.wrapColumns(20));
 text.wrapColumns(20, "    "));
 
   }
-*/
+
   public function testWrapColumnPreserveNewLines() {
     var text = "Lorem ipsum dolor sit amet,\n\nconsectetur adipisicing elit";
     Assert.equals(
       "Lorem ipsum dolor\nsit amet,\n\nconsectetur\nadipisicing elit",
       text.wrapColumns(18));
   }
-/*
+
   public function testWrapColumnLong() {
     var text = "aaaaaaaaaa aaaa aaa aa";
     Assert.equals(
@@ -139,7 +165,7 @@ text.wrapColumns(20, "    "));
 aaaa
 aaa aa", text.wrapColumns(6));
   }
-*/
+
   public function testRepeat() {
     Assert.equals('XyXyXy', 'Xy'.repeat(3));
   }

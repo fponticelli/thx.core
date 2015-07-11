@@ -92,4 +92,17 @@ Returns a string describing the type of any `value`.
 **/
   inline public static function valueTypeToString<T>(value : T)
     return toString(Type.typeof(value));
+
+/**
+Returns a string describing the type of any `value`.
+**/
+  inline public static function anyValueToString(value : Dynamic) {
+    if(Std.is(value, Type.ValueType))
+      return toString(value);
+    if(Std.is(value, Class))
+      return Type.getClassName(value);
+    if(Std.is(value, Enum))
+      return Type.getEnumName(value);
+    return valueTypeToString(value);
+  }
 }
