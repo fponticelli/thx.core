@@ -100,14 +100,14 @@ Parses a string into an Int value using the provided base. Default base is 16 fo
 
     s = s.trim().toLowerCase();
 
-    var negative = if(s.startsWith("+")) {
+    var sign = if(s.startsWith("+")) {
           s = s.substring(1);
-          false;
+          1;
         } else if(s.startsWith("-")) {
           s = s.substring(1);
-          true;
+          -1;
         } else {
-          false;
+          1;
         };
 
     if(s.length == 0)
@@ -122,11 +122,13 @@ Parses a string into an Int value using the provided base. Default base is 16 fo
       base = 10;
     }
 
-    return try ((negative ? -1 : 1) * s.toArray().reduce(function(acc : Int, c : String) {
+    var acc = 0;
+    try s.map(function(c) {
       var i = BASE.indexOf(c);
       if(i < 0 || i >= base) throw 'invalid';
-      return (acc * base) + i;
-    }, 0) : Null<Int>) catch(e : Dynamic) null;
+      acc = (acc * base) + i;
+    }) catch(e : Dynamic) {};
+    return acc * sign;
     #end
   }
 
