@@ -98,20 +98,20 @@ Parses a string into an Int value using the provided base. Default base is 16 fo
     if(base != null && (base < 2 || base > BASE.length))
       return throw 'invalid base $base, it must be between 2 and ${BASE.length}';
 
+    s = s.trim().toLowerCase();
+
     var negative = if(s.startsWith("+")) {
-      s = s.substring(1);
-      false;
-    } else if(s.startsWith("-")) {
-      s = s.substring(1);
-      true;
-    } else {
-      false;
-    };
+          s = s.substring(1);
+          false;
+        } else if(s.startsWith("-")) {
+          s = s.substring(1);
+          true;
+        } else {
+          false;
+        };
 
     if(s.length == 0)
       return null;
-
-    s = s.trim().toLowerCase();
 
     if(s.startsWith('0x')) {
       if(null != base && 16 != base)

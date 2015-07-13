@@ -53,7 +53,7 @@ class TestInts {
     ];
     for(test in tests) {
       Assert.isTrue(test.t.canParse(), 'Ints.parse should not be able to parse ${test.t}');
-      Assert.equals(test.e, test.t.parse(test.b));
+      Assert.equals(test.e, test.t.parse(test.b), 'expected ${test.e} converting "${test.t}" with base ${test.b} but got ${test.t.parse(test.b)}');
     }
   }
 
