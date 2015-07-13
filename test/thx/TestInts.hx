@@ -56,4 +56,17 @@ class TestInts {
       Assert.equals(test.e, test.t.parse(test.b));
     }
   }
+
+  public function testToString() {
+    var tests = [
+      { e : "1010", t : 10, b : 2 },
+      { e : "12", t : 10, b : 8 },
+      { e : "10", t : 10, b : 10 },
+      { e : "a", t : 10, b : 16 },
+    ];
+
+    for(test in tests) {
+      Assert.equals(test.e, test.t.toString(test.b));
+    }
+  }
 }
