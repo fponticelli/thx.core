@@ -158,4 +158,41 @@ class TestNulls {
     Assert.isTrue((nested.a).notNull());
     Assert.isTrue((nested.a.b).notNull());
   }
+
+  public function testEnsure() {
+    var nops : String = null,
+        yups : String = "some content";
+
+    Assert.isNull(ensureField);
+    Assert.isNull(ensureStaticField);
+
+    nops.ensure("alt");
+    yups.ensure("alt");
+
+    Assert.equals("alt", nops);
+    Assert.equals("some content", yups);
+
+    nops = null;
+    Nulls.ensure(nops, "alt");
+    Nulls.ensure(yups, "alt");
+
+    Assert.equals("alt", nops);
+    Assert.equals("some content", yups);
+
+    ensureField.ensure("alt");
+    ensureStaticField.ensure("alt");
+    Nulls.ensure(ensureField, "alt");
+    Nulls.ensure(ensureStaticField, "alt");
+
+    ensureField = null;
+    ensureStaticField = null;
+
+    Nulls.ensure(ensureField, "alt");
+    Nulls.ensure(ensureStaticField, "alt");
+    Nulls.ensure(ensureField, "alt");
+    Nulls.ensure(ensureStaticField, "alt");
+  }
+
+  var ensureField : String = null;
+  static var ensureStaticField : String = null;
 }
