@@ -8,7 +8,7 @@ using StringTools;
 Extension methods for integer values.
 **/
 class Ints {
-  static var pattern_parse = ~/^[+-]?(\d+|0x[0-9A-F]+)$/i;
+  static var pattern_parse = ~/^\s*[+-]?(\d+|0x[0-9A-F]+)/i;
 /**
 `abs` returns the absolute integer value of the passed argument.
 **/
@@ -81,6 +81,12 @@ Parses a string into an Int value using the provided base. Default base is 16 fo
 **/
   public static function parse(s : String, ?base : Int) : Null<Int> {
     #if js
+    if(null == base) {
+      if(s.substring(0, 2) == "0x")
+        base = 16;
+      else
+        base = 10;
+    }
     var v : Int = untyped __js__("parseInt")(s, base);
     return Math.isNaN(v) ? null : v;
     #elseif flash9
