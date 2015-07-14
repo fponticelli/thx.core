@@ -242,19 +242,6 @@ Filters out all `null` values from an array.
   }
 
 /**
-Filters an array according to the expression passed as the second argument.
-
-The special symbol `_` refers to the current element.
-
-```haxe
-[1,2,3,4,5,6].filterPluck(_ % 2 != 0); // holds [1,3,5]
-```
-**/
-  @:deprecated("`filterPluck` is deprecated, use `using thx.Functions` and `arr.filter.fn(...)` instead.")
-  macro public static function filterPluck<T>(a : ExprOf<Array<T>>, expr : ExprOf<Bool>) : ExprOf<Array<T>>
-    return macro $e{a}.filter(function(_) return $e{expr});
-
-/**
 It returns the first element of the array that matches the provided predicate function.
 If none is found it returns null.
 **/
@@ -279,21 +266,6 @@ If none is found it returns null.
     }
     return null;
   }
-
-/**
-It returns the same result as `find`, but using the pluck strategy.
-**/
-  @:deprecated("`findPluck` is deprecated, use `using thx.Functions` and `arr.find.fn(...)` instead.")
-  macro public static function findPluck<T>(a : ExprOf<Array<T>>, expr : ExprOf<Bool>) : ExprOf<Array<T>>
-    return macro $e{a}.find(function(_) return $e{expr});
-
-
-/**
-It returns the same result as `findLast`, but using the pluck strategy.
-**/
-  @:deprecated("`findPluckLast` is deprecated, use `using thx.Functions` and `arr.findLast.fn(...)` instead.")
-  macro public static function findPluckLast<T>(a : ExprOf<Array<T>>, expr : ExprOf<Bool>) : ExprOf<Array<T>>
-    return macro $e{a}.findLast(function(_) return $e{expr});
 
 /**
 It returns the first element of the array or null if the array is empty.
@@ -446,60 +418,6 @@ It works the same as `Array.sort()` but doesn't change the original array and re
   }
 
 /**
-Uses the pluck strategy to order an array.  Returns an ordered copy of the Array, leaving the original unchanged.
-Arguments for pluck are `_0` and `_1`.
-**/
-  @:deprecated("`orderPluck` is deprecated, use `using thx.Functions` and `arr.order.fn(...)` instead.")
-  macro public static function orderPluck<T>(array : ExprOf<Array<T>>, expr : ExprOf<Int>)
-    return macro $e{array}.order(function(_0, _1) return $e{expr});
-
-/**
-The method works like a normal `Array.map()` but instead of passing a function that
-receives an element, you can pass an expression that defines how to access to a member
-of the element itself.
-
-The following two examples are equivalent:
-
-```
-var r = ['a','b','c'].pluck(_.toUppercase());
-trace(r); // ['A','B','C']
-```
-
-Alternative using traditional `map`.
-
-```
-var r = ['a','b','c'].map(function(o) return o.toUppercase());
-trace(r); // ['A','B','C']
-```
-
-You can use `pluck` on any kind of field including properties and methods and you can even pass arguments
-to such functions.
-
-The method is a macro method that guarantees that the correct types and identifiers are used.
-**/
-  @:deprecated("`pluck` is deprecated, use `using thx.Functions` and `arr.map.fn(...)` instead.")
-  macro public static function pluck<T, TOut>(a : ExprOf<Array<T>>, expr : ExprOf<TOut>) : ExprOf<Array<TOut>>
-    return macro $e{a}.map(function(_) return ${expr});
-
-/**
-Same as pluck but in reverse order.
-**/
-  @:deprecated("`pluckRight` is deprecated, use `using thx.Functions` and `arr.mapRight.fn(...)` instead.")
-  macro public static function pluckRight<T, TOut>(a : ExprOf<Array<T>>, expr : ExprOf<TOut>) : ExprOf<Array<TOut>>
-    return macro thx.Arrays.mapRight($e{a}, function(_) return ${expr});
-
-/**
-Like `pluck` but with an extra argument `i` that can be used to infer the index of the iteration.
-
-```haxe
-var r = arr.plucki(_.increment(i)); // where increment() is a method of the elements in the array
-```
-**/
-  @:deprecated("`plucki` is deprecated, use `using thx.Functions` and `arr.mapi.fn(...)` instead.")
-  macro public static function plucki<T>(a : ExprOf<Array<T>>, expr : Expr)
-    return macro thx.Arrays.mapi($e{a}, function(_, i) return ${expr});
-
-/**
 Pulls from `array` all occurrences of all the elements in `toRemove`. Optionally takes
 an `equality` function.
 **/
@@ -620,13 +538,6 @@ It returns a copy of the array with its elements randomly changed in position.
     }
     return array;
   }
-
-/**
-Uses the plcuk strategy to sort an array. Arguments for pluck are `_0` and `_1`.
-**/
-  @:deprecated("`sortPluck` is deprecated, use `using thx.Functions` and `arr.sort.fn(...)` instead.")
-  macro public static function sortPluck<T>(array : ExprOf<Array<T>>, expr : ExprOf<Int>)
-    return macro $e{array}.sort(function(_0, _1) return $e{expr});
 
 /**
 Splits an array into a specified number of `parts`.

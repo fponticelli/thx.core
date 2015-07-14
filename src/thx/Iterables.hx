@@ -36,13 +36,6 @@ Refer to `Array.filter`.
     return Iterators.filter(it.iterator(), predicate);
 
 /**
-Refer to `thx.Arrays.filterPluck`.
-**/
-  @:deprecated("`filterPluck` is deprecated, use `using thx.Functions` and `it.filter.fn(...)` instead.")
-  macro public static function filterPluck<T>(it : ExprOf<Iterable<T>>, expr : ExprOf<Bool>) : ExprOf<Array<T>>
-    return macro thx.Iterators.filter($e{it}.iterator(), function(_) return $e{expr});
-
-/**
 Refer to `thx.Arrays.find`.
 **/
   public inline static function find<T, TFind>(it : Iterable<T>, predicate : T -> Bool) : Null<T>
@@ -101,20 +94,6 @@ Refer to `thx.Arrays.order`.
 **/
   public inline static function order<T>(it : Iterable<T>, sort : T -> T -> Int) : Array<T>
     return Iterators.order(it.iterator(), sort);
-
-/**
-Refer to `thx.Arrays.pluck`.
-**/
-  @:deprecated("`pluck` is deprecated, use `using thx.Functions` and `it.map.fn(...)` instead.")
-  macro public static function pluck<T, TOut>(it : ExprOf<Iterable<T>>, expr : ExprOf<TOut>) : ExprOf<Array<TOut>>
-    return macro thx.Iterators.map($e{it}.iterator(), function(_) return ${expr});
-
-/**
-Refer to `thx.Arrays.plucki`.
-**/
-  @:deprecated("`plucki` is deprecated, use `using thx.Functions` and `it.mapi.fn(...)` instead.")
-  macro public static function plucki<T, TOut>(it : ExprOf<Iterable<T>>, expr : ExprOf<TOut>) : ExprOf<Array<TOut>>
-    return macro thx.Iterators.mapi($e{it}.iterator(), function(_, i) return ${expr});
 
 /**
 Refer to `thx.Arrays.reduce`.

@@ -50,7 +50,7 @@ class TestArrays {
       );
   }
 
-  public function testFilterPluck() {
+  public function testFilterFn() {
     Assert.same([1,3,5], [1,2,3,4,5,6].filter.fn(_ % 2 != 0));
   }
 
@@ -62,15 +62,15 @@ class TestArrays {
     Assert.equals(9, [1,3,5,7,9].findLast(function(item) return item % 3 == 0));
   }
 
-  public function testFindPluck() {
+  public function testFindFn() {
     Assert.equals(3, [1,3,5,7,9].find.fn(_ % 3 == 0));
   }
 
-  public function testFindPluckLast() {
+  public function testFindFnLast() {
     Assert.equals(9, [1,3,5,7,9].findLast.fn(_ % 3 == 0));
   }
 
-  public function testPluck() {
+  public function testFn() {
     Assert.same([2,4,8], [1,2,4].map.fn(_ * 2));
   }
 
@@ -124,13 +124,13 @@ class TestArrays {
     Assert.same([2,3,1], arr);
   }
 
-  public function testOrderPluck() {
+  public function testOrderFn() {
     var arr = [2,3,1];
     Assert.same([1,2,3], arr.order.fn(_0 - _1));
     Assert.same([2,3,1], arr);
   }
 
-  public function testOrderPluckObjectOfInt() {
+  public function testOrderFnObjectOfInt() {
     var obj1 = { key: 1 };
     var obj2 = { key: 2 };
     var obj3 = { key: 3 };
@@ -139,7 +139,7 @@ class TestArrays {
     Assert.same([obj2, obj3, obj1], arr);
   }
 
-  public function testOrderPluckObjectOfFloat() {
+  public function testOrderFnObjectOfFloat() {
     var obj1 = { key: 1.0 };
     var obj2 = { key: 2.0 };
     var obj3 = { key: 3.0 };
@@ -149,7 +149,7 @@ class TestArrays {
   }
 
 #if !python // issue with arr.sort being used in a closure
-  public function testSortPluck() {
+  public function testSortFn() {
     var arr = [2,3,1];
     arr.sort.fn(_0 - _1);
     Assert.same([1,2,3], arr);
@@ -206,7 +206,7 @@ class TestArrays {
     Assert.same([6,4,2], [1,2,3].mapRight(function(v) return v * 2));
   }
 
-  public function testPluckRight() {
+  public function testFnRight() {
     Assert.same([6,4,2], [1,2,3].mapRight.fn(_ * 2));
   }
 

@@ -39,7 +39,7 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
     if(!Reflect.isObject(o)) throw 'unable to convert $o to QueryString';
     Objects.tuples(o).map(function(t) {
         if(Std.is(t.right, Array)) {
-          qs.setMany(t.left, (cast t.right : Array<Dynamic>).pluck('$_'));
+          qs.setMany(t.left, (cast t.right : Array<Dynamic>).map.fn('$_'));
         } else {
           qs.set(t.left, '${t.right}');
         }
