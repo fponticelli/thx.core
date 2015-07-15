@@ -6,6 +6,9 @@ import haxe.Utf8;
 Represents one Utf8 character stored as an integer value.
 **/
 abstract Char(Int)  {
+  public static function at(s : String, index : Int) : Char
+    return Utf8.charCodeAt(s, index);
+
   @:from inline public static function fromInt(i : Int) : Char {
     Assert.isTrue(i >= 0, 'Char value should be greater than zero: $i');
     return new Char(i);
