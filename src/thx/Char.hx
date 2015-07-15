@@ -56,9 +56,9 @@ abstract Char(Int)  {
   @:to inline public function toInt() : Int
     return this;
 
-  @:to inline public function toString() : String {
-    #if (neko || php)
-    var c = new Utf8(1);
+  @:to #if !(neko || php || cpp) inline #end public function toString() : String {
+    #if (neko || php || cpp)
+    var c = new Utf8();
     c.addChar(this);
     return c.toString();
     #else
