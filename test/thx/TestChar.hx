@@ -28,4 +28,9 @@ class TestChar {
 
     Assert.equals(121, char.prev());
   }
+
+  public function testControl() {
+    Assert.isTrue((7 : Char).isControl());
+    Assert.isFalse(("x" : Char).isControl());
+  }
 }

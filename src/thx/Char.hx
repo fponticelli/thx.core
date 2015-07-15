@@ -17,6 +17,9 @@ abstract Char(Int) to Int  {
   public function compare(other : Char)
     return Utf8.compare(toString(), other);
 
+  public function isControl()
+    return (this >= 0x0000 && this <= 0x001F) || this == 0x007F || (this >= 0x0080 && this <= 0x009F);
+
   public function next() : Char
     return this + 1;
 
