@@ -50,7 +50,9 @@ abstract Char(Int)  {
   @:op(A<B) inline public function less(other : Char)
     return compare(other) < 0;
 
-  @:to inline public function toString() : String
+  @:to inline public function toInt() : Int
+    return this;
+
   @:to inline public function toString() : String {
     #if (neko || php)
     var c = new Utf8(1);
