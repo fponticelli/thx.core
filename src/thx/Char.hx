@@ -2,12 +2,32 @@ package thx;
 
 import haxe.Utf8;
 
-abstract Char(Int) from Int to Int  {
+abstract Char(Int) to Int  {
+  @:from inline public static function fromInt(i : Int) : Char {
+    Assert.isTrue(i >= 0, 'Char value should be greater than zero: $i');
+    return new Char(i);
+  }
+
   @:from inline public static function fromString(s : String) : Char
     return Utf8.charCodeAt(s, 0);
 
+  inline function new(i : Int)
+    this = i;
+
   public function compare(other : Char)
     return Utf8.compare(toString(), other);
+
+  public function next() : Char
+    return this + 1;
+
+  public function prev() : Char
+    return this - 1;
+
+  public function toUpperCase() : Char
+    return toString().toUpperCase();
+
+  public function toLowerCase() : Char
+    return toString().toLowerCase();
 
   @:op(A==B) inline public function equals(other : Char)
     return compare(other) == 0;
