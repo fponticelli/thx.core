@@ -33,4 +33,9 @@ class TestChar {
     Assert.isTrue((7 : Char).isControl());
     Assert.isFalse(("x" : Char).isControl());
   }
+
+  public function testUtf8() {
+    Assert.equals(9786, ("☺" : Char).toInt());
+    Assert.equals("☺", (9786 : Char).toString());
+  }
 }

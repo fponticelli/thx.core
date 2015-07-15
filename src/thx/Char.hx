@@ -2,7 +2,10 @@ package thx;
 
 import haxe.Utf8;
 
-abstract Char(Int) to Int  {
+/**
+Represents one Utf8 character stored as an integer value.
+**/
+abstract Char(Int)  {
   @:from inline public static function fromInt(i : Int) : Char {
     Assert.isTrue(i >= 0, 'Char value should be greater than zero: $i');
     return new Char(i);
@@ -48,5 +51,13 @@ abstract Char(Int) to Int  {
     return compare(other) < 0;
 
   @:to inline public function toString() : String
+  @:to inline public function toString() : String {
+    #if (neko || php)
+    var c = new Utf8(1);
+    c.addChar(this);
+    return c.toString();
+    #else
     return String.fromCharCode(this);
+    #end
+  }
 }
