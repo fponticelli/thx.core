@@ -128,7 +128,16 @@ version of the string.
 Same as `filter` but `predicate` operates on integer char codes instead of string characters.
 **/
   public static function filterCharcode(s : String, predicate : Int -> Bool)
-    return toCharcodeArray(s)
+    return toCharcodes(s)
+      .filter(predicate)
+      .map(function(i) return String.fromCharCode(i))
+      .join('');
+
+/**
+Same as `filter` but `predicate` operates on integer char codes instead of string characters.
+**/
+  public static function filterChar(s : String, predicate : Char -> Bool)
+    return toChars(s)
       .filter(predicate)
       .map(function(i) return String.fromCharCode(i))
       .join('');
@@ -299,9 +308,9 @@ It transforms a string into an `Array` of characters.
 /**
 It transforms a string into an `Array` of char codes in integer format.
 **/
-  inline public static function toCharcodeArray(s : String) : Array<Int>
+  inline public static function toCharcodes(s : String) : Array<Int>
     return map(s, function(s : String)
-        // the cast is required to compile safely to C#
+        return Utf8.charCodeAt(s, 0));
 
 /**
 It transforms a string into an `Array` of char codes in integer format.
