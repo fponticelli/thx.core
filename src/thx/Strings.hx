@@ -223,7 +223,7 @@ Returns a random substring from the `value` argument. The length of such value i
 It returns an iterator holding in sequence one character of the string per iteration.
 **/
   public static function iterator(s : String) : Iterator<String>
-    return s.split('').iterator();
+    return toArray(s).iterator();
 
 /**
 It maps a string character by character using `callback`.
@@ -264,7 +264,7 @@ If present, it removes the `toremove` text from the beginning of `value`.
 Returns a new string whose characters are in reverse order.
 **/
   public static function reverse(s : String) {
-    var arr = s.split("");
+    var arr = toArray(s);
     arr.reverse();
     return arr.join("");
   }
