@@ -9,7 +9,7 @@ class Uuid {
     return Math.floor(Math.random()*0x10);
 
   static inline function srandom()
-    return "1234567890ABCDEF".charAt(random());
+    return "0123456789ABCDEF".charAt(random());
 
 /**
 `Uuid.create()` returns a string value representing a UUID value.
@@ -26,7 +26,7 @@ class Uuid {
     for(i in 15...18)
       s[i] = srandom();
     s[18] = '-';
-    s[19] = '' + ((random() & 0x3) | 0x8);
+    s[19] = '' + "89AB".charAt(random() & 0x3);
     for(i in 20...23)
       s[i] = srandom();
     s[23] = '-';
