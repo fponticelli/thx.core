@@ -134,15 +134,6 @@ Same as `filter` but `predicate` operates on integer char codes instead of strin
       .join('');
 
 /**
-Same as `filter` but `predicate` operates on integer char codes instead of string characters.
-**/
-  public static function filterChar(s : String, predicate : Char -> Bool)
-    return toChars(s)
-      .filter(predicate)
-      .map(function(i) return String.fromCharCode(i))
-      .join('');
-
-/**
 `from` searches for the first occurrance of `searchFor` and returns the text from that point on.
 
 If `searchFor` is not found, an empty string is returned.
@@ -318,13 +309,6 @@ It transforms a string into an `Array` of char codes in integer format.
 **/
   inline public static function toCharcodes(s : String) : Array<Int>
     return map(s, function(s : String)
-        return Utf8.charCodeAt(s, 0));
-
-/**
-It transforms a string into an `Array` of char codes in integer format.
-**/
-  inline public static function toChars(s : String) : Array<Char>
-    return map(s, function(s : String) : Char
         return Utf8.charCodeAt(s, 0));
 
 /**
