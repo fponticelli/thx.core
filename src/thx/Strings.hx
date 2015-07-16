@@ -302,8 +302,16 @@ Surrounds a string with the contents of `left` and `right`. If `right` is omitte
 /**
 It transforms a string into an `Array` of characters.
 **/
-  inline public static function toArray(s : String)
+  #if !(neko || php) inline #end public static function toArray(s : String) {
+    #if (neko || php)
+    var arr = [];
+    for(i in 0...Utf8.length(s))
+      arr.push(Utf8.sub(s, i, 1));
+    return arr;
+    #else
     return s.split('');
+    #end
+  }
 
 /**
 It transforms a string into an `Array` of char codes in integer format.
