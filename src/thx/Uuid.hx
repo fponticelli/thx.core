@@ -26,7 +26,7 @@ class Uuid {
     for(i in 15...18)
       s[i] = srandom();
     s[18] = '-';
-    s[19] = '' + "89AB".charAt(random() & 0x3);
+    s[19] = "89AB".charAt(random() & 0x3);
     for(i in 20...23)
       s[i] = srandom();
     s[23] = '-';
