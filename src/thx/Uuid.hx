@@ -9,7 +9,7 @@ class Uuid {
     return Math.floor(Math.random()*0x10);
 
   static inline function srandom()
-    return '${random()}';
+    return "1234567890ABCDEF".charAt(random());
 
 /**
 `Uuid.create()` returns a string value representing a UUID value.
