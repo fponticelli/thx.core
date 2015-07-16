@@ -212,4 +212,10 @@ aaa aa", text.wrapColumns(6));
 
     Assert.equals('', '/'.trimChars('/'));
   }
+
+  public function testReverse() {
+    var t = "a☺b☺☺c☺☺☺",
+        e = "☺☺☺c☺☺b☺a";
+    Assert.same(e, t.reverse());
+  }
 }

@@ -302,6 +302,12 @@ It transforms a string into an `Array` of char codes in integer format.
   inline public static function toCharcodeArray(s : String) : Array<Int>
     return map(s, function(s : String)
         // the cast is required to compile safely to C#
+
+/**
+It transforms a string into an `Array` of char codes in integer format.
+**/
+  inline public static function toChars(s : String) : Array<Char>
+    return map(s, function(s : String) : Char
         return Utf8.charCodeAt(s, 0));
 
 /**
