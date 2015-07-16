@@ -65,4 +65,7 @@ abstract Char(Int)  {
     return String.fromCharCode(this);
     #end
   }
+
+  public static function arrayToString(arr : Array<Char>) : String
+    return arr.map(function(c : Char) : String return c.toString()).join("");
 }

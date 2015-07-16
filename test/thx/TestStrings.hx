@@ -212,4 +212,16 @@ aaa aa", text.wrapColumns(6));
 
     Assert.equals('', '/'.trimChars('/'));
   }
+
+  public function testToArray() {
+    var t = "a☺b☺☺c☺☺☺",
+        e = ["a","☺","b","☺","☺","c","☺","☺","☺"];
+    Assert.same(e, t.toArray());
+  }
+
+  public function testReverse() {
+    var t = "a☺b☺☺c☺☺☺",
+        e = "☺☺☺c☺☺b☺a";
+    Assert.same(e, t.reverse());
+  }
 }

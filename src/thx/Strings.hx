@@ -128,7 +128,7 @@ version of the string.
 Same as `filter` but `predicate` operates on integer char codes instead of string characters.
 **/
   public static function filterCharcode(s : String, predicate : Int -> Bool)
-    return toCharcodeArray(s)
+    return toCharcodes(s)
       .filter(predicate)
       .map(function(i) return String.fromCharCode(i))
       .join('');
@@ -214,7 +214,7 @@ Returns a random substring from the `value` argument. The length of such value i
 It returns an iterator holding in sequence one character of the string per iteration.
 **/
   public static function iterator(s : String) : Iterator<String>
-    return s.split('').iterator();
+    return toArray(s).iterator();
 
 /**
 It maps a string character by character using `callback`.
@@ -255,7 +255,7 @@ If present, it removes the `toremove` text from the beginning of `value`.
 Returns a new string whose characters are in reverse order.
 **/
   public static function reverse(s : String) {
-    var arr = s.split("");
+    var arr = toArray(s);
     arr.reverse();
     return arr.join("");
   }
@@ -293,15 +293,22 @@ Surrounds a string with the contents of `left` and `right`. If `right` is omitte
 /**
 It transforms a string into an `Array` of characters.
 **/
-  inline public static function toArray(s : String)
+  #if !(neko || php) inline #end public static function toArray(s : String) {
+    #if (neko || php)
+    var arr = [];
+    for(i in 0...Utf8.length(s))
+      arr.push(Utf8.sub(s, i, 1));
+    return arr;
+    #else
     return s.split('');
+    #end
+  }
 
 /**
 It transforms a string into an `Array` of char codes in integer format.
 **/
-  inline public static function toCharcodeArray(s : String) : Array<Int>
+  inline public static function toCharcodes(s : String) : Array<Int>
     return map(s, function(s : String)
-        // the cast is required to compile safely to C#
         return Utf8.charCodeAt(s, 0));
 
 /**

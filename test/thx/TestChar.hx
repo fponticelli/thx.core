@@ -38,4 +38,9 @@ class TestChar {
     Assert.equals(9786, ("☺" : Char).toInt());
     Assert.equals("☺", (9786 : Char).toString());
   }
+
+  public function testArrayToString() {
+    var chars : Array<Char> = [120, 121, 122];
+    Assert.equals("xyz", Char.arrayToString(chars));
+  }
 }
