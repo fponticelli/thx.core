@@ -24,15 +24,8 @@ class Objects {
     var qn = parts.join('.');
     return TypeTools.toComplexType(TypeTools.follow(Context.getType(qn)));
   }
-  #end
 
-/**
-Copies the values from the fields of `from` to `to`. If `to` already contains those fields, then it replace
-those values with the return value of the function `replacef`.
-
-If not set, `replacef` always returns the value from the `from` object.
-**/
-  macro public static function merge(to : ExprOf<{}>, from : ExprOf<{}>, ?replacef : ExprOf<String -> Dynamic -> Dynamic -> Dynamic>) {
+  public static function mergeImpl(to : ExprOf<{}>, from : ExprOf<{}>) {
     var typeTo = TypeTools.toComplexType(Context.typeof(to));
     var typeFrom = TypeTools.toComplexType(Context.typeof(from));
     var arr = [];
@@ -72,6 +65,11 @@ If not set, `replacef` always returns the value from the `from` object.
     }
 
     var t : ComplexType = TAnonymous(arr);
-    return macro (cast thx.Objects.merge($e{to}, $e{from}, $e{replacef}) : $t);
+    return macro (cast thx.Objects.combine($e{to}, $e{from}) : $t);
+  }
+  #end
+
+  macro public static function merge(to : ExprOf<{}>, from : ExprOf<{}>) {
+    return mergeImpl(to, from);
   }
 }

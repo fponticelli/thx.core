@@ -35,9 +35,9 @@ class TestObjects {
 
     Assert.same([{ _0 : 'a', _1 : 'A'}, { _0 : 'b', _1 : 'B'}], tuples);
   }
-  public function testMergeMacro() {
+  public function testAssign() {
     var o = {'name' : 'Franco', age : 19};
-    var out = thx.macro.Objects.merge(o, { 'foo': 'bar', 'name' : 'Michael', 'age' : 'Two'});
+    var out : Dynamic = thx.Objects.assign(o, { 'foo': 'bar', 'name' : 'Michael', 'age' : 'Two'});
 
     Assert.same("Michael", out.name);
     Assert.same("Two", out.age);
@@ -48,7 +48,17 @@ class TestObjects {
     }
   }
 
-  public function testMergeMacroWithTypedef() {
+  public function testCombine() {
+    var o = {'name' : 'Franco', age : 19};
+    var out : Dynamic = thx.Objects.combine(o, { 'foo': 'bar', 'name' : 'Michael', 'age' : 'Two'});
+
+    Assert.same("Michael", out.name);
+    Assert.same("Two", out.age);
+    Assert.same("bar", out.foo);
+    Assert.same("Franco", o.name);
+  }
+
+  public function testMergeWithTypedef() {
     var to : SpecialObject = {
           bar : "qux"
         },
@@ -57,7 +67,7 @@ class TestObjects {
           extra : "field"
         };
 
-    var merged : SpecialObject = thx.macro.Objects.merge(to, from);
+    var merged : SpecialObject = thx.Objects.merge(to, from);
 
     Assert.same(merged.foo, from.foo);
     Assert.same(merged.bar, to.bar);
