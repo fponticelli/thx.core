@@ -6,6 +6,6 @@
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
   "releasenote": "Added Timestamp abstract (replaces Timestamps), Char, Chars, Nulls.ensure, Arrays.hasElements, Strings.hasContent, removed plick methods, improvements and fixes.",
-  "version": "0.28",
+  "version": "0.28.0",
   "contributors": ["fponticelli"]
 }
