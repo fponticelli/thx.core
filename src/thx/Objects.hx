@@ -45,12 +45,36 @@ using `thx.Dynamics.compare`.
     return Reflect.fields(o);
 
 /**
-Copies the values from the fields of `from` to `to`. If `to` already contains those fields, then it replace
+Merges `first` and `second` using the `combine` strategy to return a merged object. The returned
+object is typed as an object containing all of the fields from both `first` and `second`.
+**/
+  macro public static function merge(first : ExprOf<{}>, second : ExprOf<{}>) {
+    return thx.macro.Objects.mergeImpl(first, second);
+  }
+
+/**
+Copies the values from the fields of `first` and `second` to a new object. If `first` and `second` contain
+fields with the same name, the returned object will use the fields from `second`. Both objects passed
+to this function will be unmodified.
+**/
+  public static function combine(first : {}, second : {}) : {} {
+    var to = {};
+    for(field in Reflect.fields(first)) {
+      Reflect.setField(to, field, Reflect.field(first, field));
+    }
+    for(field in Reflect.fields(second)) {
+      Reflect.setField(to, field, Reflect.field(second, field));
+    }
+    return to;
+  }
+
+/**
+Copies the values from the fields of `from` to `to`. If `to` already contains those fields, then it replaces
 those values with the return value of the function `replacef`.
 
 If not set, `replacef` always returns the value from the `from` object.
 **/
-  public static function merge(to : {}, from : {}, ?replacef : String -> Dynamic -> Dynamic -> Dynamic) : {} {
+  public static function assign(to : {}, from : {}, ?replacef : String -> Dynamic -> Dynamic -> Dynamic) : {} {
     if(null == replacef)
       replacef = function(field : String, oldv : Dynamic, newv : Dynamic) return newv;
     for(field in Reflect.fields(from)) {
