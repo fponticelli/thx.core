@@ -3,6 +3,11 @@ package thx;
 import utest.Assert;
 using thx.Objects;
 
+typedef SpecialObject = {
+  ?foo : String,
+  ?bar : String
+};
+
 class TestObjects {
   public function new() { }
 
@@ -29,6 +34,34 @@ class TestObjects {
     tuples.sort(function(a, b) return Strings.compare(a._0, b._0));
 
     Assert.same([{ _0 : 'a', _1 : 'A'}, { _0 : 'b', _1 : 'B'}], tuples);
+  }
+  public function testMergeMacro() {
+    var o = {'name' : 'Franco', age : 19};
+    var out = thx.macro.Objects.merge(o, { 'foo': 'bar', 'name' : 'Michael', 'age' : 'Two'});
+
+    Assert.same("Michael", out.name);
+    Assert.same("Two", out.age);
+    Assert.same("bar", out.foo);
+
+    for (field in Reflect.fields(out)) {
+      Assert.same(Reflect.field(out, field), Reflect.field(o, field));
+    }
+  }
+
+  public function testMergeMacroWithTypedef() {
+    var to : SpecialObject = {
+          bar : "qux"
+        },
+        from = {
+          foo : "baz",
+          extra : "field"
+        };
+
+    var merged : SpecialObject = thx.macro.Objects.merge(to, from);
+
+    Assert.same(merged.foo, from.foo);
+    Assert.same(merged.bar, to.bar);
+    Assert.same(Reflect.field(merged, 'extra'), 'field');
   }
 
   public function testHasPath() {
