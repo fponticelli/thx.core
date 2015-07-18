@@ -8,13 +8,11 @@ import haxe.macro.TypeTools;
 using thx.Arrays;
 
 class Objects {
-
-  static function overwriteFieldsInType(fields : Array<Field>, type : Array<Field>) {
+  static function overwriteFieldsInType(fields : Array<Field>, type : Array<Field>)
     fields.map(function (field) {
       type.extract(function (fvar) return fvar.name == field.name);
       type.push(field);
     });
-  }
 
   #if macro
   static function getTypeFromPath(name : String, pack : Array<String>, ?sub : String) {
