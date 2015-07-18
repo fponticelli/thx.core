@@ -58,6 +58,18 @@ class TestObjects {
     Assert.same("Franco", o.name);
   }
 
+  public function testMergeWithNullable() {
+    var a : Null<SpecialObject>,
+        options : { sub : Null<SpecialObject> } = { sub : {}};
+
+    a = Objects.merge({
+      foo : 'baz',
+      bar : 'qux'
+    }, options.sub);
+
+    Assert.same('baz', a.foo);
+  }
+
   public function testMergeWithTypedef() {
     var to : SpecialObject = {
           bar : "qux"

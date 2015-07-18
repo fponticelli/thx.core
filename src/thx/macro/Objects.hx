@@ -17,10 +17,19 @@ class Objects {
   }
 
   #if macro
-  static function getTypeFromPath(name : String, pack : Array<String>, ?sub : String) {
+  static function getTypeFromPath(name : String, pack : Array<String>, ?sub : String, params) {
     var parts = pack.concat([name]);
     if (null != sub)
       parts.push(sub);
+
+    if (sub == "Null") {
+      switch params[0] {
+        case TPType(TPath({name : name, pack : pack, sub : sub, params : params})):
+          return getTypeFromPath(name, pack, sub, params);
+        case _:
+          Context.error('Expected nullable to have TPType', Context.currentPos());
+      }
+    }
     var qn = parts.join('.');
     return TypeTools.toComplexType(TypeTools.follow(Context.getType(qn)));
   }
@@ -33,8 +42,8 @@ class Objects {
     switch typeTo {
     case TAnonymous(fields):
         arr = arr.concat(fields);
-      case TPath({name : name, pack : pack, sub : sub}):
-        var type = getTypeFromPath(name, pack, sub);
+      case TPath({name : name, pack : pack, sub : sub, params : params}):
+        var type = getTypeFromPath(name, pack, sub, params);
 
         switch type {
           case TAnonymous(fields):
@@ -44,15 +53,14 @@ class Objects {
         }
 
       case _:
-        trace(typeTo);
         Context.error('Field `to` cannot use this expression for merge', to.pos);
     }
 
     switch typeFrom {
       case TAnonymous(fields):
         overwriteFieldsInType(fields, arr);
-      case TPath({name : name, pack : pack, sub : sub}):
-        var type = getTypeFromPath(name, pack, sub);
+      case TPath({name : name, pack : pack, sub : sub, params : params}):
+        var type = getTypeFromPath(name, pack, sub, params);
         switch type {
           case TAnonymous(fields):
             overwriteFieldsInType(fields, arr);
@@ -60,7 +68,6 @@ class Objects {
             Context.error('Field `from` cannot be parsed for merge', from.pos);
         }
       case _:
-        trace(typeFrom);
         Context.error('Field `from` cannot use this expression for merge', from.pos);
     }
 
