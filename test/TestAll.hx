@@ -16,6 +16,7 @@ class TestAll {
     runner.addCase(new thx.TestFloats());
     runner.addCase(new thx.TestFunctions());
     runner.addCase(new thx.TestInts());
+    runner.addCase(new thx.TestIterators());
     runner.addCase(new thx.TestMapList());
     runner.addCase(new thx.TestMaps());
     runner.addCase(new thx.TestNulls());

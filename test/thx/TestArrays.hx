@@ -1,5 +1,4 @@
 /**
- * ...
  * @author Franco Ponticelli
  */
 
