@@ -1,5 +1,6 @@
 package thx;
 
+import thx.Functions.Functions in F;
 import thx.Tuple;
 #if macro
 import haxe.macro.Expr;
@@ -29,6 +30,27 @@ Checks if `predicate` returns true for at least one element in the iterator.
       if(predicate(element))
         return true;
     return false;
+  }
+
+/**
+It compares the lengths and elements of two given iterators and returns `true` if they match.
+
+An optional equality function can be passed as the last argument. If not provided, strict equality is adopted.
+**/
+  public static function equals<T>(a : Iterator<T>, b : Iterator<T>, ?equality : T -> T -> Bool) {
+    if(null == equality) equality = F.equality;
+    var ae, be, an, bn;
+    while(true) {
+      an = a.hasNext();
+      bn = b.hasNext();
+      if(!an && !bn)
+        return true;
+      if(!an || !bn)
+        return false;
+      if(!equality(a.next(), b.next()))
+        return false;
+    }
+    return true;
   }
 
 /**

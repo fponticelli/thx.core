@@ -30,6 +30,14 @@ Refer to `thx.Arrays.eachPair`.
     return Iterators.eachPair(it.iterator(), handler);
 
 /**
+It compares the lengths and elements of two given iterables and returns `true` if they match.
+
+An optional equality function can be passed as the last argument. If not provided, strict equality is adopted.
+**/
+  public inline static function equals<T>(a : Iterable<T>, b : Iterable<T>, ?equality : T -> T -> Bool)
+    return Iterators.equals(a.iterator(), b.iterator(), equality);
+
+/**
 Refer to `Array.filter`.
 **/
   public inline static function filter<T>(it : Iterable<T>, predicate : T -> Bool) : Array<T>
