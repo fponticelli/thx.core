@@ -60,7 +60,7 @@ class TestPath {
     Assert.equals('/', path.sep);
     Assert.isTrue(path.isPosix());
     Assert.isFalse(path.isPosix());
-    Assert.equals('\\', Win32.sep);
+    Assert.equals('\\', win.sep);
     Assert.isTrue(win.isWin32());
     Assert.isFalse(win.isWin32());
   }
