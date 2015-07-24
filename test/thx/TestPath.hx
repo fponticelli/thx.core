@@ -75,7 +75,7 @@ class TestPath {
 
   public function testToWin32ToPosix() {
     var path : Path = "/path/to/file.png",
-        win = path.toWin32("C:");
+        win = path.toWin32();
     Assert.equals("C:\\path\\to\\file.png", win.toString());
     Assert.equals("/path/to/file.png", win.toPosix().toString());
   }

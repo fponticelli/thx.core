@@ -74,13 +74,14 @@ abstract Path(PathType) from PathType to PathType {
   public function toPosix() : Path
     return isPosix() ? this : {
       root : isRoot() ? posixSeparator : "",
+      root : isAbsolute() ? nixSeparator : "",
       path : this.path.copy(),
       sep  : posixSeparator
     };
 
-  public function toWin32(?root : String = "C:") : Path
+  public function toWin32(?root : String = "C:\\") : Path
     return isWin32() ? this : {
-      root : isRoot() ? root : "",
+      root : isAbsolute() ? root : "",
       path : this.path.copy(),
       sep  : win32Separator
     };
