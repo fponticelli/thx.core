@@ -56,8 +56,14 @@ abstract Path(PathType) from PathType to PathType {
   public function isWin32()
     return sep == win32Separator;
 
-  public function base(?end : String) : String
-    return ""; // TODO
+  public function base(?end : String) : String {
+    if(this.path.length == 0)
+      return '';
+    var name = this.path.last();
+    if(null != end && name.endsWith(end))
+      return name.substring(0, name.length - end.length);
+    return name;
+  }
 
   public function ext() : String {
     if(this.path.length == 0)
@@ -114,3 +120,29 @@ typedef PathType = {
   path : Array<String>,
   sep : String
 }
+
+/*
+TODO:
+
+ * add isValid
+ * add normalize (removes/replaces invalid characters)
+win32 invalid char
+
+The following reserved characters:
+< (less than)
+> (greater than)
+: (colon)
+" (double quote)
+/ (forward slash)
+\ (backslash)
+| (vertical bar or pipe)
+? (question mark)
+* (asterisk)
+
+CON, PRN, AUX, NUL, COM1, COM2, COM3, COM4, COM5, COM6, COM7, COM8, COM9, LPT1, LPT2, LPT3, LPT4, LPT5, LPT6, LPT7, LPT8, and LPT9.
+
+
+linux invalid chars
+/ \0
+
+*/
