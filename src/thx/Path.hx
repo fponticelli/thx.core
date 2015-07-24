@@ -1,5 +1,9 @@
 package thx;
 
+using thx.Arrays;
+using thx.Functions;
+using thx.Strings;
+
 abstract Path(PathType) from PathType to PathType {
   public static var posixSeparator(default, null) : String = "/";
   public static var win32Separator(default, null) : String = "\\";
@@ -7,8 +11,22 @@ abstract Path(PathType) from PathType to PathType {
   public var root(get, never) : String;
   public var sep(get, never) : String;
 
+  static var WIN32_ROOT = ~/^([a-z]+[:])/i;
   @:from public static function fromString(s : String) : Path {
-    return new Path("", [], posixSeparator);
+    if(s.contains(win32Separator)) {
+      if(WIN32_ROOT.match(s)) {
+        return new Path(
+          WIN32_ROOT.matched(1),
+          WIN32_ROOT.matchedRight().split(win32Separator),
+          win32Separator);
+      } else {
+        return new Path("", s.split(win32Separator), win32Separator);
+      }
+    }
+    return new Path(
+      s.startsWith(posixSeparator) ? posixSeparator : "",
+      s.split(posixSeparator),
+      posixSeparator);
   }
 
   inline function new(root : String, path : Array<String>, sep : String)
