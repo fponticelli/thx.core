@@ -27,7 +27,7 @@ class TestPath {
 
   public function testUp() {
     Assert.equals('/a/b', ('/a/b/c/' : Path).up().toString());
-    Assert.equals('/', ('/a' : Path).up().up().toString());
+    Assert.equals('/', ('/a' : Path).up(2).toString());
   }
 
   public function testDir() {
@@ -64,13 +64,13 @@ class TestPath {
 
   public function testJoin() {
     Assert.equals('/a/b/c', (('/a/x' : Path) / ('../b/c' : Path)).toString());
-    Assert.equals('b/c', (('../x' : Path) / ('../b/c' : Path)).toString());
+    Assert.equals('../b/c', (('../x' : Path) / ('../b/c' : Path)).toString());
     Assert.equals('/b/c', (('/a/x' : Path) / ('/b/c' : Path)).toString());
   }
 
   public function testJoinString() {
     Assert.equals('/a/b/c', (('/a/b' : Path) / "c").toString());
-    Assert.equals('../../b/c', (('../x' : Path) / "../d").toString());
+    Assert.equals('../d', (('../x' : Path) / "../d").toString());
   }
 
   public function testToWin32ToNix() {
@@ -97,7 +97,9 @@ class TestPath {
     Assert.equals('..', ('..' : Path).toString());
     Assert.equals('..', ('../' : Path).toString());
     Assert.equals('/', ('/' : Path).toString());
-    Assert.equals('/a/a', ('/a/a' : Path).toString());
+    Assert.equals('/a/a', ('/a///a' : Path).toString());
     Assert.equals('/a/a', ('/a/a/' : Path).toString());
+    Assert.equals('.', ('a/..' : Path).toString());
+    Assert.equals('a', ('a' : Path).toString());
   }
 }
