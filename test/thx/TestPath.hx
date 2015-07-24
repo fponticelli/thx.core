@@ -56,10 +56,10 @@ class TestPath {
         win = path.toWin32("C:");
     Assert.equals('/', path.sep);
     Assert.equals('\\', win.sep);
-    Assert.isTrue(path.isPosix());
+    Assert.isTrue(path.isNix());
     Assert.isFalse(path.isWin32());
     Assert.isTrue(win.isWin32());
-    Assert.isFalse(win.isPosix());
+    Assert.isFalse(win.isNix());
   }
 
   public function testJoin() {
@@ -73,11 +73,16 @@ class TestPath {
     Assert.equals('../../b/c', (('../x' : Path) / "../d").toString());
   }
 
-  public function testToWin32ToPosix() {
+  public function testToWin32ToNix() {
     var path : Path = "/path/to/file.png",
         win = path.toWin32();
     Assert.equals("C:\\path\\to\\file.png", win.toString());
-    Assert.equals("/path/to/file.png", win.toPosix().toString());
+    Assert.equals("/path/to/file.png", win.toNix().toString());
+
+    path = "path/to/file.png";
+    win = path.toWin32();
+    Assert.equals("path\\to\\file.png", win.toString());
+    Assert.equals("path/to/file.png", win.toNix().toString());
   }
 
   public function testNormalization() {

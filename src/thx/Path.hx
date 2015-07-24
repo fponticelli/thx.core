@@ -5,7 +5,7 @@ using thx.Functions;
 using thx.Strings;
 
 abstract Path(PathType) from PathType to PathType {
-  public static var posixSeparator(default, null) : String = "/";
+  public static var nixSeparator(default, null) : String = "/";
   public static var win32Separator(default, null) : String = "\\";
 
   public var root(get, never) : String;
@@ -24,9 +24,9 @@ abstract Path(PathType) from PathType to PathType {
       }
     }
     return new Path(
-      s.startsWith(posixSeparator) ? posixSeparator : "",
-      s.split(posixSeparator),
-      posixSeparator);
+      s.startsWith(nixSeparator) ? nixSeparator : "",
+      s.split(nixSeparator),
+      nixSeparator);
   }
 
   function new(root : String, path : Array<String>, sep : String) {
@@ -50,8 +50,8 @@ abstract Path(PathType) from PathType to PathType {
   public function isRoot()
     return isAbsolute() && this.path.length == 0;
 
-  public function isPosix()
-    return sep == posixSeparator;
+  public function isNix()
+    return sep == nixSeparator;
 
   public function isWin32()
     return sep == win32Separator;
@@ -77,12 +77,11 @@ abstract Path(PathType) from PathType to PathType {
   public function to(destination : Path) : Path
     return this; // TODO
 
-  public function toPosix() : Path
-    return isPosix() ? this : {
-      root : isRoot() ? posixSeparator : "",
+  public function toNix() : Path
+    return isNix() ? this : {
       root : isAbsolute() ? nixSeparator : "",
       path : this.path.copy(),
-      sep  : posixSeparator
+      sep  : nixSeparator
     };
 
   public function toWin32(?root : String = "C:\\") : Path
