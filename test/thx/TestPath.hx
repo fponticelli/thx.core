@@ -26,11 +26,8 @@ class TestPath {
   }
 
   public function testUp() {
-    var path : Path = "/a/b/c";
-    Assert.equals('/a/b', path.up().toString());
-    Assert.raises(function() {
-      ('/a' : Path).up().up();
-    }, Error);
+    Assert.equals('/a/b', ('/a/b/c/' : Path).up().toString());
+    Assert.equals('/', ('/a' : Path).up().up().toString());
   }
 
   public function testDir() {
@@ -58,11 +55,11 @@ class TestPath {
     var path : Path = "/path/to/file.png",
         win = path.toWin32("C:");
     Assert.equals('/', path.sep);
-    Assert.isTrue(path.isPosix());
-    Assert.isFalse(path.isPosix());
     Assert.equals('\\', win.sep);
+    Assert.isTrue(path.isPosix());
+    Assert.isFalse(path.isWin32());
     Assert.isTrue(win.isWin32());
-    Assert.isFalse(win.isWin32());
+    Assert.isFalse(win.isPosix());
   }
 
   public function testJoin() {
