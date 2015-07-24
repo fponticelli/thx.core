@@ -59,8 +59,11 @@ abstract Path(PathType) from PathType to PathType {
   public function base(?end : String) : String
     return ""; // TODO
 
-  public function ext() : String
-    return ""; // TODO
+  public function ext() : String {
+    if(this.path.length == 0)
+      return '';
+    return this.path.last().afterLast(".");
+  }
 
   public function dir() : String
     return up().toString();
