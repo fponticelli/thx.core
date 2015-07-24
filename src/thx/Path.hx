@@ -91,10 +91,10 @@ abstract Path(PathType) from PathType to PathType {
       sep  : win32Separator
     };
 
-  public function up() : Path
+  public function up(?n = 1) : Path
     return isRoot() ? this : {
       root : this.root,
-      path : this.path.slice(0, -1),
+      path : this.path.slice(0, -n),
       sep  : this.sep
     };
 
