@@ -29,12 +29,17 @@ abstract Path(PathType) from PathType to PathType {
       posixSeparator);
   }
 
-  inline function new(root : String, path : Array<String>, sep : String)
-    this = {
-      root : root,
-      path : path,
-      sep : sep
-    };
+  function new(root : String, path : Array<String>, sep : String) {
+    path = path.compact().filter.fn(_ != ".");
+    path = path.reduce(function(acc : Array<String>, s : String) {
+      if(s == ".." && acc.length > 0 && acc.last() != "..") {
+        return acc.slice(0, -1);
+      } else {
+        return acc.concat([s]);
+      }
+    }, []);
+    this = { root : root, path : path, sep : sep };
+  }
 
   public function isAbsolute()
     return this.root != "";
