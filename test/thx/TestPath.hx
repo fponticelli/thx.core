@@ -65,19 +65,22 @@ class TestPath {
     Assert.isFalse(win.isWin32());
   }
 
-  public function testConcat() {
-    Assert.equals('/a/b/c', (('/a/x' : Path) + ('../b/c' : Path)).toString());
-    Assert.equals('../../b/c', (('../x' : Path) + ('../b/c' : Path)).toString());
-    Assert.raises(function() {
-      ('/a/x' : Path) + ('/b/c' : Path);
-    }, Error);
+  public function testJoin() {
+    Assert.equals('/a/b/c', (('/a/x' : Path) / ('../b/c' : Path)).toString());
+    Assert.equals('b/c', (('../x' : Path) / ('../b/c' : Path)).toString());
+    Assert.equals('/b/c', (('/a/x' : Path) / ('/b/c' : Path)).toString());
+  }
+
+  public function testJoinString() {
+    Assert.equals('/a/b/c', (('/a/b' : Path) / "c").toString());
+    Assert.equals('../../b/c', (('../x' : Path) / "../d").toString());
   }
 
   public function testToWin32ToPosix() {
     var path : Path = "/path/to/file.png",
-        Win32 = path.toWin32("C:");
-    Assert.equals("C:\\path\\to\\file.png", Win32);
-    Assert.equals("/path/to/file.png", Win32.toPosix());
+        win = path.toWin32("C:");
+    Assert.equals("C:\\path\\to\\file.png", win.toString());
+    Assert.equals("/path/to/file.png", win.toPosix().toString());
   }
 
   public function testNormalization() {
