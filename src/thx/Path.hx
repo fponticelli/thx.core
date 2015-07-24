@@ -63,14 +63,14 @@ abstract Path(PathType) from PathType to PathType {
     return ""; // TODO
 
   public function dir() : String
-    return ""; // TODO
+    return up().toString();
 
   public function to(destination : Path) : Path
     return this; // TODO
 
   public function toPosix() : Path
     return isPosix() ? this : {
-      root : isRoot() ? "/" : "",
+      root : isRoot() ? posixSeparator : "",
       path : this.path.copy(),
       sep  : posixSeparator
     };
@@ -93,7 +93,7 @@ abstract Path(PathType) from PathType to PathType {
     return this;
 
   @:op(A/B) public function joinString(other : String) : Path
-    return this;
+    return join(other);
 
   @:to public function toString()
     return !isAbsolute() && this.path.length == 0 ? '.' : this.root + this.path.join(sep);
