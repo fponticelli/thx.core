@@ -89,4 +89,13 @@ class TestPath {
     Assert.equals('/b/c', ('/a/.././b/./c/.' : Path).toString());
     Assert.equals('../../c', ('a/../../../b/../c/.' : Path).toString());
   }
+
+  public function testToString() {
+    Assert.equals('.', ('.' : Path).toString());
+    Assert.equals('..', ('..' : Path).toString());
+    Assert.equals('..', ('../' : Path).toString());
+    Assert.equals('/', ('/' : Path).toString());
+    Assert.equals('/a/a', ('/a/a' : Path).toString());
+    Assert.equals('/a/a', ('/a/a/' : Path).toString());
+  }
 }
