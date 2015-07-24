@@ -1,20 +1,89 @@
 package thx;
 
 import utest.Assert;
+import thx.Error;
 import thx.Path;
 
 class TestPath {
   public function new() { }
 
-  public function testToString() {
-
+  public function testIsRelativeAndIsAbsolute() {
+    var rel : Path = "a/b",
+        abs : Path = "/a/b";
+    Assert.isTrue(rel.isRelative());
+    Assert.isFalse(rel.isAbsolute());
+    Assert.isTrue(abs.isAbsolute());
+    Assert.isFalse(abs.isRelative());
   }
 
-  public function testToNix() {
-
+  public function testTo() {
+    var path1 : Path = "/a/b/c",
+        path2 : Path = "/a/d",
+        path3 : Path = "/x/y/z";
+    Assert.equals('../../d', path1.to(path2).toString());
+    Assert.equals('../../../x/y/z', path1.to(path3).toString());
+    Assert.equals('../b/c', path2.to(path1).toString());
   }
 
-  public function testToWindows() {
-    
+  public function testUp() {
+    var path : Path = "/a/b/c";
+    Assert.equals('/a/b', path.up().toString());
+    Assert.raises(function() {
+      ('/a' : Path).up().up();
+    }, Error);
+  }
+
+  public function testDir() {
+    Assert.equals('/a/b', ("/a/b/c" : Path).dir());
+    Assert.equals('a/b',  ("a/b/c" : Path).dir());
+    Assert.equals('.',  ("a" : Path).dir());
+    Assert.equals('.',  (".." : Path).dir());
+  }
+
+  public function testBase() {
+    var path : Path = "/a/b.c";
+    Assert.equals('b.c', path.base());
+    Assert.equals('b', path.base('.c'));
+    Assert.equals('b.', path.base('c'));
+    Assert.equals('b.c', path.base('.d'));
+  }
+
+  public function testExt() {
+    var path : Path = "";
+    Assert.equals('c', ('/a/b.c' : Path).ext());
+    Assert.equals('', ('/a/b/c' : Path).ext());
+  }
+
+  public function testSep() {
+    var path : Path = "/path/to/file.png",
+        win = path.toWin32("C:");
+    Assert.equals('/', path.sep);
+    Assert.isTrue(path.isPosix());
+    Assert.isFalse(path.isPosix());
+    Assert.equals('\\', Win32.sep);
+    Assert.isTrue(win.isWin32());
+    Assert.isFalse(win.isWin32());
+  }
+
+  public function testConcat() {
+    Assert.equals('/a/b/c', (('/a/x' : Path) + ('../b/c' : Path)).toString());
+    Assert.equals('../../b/c', (('../x' : Path) + ('../b/c' : Path)).toString());
+    Assert.raises(function() {
+      ('/a/x' : Path) + ('/b/c' : Path)
+    }, Error);
+  }
+
+  public function testToWin32ToPosix() {
+    var path : Path = "/path/to/file.png",
+        Win32 = path.toWin32("C:");
+    Assert.equals("C:\\path\\to\\file.png", Win32);
+    Assert.equals("/path/to/file.png", Win32.toPosix());
+  }
+
+  public function testNormalization() {
+    Assert.equals('c', ('a/.././b/../c/.' : Path).toString());
+    Assert.equals('a/c', ('a/./b/../c/.' : Path).toString());
+    Assert.equals('/b/c', ('/a/.././b/./c/.' : Path).toString());
+    Assert.equals('../../c', ('a/../../../b/../c/.' : Path).toString());
   }
 }
