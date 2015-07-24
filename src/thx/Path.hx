@@ -4,6 +4,7 @@ abstract Path(PathType) from PathType to PathType {
   public static var posixSeparator(default, null) : String = "/";
   public static var win32Separator(default, null) : String = "\\";
 
+  public var root(get, never) : String;
   public var sep(get, never) : String;
 
   @:from public static function fromString(s : String) : Path {
@@ -18,13 +19,13 @@ abstract Path(PathType) from PathType to PathType {
     };
 
   public function isAbsolute()
-    return false;
+    return this.root != "";
 
   public function isRelative()
-    return false;
+    return this.root == "";
 
   public function isRoot()
-    return false;
+    return isAbsolute() && this.path.length == 0;
 
   public function isPosix()
     return false;
@@ -72,7 +73,10 @@ abstract Path(PathType) from PathType to PathType {
     return this;
 
   @:to public function toString()
-    return this.root + this.path.join(sep);
+    return !isAbsolute() && this.path.length == 0 ? '.' : this.root + this.path.join(sep);
+
+  function get_root() : String
+    return this.root;
 
   function get_sep() : String
     return this.sep;
