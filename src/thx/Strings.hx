@@ -21,6 +21,19 @@ If `searchFor` is not found, an empty string is returned.
       return value.substring(pos + searchFor.length);
   }
 
+  /**
+  `afterLast` searches for the last occurrance of `searchFor` and returns the text after that.
+
+  If `searchFor` is not found, an empty string is returned.
+  **/
+    public static function afterLast(value : String, searchFor : String) {
+      var pos = value.lastIndexOf(searchFor);
+      if (pos < 0)
+        return "";
+      else
+        return value.substring(pos + searchFor.length);
+    }
+
 /**
 `capitalize` returns a string with the first character convert to upper case.
 **/
