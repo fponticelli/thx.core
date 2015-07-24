@@ -51,10 +51,10 @@ abstract Path(PathType) from PathType to PathType {
     return isAbsolute() && this.path.length == 0;
 
   public function isPosix()
-    return false;
+    return sep == posixSeparator;
 
   public function isWin32()
-    return false;
+    return sep == win32Separator;
 
   public function base(?end : String) : String
     return ""; // TODO
