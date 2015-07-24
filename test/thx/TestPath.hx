@@ -69,7 +69,7 @@ class TestPath {
     Assert.equals('/a/b/c', (('/a/x' : Path) + ('../b/c' : Path)).toString());
     Assert.equals('../../b/c', (('../x' : Path) + ('../b/c' : Path)).toString());
     Assert.raises(function() {
-      ('/a/x' : Path) + ('/b/c' : Path)
+      ('/a/x' : Path) + ('/b/c' : Path);
     }, Error);
   }
 
