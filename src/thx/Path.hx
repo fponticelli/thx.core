@@ -98,14 +98,20 @@ abstract Path(PathType) from PathType to PathType {
       sep  : this.sep
     };
 
-  @:op(A/B) public function join(other : Path) : Path
-    return this;
+  @:op(A/B) public function join(other : Path) : Path {
+    if(other.isAbsolute())
+      return other;
+    return new Path(this.root, this.path.concat(other.get_path()), this.sep);
+  }
 
-  @:op(A/B) public function joinString(other : String) : Path
+  @:op(A/B) inline public function joinString(other : String) : Path
     return join(other);
 
   @:to public function toString()
     return !isAbsolute() && this.path.length == 0 ? '.' : this.root + this.path.join(sep);
+
+  function get_path() : Array<String>
+    return this.path;
 
   function get_root() : String
     return this.root;
