@@ -34,6 +34,8 @@ abstract Path(PathType) from PathType to PathType {
     path = path.reduce(function(acc : Array<String>, s : String) {
       if(s == ".." && acc.length > 0 && acc.last() != "..") {
         return acc.slice(0, -1);
+      } else if(s == ".." && root != "") {
+        return acc;
       } else {
         return acc.concat([s]);
       }
