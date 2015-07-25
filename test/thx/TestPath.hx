@@ -122,4 +122,24 @@ class TestPath {
     Assert.isTrue(p.isValid());
     Assert.equals("C:\\a___b", p.toString());
   }
+
+  public function testRoot() {
+    var root : Path = "C:\\";
+    Assert.isFalse(root.isNix());
+    Assert.isTrue(root.isWin32());
+    Assert.isTrue(root.isAbsolute());
+    Assert.isFalse(root.isRelative());
+    Assert.isTrue(root.isRoot());
+    Assert.equals("C:\\", root.toString());
+    Assert.equals(".", root.asRelative().toString());
+
+    root = "/";
+    Assert.isTrue(root.isNix());
+    Assert.isFalse(root.isWin32());
+    Assert.isTrue(root.isAbsolute());
+    Assert.isFalse(root.isRelative());
+    Assert.isTrue(root.isRoot());
+    Assert.equals("/", root.toString());
+    Assert.equals(".", root.asRelative().toString());
+  }
 }
