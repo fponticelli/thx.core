@@ -86,13 +86,9 @@ abstract Path(PathType) from PathType to PathType {
             .map(function(_) return '..')
             .concat(opath.slice(common.length)),
           this.sep);
-      case [true, true]:
+      case [true, true]   | [false, true]:
         return destination;
-      case [true, false]:
-        return join(destination);
-      case [false, true]:
-        return destination;
-      case [false, false]:
+      case [false, false] | [true, false]:
         return join(destination);
     }
   }
