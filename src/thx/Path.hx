@@ -147,8 +147,11 @@ typedef PathType = {
 /*
 TODO:
 
+ * withFile
+ * sibbling
  * add isValid
  * add normalize (removes/replaces invalid characters)
+ * add normalize to posix
 win32 invalid char
 
 The following reserved characters:
