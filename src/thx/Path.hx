@@ -164,9 +164,6 @@ abstract Path(PathType) from PathType to PathType {
     return new Path(this.root, this.path.concat(other.get_path()), this.sep);
   }
 
-  @:op(A/B) inline public function joinString(other : String) : Path
-    return join(other);
-
   @:to public function toString()
     return !isAbsolute() && this.path.length == 0 ? '.' : this.root + this.path.join(sep);
 
@@ -185,32 +182,3 @@ typedef PathType = {
   path : Array<String>,
   sep : String
 }
-
-/*
-TODO:
-
- * withFile
- * sibbling
- * add isValid
- * add normalize (removes/replaces invalid characters)
- * add normalize to posix
-win32 invalid char
-
-The following reserved characters:
-< (less than)
-> (greater than)
-: (colon)
-" (double quote)
-/ (forward slash)
-\ (backslash)
-| (vertical bar or pipe)
-? (question mark)
-* (asterisk)
-
-CON, PRN, AUX, NUL, COM1, COM2, COM3, COM4, COM5, COM6, COM7, COM8, COM9, LPT1, LPT2, LPT3, LPT4, LPT5, LPT6, LPT7, LPT8, and LPT9.
-
-
-linux invalid chars
-/ \0
-
-*/
