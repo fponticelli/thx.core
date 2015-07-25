@@ -8,10 +8,24 @@ abstract Path(PathType) from PathType to PathType {
   public static var nixSeparator(default, null) : String = "/";
   public static var win32Separator(default, null) : String = "\\";
 
+  static var zero = String.fromCharCode(0);
+  public static function isValidNix(path : Path) : Bool
+    return path.get_path().any.fn(!_.contains("/") && !_.contains(zero));
+
+  static var WIN32_CHARS = ~/[<>:"\/\|?*\0]/g;
+  public static function isValidWin32(path : Path) : Bool
+    return path.get_path().any.fn(!WIN32_CHARS.match(_));
+
+  public static function normalizeNix(path : Path, ?replacement = "_")
+    return path.map.fn(_.replace("/", replacement).replace(zero, ""));
+
+  public static function normalizeWin32(path : Path, ?replacement = "_")
+    return path.map.fn(WIN32_CHARS.replace(_, replacement));
+
   public var root(get, never) : String;
   public var sep(get, never) : String;
 
-  static var WIN32_ROOT = ~/^([a-z]+[:])/i;
+  static var WIN32_ROOT = ~/^([a-z]+[:][\\])/i;
   @:from public static function fromString(s : String) : Path {
     if(s.contains(win32Separator)) {
       if(WIN32_ROOT.match(s)) {
@@ -43,6 +57,9 @@ abstract Path(PathType) from PathType to PathType {
     this = { root : root, path : path, sep : sep };
   }
 
+
+  public function normalize()
+    return isWin32() ? normalizeWin32(this) : normalizeNix(this);
   public function isAbsolute()
     return this.root != "";
 
@@ -57,6 +74,9 @@ abstract Path(PathType) from PathType to PathType {
 
   public function isWin32()
     return sep == win32Separator;
+
+  public function isValid()
+    return isWin32() ? isValidWin32(this) : isValidNix(this);
 
   public function base(?end : String) : String {
     if(this.path.length == 0)
