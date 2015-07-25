@@ -16,13 +16,19 @@ class TestPath {
     Assert.isFalse(abs.isRelative());
   }
 
-  public function testTo() {
+  public function testPathTo() {
     var path1 : Path = "/a/b/c",
         path2 : Path = "/a/d",
-        path3 : Path = "/x/y/z";
-    Assert.equals('../../d', path1.to(path2).toString());
-    Assert.equals('../../../x/y/z', path1.to(path3).toString());
-    Assert.equals('../b/c', path2.to(path1).toString());
+        path3 : Path = "/x/y/z",
+        path4 : Path = "a/b/c",
+        path5 : Path = "x/y/z";
+    Assert.equals('../../d', path1.pathTo(path2).toString());
+    Assert.equals('../../../x/y/z', path1.pathTo(path3).toString());
+    Assert.equals('../b/c', path2.pathTo(path1).toString());
+
+    Assert.equals('/a/b/c/a/b/c', path1.pathTo(path4).toString());
+    Assert.equals('/a/d', path5.pathTo(path2).toString());
+    Assert.equals('a/b/c/x/y/z', path4.pathTo(path5).toString());
   }
 
   public function testUp() {
@@ -96,6 +102,7 @@ class TestPath {
     Assert.equals('.', ('.' : Path).toString());
     Assert.equals('..', ('..' : Path).toString());
     Assert.equals('..', ('../' : Path).toString());
+    Assert.equals('/', ('/../' : Path).toString());
     Assert.equals('/', ('/' : Path).toString());
     Assert.equals('/a/a', ('/a///a' : Path).toString());
     Assert.equals('/a/a', ('/a/a/' : Path).toString());
