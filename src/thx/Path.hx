@@ -57,9 +57,23 @@ abstract Path(PathType) from PathType to PathType {
     this = { root : root, path : path, sep : sep };
   }
 
+  public function asAbsolute(?root = "C:\\")
+    return new Path(
+      this.sep == nixSeparator ? nixSeparator : root,
+      this.path,
+      this.sep
+    );
+
+  public function asRelative()
+    return new Path(
+      "",
+      this.path,
+      this.sep
+    );
 
   public function normalize()
     return isWin32() ? normalizeWin32(this) : normalizeNix(this);
+
   public function isAbsolute()
     return this.root != "";
 
