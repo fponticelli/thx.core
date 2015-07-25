@@ -76,6 +76,13 @@ abstract Path(PathType) from PathType to PathType {
   public function dir() : String
     return up().toString();
 
+  public function map(handler : String -> String) : Path
+    return new Path(
+      this.root,
+      this.path.map(handler),
+      this.sep
+    );
+
   public function pathTo(destination : Path) : Path {
     return switch [isAbsolute(), destination.isAbsolute()] {
       case [true, true] if(this.root == destination.root):
@@ -92,6 +99,9 @@ abstract Path(PathType) from PathType to PathType {
         return join(destination);
     }
   }
+
+  public function sibling(path : Path)
+    return up().join(path);
 
   public function toNix() : Path
     return isNix() ? this : {
