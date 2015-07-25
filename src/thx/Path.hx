@@ -74,8 +74,26 @@ abstract Path(PathType) from PathType to PathType {
   public function dir() : String
     return up().toString();
 
-  public function to(destination : Path) : Path
-    return this; // TODO
+  public function pathTo(destination : Path) : Path {
+    return switch [isAbsolute(), destination.isAbsolute()] {
+      case [true, true] if(this.root == destination.root):
+        var opath = destination.get_path(),
+            common = this.path.commonsFromStart(opath);
+        return new Path("",
+          this.path.slice(0, this.path.length - common.length)
+            .map(function(_) return '..')
+            .concat(opath.slice(common.length)),
+          this.sep);
+      case [true, true]:
+        return destination;
+      case [true, false]:
+        return join(destination);
+      case [false, true]:
+        return destination;
+      case [false, false]:
+        return join(destination);
+    }
+  }
 
   public function toNix() : Path
     return isNix() ? this : {
