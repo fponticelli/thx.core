@@ -53,6 +53,21 @@ Finds the first occurrance of `element` and returns all the elements before it.
     return array.slice(0, array.indexOf(element));
 
 /**
+Traverse both arrays from the beginning and collect the elements that are the
+same. It stops as soon as the arrays differ.
+**/
+  public static function commonsFromStart<T>(self : Array<T>, other : Array<T>, ?equality : T -> T -> Bool) : Array<T> {
+    if(null == equality) equality = F.equality;
+    var count = 0;
+    for(pair in zip(self, other))
+      if(equality(pair._0, pair._1))
+        count++;
+      else
+        break;
+    return self.slice(0, count);
+  }
+
+/**
 Filters out all null elements in the array
 **/
   public static function compact<T>(arr : Array<Null<T>>) : Array<T> {
