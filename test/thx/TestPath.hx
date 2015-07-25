@@ -109,4 +109,17 @@ class TestPath {
     Assert.equals('.', ('a/..' : Path).toString());
     Assert.equals('a', ('a' : Path).toString());
   }
+
+  public function testNormalize() {
+    var p : Path = { root : "/", path : ["a/*>b"], sep : "/" };
+    Assert.isFalse(p.isValid());
+    p = p.normalize();
+    Assert.isTrue(p.isValid());
+    Assert.equals("/a_*>b", p.toString());
+    p = p.toWin32();
+    Assert.isFalse(p.isValid());
+    p = p.normalize();
+    Assert.isTrue(p.isValid());
+    Assert.equals("C:\\a___b", p.toString());
+  }
 }
