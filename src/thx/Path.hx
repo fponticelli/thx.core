@@ -51,7 +51,7 @@ abstract Path(Array<String>) {
     // simplify ..
     return path.reduce(function(acc : Array<String>, s : String) {
       if(s == ".." && acc.length > 0 && acc.last() != "..") {
-        return acc.slice(0, -1);
+        return acc.slice(0, acc.length-1);
       } else if(s == ".." && isAbsolute) {
         return acc;
       } else {
@@ -160,8 +160,9 @@ abstract Path(Array<String>) {
       new Path([win32Separator, isAbsolute() ? root : ""].concat(path));
 
   public function up(?n = 1) : Path
-    return isRoot() ? get_self() :
-    new Path([sep, root].concat(this.slice(2, -n)));
+    return isRoot() ?
+      get_self() :
+      new Path([sep, root].concat(this.slice(2, this.length-n)));
 
   @:op(A/B) public function join(other : Path) : Path {
     if(other.isAbsolute())
