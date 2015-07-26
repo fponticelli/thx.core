@@ -111,7 +111,7 @@ class TestPath {
   }
 
   public function testNormalize() {
-    var p : Path = { root : "/", path : ["a/*>b"], sep : "/" };
+    var p = Path.raw(["/", "/", "a/*>b"]);
     Assert.isFalse(p.isValid());
     p = p.normalize();
     Assert.isTrue(p.isValid());
