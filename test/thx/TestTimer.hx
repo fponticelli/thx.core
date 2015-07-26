@@ -46,7 +46,7 @@ class TestTimer {
   }
 
   public function testCancelDelay() {
-    var done  = Assert.createAsync(),
+    var done  = Assert.createAsync(1000),
         delay = 100,
         stop  = 50;
     var cancel = Timer.delay(function() {
