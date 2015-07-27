@@ -63,6 +63,12 @@ The returned value is a rounded integer.
   inline public static function isOdd(v : Int)
     return v % 2 != 0;
 
+  inline public static function lpad(v : Int, len : Int, ?pad = "0") : String
+    return StringTools.lpad('$v', pad, len);
+
+  inline public static function rpad(v : Int, len : Int, ?pad = "0") : String
+    return StringTools.rpad('$v', pad, len);
+
 /**
 It returns the maximum value between `a` and `b`.
 **/
