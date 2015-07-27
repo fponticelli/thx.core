@@ -45,12 +45,36 @@ using `thx.Dynamics.compare`.
     return Reflect.fields(o);
 
 /**
-Copies the values from the fields of `from` to `to`. If `to` already contains those fields, then it replace
+Merges `first` and `second` using the `combine` strategy to return a merged object. The returned
+object is typed as an object containing all of the fields from both `first` and `second`.
+**/
+  macro public static function merge(first : ExprOf<{}>, second : ExprOf<{}>) {
+    return thx.macro.Objects.mergeImpl(first, second);
+  }
+
+/**
+Copies the values from the fields of `first` and `second` to a new object. If `first` and `second` contain
+fields with the same name, the returned object will use the fields from `second`. Both objects passed
+to this function will be unmodified.
+**/
+  public static function combine(first : {}, second : {}) : {} {
+    var to = {};
+    for(field in Reflect.fields(first)) {
+      Reflect.setField(to, field, Reflect.field(first, field));
+    }
+    for(field in Reflect.fields(second)) {
+      Reflect.setField(to, field, Reflect.field(second, field));
+    }
+    return to;
+  }
+
+/**
+Copies the values from the fields of `from` to `to`. If `to` already contains those fields, then it replaces
 those values with the return value of the function `replacef`.
 
 If not set, `replacef` always returns the value from the `from` object.
 **/
-  public static function merge(to : {}, from : {}, ?replacef : String -> Dynamic -> Dynamic -> Dynamic) : {} {
+  public static function assign(to : {}, from : {}, ?replacef : String -> Dynamic -> Dynamic -> Dynamic) : {} {
     if(null == replacef)
       replacef = function(field : String, oldv : Dynamic, newv : Dynamic) return newv;
     for(field in Reflect.fields(from)) {
@@ -85,7 +109,7 @@ Anonymous objects are entered into and copied recursively.
 Clone the current object by creating a new object and using `copyTo` to clone each field.
 **/
   public static function clone<T:{}>(src : T, cloneInstances = false) : T {
-    return Dynamics.clone(src,cloneInstances);
+    return Dynamics.clone(src, cloneInstances);
   }
 
 
@@ -130,7 +154,7 @@ tuple is the field name and the right value (_1) is the field value.
 **/
   public static function tuples(o : {}): Array<Tuple2<String, Dynamic>>
     return Reflect.fields(o).map(function(key)
-        return new Tuple2(key, Reflect.field(o, key))
+      return new Tuple2(key, Reflect.field(o, key))
     );
 
 /**
@@ -163,9 +187,8 @@ Like `hasPath`, but will return `false` for null values, even if the key exists.
 
 E.g. { key1 : { key2: null } }.hasPathValue("key1.key2") -> returns false
 **/
-  public static function hasPathValue(o : {}, path : String) : Bool {
+  public static function hasPathValue(o : {}, path : String) : Bool
     return getPath(o, path) != null;
-  }
 
 /**
 Gets a value from an object by a string path.  The path can contain object keys and array indices separated
@@ -200,12 +223,12 @@ Inner objects and arrays will be created as needed when traversing the path.
 E.g. { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.2", 4) -> returns { key1: { key2: [ 1, 2, 4 ] } }
 **/
   public static function setPath<T>(o : {}, path : String, val : T) : {} {
-    var paths = path.split(".");
-    var current : Dynamic = o;
+    var paths = path.split("."),
+        current : Dynamic = o;
 
     for (i in 0...(paths.length - 1)) {
-      var currentPath = paths[i];
-      var nextPath = paths[i + 1];
+      var currentPath = paths[i],
+          nextPath = paths[i + 1];
 
       if (currentPath.isDigitsOnly()) {
         var index = Std.parseInt(currentPath);
@@ -253,7 +276,6 @@ E.g. { foo : 'bar' }.removePath('foo') -> returns {}
     // the target field to be removed
     try {
       var sub = paths.reduce(function(existing, nextPath) {
-
         if (nextPath.isDigitsOnly()) {
           var current : Dynamic = existing;
           var index = Std.parseInt(nextPath);

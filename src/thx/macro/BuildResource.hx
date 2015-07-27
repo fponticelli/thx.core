@@ -69,9 +69,9 @@ class BuildResource {
 	static function getResourceObject(cls : ClassType) {
 		var o = {},
 				prefix = resolvePrefix(cls.meta);
-		Objects.merge(o, getContentMeta(cls.meta, cls.module, prefix));
-		Objects.merge(o, getMatchingFile(cls.name, cls.module, formats, prefix));
-		Objects.merge(o, getContentFile(cls.meta, cls.module, prefix));
+		Objects.assign(o, getContentMeta(cls.meta, cls.module, prefix));
+		Objects.assign(o, getMatchingFile(cls.name, cls.module, formats, prefix));
+		Objects.assign(o, getContentFile(cls.meta, cls.module, prefix));
 		return o;
 	}
 
@@ -83,7 +83,7 @@ class BuildResource {
 			.map(function(v) return v.params)
 			.flatten()
 			.map(function(p) return ExprTools.getValue(p))
-			.map(function(n) Objects.merge(o, n));
+			.map(function(n) Objects.assign(o, n));
 		var path = thx.macro.Macros.getModuleDirectory(module);
 		resolveReferences(o, prefix, module, path);
 		return o;
@@ -130,7 +130,7 @@ class BuildResource {
 
 	static function getFromFiles(list : Array<{ file : String, format : String }>, module : String, prefix : String) {
 		var o = {};
-		list.map(function(item) Objects.merge(o, getFromFile(item.file, module, prefix, item.format, false)));
+		list.map(function(item) Objects.assign(o, getFromFile(item.file, module, prefix, item.format, false)));
 		return o;
 	}
 

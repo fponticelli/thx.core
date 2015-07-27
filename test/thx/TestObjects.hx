@@ -3,6 +3,11 @@ package thx;
 import utest.Assert;
 using thx.Objects;
 
+typedef SpecialObject = {
+  ?foo : String,
+  ?bar : String
+};
+
 class TestObjects {
   public function new() { }
 
@@ -27,7 +32,58 @@ class TestObjects {
     var tuples = ob.tuples();
 
     tuples.sort(function(a, b) return Strings.compare(a._0, b._0));
+
     Assert.same([{ _0 : 'a', _1 : 'A'}, { _0 : 'b', _1 : 'B'}], tuples);
+  }
+  public function testAssign() {
+    var o = {'name' : 'Franco', age : 19};
+    var out : Dynamic = thx.Objects.assign(o, { 'foo': 'bar', 'name' : 'Michael', 'age' : 'Two'});
+
+    Assert.same("Michael", out.name);
+    Assert.same("Two", out.age);
+    Assert.same("bar", out.foo);
+
+    for (field in Reflect.fields(out)) {
+      Assert.same(Reflect.field(out, field), Reflect.field(o, field));
+    }
+  }
+
+  public function testCombine() {
+    var o = {'name' : 'Franco', age : 19};
+    var out : Dynamic = thx.Objects.combine(o, { 'foo': 'bar', 'name' : 'Michael', 'age' : 'Two'});
+
+    Assert.same("Michael", out.name);
+    Assert.same("Two", out.age);
+    Assert.same("bar", out.foo);
+    Assert.same("Franco", o.name);
+  }
+
+  public function testMergeWithNullable() {
+    var a : Null<SpecialObject>,
+        options : { sub : Null<SpecialObject> } = { sub : {}};
+
+    a = Objects.merge({
+      foo : 'baz',
+      bar : 'qux'
+    }, options.sub);
+
+    Assert.same('baz', a.foo);
+  }
+
+  public function testMergeWithTypedef() {
+    var to : SpecialObject = {
+          bar : "qux"
+        },
+        from = {
+          foo : "baz",
+          extra : "field"
+        };
+
+    var merged : SpecialObject = thx.Objects.merge(to, from);
+
+    Assert.same(merged.foo, from.foo);
+    Assert.same(merged.bar, to.bar);
+    Assert.same(Reflect.field(merged, 'extra'), 'field');
   }
 
   public function testHasPath() {

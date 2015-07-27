@@ -47,14 +47,14 @@ trace(0.8.clamp(0, 1)); // prints 0.8
 trace(-0.5.clamp(0, 1)); // prints 0.0
 ```
 **/
-  public static inline function clamp<T : Float>(v : T, min : T, max : T) : T
+  public static inline function clamp(v : Float, min : Float, max : Float) : Float
     return v < min ? min : (v > max ? max : v);
 
 /**
 Like clamp but you only pass one argument (`max`) that is used as the upper limit
 and the opposite (additive inverse or `-max`) as the lower limit.
 **/
-  public static inline function clampSym<T : Float>(v : T, max : T) : T
+  public static inline function clampSym(v : Float, max : Float) : Float
     return clamp(v, -max, max);
 
 /**
@@ -133,8 +133,23 @@ Float numbers can sometime introduce tiny errors even for simple operations.
 `nearEquals` compares two floats using a tiny tollerance (last optional
 argument). By default it is defined as `EPSILON`.
 **/
-  inline public static function nearEquals(a : Float, b : Float, ?tollerance = EPSILON)
-    return Math.abs(a - b) <= tollerance;
+  public static function nearEquals(a : Float, b : Float, ?tollerance = EPSILON) {
+    if(Math.isFinite(a)) {
+      #if (php || java)
+      if(!Math.isFinite(b))
+        return false;
+      #end
+      return Math.abs(a - b) <= tollerance;
+    }
+    if(Math.isNaN(a))
+      return Math.isNaN(b);
+    if(Math.isNaN(b))
+      return false;
+    if(!Math.isFinite(b))
+      return (a > 0) == (b > 0);
+    // a is Infinity and b is finite
+    return false;
+  }
 
 /**
 Float numbers can sometime introduce tiny errors even for simple operations.

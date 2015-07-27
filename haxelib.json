@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
-  "releasenote": "Fixed bug in `Floats.nearEqualAngles`.",
-  "version": "0.25.1",
+  "releasenote": "Added thx.Path and more improvements.",
+  "version": "0.30.0",
   "contributors": ["fponticelli"]
 }

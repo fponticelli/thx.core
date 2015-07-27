@@ -2,6 +2,7 @@ package thx;
 
 using StringTools;
 using thx.Arrays;
+import haxe.Utf8;
 
 /**
 Extension methods for strings.
@@ -20,11 +21,24 @@ If `searchFor` is not found, an empty string is returned.
       return value.substring(pos + searchFor.length);
   }
 
+  /**
+  `afterLast` searches for the last occurrance of `searchFor` and returns the text after that.
+
+  If `searchFor` is not found, an empty string is returned.
+  **/
+    public static function afterLast(value : String, searchFor : String) {
+      var pos = value.lastIndexOf(searchFor);
+      if (pos < 0)
+        return "";
+      else
+        return value.substring(pos + searchFor.length);
+    }
+
 /**
 `capitalize` returns a string with the first character convert to upper case.
 **/
   inline public static function capitalize(s : String)
-    return s.substring(0, 1).toUpperCase() + s.substring(1);
+    return Utf8.sub(s, 0, 1).toUpperCase() + Utf8.sub(s, 1, Utf8.length(s) - 1);
 
 /**
 Capitalize the first letter of every word in `value`. If `whiteSpaceOnly` is set to `true`
@@ -57,8 +71,12 @@ For whitespaces in this description, it is intended to be anything that is match
 It compares to string and it returns a negative number if `a` is inferior to `b`, zero if they are the same,
 or otherwise a positive non-sero number.
 **/
-  public static function compare(a : String, b : String)
-    return a < b ? -1 : a > b ? 1 : 0;
+  public inline static function compare(a : String, b : String)
+  #if neko // haxe.Utf8.compare does not work properly: https://github.com/HaxeFoundation/haxe/issues/4396
+    return a < b ? -1 : (a > b ? 1 : 0);
+  #else
+    return Utf8.compare(a, b);
+  #end
 
 /**
 `contains` returns `true` if `s` contains one or more occurrences of `test`.
@@ -69,6 +87,12 @@ or otherwise a positive non-sero number.
   #else
     return s.indexOf(test) >= 0;
   #end
+
+/**
+Return the number of occurances of `test` in `s`.
+**/
+  public static function count(s : String, test : String)
+    return s.split(test).length - 1;
 
 /**
 `contains` returns `true` if `s` contains any of the strings in `tests`
@@ -88,14 +112,21 @@ or otherwise a positive non-sero number.
 of `symbol`.
 
 ```haxe
-'thx is a nice linrary'.ellipsis(7); // returns 'thx is ...'
+'thx is a nice library'.ellipsis(8); // returns 'thx is …'
 ```
 **/
-  public static function ellipsis(s : String, maxlen = 20, symbol = "...")
-    return if (s.length > maxlen)
-      s.substring(0, symbol.length > maxlen - symbol.length ? symbol.length : maxlen - symbol.length) + symbol;
-    else
-      s;
+  public static function ellipsis(s : String, maxlen = 20, symbol = "…") {
+    var sl = Utf8.length(s),
+        symboll = Utf8.length(symbol);
+    if (sl > maxlen) {
+      if(maxlen < symboll ) {
+        return Utf8.sub(symbol, symboll - maxlen, maxlen);
+      } else {
+        return Utf8.sub(s, 0, maxlen - symboll) + symbol;
+      }
+    } else
+      return s;
+  }
 
 /**
 `filter` applies `predicate` character by character to `s` and it returns a filtered
@@ -110,7 +141,7 @@ version of the string.
 Same as `filter` but `predicate` operates on integer char codes instead of string characters.
 **/
   public static function filterCharcode(s : String, predicate : Int -> Bool)
-    return toCharcodeArray(s)
+    return toCharcodes(s)
       .filter(predicate)
       .map(function(i) return String.fromCharCode(i))
       .join('');
@@ -127,6 +158,12 @@ If `searchFor` is not found, an empty string is returned.
     else
       return value.substring(pos);
   }
+
+/**
+Returns `true` if `value` is not `null` and contains at least one character.
+**/
+  public static inline function hasContent(value : String) : Bool
+    return value != null && value.length > 0;
 
 /**
 Works the same as `underscore` but also replaces underscores with whitespaces.
@@ -184,13 +221,13 @@ or case neutral characters.
 Returns a random substring from the `value` argument. The length of such value is by default `1`.
 **/
   public static function random(value : String, length = 1)
-    return value.substr(Math.floor((value.length - length + 1) * Math.random()), length);
+    return Utf8.sub(value, Math.floor((Utf8.length(value) - length + 1) * Math.random()), length);
 
 /**
 It returns an iterator holding in sequence one character of the string per iteration.
 **/
   public static function iterator(s : String) : Iterator<String>
-    return s.split('').iterator();
+    return toArray(s).iterator();
 
 /**
 It maps a string character by character using `callback`.
@@ -231,7 +268,7 @@ If present, it removes the `toremove` text from the beginning of `value`.
 Returns a new string whose characters are in reverse order.
 **/
   public static function reverse(s : String) {
-    var arr = s.split("");
+    var arr = toArray(s);
     arr.reverse();
     return arr.join("");
   }
@@ -269,16 +306,23 @@ Surrounds a string with the contents of `left` and `right`. If `right` is omitte
 /**
 It transforms a string into an `Array` of characters.
 **/
-  inline public static function toArray(s : String)
+  #if !(neko || php) inline #end public static function toArray(s : String) {
+    #if (neko || php)
+    var arr = [];
+    for(i in 0...Utf8.length(s))
+      arr.push(Utf8.sub(s, i, 1));
+    return arr;
+    #else
     return s.split('');
+    #end
+  }
 
 /**
 It transforms a string into an `Array` of char codes in integer format.
 **/
-  inline public static function toCharcodeArray(s : String) : Array<Int>
+  inline public static function toCharcodes(s : String) : Array<Int>
     return map(s, function(s : String)
-        // the cast is required to compile safely to C#
-        return (s.charCodeAt(0) : Int));
+        return Utf8.charCodeAt(s, 0));
 
 /**
 Returns an array of `String` whose elements are equally long (using `len`). If the string `s`
@@ -286,9 +330,9 @@ is not exactly divisible by `len` the last element of the array will be shorter.
 **/
   public static function toChunks(s : String, len : Int) : Array<String> {
     var chunks = [];
-    while(s.length > 0) {
-      chunks.push(s.substring(0, len));
-      s = s.substring(len);
+    while(Utf8.length(s) > 0) {
+      chunks.push(Utf8.sub(s, 0, len));
+      s = Utf8.sub(s, len, Utf8.length(s) - len);
     }
     return chunks;
   }
@@ -384,9 +428,9 @@ Words whose length exceeds `columns` are not split.
 
   static function wrapLine(s : String, columns : Int, indent : String, newline : String) {
     var parts = [],
-      pos = 0,
-      len = s.length,
-      ilen = indent.length;
+        pos   = 0,
+        len   = s.length,
+        ilen  = indent.length;
     columns -= ilen;
     while(true) {
       if(pos + columns >= len - ilen) {

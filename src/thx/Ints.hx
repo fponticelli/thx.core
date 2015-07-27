@@ -8,7 +8,7 @@ using StringTools;
 Extension methods for integer values.
 **/
 class Ints {
-  static var pattern_parse = ~/^[+-]?(\d+|0x[0-9A-F]+)$/i;
+  static var pattern_parse = ~/^\s*[+-]?(\d+|0x[0-9A-F]+)/i;
 /**
 `abs` returns the absolute integer value of the passed argument.
 **/
@@ -81,6 +81,12 @@ Parses a string into an Int value using the provided base. Default base is 16 fo
 **/
   public static function parse(s : String, ?base : Int) : Null<Int> {
     #if js
+    if(null == base) {
+      if(s.substring(0, 2) == "0x")
+        base = 16;
+      else
+        base = 10;
+    }
     var v : Int = untyped __js__("parseInt")(s, base);
     return Math.isNaN(v) ? null : v;
     #elseif flash9
@@ -92,20 +98,20 @@ Parses a string into an Int value using the provided base. Default base is 16 fo
     if(base != null && (base < 2 || base > BASE.length))
       return throw 'invalid base $base, it must be between 2 and ${BASE.length}';
 
-    var negative = if(s.startsWith("+")) {
-      s = s.substring(1);
-      false;
-    } else if(s.startsWith("-")) {
-      s = s.substring(1);
-      true;
-    } else {
-      false;
-    };
+    s = s.trim().toLowerCase();
+
+    var sign = if(s.startsWith("+")) {
+          s = s.substring(1);
+          1;
+        } else if(s.startsWith("-")) {
+          s = s.substring(1);
+          -1;
+        } else {
+          1;
+        };
 
     if(s.length == 0)
       return null;
-
-    s = s.trim().toLowerCase();
 
     if(s.startsWith('0x')) {
       if(null != base && 16 != base)
@@ -116,11 +122,13 @@ Parses a string into an Int value using the provided base. Default base is 16 fo
       base = 10;
     }
 
-    return try ((negative ? -1 : 1) * s.toArray().reduce(function(acc : Int, c : String) {
+    var acc = 0;
+    try s.map(function(c) {
       var i = BASE.indexOf(c);
       if(i < 0 || i >= base) throw 'invalid';
-      return (acc * base) + i;
-    }, 0) : Null<Int>) catch(e : Dynamic) null;
+      acc = (acc * base) + i;
+    }) catch(e : Dynamic) {};
+    return acc * sign;
     #end
   }
 

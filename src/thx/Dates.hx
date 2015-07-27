@@ -222,7 +222,7 @@ Snaps a Date to the next second, minute, hour, day, week, month or year.
 @return The snapped date.
 **/
   inline public static function snapNext(date : Date, period : TimePeriod) : Date
-    return Date.fromTime(Timestamps.snapNext(date.getTime(), period));
+    return (date : Timestamp).snapNext(period);
 
 /**
 Snaps a Date to the previous second, minute, hour, day, week, month or year.
@@ -232,7 +232,7 @@ Snaps a Date to the previous second, minute, hour, day, week, month or year.
 @return The snapped date.
 **/
   inline public static function snapPrev(date : Date, period : TimePeriod) : Date
-    return Date.fromTime(Timestamps.snapPrev(date.getTime(), period));
+    return (date : Timestamp).snapPrev(period);
 
 /**
 Snaps a Date to the nearest second, minute, hour, day, week, month or year.
@@ -242,7 +242,7 @@ Snaps a Date to the nearest second, minute, hour, day, week, month or year.
 @return The snapped date.
 **/
   inline public static function snapTo(date : Date, period : TimePeriod) : Date
-    return Date.fromTime(Timestamps.snapTo(date.getTime(), period));
+    return (date : Timestamp).snapTo(period);
 
 /**
   Get a date relative to the current date, shifting by a set period of time.
@@ -463,166 +463,6 @@ Returns a new date that is modified only by the second.
 **/
   public static function withSecond(date : Date, second : Int)
     return Dates.create(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), second);
-}
-
-/**
-`Timestamps` provides additional extension methods on top of the `Float`
-type representing date values.
-
-```
-using Dates;
-```
-
-@author Jason O'Neil
-@author Franco Ponticelli
-**/
-class Timestamps {
-/**
-Creates a date (timestamp/float format) by using the passed year, month, day, hour, minute, second.
-
-Note that each argument can overflow its normal boundaries (e.g. a month value of `-33` is perfectly valid)
-and the method will normalize that value by offsetting the other arguments by the right amount.
-**/
-    @:noUsing
-    inline public static function create(year : Int, ?month : Int, ?day : Int, ?hour : Int, ?minute : Int, ?second : Int) : Float
-      return Dates.create(year, month, day, hour, minute, second).getTime();
-/**
-Snaps a time to the next second, minute, hour, day, week, month or year.
-
-@param time The unix time in milliseconds.  See date.getTime()
-@param period Either: Second, Minute, Hour, Day, Week, Month or Year
-@return The unix time of the snapped date (In milliseconds).
-**/
-  public static function snapNext(time : Float, period : TimePeriod) : Float
-    return switch period {
-      case Second:
-        c(time, 1000.0);
-      case Minute:
-        c(time, 60000.0);
-      case Hour:
-        c(time, 3600000.0);
-      case Day:
-        var d = Date.fromTime(time);
-        create(d.getFullYear(), d.getMonth(), d.getDate() + 1, 0, 0, 0);
-      case Week:
-        var d = Date.fromTime(time),
-            wd = d.getDay();
-        create(d.getFullYear(), d.getMonth(), d.getDate() + 7 - wd, 0, 0, 0);
-      case Month:
-        var d = Date.fromTime(time);
-        create(d.getFullYear(), d.getMonth() + 1, 1, 0, 0, 0);
-      case Year:
-        var d = Date.fromTime(time);
-        create(d.getFullYear() + 1, 0, 1, 0, 0, 0);
-    };
-
-/**
-Snaps a time to the previous second, minute, hour, day, week, month or year.
-
-@param time The unix time in milliseconds.  See date.getTime()
-@param period Either: Second, Minute, Hour, Day, Week, Month or Year
-@return The unix time of the snapped date (In milliseconds).
-**/
-  public static function snapPrev(time : Float, period : TimePeriod) : Float
-    return switch period {
-      case Second:
-        f(time, 1000.0);
-      case Minute:
-        f(time, 60000.0);
-      case Hour:
-        f(time, 3600000.0);
-      case Day:
-        var d = Date.fromTime(time);
-        create(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0);
-      case Week:
-        var d = Date.fromTime(time),
-            wd = d.getDay();
-        create(d.getFullYear(), d.getMonth(), d.getDate() - wd, 0, 0, 0);
-      case Month:
-        var d = Date.fromTime(time);
-        create(d.getFullYear(), d.getMonth(), 1, 0, 0, 0);
-      case Year:
-        var d = Date.fromTime(time);
-        create(d.getFullYear(), 0, 1, 0, 0, 0);
-    };
-
-/**
-Snaps a time to the nearest second, minute, hour, day, week, month or year.
-
-@param time The unix time in milliseconds.  See date.getTime()
-@param period Either: Second, Minute, Hour, Day, Week, Month or Year
-@return The unix time of the snapped date (In milliseconds).
-**/
-  public static function snapTo(time : Float, period : TimePeriod) : Float
-    return switch period {
-      case Second:
-        r(time, 1000.0);
-      case Minute:
-        r(time, 60000.0);
-      case Hour:
-        r(time, 3600000.0);
-      case Day:
-        var d = Date.fromTime(time),
-            mod = (d.getHours() >= 12) ? 1 : 0;
-        create(d.getFullYear(), d.getMonth(), d.getDate() + mod, 0, 0, 0);
-      case Week:
-        var d = Date.fromTime(time),
-            wd = d.getDay(),
-            mod = wd < 3 ? -wd : (wd > 3 ? 7 - wd : d.getHours() < 12 ? -wd : 7 - wd);
-        create(d.getFullYear(), d.getMonth(), d.getDate() + mod, 0, 0, 0);
-      case Month:
-        var d = Date.fromTime(time),
-            mod = d.getDate() > Math.round(DateTools.getMonthDays(d) / 2) ? 1 : 0;
-        create(d.getFullYear(), d.getMonth() + mod, 1, 0, 0, 0);
-      case Year:
-        var d = Date.fromTime(time),
-            mod = time > new Date(d.getFullYear(), 6, 2, 0, 0, 0).getTime() ? 1 : 0;
-        create(d.getFullYear() + mod, 0, 1, 0, 0, 0);
-    };
-
-/**
-Snaps a time to the given weekday inside the current week.  The time within the day will stay the same.
-
-If you are already on the given day, the date will not change.
-
-@param time The unix time in milliseconds.  See date.getTime()
-@param day Day to snap to.  Either `Sunday`, `Monday`, `Tuesday` etc.
-@param firstDayOfWk The first day of the week.  Default to `Sunday`.
-@return The unix time of the day you have snapped to.
-**/
-  inline public static function snapToWeekDay(time : Float, day : Weekday, ?firstDayOfWk : Weekday) : Float
-    return Dates.snapToWeekDay(Date.fromTime(time), day, firstDayOfWk).getTime();
-
-/**
-Snaps a time to the next given weekday.  The time within the day will stay the same.
-
-If you are already on the given day, the date will not change.
-
-@param time The unix time in milliseconds.  See date.getTime()
-@param day Day to snap to.  Either `Sunday`, `Monday`, `Tuesday` etc.
-@return The unix time of the day you have snapped to.
-**/
-  inline public static function snapNextWeekDay(time : Float, day : Weekday) : Float
-    return Dates.snapNextWeekDay(Date.fromTime(time), day).getTime();
-
-/**
-Snaps a time to the previous given weekday.  The time within the day will stay the same.
-
-If you are already on the given day, the date will not change.
-
-@param time The unix time in milliseconds.  See date.getTime()
-@param day Day to snap to.  Either `Sunday`, `Monday`, `Tuesday` etc.
-@return The unix time of the day you have snapped to.
-**/
-  inline public static function snapPrevWeekDay(time : Float, day : Weekday) : Float
-    return Dates.snapPrevWeekDay(Date.fromTime(time), day).getTime();
-
-  inline static function r(t : Float, v : Float)
-    return Math.fround(t / v) * v;
-  inline static function f(t : Float, v : Float)
-    return Math.ffloor(t / v) * v;
-  inline static function c(t : Float, v : Float)
-    return Math.fceil(t / v) * v;
 }
 
 enum TimePeriod {

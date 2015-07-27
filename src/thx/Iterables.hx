@@ -30,17 +30,18 @@ Refer to `thx.Arrays.eachPair`.
     return Iterators.eachPair(it.iterator(), handler);
 
 /**
+It compares the lengths and elements of two given iterables and returns `true` if they match.
+
+An optional equality function can be passed as the last argument. If not provided, strict equality is adopted.
+**/
+  public inline static function equals<T>(a : Iterable<T>, b : Iterable<T>, ?equality : T -> T -> Bool)
+    return Iterators.equals(a.iterator(), b.iterator(), equality);
+
+/**
 Refer to `Array.filter`.
 **/
   public inline static function filter<T>(it : Iterable<T>, predicate : T -> Bool) : Array<T>
     return Iterators.filter(it.iterator(), predicate);
-
-/**
-Refer to `thx.Arrays.filterPluck`.
-**/
-  @:deprecated("`filterPluck` is deprecated, use `using thx.Functions` and `it.filter.fn(...)` instead.")
-  macro public static function filterPluck<T>(it : ExprOf<Iterable<T>>, expr : ExprOf<Bool>) : ExprOf<Array<T>>
-    return macro thx.Iterators.filter($e{it}.iterator(), function(_) return $e{expr});
 
 /**
 Refer to `thx.Arrays.find`.
@@ -59,6 +60,12 @@ Refer to `thx.Arrays.last`.
 **/
   public inline static function last<T, TFind>(it : Iterable<T>) : Null<T>
     return Iterators.last(it.iterator());
+
+/**
+Returns `true` if the iterable contains at least one element.
+**/
+  inline public static function hasElements<T>(it : Iterable<T>) : Bool
+    return Iterators.hasElements(it.iterator());
 
 /**
 Refer to `thx.Arrays.isEmpty`.
@@ -97,29 +104,15 @@ Refer to `thx.Arrays.order`.
     return Iterators.order(it.iterator(), sort);
 
 /**
-Refer to `thx.Arrays.pluck`.
-**/
-  @:deprecated("`pluck` is deprecated, use `using thx.Functions` and `it.map.fn(...)` instead.")
-  macro public static function pluck<T, TOut>(it : ExprOf<Iterable<T>>, expr : ExprOf<TOut>) : ExprOf<Array<TOut>>
-    return macro thx.Iterators.map($e{it}.iterator(), function(_) return ${expr});
-
-/**
-Refer to `thx.Arrays.plucki`.
-**/
-  @:deprecated("`plucki` is deprecated, use `using thx.Functions` and `it.mapi.fn(...)` instead.")
-  macro public static function plucki<T, TOut>(it : ExprOf<Iterable<T>>, expr : ExprOf<TOut>) : ExprOf<Array<TOut>>
-    return macro thx.Iterators.mapi($e{it}.iterator(), function(_, i) return ${expr});
-
-/**
 Refer to `thx.Arrays.reduce`.
 **/
-  public inline static function reduce<TItem, TAcc>(it : Iterable<TItem>, callback : TAcc -> TItem -> TAcc, initial : TAcc) : TAcc
+  public inline static function reduce<TElement, TAcc>(it : Iterable<TElement>, callback : TAcc -> TElement -> TAcc, initial : TAcc) : TAcc
     return Iterators.reduce(it.iterator(), callback, initial);
 
 /**
 Refer to `thx.Arrays.reducei`.
 **/
-  public inline static function reducei<TItem, TAcc>(it : Iterable<TItem>, callback : TAcc -> TItem -> Int -> TAcc, initial : TAcc) : TAcc
+  public inline static function reducei<TElement, TAcc>(it : Iterable<TElement>, callback : TAcc -> TElement -> Int -> TAcc, initial : TAcc) : TAcc
     return Iterators.reducei(it.iterator(), callback, initial);
 
 /**

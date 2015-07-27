@@ -18,6 +18,12 @@ Identifiers can also be getters and methods (both are invoked only once and only
 **/
 class Nulls {
 /**
+Assigns the value `alt` to `value` if found `null`;
+**/
+  macro public static function ensure<T>(value : ExprOf<Null<T>>, alt : ExprOf<T>)
+    return try macro if(null == $e{value}) $e{value} = $e{alt};
+
+/**
 `exists` is synonymous of `notNull`.
 **/
   macro public static function exists(value : Expr)

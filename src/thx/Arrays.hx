@@ -24,8 +24,8 @@ Finds the first occurrance of `element` and returns all the elements after it.
 Checks if `predicate` returns true for all elements in the array.
 **/
   public static function all<T>(arr : Array<T>, predicate : T -> Bool) {
-    for(item in arr)
-      if(!predicate(item))
+    for(element in arr)
+      if(!predicate(element))
         return false;
     return true;
   }
@@ -34,8 +34,8 @@ Checks if `predicate` returns true for all elements in the array.
 Checks if `predicate` returns true for at least one element in the array.
 **/
   public static function any<T>(arr : Array<T>, predicate : T -> Bool) {
-    for(item in arr)
-      if(predicate(item))
+    for(element in arr)
+      if(predicate(element))
         return true;
     return false;
   }
@@ -53,14 +53,29 @@ Finds the first occurrance of `element` and returns all the elements before it.
     return array.slice(0, array.indexOf(element));
 
 /**
+Traverse both arrays from the beginning and collect the elements that are the
+same. It stops as soon as the arrays differ.
+**/
+  public static function commonsFromStart<T>(self : Array<T>, other : Array<T>, ?equality : T -> T -> Bool) : Array<T> {
+    if(null == equality) equality = F.equality;
+    var count = 0;
+    for(pair in zip(self, other))
+      if(equality(pair._0, pair._1))
+        count++;
+      else
+        break;
+    return self.slice(0, count);
+  }
+
+/**
 Filters out all null elements in the array
 **/
   public static function compact<T>(arr : Array<Null<T>>) : Array<T> {
 #if cs
     var result : Array<T> = [];
-    for(item in arr) {
-      if(null != item)
-        result.push(item);
+    for(element in arr) {
+      if(null != element)
+        result.push(element);
     }
     return result;
 #else
@@ -242,26 +257,13 @@ Filters out all `null` values from an array.
   }
 
 /**
-Filters an array according to the expression passed as the second argument.
-
-The special symbol `_` refers to the current item.
-
-```haxe
-[1,2,3,4,5,6].filterPluck(_ % 2 != 0); // holds [1,3,5]
-```
-**/
-  @:deprecated("`filterPluck` is deprecated, use `using thx.Functions` and `arr.filter.fn(...)` instead.")
-  macro public static function filterPluck<T>(a : ExprOf<Array<T>>, expr : ExprOf<Bool>) : ExprOf<Array<T>>
-    return macro $e{a}.filter(function(_) return $e{expr});
-
-/**
 It returns the first element of the array that matches the provided predicate function.
 If none is found it returns null.
 **/
   public static function find<T>(array : Array<T>, predicate : T -> Bool) : Null<T> {
-    for(item in array)
-      if(predicate(item))
-        return item;
+    for(element in array)
+      if(predicate(element))
+        return element;
     return null;
   }
 
@@ -279,21 +281,6 @@ If none is found it returns null.
     }
     return null;
   }
-
-/**
-It returns the same result as `find`, but using the pluck strategy.
-**/
-  @:deprecated("`findPluck` is deprecated, use `using thx.Functions` and `arr.find.fn(...)` instead.")
-  macro public static function findPluck<T>(a : ExprOf<Array<T>>, expr : ExprOf<Bool>) : ExprOf<Array<T>>
-    return macro $e{a}.find(function(_) return $e{expr});
-
-
-/**
-It returns the same result as `findLast`, but using the pluck strategy.
-**/
-  @:deprecated("`findPluckLast` is deprecated, use `using thx.Functions` and `arr.findLast.fn(...)` instead.")
-  macro public static function findPluckLast<T>(a : ExprOf<Array<T>>, expr : ExprOf<Bool>) : ExprOf<Array<T>>
-    return macro $e{a}.findLast(function(_) return $e{expr});
 
 /**
 It returns the first element of the array or null if the array is empty.
@@ -325,7 +312,7 @@ trace(arr); // [1,2,3,4,5,6,7,8,9]
     #if js
       return untyped __js__('Array.prototype.concat.apply')([], array);
     #else
-      return reduce(array, function(acc : Array<T>, item) return acc.concat(item), []);
+      return reduce(array, function(acc : Array<T>, element) return acc.concat(element), []);
     #end
 
 /**
@@ -379,16 +366,22 @@ In case you have to use a type that is not supported by `@:generic`, please use 
 #end
 
 /**
+Returns `true` if the array contains at least one element.
+**/
+  inline public static function hasElements<T>(array : Array<T>) : Bool
+    return null != array && array.length > 0;
+
+/**
 It returns the first element of the array or null if the array is empty. Same as `first`.
 **/
   inline public static function head<T>(array : Array<T>) : Null<T>
     return array[0];
 
 /**
-`ifEmpty` returns `value` if it is neither `null` or empty, otherwise it returns `alt`
+`ifEmpty` returns `array` if it is neither `null` or empty, otherwise it returns `alt`
 **/
-  public static inline function ifEmpty<T>(value : Array<T>, alt : Array<T>) : Array<T>
-    return null != value && 0 != value.length ? value : alt;
+  public static inline function ifEmpty<T>(array : Array<T>, alt : Array<T>) : Array<T>
+    return null != array && 0 != array.length ? array : alt;
 
 /**
 Get all the elements from `array` except for the last one.
@@ -400,7 +393,7 @@ Get all the elements from `array` except for the last one.
 It returns `true` if the array contains zero elements.
 **/
   inline public static function isEmpty<T>(array : Array<T>) : Bool
-    return array.length == 0;
+    return null == array || array.length == 0;
 
 /**
 It returns the last element of the array or null if the array is empty.
@@ -440,66 +433,12 @@ It works the same as `Array.sort()` but doesn't change the original array and re
   }
 
 /**
-Uses the pluck strategy to order an array.  Returns an ordered copy of the Array, leaving the original unchanged.
-Arguments for pluck are `_0` and `_1`.
-**/
-  @:deprecated("`orderPluck` is deprecated, use `using thx.Functions` and `arr.order.fn(...)` instead.")
-  macro public static function orderPluck<T>(array : ExprOf<Array<T>>, expr : ExprOf<Int>)
-    return macro $e{array}.order(function(_0, _1) return $e{expr});
-
-/**
-The method works like a normal `Array.map()` but instead of passing a function that
-receives an item, you can pass an expression that defines how to access to a member
-of the item itself.
-
-The following two examples are equivalent:
-
-```
-var r = ['a','b','c'].pluck(_.toUppercase());
-trace(r); // ['A','B','C']
-```
-
-Alternative using traditional `map`.
-
-```
-var r = ['a','b','c'].map(function(o) return o.toUppercase());
-trace(r); // ['A','B','C']
-```
-
-You can use `pluck` on any kind of field including properties and methods and you can even pass arguments
-to such functions.
-
-The method is a macro method that guarantees that the correct types and identifiers are used.
-**/
-  @:deprecated("`pluck` is deprecated, use `using thx.Functions` and `arr.map.fn(...)` instead.")
-  macro public static function pluck<T, TOut>(a : ExprOf<Array<T>>, expr : ExprOf<TOut>) : ExprOf<Array<TOut>>
-    return macro $e{a}.map(function(_) return ${expr});
-
-/**
-Same as pluck but in reverse order.
-**/
-  @:deprecated("`pluckRight` is deprecated, use `using thx.Functions` and `arr.mapRight.fn(...)` instead.")
-  macro public static function pluckRight<T, TOut>(a : ExprOf<Array<T>>, expr : ExprOf<TOut>) : ExprOf<Array<TOut>>
-    return macro thx.Arrays.mapRight($e{a}, function(_) return ${expr});
-
-/**
-Like `pluck` but with an extra argument `i` that can be used to infer the index of the iteration.
-
-```haxe
-var r = arr.plucki(_.increment(i)); // where increment() is a method of the elements in the array
-```
-**/
-  @:deprecated("`plucki` is deprecated, use `using thx.Functions` and `arr.mapi.fn(...)` instead.")
-  macro public static function plucki<T>(a : ExprOf<Array<T>>, expr : Expr)
-    return macro thx.Arrays.mapi($e{a}, function(_, i) return ${expr});
-
-/**
 Pulls from `array` all occurrences of all the elements in `toRemove`. Optionally takes
 an `equality` function.
 **/
   public static function pull<T>(array : Array<T>, toRemove : Array<T>, ?equality : T -> T -> Bool)
-    for(item in toRemove)
-      removeAll(array, item, equality);
+    for(element in toRemove)
+      removeAll(array, element, equality);
 
 /**
 It pushes `value` onto the array if `condition` is true. Also returns the array for easy method chaining.
@@ -513,7 +452,7 @@ It pushes `value` onto the array if `condition` is true. Also returns the array 
 /**
 It applies a function against an accumulator and each value of the array (from left-to-right) has to reduce it to a single value.
 **/
-  inline public static function reduce<TItem, TAcc>(array : Array<TItem>, callback : TAcc -> TItem -> TAcc, initial : TAcc) : TAcc {
+  inline public static function reduce<TElement, TAcc>(array : Array<TElement>, callback : TAcc -> TElement -> TAcc, initial : TAcc) : TAcc {
     #if js
       return untyped array.reduce(callback, initial);
     #else
@@ -538,7 +477,7 @@ Note that the function changes the passed array and doesn't create a copy.
 /**
 It is the same as `reduce` but with the extra integer `index` parameter.
 **/
-  inline public static function reducei<TItem, TAcc>(array : Array<TItem>, callback : TAcc -> TItem -> Int -> TAcc, initial : TAcc) : TAcc {
+  inline public static function reducei<TElement, TAcc>(array : Array<TElement>, callback : TAcc -> TElement -> Int -> TAcc, initial : TAcc) : TAcc {
     #if js
       return untyped array.reduce(callback, initial);
     #else
@@ -550,7 +489,7 @@ It is the same as `reduce` but with the extra integer `index` parameter.
 /**
 Same as `Arrays.reduce` but starting from the last element and traversing to the first
 **/
-  inline public static function reduceRight<TItem, TAcc>(array : Array<TItem>, callback : TAcc -> TItem -> TAcc, initial : TAcc) : TAcc {
+  inline public static function reduceRight<TElement, TAcc>(array : Array<TElement>, callback : TAcc -> TElement -> TAcc, initial : TAcc) : TAcc {
     var i = array.length;
     while(--i >= 0)
       initial = callback(initial, array[i]);
@@ -614,13 +553,6 @@ It returns a copy of the array with its elements randomly changed in position.
     }
     return array;
   }
-
-/**
-Uses the plcuk strategy to sort an array. Arguments for pluck are `_0` and `_1`.
-**/
-  @:deprecated("`sortPluck` is deprecated, use `using thx.Functions` and `arr.sort.fn(...)` instead.")
-  macro public static function sortPluck<T>(array : ExprOf<Array<T>>, expr : ExprOf<Int>)
-    return macro $e{array}.sort(function(_0, _1) return $e{expr});
 
 /**
 Splits an array into a specified number of `parts`.
