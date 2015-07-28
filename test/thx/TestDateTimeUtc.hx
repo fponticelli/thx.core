@@ -65,7 +65,7 @@ class TestDateTimeUtc {
 
   public function testFromToFloat() {
     var d : Float = date;
-    Assert.isTrue(date == d);
+    Assert.isTrue(date == d, 'expected $date but got ${(d : DateTimeUtc)}');
   }
 
   public function testFromToString() {

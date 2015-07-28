@@ -13,12 +13,7 @@ abstract DateTimeUtc(Int64) {
   static var millisPerDay = millisPerHour * 24;
 
   static var ticksPerMillisecond : Int = 10000;
-  // static var ticksPerSecond : Int = ticksPerMillisecond * 1000;
-  // static var ticksPerMinute : Int = ticksPerSecond * 60;
-  // static var ticksPerHour : Int = ticksPerMinute * 60;
-  // static var ticksPerDay : Int = ticksPerHour * 24;
-
-  static var ticksPerMillisecondI64 : Int64 = Int64.ofInt(10000);
+  static var ticksPerMillisecondI64 : Int64 = Int64.ofInt(ticksPerMillisecond);
   static var ticksPerSecondI64 : Int64 = ticksPerMillisecondI64 * 1000;
   static var ticksPerMinuteI64 : Int64 = ticksPerSecondI64 * 60;
   static var ticksPerHourI64 : Int64 = ticksPerMinuteI64 * 60;
@@ -29,10 +24,8 @@ abstract DateTimeUtc(Int64) {
   static var daysPer100Years : Int = daysPer4Years * 25 - 1;  // 36524
   static var daysPer400Years : Int = daysPer100Years * 4 + 1; // 146097
 
-  static var daysTo1601 : Int = daysPer400Years * 4;          // 584388
-  static var daysTo1899 : Int = daysPer400Years * 4 + daysPer100Years * 3 - 367;
   static var daysTo1970 : Int = daysPer400Years * 4 + daysPer100Years * 3 + daysPer4Years * 17 + daysPerYear; // 719,162
-  static var daysTo10000 : Int = daysPer400Years * 25 - 366;  // 3652059
+  static var unixEpochTicks : Int64 = ticksPerDayI64 * daysTo1970;
 
   static var DATE_PART_YEAR = 0;
   static var DATE_PART_DAY_OF_YEAR = 1;
@@ -49,8 +42,10 @@ abstract DateTimeUtc(Int64) {
       date.getHours(), date.getMinutes(), date.getSeconds(), 0);
 
   // TODO optimize
-  @:from public static function fromFloat(timestamp : Float) : DateTimeUtc
-    return fromDate(Date.fromTime(timestamp));
+  @:from public static function fromFloat(timestamp : Float) : DateTimeUtc {
+    trace(timestamp/millisPerHour);
+    return new DateTimeUtc(unixEpochTicks).addHours(timestamp/millisPerHour);
+  }
 
   // TODO optimize
   @:from public static function fromString(s : String) : DateTimeUtc {
