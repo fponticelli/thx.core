@@ -57,4 +57,19 @@ class TestDateTimeUtc {
     Assert.isFalse(tomorrow < date);
     Assert.isFalse(tomorrow <= date);
   }
+
+  public function testFromToDate() {
+    var d : Date = date;
+    Assert.isTrue(date == d);
+  }
+
+  public function testFromToFloat() {
+    var d : Float = date;
+    Assert.isTrue(date == d);
+  }
+
+  public function testFromToString() {
+    var d : String = date;
+    Assert.isTrue(date == d);
+  }
 }

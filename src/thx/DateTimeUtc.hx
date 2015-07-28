@@ -4,6 +4,7 @@ using haxe.Int64;
 import thx.Month;
 import thx.Weekday;
 using thx.Ints;
+using thx.Strings;
 
 abstract DateTimeUtc(Int64) {
   static var ticksPerMillisecond : Int = 10000;
@@ -36,6 +37,39 @@ abstract DateTimeUtc(Int64) {
   static var daysToMonth365 = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365];
   static var daysToMonth366 = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366];
 
+  // TODO optimize
+  @:from public static function fromDate(date : Date) : DateTimeUtc
+    return create(
+      date.getFullYear(), date.getMonth() + 1, date.getDate(),
+      date.getHours(), date.getMinutes(), date.getSeconds(), 0);
+
+  // TODO optimize
+  @:from public static function fromFloat(timestamp : Float) : DateTimeUtc
+    return fromDate(Date.fromTime(timestamp));
+
+  // TODO optimize
+  @:from public static function fromString(s : String) : DateTimeUtc {
+    var pattern = ~/^(\d+)[-](\d{2})[-](\d{2}) (\d{2})[:](\d{2})[:](\d{2})(?:\.(\d+))?$/;
+    if(!pattern.match(s))
+      throw new thx.Error('unable to parse DateTimeUtc string: "$s"');
+    var smillis = pattern.matched(7),
+        millis = 0;
+    if(null != smillis) {
+      smillis = "1" + smillis.rpad("0", 3).substring(0, 3);
+      millis = Std.parseInt(smillis) - 1000;
+    }
+
+    return create(
+        Std.parseInt(pattern.matched(1)),
+        Std.parseInt(pattern.matched(2)),
+        Std.parseInt(pattern.matched(3)),
+        Std.parseInt(pattern.matched(4)),
+        Std.parseInt(pattern.matched(5)),
+        Std.parseInt(pattern.matched(6)),
+        millis
+      );
+  }
+
   public static function create(year : Int, month : Int, day : Int, hour : Int, minute : Int, second : Int, millisecond : Int) {
     var ticks = dateToTicks(year, month, day) +
                 timeToTicks(hour, minute, second) +
@@ -55,7 +89,7 @@ abstract DateTimeUtc(Int64) {
       var n = y * 365 + Std.int(y / 4) - Std.int(y / 100) + Std.int(y / 400) + days[month - 1] + day - 1;
       return n * ticksPerDayI64;
     }
-    return throw new Error('bad year/month $year/$month');
+    return throw new Error('bad year/month/day $year/$month/$day');
   }
 
   public static function timeToTicks(hour : Int, minute : Int, second : Int) : Int64 {
@@ -114,7 +148,7 @@ abstract DateTimeUtc(Int64) {
   inline public function new(ticks : Int64)
     this = ticks;
 
-  inline function get_ticks() : Int64
+  @:to inline function get_ticks() : Int64
     return this;
 
   inline function get_year() : Int
@@ -159,16 +193,13 @@ abstract DateTimeUtc(Int64) {
   // addMonths
   // addSeconds
   // addYears
-
   // compare
   // equals
   // fromString
   // fromDate
   // fromFloat
-
   // date formatting (with thx.culture)
-
-  // operators: + (timespan), ==
+  // operators: + (timespan)
 
   public function compare(other : DateTimeUtc) : Int {
     if(ticks > other.ticks)
@@ -194,6 +225,14 @@ abstract DateTimeUtc(Int64) {
   @:op(A<=B) inline public function lessEquals(other : DateTimeUtc) : Bool
     return compare(other.ticks) <= 0;
 
-  inline public function toString() : String
+  // TODO optimize
+  @:to inline public function toFloat() : Float
+    return toDate().getTime();
+
+  // TODO optimize
+  @:to inline public function toDate() : Date
+    return new Date(year, month - 1, day, hour, minute, second);
+
+  @:to inline public function toString() : String
     return '$year-${month.lpad(2)}-${day.lpad(2)} ${hour.lpad(2)}:${minute.lpad(2)}:${second.lpad(2)}.$millisecond';
 }
