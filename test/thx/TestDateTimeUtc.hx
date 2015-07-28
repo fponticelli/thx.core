@@ -8,6 +8,7 @@ import thx.Weekday;
 
 class TestDateTimeUtc {
   var date = DateTimeUtc.create(2015, 7, 26, 21, 40, 30, 0);
+  var tomorrow = DateTimeUtc.create(2015, 7, 27, 21, 40, 30, 0);
   // var future = DateTimeUtc.create(9999, 7, 26, 21, 40, 30, 0);
   // var past = DateTimeUtc.create(1, 7, 26, 21, 40, 30, 0);
   //var farFuture = DateTimeUtc.create(20600, 7, 26, 21, 40, 30, 0);
@@ -37,5 +38,23 @@ class TestDateTimeUtc {
 
   public function testEquals() {
     Assert.isTrue(date == date);
+    Assert.isTrue(date != tomorrow);
+  }
+
+  public function testCompare() {
+    Assert.isFalse(date > date);
+    Assert.isTrue(date >= date);
+    Assert.isFalse(date < date);
+    Assert.isTrue(date <= date);
+
+    Assert.isFalse(date > tomorrow);
+    Assert.isFalse(date >= tomorrow);
+    Assert.isTrue(date < tomorrow);
+    Assert.isTrue(date <= tomorrow);
+
+    Assert.isTrue(tomorrow > date);
+    Assert.isTrue(tomorrow >= date);
+    Assert.isFalse(tomorrow < date);
+    Assert.isFalse(tomorrow <= date);
   }
 }

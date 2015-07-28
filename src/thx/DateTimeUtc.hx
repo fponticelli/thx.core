@@ -170,8 +170,29 @@ abstract DateTimeUtc(Int64) {
 
   // operators: + (timespan), ==
 
+  public function compare(other : DateTimeUtc) : Int {
+    if(ticks > other.ticks)
+      return 1;
+    else if(ticks < other.ticks)
+      return -1;
+    else
+      return 0;
+  }
+
   @:op(A==B) inline public function equals(other : DateTimeUtc)
     return ticks == other.ticks;
+
+  @:op(A>B) inline public function greater(other : DateTimeUtc) : Bool
+    return compare(other.ticks) > 0;
+
+  @:op(A>=B) inline public function greaterEquals(other : DateTimeUtc) : Bool
+    return compare(other.ticks) >= 0;
+
+  @:op(A<B) inline public function less(other : DateTimeUtc) : Bool
+    return compare(other.ticks) < 0;
+
+  @:op(A<=B) inline public function lessEquals(other : DateTimeUtc) : Bool
+    return compare(other.ticks) <= 0;
 
   inline public function toString() : String
     return '$year-${month.lpad(2)}-${day.lpad(2)} ${hour.lpad(2)}:${minute.lpad(2)}:${second.lpad(2)}.$millisecond';
