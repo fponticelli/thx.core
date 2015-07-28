@@ -72,4 +72,17 @@ class TestDateTimeUtc {
     var d : String = date;
     Assert.isTrue(date == d);
   }
+
+  public function testAdd() {
+    var d = date
+              .addYears(2)
+              .addMonths(9)
+              .addDays(10)
+              .addHours(7)
+              .addMinutes(10)
+              .addSeconds(7)
+              .addMilliseconds(7),
+        e = "2018-05-07 04:50:37.007";
+    Assert.isTrue(d == "2018-05-07 04:50:37.007", 'expected $e but got $d');
+  }
 }

@@ -7,6 +7,11 @@ using thx.Ints;
 using thx.Strings;
 
 abstract DateTimeUtc(Int64) {
+  static var millisPerSecond = 1000;
+  static var millisPerMinute = millisPerSecond * 60;
+  static var millisPerHour = millisPerMinute * 60;
+  static var millisPerDay = millisPerHour * 24;
+
   static var ticksPerMillisecond : Int = 10000;
   // static var ticksPerSecond : Int = ticksPerMillisecond * 1000;
   // static var ticksPerMinute : Int = ticksPerSecond * 60;
@@ -185,21 +190,52 @@ abstract DateTimeUtc(Int64) {
   // timeOfDay
 
   // add
-  // addHours
-  // addMilliseconds
   // addNanoseconds
   // addTicks
-  // addMinutes
   // addMonths
-  // addSeconds
   // addYears
-  // compare
-  // equals
-  // fromString
-  // fromDate
-  // fromFloat
-  // date formatting (with thx.culture)
   // operators: + (timespan)
+
+  function addScaled(value : Float, scale : Int) {
+    var millis : Int64 = Std.int(value * scale + (value >= 0? 0.5: -0.5));
+    return new DateTimeUtc(ticks + millis * ticksPerMillisecondI64);
+  }
+
+  inline public function addDays(days : Float)
+    return addScaled(days, millisPerDay);
+
+  inline public function addHours(hours : Float)
+    return addScaled(hours, millisPerHour);
+
+  inline public function addMilliseconds(milliseconds : Int)
+    return addScaled(milliseconds, 1);
+
+  inline public function addMinutes(minutes : Float)
+    return addScaled(minutes, millisPerMinute);
+
+  public function addMonths(months : Int) {
+    var y = getDatePart(DATE_PART_YEAR),
+        m = getDatePart(DATE_PART_MONTH),
+        d = getDatePart(DATE_PART_DAY),
+        i = m - 1 + months;
+    if(i >= 0) {
+      m = Std.int(i % 12 + 1);
+      y = Std.int(y + i / 12);
+    } else {
+      m = Std.int(12 + (i + 1) % 12);
+      y = Std.int(y + (i - 11) / 12);
+    }
+    var days = daysInMonth(y, m);
+    if(d > days)
+      d = days;
+    return new DateTimeUtc(dateToTicks(y, m, d) + ticks % ticksPerDayI64);
+  }
+
+  inline public function addSeconds(seconds : Float)
+    return addScaled(seconds, millisPerSecond);
+
+  inline public function addYears(years : Int)
+    return addMonths(years * 12);
 
   public function compare(other : DateTimeUtc) : Int {
     if(ticks > other.ticks)
