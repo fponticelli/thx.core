@@ -104,32 +104,32 @@ The default `period` range is `Second`.
       units = -units;
     var min = jump(self, period, -units),
         max = jump(self, period, units);
-    return lessEqual(min, other) && moreEqual(max, other);
+    return lessEquals(min, other) && greaterEquals(max, other);
   }
 
 /**
 Returns `true` if the `self` date is greater than `other`.
 **/
-  inline public static function more(self : Date, other : Date) : Bool
-    return self.getTime() > other.getTime();
+  inline public static function greater(self : Date, other : Date) : Bool
+    return compare(self, other) > 0;
 
 /**
 Returns `true` if the `self` date is lesser than `other`.
 **/
   inline public static function less(self : Date, other : Date) : Bool
-    return self.getTime() < other.getTime();
+    return compare(self, other) < 0;
 
 /**
 Returns `true` if the `self` date is greater than or equal to `other`.
 **/
-  inline public static function moreEqual(self : Date, other : Date) : Bool
-    return self.getTime() >= other.getTime();
+  inline public static function greaterEquals(self : Date, other : Date) : Bool
+    return compare(self, other) >= 0;
 
 /**
 Returns `true` if the `self` date is lesser than or equal to `other`.
 **/
-  inline public static function lessEqual(self : Date, other : Date) : Bool
-    return self.getTime() <= other.getTime();
+  inline public static function lessEquals(self : Date, other : Date) : Bool
+    return compare(self, other) <= 0;
 
 /**
 Tells if a year is a leap year.
