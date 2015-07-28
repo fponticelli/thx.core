@@ -42,10 +42,8 @@ abstract DateTimeUtc(Int64) {
       date.getHours(), date.getMinutes(), date.getSeconds(), 0);
 
   // TODO optimize
-  @:from public static function fromFloat(timestamp : Float) : DateTimeUtc {
-    trace(timestamp/millisPerHour);
-    return new DateTimeUtc(unixEpochTicks).addHours(timestamp/millisPerHour);
-  }
+  @:from public static function fromFloat(timestamp : Float) : DateTimeUtc
+    return fromDate(Date.fromTime(timestamp));
 
   // TODO optimize
   @:from public static function fromString(s : String) : DateTimeUtc {
