@@ -5,14 +5,12 @@ import thx.Month;
 import thx.Weekday;
 using thx.Ints;
 
-abstract DateTime(Int64) {
-  static var ticksMask = Int64.make(0x3FFFFFFF, 0xFFFFFFFF);
-
+abstract DateTimeUtc(Int64) {
   static var ticksPerMillisecond : Int = 10000;
-  static var ticksPerSecond : Int = ticksPerMillisecond * 1000;
-  static var ticksPerMinute : Int = ticksPerSecond * 60;
-  static var ticksPerHour : Int = ticksPerMinute * 60;
-  static var ticksPerDay : Int = ticksPerHour * 24;
+  // static var ticksPerSecond : Int = ticksPerMillisecond * 1000;
+  // static var ticksPerMinute : Int = ticksPerSecond * 60;
+  // static var ticksPerHour : Int = ticksPerMinute * 60;
+  // static var ticksPerDay : Int = ticksPerHour * 24;
 
   static var ticksPerMillisecondI64 : Int64 = Int64.ofInt(10000);
   static var ticksPerSecondI64 : Int64 = ticksPerMillisecondI64 * 1000;
@@ -43,12 +41,13 @@ abstract DateTime(Int64) {
                 timeToTicks(hour, minute, second) +
                 (millisecond * ticksPerMillisecond);
 
-    return new DateTime(ticks);
+    return new DateTimeUtc(ticks);
   }
 
   public static function isLeapYear(year : Int) : Bool
     return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
 
+  // TODO remove validation and allow for overflowing values
   public static function dateToTicks(year : Int, month : Int, day : Int) : Int64 {
     var days = isLeapYear(year) ? daysToMonth366: daysToMonth365;
     if(day >= 1 && day <= days[month] - days[month - 1]) {
@@ -60,11 +59,8 @@ abstract DateTime(Int64) {
   }
 
   public static function timeToTicks(hour : Int, minute : Int, second : Int) : Int64 {
-    if(hour >= 0 && hour < 24 && minute >= 0 && minute < 60 && second >=0 && second < 60) {
-      var totalSeconds = (hour * 3600 : Int64) + minute * 60 + second;
-      return totalSeconds * ticksPerSecondI64;
-    }
-    return throw new Error('invalid time range $hour:$minute:$second');
+    var totalSeconds = (hour * 3600 : Int64) + minute * 60 + second;
+    return totalSeconds * ticksPerSecondI64;
   }
 
   public static function daysInMonth(year : Int, month : Int) : Int {
@@ -73,7 +69,6 @@ abstract DateTime(Int64) {
   }
 
   private function getDatePart(part : Int) {
-    var ticks = internalTicks;
     var n = ticks.div(ticksPerDayI64).toInt();
     var y400 = Std.int(n / daysPer400Years);
     n -= y400 * daysPer400Years;
@@ -102,6 +97,8 @@ abstract DateTime(Int64) {
     return n - days[m - 1] + 1;
   }
 
+  public var ticks(get, never) : Int64;
+
   public var year(get, never) : Int;
   public var month(get, never) : Month;
   public var day(get, never) : Int;
@@ -114,13 +111,11 @@ abstract DateTime(Int64) {
   public var dayOfYear(get, never) : Int;
   public var millisecond(get, never) : Int;
 
-  var internalTicks(get, never) : Int64;
-
   inline public function new(ticks : Int64)
     this = ticks;
 
-  inline function get_internalTicks() : Int64
-    return this & ticksMask;
+  inline function get_ticks() : Int64
+    return this;
 
   inline function get_year() : Int
     return getDatePart(DATE_PART_YEAR);
@@ -132,22 +127,51 @@ abstract DateTime(Int64) {
     return getDatePart(DATE_PART_DAY);
 
   inline function get_hour() : Int
-    return internalTicks.div(ticksPerHourI64).mod(24).toInt();
+    return ticks.div(ticksPerHourI64).mod(24).toInt();
 
   inline function get_minute() : Int
-    return internalTicks.div(ticksPerMinuteI64).mod(60).toInt();
+    return ticks.div(ticksPerMinuteI64).mod(60).toInt();
 
   inline function get_dayOfWeek() : Weekday
-    return internalTicks.div(ticksPerDayI64).add(1).mod(7).toInt();
+    return ticks.div(ticksPerDayI64).add(1).mod(7).toInt();
 
   inline function get_dayOfYear() : Int
     return getDatePart(DATE_PART_DAY_OF_YEAR);
 
   inline function get_millisecond() : Int
-    return internalTicks.div(ticksPerMillisecondI64).mod(1000).toInt();
+    return ticks.div(ticksPerMillisecondI64).mod(1000).toInt();
 
   inline function get_second() : Int
-    return internalTicks.div(ticksPerSecondI64).mod(60).toInt();
+    return ticks.div(ticksPerSecondI64).mod(60).toInt();
+
+  // nanosecond
+  // timeticks
+  // now
+  // today
+  // timeOfDay
+
+  // add
+  // addHours
+  // addMilliseconds
+  // addNanoseconds
+  // addTicks
+  // addMinutes
+  // addMonths
+  // addSeconds
+  // addYears
+
+  // compare
+  // equals
+  // fromString
+  // fromDate
+  // fromFloat
+
+  // date formatting (with thx.culture)
+
+  // operators: + (timespan), ==
+
+  @:op(A==B) inline public function equals(other : DateTimeUtc)
+    return ticks == other.ticks;
 
   inline public function toString() : String
     return '$year-${month.lpad(2)}-${day.lpad(2)} ${hour.lpad(2)}:${minute.lpad(2)}:${second.lpad(2)}.$millisecond';

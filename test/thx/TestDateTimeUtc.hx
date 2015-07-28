@@ -2,16 +2,16 @@ package thx;
 
 import haxe.PosInfos;
 import utest.Assert;
-using thx.DateTime;
+using thx.DateTimeUtc;
 import thx.Month;
 import thx.Weekday;
 
-class TestDateTime {
-  var date = DateTime.create(2015, 7, 26, 21, 40, 30, 0);
-  // var future = DateTime.create(9999, 7, 26, 21, 40, 30, 0);
-  // var past = DateTime.create(1, 7, 26, 21, 40, 30, 0);
-  // var farFuture = DateTime.create(14600, 7, 26, 21, 40, 30, 0);
-  // var longPast = DateTime.create(-1, 7, 26, 21, 40, 30, 0);
+class TestDateTimeUtc {
+  var date = DateTimeUtc.create(2015, 7, 26, 21, 40, 30, 0);
+  // var future = DateTimeUtc.create(9999, 7, 26, 21, 40, 30, 0);
+  // var past = DateTimeUtc.create(1, 7, 26, 21, 40, 30, 0);
+  //var farFuture = DateTimeUtc.create(20600, 7, 26, 21, 40, 30, 0);
+  //var longPast = DateTimeUtc.create(-10000, 7, 26, 21, 40, 30, 0);
 
   public function new() {}
 
@@ -31,7 +31,11 @@ class TestDateTime {
     Assert.equals('2015-07-26 21:40:30.0', date.toString());
     // Assert.equals('2015-07-26 21:40:30.0', future.toString());
     // Assert.equals('2015-07-26 21:40:30.0', past.toString());
-    // Assert.equals('2015-07-26 21:40:30.0', farFuture.toString());
-    // Assert.equals('2015-07-26 21:40:30.0', longPast.toString());
+    //Assert.equals('2015-07-26 21:40:30.0', farFuture.toString());
+    //Assert.equals('2015-07-26 21:40:30.0', longPast.toString());
+  }
+
+  public function testEquals() {
+    Assert.isTrue(date == date);
   }
 }
