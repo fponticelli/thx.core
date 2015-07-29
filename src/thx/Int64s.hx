@@ -31,11 +31,11 @@ using haxe.Int64;
 
 import StringTools;
 
-class Int64Helper {
+class Int64s {
   static var base = Int64.ofInt(10);
-  public static function parse(sParam : String) : Int64 {
+  public static function parse(s : String) : Int64 {
     var sIsNegative = false,
-        multiplier = Int64.ofInt(1,
+        multiplier = Int64.ofInt(1),
         current = Int64.ofInt(0);
     if(s.charAt(0) == "-") {
       sIsNegative = true;
