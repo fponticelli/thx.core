@@ -42,7 +42,7 @@ abstract DateTimeUtc(Int64) {
       date.getHours(), date.getMinutes(), date.getSeconds(), 0);
 
   // TODO optimize
-  @:from public static function fromFloat(timestamp : Float) : DateTimeUtc
+  @:from public static function fromTime(timestamp : Float) : DateTimeUtc
     return fromDate(Date.fromTime(timestamp));
 
   // TODO optimize
