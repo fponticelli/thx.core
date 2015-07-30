@@ -24,6 +24,15 @@ abstract Time(Int64) {
   public var totalSeconds(get, never) : Int64;
   public var totalMilliseconds(get, never) : Int64;
 
+  inline public static function fromHours(hours : Int)
+    return create(hours, 0, 0, 0);
+  inline public static function fromMinutes(minutes : Int)
+    return create(0, minutes, 0, 0);
+  inline public static function fromSeconds(seconds : Int)
+    return create(0, 0, seconds, 0);
+  inline public static function fromMilliseconds(milliseconds : Int)
+    return create(0, 0, 0, milliseconds);
+
   public static function timeToTicks(hours : Int, minutes : Int, seconds : Int) : Int64 {
     var totalSeconds = (hours * 3600 : Int64) + minutes * 60 + seconds;
     return totalSeconds * ticksPerSecondI64;
