@@ -23,6 +23,32 @@ abstract Time(Int64) {
     return totalSeconds * ticksPerSecondI64;
   }
 
+  // TODO optimize
+  @:from public static function fromString(s : String) : Time {
+    var pattern = ~/^(\d+)[:](\d{2})[:](\d{2})(?:\.(\d+))?$/;
+    if(!pattern.match(s))
+      throw new thx.Error('unable to parse Time string: "$s"');
+    var smillis = pattern.matched(4),
+        millis = 0;
+    if(null != smillis) {
+      smillis = "1" + smillis.rpad("0", 3).substring(0, 3);
+      millis = Std.parseInt(smillis) - 1000;
+    }
+
+    return create(
+        Std.parseInt(pattern.matched(1)),
+        Std.parseInt(pattern.matched(2)),
+        Std.parseInt(pattern.matched(3)),
+        millis
+      );
+  }
+
+  public static function create(hours : Int, ?minutes : Int = 0, ?seconds : Int = 0, ?milliseconds : Int = 0)
+    return new Time(timeToTicks(hours, minutes, seconds) + (milliseconds * ticksPerMillisecondI64));
+
+  inline public static function createDays(days : Int, ?hours : Int = 0, ?minutes : Int = 0, ?seconds : Int = 0, ?milliseconds : Int = 0)
+    return create(days * 24 + hours, minutes, seconds, milliseconds);
+
   inline public function new(ticks : Int64)
     this = ticks;
 
