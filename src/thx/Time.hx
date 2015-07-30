@@ -67,6 +67,9 @@ abstract Time(Int64) {
   inline public function new(ticks : Int64)
     this = ticks;
 
+  public function abs() : Time
+    return ticks < 0 ? new Time(-ticks) : new Time(ticks);
+
   @:op(-A) inline public function negate()
       return new Time(-ticks);
 
