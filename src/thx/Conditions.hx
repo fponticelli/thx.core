@@ -5,7 +5,10 @@ import haxe.macro.ExprTools;
 using haxe.macro.ExprTools;
 #end
 
-
+/**
+Helper methods to generate conditional statements in a more
+declarative way.
+*/
 class Conditions {
   public macro static function when(cond:Expr,then:Expr)
     return macro if($cond) { $then; };

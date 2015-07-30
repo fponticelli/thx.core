@@ -4,6 +4,24 @@ using thx.Arrays;
 using thx.Functions;
 using thx.Strings;
 
+/**
+`Path` represents a pointer to a directory or file in a filesystem.
+
+It supports both win32 and (U)nix style of path and tries to guess
+the correct type when parsing a string. If the guessing is not possible
+it assumes the Nix style by default.
+
+Path can be conveted from/to styles using `toWin32` and `toNix`.
+
+Path are immutable objects and can combined using the `/` operator.
+
+Ex.
+```haxe
+var p : Path = "/usr/local",
+    dir = "haxe";
+trace(p / dir); // prints "/usr/local/haxe"
+```
+*/
 abstract Path(Array<String>) {
   inline public static var nixSeparator : String = "/";
   inline public static var win32Separator : String = "\\";
@@ -163,6 +181,15 @@ abstract Path(Array<String>) {
     return isRoot() ?
       get_self() :
       new Path([sep, root].concat(this.slice(2, this.length-n)));
+
+  public function withExt(newextension : String) {
+    var oext = ext();
+    if(oext.length > 0)
+      oext = '.$oext';
+    if(newextension.substring(0, 1) == ".")
+      newextension = newextension.substring(1);
+    return sibling('${base(oext)}.$newextension');
+  }
 
   @:op(A/B) public function join(other : Path) : Path {
     if(other.isAbsolute())
