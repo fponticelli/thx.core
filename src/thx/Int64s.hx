@@ -32,6 +32,9 @@ using haxe.Int64;
 import StringTools;
 
 class Int64s {
+  public static function abs(value : Int64)
+    return value < 0 ? -value : value;
+
   public static function compare(a : Int64, b : Int64)
     if(a > b)
       return 1;
@@ -71,6 +74,11 @@ class Int64s {
     }
     return current;
   }
+
+  // TODO
+  //public static function toFloat(i : Int64) : Float {
+  //  return 0.0;
+  //}
 
   public static function fromFloat(f : Float) : Int64 {
     if(Math.isNaN(f) || !Math.isFinite(f))
