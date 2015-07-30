@@ -231,6 +231,11 @@ abstract DateTimeUtc(Int64) {
   @:op(A==B) inline public function equals(other : DateTimeUtc)
     return ticks == other.ticks;
 
+  public function nearEquals(other : DateTimeUtc, span : Time) {
+    var ticks = Int64s.abs(other.ticks - ticks);
+    return ticks <= span.abs().ticks;
+  }
+
   @:op(A>B) inline public function greater(other : DateTimeUtc) : Bool
     return compare(other.ticks) > 0;
 
