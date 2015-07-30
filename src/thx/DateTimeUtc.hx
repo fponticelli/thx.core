@@ -230,14 +230,8 @@ abstract DateTimeUtc(Int64) {
   inline public function addYears(years : Int)
     return addMonths(years * 12);
 
-  public function compare(other : DateTimeUtc) : Int {
-    if(ticks > other.ticks)
-      return 1;
-    else if(ticks < other.ticks)
-      return -1;
-    else
-      return 0;
-  }
+  inline public function compare(other : DateTimeUtc) : Int
+    return Int64s.compare(ticks, other.ticks);
 
   @:op(A==B) inline public function equals(other : DateTimeUtc)
     return ticks == other.ticks;
