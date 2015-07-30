@@ -18,6 +18,12 @@ abstract Time(Int64) {
   public var seconds(get, never) : Int;
   public var milliseconds(get, never) : Int;
 
+  public var totalDays(get, never) : Int64;
+  public var totalHours(get, never) : Int64;
+  public var totalMinutes(get, never) : Int64;
+  public var totalSeconds(get, never) : Int64;
+  public var totalMilliseconds(get, never) : Int64;
+
   public static function timeToTicks(hours : Int, minutes : Int, seconds : Int) : Int64 {
     var totalSeconds = (hours * 3600 : Int64) + minutes * 60 + seconds;
     return totalSeconds * ticksPerSecondI64;
@@ -99,4 +105,19 @@ abstract Time(Int64) {
 
   @:to inline function get_milliseconds() : Int
     return ((this / ticksPerMillisecondI64) % 1000).toInt();
+
+  @:to inline function get_totalDays() : Int64
+    return this / ticksPerDayI64;
+
+  @:to inline function get_totalHours() : Int64
+    return this / ticksPerHourI64;
+
+  @:to inline function get_totalMinutes() : Int64
+    return this / ticksPerMinuteI64;
+
+  @:to inline function get_totalSeconds() : Int64
+    return this / ticksPerSecondI64;
+
+  @:to inline function get_totalMilliseconds() : Int64
+    return this / ticksPerMillisecondI64;
 }
