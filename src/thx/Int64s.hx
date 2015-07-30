@@ -32,6 +32,14 @@ using haxe.Int64;
 import StringTools;
 
 class Int64s {
+  public static function compare(a : Int64, b : Int64)
+    if(a > b)
+      return 1;
+    else if(a < b)
+      return -1;
+    else
+      return 0;
+
   static var base = Int64.ofInt(10);
   public static function parse(s : String) : Int64 {
     var sIsNegative = false,
