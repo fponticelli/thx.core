@@ -60,7 +60,7 @@ class TestDateTimeUtc {
 
   public function testFromToDate() {
     var d : Date = date;
-    Assert.isTrue(date == d);
+    Assert.isTrue(date == d, 'expected $date but got ${(d : DateTimeUtc)}');
   }
 
   public function testFromToFloat() {
@@ -84,5 +84,11 @@ class TestDateTimeUtc {
               .addMilliseconds(7),
         e = "2018-05-07 04:50:37.007";
     Assert.isTrue(d == "2018-05-07 04:50:37.007", 'expected $e but got $d');
+  }
+
+  public function testNow() {
+    var ref = DateHelper.now(),
+        date = DateTimeUtc.now();
+    Assert.isTrue(date.nearEquals(ref, Time.fromMinutes(1)), 'expected $ref but got $date');
   }
 }

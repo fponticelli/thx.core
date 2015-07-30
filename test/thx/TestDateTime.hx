@@ -6,6 +6,5 @@ import thx.DateTime;
 class TestDateTime {
   public function new() {}
 
-  public function testCreate() {
-  }
+  //public function testCreate() { }
 }
