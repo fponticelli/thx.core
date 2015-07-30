@@ -182,6 +182,15 @@ abstract Path(Array<String>) {
       get_self() :
       new Path([sep, root].concat(this.slice(2, this.length-n)));
 
+  public function withExt(newextension : String) {
+    var oext = ext();
+    if(oext.length > 0)
+      oext = '.$oext';
+    if(newextension.substring(0, 1) == ".")
+      newextension = newextension.substring(1);
+    return sibling('${base(oext)}.$newextension');
+  }
+
   @:op(A/B) public function join(other : Path) : Path {
     if(other.isAbsolute())
       return other;
