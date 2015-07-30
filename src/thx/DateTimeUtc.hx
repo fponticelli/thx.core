@@ -68,10 +68,10 @@ abstract DateTimeUtc(Int64) {
       );
   }
 
-  public static function create(year : Int, month : Int, day : Int, hour : Int, minute : Int, second : Int, millisecond : Int) {
+  public static function create(year : Int, month : Int, day : Int, ?hour : Int = 0, ?minute : Int = 0, ?second : Int = 0, ?millisecond : Int = 0) {
     var ticks = dateToTicks(year, month, day) +
-                timeToTicks(hour, minute, second) +
-                (millisecond * ticksPerMillisecond);
+                Time.timeToTicks(hour, minute, second) +
+                (millisecond * ticksPerMillisecondI64);
 
     return new DateTimeUtc(ticks);
   }
@@ -88,11 +88,6 @@ abstract DateTimeUtc(Int64) {
       return n * ticksPerDayI64;
     }
     return throw new Error('bad year/month/day $year/$month/$day');
-  }
-
-  public static function timeToTicks(hour : Int, minute : Int, second : Int) : Int64 {
-    var totalSeconds = (hour * 3600 : Int64) + minute * 60 + second;
-    return totalSeconds * ticksPerSecondI64;
   }
 
   public static function daysInMonth(year : Int, month : Int) : Int {
