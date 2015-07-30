@@ -52,6 +52,33 @@ abstract Time(Int64) {
   inline public function new(ticks : Int64)
     this = ticks;
 
+  @:op(-A) inline public function negate()
+      return new Time(-ticks);
+
+  @:op(A+B) inline public function add(other : Time)
+    return new Time(ticks + other.ticks);
+
+  @:op(A-B) inline public function subtract(other : Time)
+    return new Time(ticks - other.ticks);
+
+  inline public function compare(other : Time)
+    return Int64s.compare(ticks, other.ticks);
+
+  @:op(A==B) inline public function equals(other : Time)
+    return ticks == other.ticks;
+
+  @:op(A>B) inline public function greater(other : Time) : Bool
+    return compare(other.ticks) > 0;
+
+  @:op(A>=B) inline public function greaterEquals(other : Time) : Bool
+    return compare(other.ticks) >= 0;
+
+  @:op(A<B) inline public function less(other : Time) : Bool
+    return compare(other.ticks) < 0;
+
+  @:op(A<=B) inline public function lessEquals(other : Time) : Bool
+    return compare(other.ticks) <= 0;
+
   @:to inline function get_ticks() : Int64
     return this;
 
