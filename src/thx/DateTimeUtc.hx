@@ -35,17 +35,16 @@ abstract DateTimeUtc(Int64) {
   static var daysToMonth365 = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365];
   static var daysToMonth366 = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366];
 
-  // TODO optimize
+  public static function now() : DateTimeUtc {
+    return DateTimeUtc.fromTime(Date.now().getTime());
+  }
+
   @:from public static function fromDate(date : Date) : DateTimeUtc
-    return create(
-      date.getFullYear(), date.getMonth() + 1, date.getDate(),
-      date.getHours(), date.getMinutes(), date.getSeconds(), 0);
+    return fromTime(date.getTime());
 
-  // TODO optimize
   @:from public static function fromTime(timestamp : Float) : DateTimeUtc
-    return fromDate(Date.fromTime(timestamp));
+    return new DateTimeUtc(Int64s.fromFloat(timestamp) * ticksPerMillisecondI64 + unixEpochTicks);
 
-  // TODO optimize
   @:from public static function fromString(s : String) : DateTimeUtc {
     var pattern = ~/^(\d+)[-](\d{2})[-](\d{2}) (\d{2})[:](\d{2})[:](\d{2})(?:\.(\d+))?$/;
     if(!pattern.match(s))
@@ -248,13 +247,13 @@ abstract DateTimeUtc(Int64) {
   @:op(A<=B) inline public function lessEquals(other : DateTimeUtc) : Bool
     return compare(other.ticks) <= 0;
 
-  // TODO optimize
   @:to inline public function toFloat() : Float
     return toDate().getTime();
 
-  // TODO optimize
+  // TODO this requires proper Int64.toDouble to work ...
+  // values are currently rounded to the second
   @:to inline public function toDate() : Date
-    return new Date(year, month - 1, day, hour, minute, second);
+    return Date.fromTime(((ticks - unixEpochTicks) / ticksPerSecondI64).toInt() * 1000.0);
 
   @:to inline public function toString() : String
     return '$year-${month.lpad(2)}-${day.lpad(2)} ${hour.lpad(2)}:${minute.lpad(2)}:${second.lpad(2)}.$millisecond';
