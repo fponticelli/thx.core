@@ -42,6 +42,7 @@ abstract DateTimeUtc(Int64) {
   static var daysToMonth366 = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366];
 
   public static function now() : DateTimeUtc
+// Date.getTime() in C# is broken hence the special case
 #if cs
   return new DateTimeUtc(cs.system.DateTime.Now.ToUniversalTime().Ticks);
 #else
