@@ -183,6 +183,15 @@ abstract DateTimeUtc(Int64) {
   // addYears
   // operators: + (timespan)
 
+  @:op(A+B) inline function add(time : Time)
+    return new DateTimeUtc(ticks + time.ticks);
+
+  @:op(A-B) inline function subtract(time : Time)
+    return new DateTimeUtc(ticks - time.ticks);
+
+  @:op(A-B) inline function subtractDate(date : DateTimeUtc) : Time
+    return new Time(ticks - date.ticks);
+
   function addScaled(value : Float, scale : Int) {
     var millis : Int64 = Std.int(value * scale + (value >= 0? 0.5: -0.5));
     return new DateTimeUtc(ticks + millis * ticksPerMillisecondI64);
