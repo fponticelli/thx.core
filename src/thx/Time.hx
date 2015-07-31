@@ -3,15 +3,10 @@ package thx;
 using haxe.Int64;
 using thx.Ints;
 using thx.Strings;
+import thx.DateTimeUtc.*;
 
+@:access(thx.DateTimeUtc)
 abstract Time(Int64) {
-  static var ticksPerMillisecond : Int = 10000;
-  static var ticksPerMillisecondI64 : Int64 = Int64.ofInt(ticksPerMillisecond);
-  static var ticksPerSecondI64 : Int64 = ticksPerMillisecondI64 * 1000;
-  static var ticksPerMinuteI64 : Int64 = ticksPerSecondI64 * 60;
-  static var ticksPerHourI64 : Int64 = ticksPerMinuteI64 * 60;
-  static var ticksPerDayI64 : Int64 = ticksPerHourI64 * 24;
-
   public var ticks(get, never) : Int64;
   public var days(get, never) : Int;
   public var hours(get, never) : Int;
