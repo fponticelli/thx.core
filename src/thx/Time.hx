@@ -1,6 +1,7 @@
 package thx;
 
 using haxe.Int64;
+using thx.Ints;
 using thx.Strings;
 
 abstract Time(Int64) {
@@ -101,7 +102,7 @@ abstract Time(Int64) {
     return new DateTimeUtc(ticks);
 
   @:to public function toString()
-    return '$totalHours:$minutes:$seconds${milliseconds != 0 ? "."+milliseconds : ""}';
+    return '$totalHours:${minutes.lpad(2, "0")}:${seconds.lpad(2, "0")}${milliseconds != 0 ? "."+milliseconds.lpad(3, "0") : ""}';
 
   @:to inline function get_ticks() : Int64
     return this;

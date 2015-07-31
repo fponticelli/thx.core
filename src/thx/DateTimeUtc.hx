@@ -233,7 +233,7 @@ abstract DateTimeUtc(Int64) {
     return Date.fromTime(((ticks - unixEpochTicks) / ticksPerMillisecondI64).toFloat());
 
   @:to inline public function toString() : String
-    return '$year-${month.lpad(2)}-${day.lpad(2)} ${hour.lpad(2)}:${minute.lpad(2)}:${second.lpad(2)}.$millisecond';
+    return '$year-${month.lpad(2)}-${day.lpad(2)} ${hour.lpad(2)}:${minute.lpad(2)}:${second.lpad(2)}${millisecond != 0 ? "."+millisecond.lpad(3, "0") : ""}';
 
   @:to inline function get_ticks() : Int64
     return this;
