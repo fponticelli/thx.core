@@ -136,49 +136,18 @@ abstract DateTimeUtc(Int64) {
   public var hour(get, never) : Int;
   public var minute(get, never) : Int;
   public var second(get, never) : Int;
+  public var millisecond(get, never) : Int;
 
   public var dayOfWeek(get, never) : Weekday;
   public var dayOfYear(get, never) : Int;
-  public var millisecond(get, never) : Int;
+  public var timeOfDay(get, never) : Time;
 
   inline public function new(ticks : Int64)
     this = ticks;
 
-  @:to inline function get_ticks() : Int64
-    return this;
-
-  inline function get_year() : Int
-    return getDatePart(DATE_PART_YEAR);
-
-  inline function get_month() : Month
-    return getDatePart(DATE_PART_MONTH);
-
-  inline function get_day() : Int
-    return getDatePart(DATE_PART_DAY);
-
-  inline function get_hour() : Int
-    return ticks.div(ticksPerHourI64).mod(24).toInt();
-
-  inline function get_minute() : Int
-    return ticks.div(ticksPerMinuteI64).mod(60).toInt();
-
-  inline function get_dayOfWeek() : Weekday
-    return ticks.div(ticksPerDayI64).add(1).mod(7).toInt();
-
-  inline function get_dayOfYear() : Int
-    return getDatePart(DATE_PART_DAY_OF_YEAR);
-
-  inline function get_millisecond() : Int
-    return ticks.div(ticksPerMillisecondI64).mod(1000).toInt();
-
-  inline function get_second() : Int
-    return ticks.div(ticksPerSecondI64).mod(60).toInt();
-
   // nanosecond
   // timeticks
-  // now
   // today
-  // timeOfDay
 
   // add
   // addNanoseconds
@@ -239,10 +208,10 @@ abstract DateTimeUtc(Int64) {
   inline public function compare(other : DateTimeUtc) : Int
     return Int64s.compare(ticks, other.ticks);
 
-  @:op(A==B) public function equals(other : DateTimeUtc)
+  @:op(A==B) inline public function equals(other : DateTimeUtc)
     return ticks == other.ticks;
 
-  @:op(A!=B) public function notEquals(other : DateTimeUtc)
+  @:op(A!=B) inline public function notEquals(other : DateTimeUtc)
     return ticks != other.ticks;
 
   public function nearEquals(other : DateTimeUtc, span : Time) {
@@ -265,11 +234,42 @@ abstract DateTimeUtc(Int64) {
   @:to inline public function toFloat() : Float
     return toDate().getTime();
 
-  // TODO this requires proper Int64.toDouble to work ...
-  // values are currently rounded to the second
   @:to inline public function toDate() : Date
     return Date.fromTime(((ticks - unixEpochTicks) / ticksPerMillisecondI64).toFloat());
 
   @:to inline public function toString() : String
     return '$year-${month.lpad(2)}-${day.lpad(2)} ${hour.lpad(2)}:${minute.lpad(2)}:${second.lpad(2)}.$millisecond';
+
+  @:to inline function get_ticks() : Int64
+    return this;
+
+  inline function get_year() : Int
+    return getDatePart(DATE_PART_YEAR);
+
+  inline function get_month() : Month
+    return getDatePart(DATE_PART_MONTH);
+
+  inline function get_day() : Int
+    return getDatePart(DATE_PART_DAY);
+
+  inline function get_hour() : Int
+    return ticks.div(ticksPerHourI64).mod(24).toInt();
+
+  inline function get_minute() : Int
+    return ticks.div(ticksPerMinuteI64).mod(60).toInt();
+
+  inline function get_dayOfWeek() : Weekday
+    return ticks.div(ticksPerDayI64).add(1).mod(7).toInt();
+
+  inline function get_dayOfYear() : Int
+    return getDatePart(DATE_PART_DAY_OF_YEAR);
+
+  inline function get_millisecond() : Int
+    return ticks.div(ticksPerMillisecondI64).mod(1000).toInt();
+
+  inline function get_second() : Int
+    return ticks.div(ticksPerSecondI64).mod(60).toInt();
+
+  inline function get_timeOfDay() : Time
+    return new Time(ticks % ticksPerDayI64);
 }
