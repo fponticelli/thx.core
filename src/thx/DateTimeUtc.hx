@@ -7,6 +7,11 @@ using thx.Ints;
 using thx.Int64s;
 using thx.Strings;
 
+// TODO
+// today
+// addMonths
+// addYears
+
 abstract DateTimeUtc(Int64) {
   static var millisPerSecond = 1000;
   static var millisPerMinute = millisPerSecond * 60;
@@ -144,16 +149,6 @@ abstract DateTimeUtc(Int64) {
 
   inline public function new(ticks : Int64)
     this = ticks;
-
-  // nanosecond
-  // timeticks
-  // today
-
-  // add
-  // addNanoseconds
-  // addTicks
-  // addMonths
-  // addYears
 
   @:op(A+B) inline function add(time : Time)
     return new DateTimeUtc(ticks + time.ticks);
