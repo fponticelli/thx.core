@@ -97,8 +97,11 @@ abstract Time(Int64) {
   @:op(A<=B) inline public function lessEquals(other : Time) : Bool
     return compare(other.ticks) <= 0;
 
+  public function toDateTimeUtc()
+    return new DateTimeUtc(ticks);
+
   @:to public function toString()
-    return '$totalHours:$minutes:$seconds.$milliseconds';
+    return '$totalHours:$minutes:$seconds${milliseconds != 0 ? "."+milliseconds : ""}';
 
   @:to inline function get_ticks() : Int64
     return this;
