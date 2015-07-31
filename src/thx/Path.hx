@@ -1,7 +1,6 @@
 package thx;
 
 using thx.Arrays;
-using thx.Functions;
 using thx.Strings;
 
 /**
@@ -27,16 +26,16 @@ abstract Path(Array<String>) {
   inline public static var win32Separator : String = "\\";
 
   public static function isValidNix(path : Path) : Bool
-    return path.path.any.fn(!_.contains("/"));
+    return path.path.any(function(_) return !_.contains("/"));
 
   public static function isValidWin32(path : Path) : Bool
-    return path.path.any.fn(!(~/[<>:\/\|?*"]/g).match(_));
+    return path.path.any(function(_) return !(~/[<>:\/\|?*"]/g).match(_));
 
   public static function normalizeNix(path : Path, ?replacement = "_")
-    return path.map.fn(_.replace("/", replacement));
+    return path.map(function(_) return _.replace("/", replacement));
 
   public static function normalizeWin32(path : Path, ?replacement = "_")
-    return path.map.fn((~/[<>:"\/\|?*]/g).replace(_, replacement));
+    return path.map(function(_) return (~/[<>:"\/\|?*]/g).replace(_, replacement));
 
   public var path(get, never) : Array<String>;
   public var root(get, never) : String;
