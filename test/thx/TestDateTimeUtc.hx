@@ -29,11 +29,11 @@ class TestDateTimeUtc {
   }
 
   public function testToString() {
-    Assert.equals('2015-07-26 21:40:30.0', date.toString());
-    // Assert.equals('2015-07-26 21:40:30.0', future.toString());
-    // Assert.equals('2015-07-26 21:40:30.0', past.toString());
-    //Assert.equals('2015-07-26 21:40:30.0', farFuture.toString());
-    //Assert.equals('2015-07-26 21:40:30.0', longPast.toString());
+    Assert.equals('2015-07-26 21:40:30', date.toString());
+    // Assert.equals('2015-07-26 21:40:30', future.toString());
+    // Assert.equals('2015-07-26 21:40:30', past.toString());
+    //Assert.equals('2015-07-26 21:40:30', farFuture.toString());
+    //Assert.equals('2015-07-26 21:40:30', longPast.toString());
   }
 
   public function testEquals() {

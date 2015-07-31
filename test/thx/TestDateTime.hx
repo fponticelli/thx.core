@@ -6,5 +6,9 @@ import thx.DateTime;
 class TestDateTime {
   public function new() {}
 
-  //public function testCreate() { }
+  public function testLocalOffset() {
+    var ref   = DateHelper.localOffset(),
+        delta = DateTime.localOffset();
+    Assert.isTrue(ref == delta);
+  }
 }
