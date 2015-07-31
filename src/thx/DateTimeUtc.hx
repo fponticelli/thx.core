@@ -37,7 +37,11 @@ abstract DateTimeUtc(Int64) {
   static var daysToMonth366 = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366];
 
   public static function now() : DateTimeUtc
+#if cs
+  return new DateTimeUtc(cs.system.DateTime.Now.ToUniversalTime().Ticks);
+#else
     return fromDate(Date.now());
+#end
 
   @:from public static function fromDate(date : Date) : DateTimeUtc
     return fromTime(date.getTime());
@@ -181,7 +185,6 @@ abstract DateTimeUtc(Int64) {
   // addTicks
   // addMonths
   // addYears
-  // operators: + (timespan)
 
   @:op(A+B) inline function add(time : Time)
     return new DateTimeUtc(ticks + time.ticks);
