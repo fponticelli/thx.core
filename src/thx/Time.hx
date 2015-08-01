@@ -101,6 +101,13 @@ abstract Time(Int64) {
   @:to public function toString()
     return '$totalHours:${minutes.lpad(2, "0")}:${seconds.lpad(2, "0")}${milliseconds != 0 ? "."+milliseconds.lpad(3, "0") : ""}';
 
+  public function toGmtString() {
+    var h = totalHours.toInt().lpad(2, "0");
+    if(ticks >= 0)
+      h = '+$h';
+    return '${h}:${minutes.lpad(2, "0")}';
+  }
+
   @:to inline function get_ticks() : Int64
     return this;
 
