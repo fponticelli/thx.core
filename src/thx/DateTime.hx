@@ -15,7 +15,7 @@ abstract DateTime(Array<Int64>) {
 #else
     var now = DateTimeUtc.now(),
         local = new Date(now.year, now.month - 1, now.day, now.hour, now.minute, now.second),
-        delta = Math.ffloor(now.toFloat() / 1000) * 1000 - local.getTime();
+        delta = Math.ffloor(now.toTime() / 1000) * 1000 - local.getTime();
 
     return new Time(Int64s.fromFloat(delta) * ticksPerMillisecondI64);
 #end

@@ -230,8 +230,8 @@ abstract DateTimeUtc(Int64) {
   @:op(A<=B) inline public function lessEquals(other : DateTimeUtc) : Bool
     return compare(other.ticks) <= 0;
 
-  @:to inline public function toFloat() : Float
     return toDate().getTime();
+  @:to inline public function toTime() : Float
 
   @:to inline public function toDate() : Date
     return Date.fromTime(((ticks - unixEpochTicks) / ticksPerMillisecondI64).toFloat());
