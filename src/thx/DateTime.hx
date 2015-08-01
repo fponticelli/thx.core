@@ -51,11 +51,7 @@ abstract DateTime(Array<Int64>) {
   public var dayOfYear(get, never) : Int;
   public var timeOfDay(get, never) : Time;
 
-  @:to inline function get_utc() : DateTimeUtc
-    return new DateTimeUtc(this[0]);
 
-  @:to inline function get_offset() : Time
-    return new Time(this[1]);
 
   inline public function withOffset(offset : Time)
     return create(utc, offset);
@@ -69,6 +65,12 @@ abstract DateTime(Array<Int64>) {
   //1997-07-16T19:20:30+01:00
   public function toString()
     return '$year-${month.lpad(2)}-${day.lpad(2)}T${hour.lpad(2)}:${minute.lpad(2)}:${second.lpad(2)}${millisecond != 0 ? "."+millisecond.lpad(3, "0") : ""}${offset.toGmtString()}';
+
+  @:to inline function get_utc() : DateTimeUtc
+    return new DateTimeUtc(this[0]);
+
+  @:to inline function get_offset() : Time
+    return new Time(this[1]);
 
   @:to inline function get_ticks() : Int64
     return timeOfDay.ticks;
