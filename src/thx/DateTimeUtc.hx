@@ -56,7 +56,7 @@ abstract DateTimeUtc(Int64) {
     return new DateTimeUtc(Int64s.fromFloat(timestamp).mul(ticksPerMillisecondI64).add(unixEpochTicks));
 
   @:from public static function fromString(s : String) : DateTimeUtc {
-    var pattern = ~/^(\d+)[-](\d{2})[-](\d{2}) (\d{2})[:](\d{2})[:](\d{2})(?:\.(\d+))?$/;
+    var pattern = ~/^(\d+)[-](\d{2})[-](\d{2})[T ](\d{2})[:](\d{2})[:](\d{2})(?:\.(\d+))?Z?$/;
     if(!pattern.match(s))
       throw new thx.Error('unable to parse DateTimeUtc string: "$s"');
     var smillis = pattern.matched(7),
@@ -133,6 +133,9 @@ abstract DateTimeUtc(Int64) {
     return n - days[m - 1] + 1;
   }
 
+  inline public function new(ticks : Int64)
+    this = ticks;
+
   public var ticks(get, never) : Int64;
 
   public var year(get, never) : Int;
@@ -147,9 +150,6 @@ abstract DateTimeUtc(Int64) {
   public var dayOfWeek(get, never) : Weekday;
   public var dayOfYear(get, never) : Int;
   public var timeOfDay(get, never) : Time;
-
-  inline public function new(ticks : Int64)
-    this = ticks;
 
   @:op(A+B) inline function add(time : Time)
     return new DateTimeUtc(ticks + time.ticks);
@@ -233,8 +233,9 @@ abstract DateTimeUtc(Int64) {
   @:to inline public function toDate() : Date
     return Date.fromTime(((ticks - unixEpochTicks) / ticksPerMillisecondI64).toFloat());
 
+  //1997-07-16T19:20:30Z
   @:to inline public function toString() : String
-    return '$year-${month.lpad(2)}-${day.lpad(2)} ${hour.lpad(2)}:${minute.lpad(2)}:${second.lpad(2)}${millisecond != 0 ? "."+millisecond.lpad(3, "0") : ""}';
+    return '$year-${month.lpad(2)}-${day.lpad(2)}T${hour.lpad(2)}:${minute.lpad(2)}:${second.lpad(2)}${millisecond != 0 ? "."+millisecond.lpad(3, "0") : ""}Z';
 
   @:to inline function get_ticks() : Int64
     return this;
