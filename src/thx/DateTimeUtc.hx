@@ -43,7 +43,7 @@ abstract DateTimeUtc(Int64) {
 
   public static function now() : DateTimeUtc
 // Date.getTime() in C# is broken hence the special case
-#if cs
+#if cs // because of issue https://github.com/HaxeFoundation/haxe/issues/4452
     return new DateTimeUtc(cs.system.DateTime.Now.ToUniversalTime().Ticks);
 #else
     return fromDate(Date.now());
@@ -53,7 +53,7 @@ abstract DateTimeUtc(Int64) {
     return new DateTimeUtc(ticks);
 
   @:from public static function fromDate(date : Date) : DateTimeUtc
-#if cs
+#if cs // because of issue https://github.com/HaxeFoundation/haxe/issues/4452
     return new DateTimeUtc(untyped date.date.Ticks);
 #else
     return fromTime(date.getTime());
@@ -238,7 +238,7 @@ abstract DateTimeUtc(Int64) {
     return ticks.sub(unixEpochTicks).div(ticksPerMillisecondI64).toFloat();
 
   @:to inline public function toDate() : Date
-#if cs
+#if cs // because of issue https://github.com/HaxeFoundation/haxe/issues/4452
     return untyped Date.fromNative(new cs.system.DateTime(ticks));
 #else
     return Date.fromTime(toTime());
