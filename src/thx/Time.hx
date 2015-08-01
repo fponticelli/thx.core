@@ -7,18 +7,6 @@ import thx.DateTimeUtc.*;
 
 @:access(thx.DateTimeUtc)
 abstract Time(Int64) {
-  public var ticks(get, never) : Int64;
-  public var days(get, never) : Int;
-  public var hours(get, never) : Int;
-  public var minutes(get, never) : Int;
-  public var seconds(get, never) : Int;
-  public var milliseconds(get, never) : Int;
-
-  public var totalDays(get, never) : Int64;
-  public var totalHours(get, never) : Int64;
-  public var totalMinutes(get, never) : Int64;
-  public var totalSeconds(get, never) : Int64;
-  public var totalMilliseconds(get, never) : Int64;
   public static var zero(default, null) = new Time(0);
 
   inline public static function fromHours(hours : Int)
@@ -63,6 +51,19 @@ abstract Time(Int64) {
 
   inline public function new(ticks : Int64)
     this = ticks;
+
+  public var ticks(get, never) : Int64;
+  public var days(get, never) : Int;
+  public var hours(get, never) : Int;
+  public var minutes(get, never) : Int;
+  public var seconds(get, never) : Int;
+  public var milliseconds(get, never) : Int;
+
+  public var totalDays(get, never) : Int64;
+  public var totalHours(get, never) : Int64;
+  public var totalMinutes(get, never) : Int64;
+  public var totalSeconds(get, never) : Int64;
+  public var totalMilliseconds(get, never) : Int64;
 
   public function abs() : Time
     return ticks < 0 ? new Time(-ticks) : new Time(ticks);
