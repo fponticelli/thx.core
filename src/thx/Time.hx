@@ -19,6 +19,7 @@ abstract Time(Int64) {
   public var totalMinutes(get, never) : Int64;
   public var totalSeconds(get, never) : Int64;
   public var totalMilliseconds(get, never) : Int64;
+  public static var zero(default, null) = new Time(0);
 
   inline public static function fromHours(hours : Int)
     return create(hours, 0, 0, 0);
