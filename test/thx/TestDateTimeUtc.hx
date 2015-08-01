@@ -83,7 +83,7 @@ class TestDateTimeUtc {
   }
 
   public function testNow() {
-    var ref = DateHelper.now(),
+    var ref = DateHelper.nowUtc(),
         date = DateTimeUtc.now();
     Assert.isTrue(date.nearEquals(ref, Time.fromMinutes(1)), 'expected $ref but got $date');
   }

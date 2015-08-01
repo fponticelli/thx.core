@@ -1,9 +1,14 @@
 package thx;
 
 class DateHelper {
-  macro public static function now() {
+  macro public static function nowUtc() {
     var date = DateTimeUtc.now().toString();
     return macro thx.DateTimeUtc.fromString($v{date});
+  }
+
+  macro public static function nowDate() {
+    var date = DateTime.now().toString();
+    return macro thx.DateTime.fromString($v{date});
   }
 
   macro public static function localOffset() {
