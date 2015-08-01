@@ -29,7 +29,7 @@ class TestDateTimeUtc {
   }
 
   public function testToString() {
-    Assert.equals('2015-07-26 21:40:30', date.toString());
+    Assert.equals('2015-07-26T21:40:30Z', date.toString());
     // Assert.equals('2015-07-26 21:40:30', future.toString());
     // Assert.equals('2015-07-26 21:40:30', past.toString());
     //Assert.equals('2015-07-26 21:40:30', farFuture.toString());
