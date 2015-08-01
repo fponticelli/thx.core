@@ -9,10 +9,6 @@ import thx.Weekday;
 class TestDateTimeUtc {
   var date = DateTimeUtc.create(2015, 7, 26, 21, 40, 30, 0);
   var tomorrow = DateTimeUtc.create(2015, 7, 27, 21, 40, 30, 0);
-  // var future = DateTimeUtc.create(9999, 7, 26, 21, 40, 30, 0);
-  // var past = DateTimeUtc.create(1, 7, 26, 21, 40, 30, 0);
-  //var farFuture = DateTimeUtc.create(20600, 7, 26, 21, 40, 30, 0);
-  //var longPast = DateTimeUtc.create(-10000, 7, 26, 21, 40, 30, 0);
 
   public function new() {}
 
@@ -30,10 +26,6 @@ class TestDateTimeUtc {
 
   public function testToString() {
     Assert.equals('2015-07-26T21:40:30Z', date.toString());
-    // Assert.equals('2015-07-26 21:40:30', future.toString());
-    // Assert.equals('2015-07-26 21:40:30', past.toString());
-    //Assert.equals('2015-07-26 21:40:30', farFuture.toString());
-    //Assert.equals('2015-07-26 21:40:30', longPast.toString());
   }
 
   public function testEquals() {
@@ -66,9 +58,10 @@ class TestDateTimeUtc {
     Assert.isTrue(date == d, 'expected $date but got ${(d : DateTimeUtc)}');
   }
 
-  public function testFromToFloat() {
-    var d : Float = date;
-    Assert.isTrue(date == d, 'expected $date but got ${(d : DateTimeUtc)}');
+  public function testFromToTime() {
+    var d : Float = date,
+        date2 : DateTimeUtc = d;
+    Assert.isTrue(date == date2, 'expected $date but got $date2');
   }
 
   public function testFromToString() {
