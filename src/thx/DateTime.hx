@@ -3,6 +3,7 @@ package thx;
 using haxe.Int64;
 using thx.Ints;
 using thx.Int64s;
+using thx.Strings;
 import thx.DateTimeUtc.*;
 
 @:access(thx.DateTimeUtc)
@@ -22,10 +23,46 @@ abstract DateTime(Array<Int64>) {
   }
 
   inline public static function now() : DateTime
-    return create(DateTimeUtc.now(), localOffset());
+    return new DateTime(DateTimeUtc.now(), localOffset());
 
   inline public static function nowUtc() : DateTime
-    return create(DateTimeUtc.now(), Time.zero);
+    return new DateTime(DateTimeUtc.now(), Time.zero);
+
+  @:from public static function fromString(s : String) : DateTime {
+    var pattern = ~/^(\d+)[-](\d{2})[-](\d{2})[T ](\d{2})[:](\d{2})[:](\d{2})(?:\.(\d+))?(Z|([+-]\d{2})[:](\d{2}))?$/;
+    if(!pattern.match(s))
+      throw new thx.Error('unable to parse DateTime string: "$s"');
+    var smillis = pattern.matched(7),
+        millis = 0;
+    if(null != smillis) {
+      smillis = "1" + smillis.rpad("0", 3).substring(0, 3);
+      millis = Std.parseInt(smillis) - 1000;
+    }
+
+    var time = Time.zero,
+        timepart = pattern.matched(8);
+    if(null != timepart && "Z" != timepart) {
+      var hours = pattern.matched(9);
+      if(hours.substring(0, 1) == "+")
+        hours = hours.substring(1);
+      time = Time.create(
+        Std.parseInt(hours),
+        Std.parseInt(pattern.matched(10)),
+        0
+      );
+    }
+
+    return create(
+        Std.parseInt(pattern.matched(1)),
+        Std.parseInt(pattern.matched(2)),
+        Std.parseInt(pattern.matched(3)),
+        Std.parseInt(pattern.matched(4)),
+        Std.parseInt(pattern.matched(5)),
+        Std.parseInt(pattern.matched(6)),
+        millis,
+        time
+      );
+  }
 
   inline static public function create(year : Int, month : Int, day : Int, ?hour : Int = 0, ?minute : Int = 0, ?second : Int = 0, ?millisecond : Int = 0, offset : Time)
     return new DateTime(
