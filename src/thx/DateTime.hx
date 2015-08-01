@@ -21,6 +21,15 @@ abstract DateTime(Array<Int64>) {
 #end
   }
 
+  inline public static function now() : DateTime
+    return create(DateTimeUtc.now(), localOffset());
+
+  inline public static function nowUtc() : DateTime
+    return create(DateTimeUtc.now(), Time.zero);
+
+  inline static public function create(dateTime : DateTimeUtc, offset : Time)
+    return new DateTime([dateTime.ticks, offset.ticks]);
+
   public var utc(get, never) : DateTimeUtc;
   public var offset(get, never) : Time;
 
