@@ -44,7 +44,7 @@ abstract DateTimeUtc(Int64) {
   public static function now() : DateTimeUtc
 // Date.getTime() in C# is broken hence the special case
 #if cs
-  return new DateTimeUtc(cs.system.DateTime.Now.ToUniversalTime().Ticks);
+    return new DateTimeUtc(cs.system.DateTime.Now.ToUniversalTime().Ticks);
 #else
     return fromDate(Date.now());
 #end
@@ -53,7 +53,11 @@ abstract DateTimeUtc(Int64) {
     return new DateTimeUtc(ticks);
 
   @:from public static function fromDate(date : Date) : DateTimeUtc
+#if cs
+    return new DateTimeUtc(untyped date.date.Ticks);
+#else
     return fromTime(date.getTime());
+#end
 
   @:from public static function fromTime(timestamp : Float) : DateTimeUtc
     return new DateTimeUtc(Int64s.fromFloat(timestamp).mul(ticksPerMillisecondI64).add(unixEpochTicks));
@@ -230,11 +234,15 @@ abstract DateTimeUtc(Int64) {
   @:op(A<=B) inline public function lessEquals(other : DateTimeUtc) : Bool
     return compare(other.ticks) <= 0;
 
-    return toDate().getTime();
   @:to inline public function toTime() : Float
+    return ticks.sub(unixEpochTicks).div(ticksPerMillisecondI64).toFloat();
 
   @:to inline public function toDate() : Date
-    return Date.fromTime(((ticks - unixEpochTicks) / ticksPerMillisecondI64).toFloat());
+#if cs
+    return untyped Date.fromNative(new cs.system.DateTime(ticks));
+#else
+    return Date.fromTime(toTime());
+#end
 
   //1997-07-16T19:20:30Z
   @:to inline public function toString() : String
