@@ -25,22 +25,28 @@ abstract Time(Int64) {
 
   // TODO optimize
   @:from public static function fromString(s : String) : Time {
-    var pattern = ~/^(\d+)[:](\d{2})[:](\d{2})(?:\.(\d+))?$/;
+    var pattern = ~/^([-+])?(\d+)[:](\d{2})[:](\d{2})(?:\.(\d+))?$/;
     if(!pattern.match(s))
       throw new thx.Error('unable to parse Time string: "$s"');
-    var smillis = pattern.matched(4),
+    var smillis = pattern.matched(5),
         millis = 0;
     if(null != smillis) {
       smillis = "1" + smillis.rpad("0", 3).substring(0, 3);
       millis = Std.parseInt(smillis) - 1000;
     }
 
-    return create(
-        Std.parseInt(pattern.matched(1)),
+    var time = create(
         Std.parseInt(pattern.matched(2)),
         Std.parseInt(pattern.matched(3)),
+        Std.parseInt(pattern.matched(4)),
         millis
       );
+
+    if(pattern.matched(1) == "-") {
+      return time.negate();
+    } else {
+      return time;
+    }
   }
 
   public static function create(hours : Int, ?minutes : Int = 0, ?seconds : Int = 0, ?milliseconds : Int = 0)
