@@ -27,14 +27,17 @@ abstract DateTime(Array<Int64>) {
   inline public static function nowUtc() : DateTime
     return create(DateTimeUtc.now(), Time.zero);
 
-  inline static public function create(dateTime : DateTimeUtc, offset : Time)
-    return new DateTime([dateTime.ticks, offset.ticks]);
+  inline static public function create(year : Int, month : Int, day : Int, ?hour : Int = 0, ?minute : Int = 0, ?second : Int = 0, ?millisecond : Int = 0, offset : Time)
+    return new DateTime(
+      DateTimeUtc.create(year, month, day, hour, minute, second, millisecond),
+      offset
+    ).subtract(offset);
 
   public var utc(get, never) : DateTimeUtc;
   public var offset(get, never) : Time;
 
-  inline function new(parts : Array<Int64>)
-    this = parts;
+  inline function new(dateTime : DateTimeUtc, offset : Time)
+    this = [dateTime, offset];
 
   public var ticks(get, never) : Int64;
 
@@ -52,34 +55,34 @@ abstract DateTime(Array<Int64>) {
   public var timeOfDay(get, never) : Time;
 
   @:op(A+B) inline function add(time : Time)
-    return DateTime.create(DateTimeUtc.fromInt64(utc.ticks + time.ticks), offset);
+    return new DateTime(DateTimeUtc.fromInt64(utc.ticks + time.ticks), offset);
 
   @:op(A-B) inline function subtract(time : Time)
-    return DateTime.create(DateTimeUtc.fromInt64(utc.ticks - time.ticks), offset);
+    return new DateTime(DateTimeUtc.fromInt64(utc.ticks - time.ticks), offset);
 
   @:op(A-B) inline function subtractDate(date : DateTime) : Time
-    return DateTime.create(DateTimeUtc.fromInt64(utc.ticks + date.utc.ticks), offset);
+    return new DateTime(DateTimeUtc.fromInt64(utc.ticks + date.utc.ticks), offset);
 
   inline public function addDays(days : Float)
-    return DateTime.create(utc.addDays(days), offset);
+    return new DateTime(utc.addDays(days), offset);
 
   inline public function addHours(hours : Float)
-    return DateTime.create(utc.addHours(hours), offset);
+    return new DateTime(utc.addHours(hours), offset);
 
   inline public function addMilliseconds(milliseconds : Int)
-    return DateTime.create(utc.addMilliseconds(milliseconds), offset);
+    return new DateTime(utc.addMilliseconds(milliseconds), offset);
 
   inline public function addMinutes(minutes : Float)
-    return DateTime.create(utc.addMinutes(minutes), offset);
+    return new DateTime(utc.addMinutes(minutes), offset);
 
   inline public function addMonths(months : Int)
-    return DateTime.create(utc.addMonths(months), offset);
+    return new DateTime(utc.addMonths(months), offset);
 
   inline public function addSeconds(seconds : Float)
-    return DateTime.create(utc.addSeconds(seconds), offset);
+    return new DateTime(utc.addSeconds(seconds), offset);
 
   inline public function addYears(years : Int)
-    return DateTime.create(utc.addYears(years), offset);
+    return new DateTime(utc.addYears(years), offset);
 
   // TODO should it consider offset?
   inline public function compare(other : DateTime) : Int
@@ -112,7 +115,7 @@ abstract DateTime(Array<Int64>) {
     return compare(other) <= 0;
 
   inline public function withOffset(offset : Time)
-    return create(utc, offset);
+    return new DateTime(utc, offset);
 
   @:to inline public function toUtc() : DateTimeUtc
     return utc;
@@ -121,7 +124,7 @@ abstract DateTime(Array<Int64>) {
     return new DateTimeUtc(utc.ticks + offset.ticks);
 
   //1997-07-16T19:20:30+01:00
-  public function toString()
+  @:to public function toString()
     return '$year-${month.lpad(2)}-${day.lpad(2)}T${hour.lpad(2)}:${minute.lpad(2)}:${second.lpad(2)}${millisecond != 0 ? "."+millisecond.lpad(3, "0") : ""}${offset.toGmtString()}';
 
   @:to inline function get_utc() : DateTimeUtc
