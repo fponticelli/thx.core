@@ -52,13 +52,13 @@ abstract DateTime(Array<Int64>) {
   public var timeOfDay(get, never) : Time;
 
   @:op(A+B) inline function add(time : Time)
-    return DateTime.create(utc.ticks + time.ticks, offset);
+    return DateTime.create(DateTimeUtc.fromInt64(utc.ticks + time.ticks), offset);
 
   @:op(A-B) inline function subtract(time : Time)
-    return DateTime.create(utc.ticks - time.ticks, offset);
+    return DateTime.create(DateTimeUtc.fromInt64(utc.ticks - time.ticks), offset);
 
   @:op(A-B) inline function subtractDate(date : DateTime) : Time
-    return DateTime.create(utc.ticks + date.utc.ticks, offset);
+    return DateTime.create(DateTimeUtc.fromInt64(utc.ticks + date.utc.ticks), offset);
 
   inline public function addDays(days : Float)
     return DateTime.create(utc.addDays(days), offset);

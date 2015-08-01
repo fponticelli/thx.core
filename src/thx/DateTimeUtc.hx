@@ -49,7 +49,7 @@ abstract DateTimeUtc(Int64) {
     return fromDate(Date.now());
 #end
 
-  @:from public static function fromInt64(ticks : Int64) : DateTimeUtc
+  public static function fromInt64(ticks : Int64) : DateTimeUtc
     return new DateTimeUtc(ticks);
 
   @:from public static function fromDate(date : Date) : DateTimeUtc
