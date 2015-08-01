@@ -1,6 +1,7 @@
 package thx;
 
 using haxe.Int64;
+using thx.Ints;
 using thx.Int64s;
 import thx.DateTimeUtc.*;
 
@@ -31,4 +32,8 @@ abstract DateTime(Array<Int64>) {
 
   @:to inline function get_offset() : Time
     return new Time(this[1]);
+
+  //1997-07-16T19:20:30+01:00
+  public function toString()
+    return '$year-${month.lpad(2)}-${day.lpad(2)}T${hour.lpad(2)}:${minute.lpad(2)}:${second.lpad(2)}${millisecond != 0 ? "."+millisecond.lpad(3, "0") : ""}${offset.toGmtString()}';
 }
