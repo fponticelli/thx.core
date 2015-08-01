@@ -11,7 +11,7 @@ abstract DateTime(Array<Int64>) {
 // Date.getTime() in C# is broken hence the special case
 #if cs
     var now = cs.system.DateTime.Now;
-    return new Time(now.ToUniversalTime().Ticks - now.ToLocalTime().Ticks);
+    return new Time(now.ToLocalTime().Ticks - now.ToUniversalTime().Ticks);
 #else
     var now = DateTimeUtc.now(),
         local = new Date(now.year, now.month - 1, now.day, now.hour, now.minute, now.second),
