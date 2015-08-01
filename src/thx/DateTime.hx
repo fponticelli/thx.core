@@ -10,12 +10,12 @@ abstract DateTime(Array<Int64>) {
   static public function localOffset() : Time {
 // Date.getTime() in C# is broken hence the special case
 #if cs
-      var now = cs.system.DateTime.Now;
-      return new Time(now.ToUniversalTime().Ticks - now.ToLocalTime().Ticks);
+    var now = cs.system.DateTime.Now;
+    return new Time(now.ToUniversalTime().Ticks - now.ToLocalTime().Ticks);
 #else
     var now = DateTimeUtc.now(),
         local = new Date(now.year, now.month - 1, now.day, now.hour, now.minute, now.second),
-        delta = local.getTime() - Math.ffloor(now.toFloat() / 1000) * 1000;
+        delta = Math.ffloor(now.toFloat() / 1000) * 1000 - local.getTime();
 
     return new Time(Int64s.fromFloat(delta) * ticksPerMillisecondI64);
 #end
