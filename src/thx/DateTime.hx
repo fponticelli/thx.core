@@ -51,7 +51,65 @@ abstract DateTime(Array<Int64>) {
   public var dayOfYear(get, never) : Int;
   public var timeOfDay(get, never) : Time;
 
+  @:op(A+B) inline function add(time : Time)
+    return DateTime.create(utc.ticks + time.ticks, offset);
 
+  @:op(A-B) inline function subtract(time : Time)
+    return DateTime.create(utc.ticks - time.ticks, offset);
+
+  @:op(A-B) inline function subtractDate(date : DateTime) : Time
+    return DateTime.create(utc.ticks + date.utc.ticks, offset);
+
+  inline public function addDays(days : Float)
+    return DateTime.create(utc.addDays(days), offset);
+
+  inline public function addHours(hours : Float)
+    return DateTime.create(utc.addHours(hours), offset);
+
+  inline public function addMilliseconds(milliseconds : Int)
+    return DateTime.create(utc.addMilliseconds(milliseconds), offset);
+
+  inline public function addMinutes(minutes : Float)
+    return DateTime.create(utc.addMinutes(minutes), offset);
+
+  inline public function addMonths(months : Int)
+    return DateTime.create(utc.addMonths(months), offset);
+
+  inline public function addSeconds(seconds : Float)
+    return DateTime.create(utc.addSeconds(seconds), offset);
+
+  inline public function addYears(years : Int)
+    return DateTime.create(utc.addYears(years), offset);
+
+  // TODO should it consider offset?
+  inline public function compare(other : DateTime) : Int
+    return Int64s.compare(utc.ticks, other.utc.ticks);
+
+  // TODO should it consider offset?
+  @:op(A==B) inline public function equals(other : DateTime)
+    return utc.ticks == other.utc.ticks;
+
+  // TODO should it consider offset?
+  @:op(A!=B) inline public function notEquals(other : DateTime)
+    return utc.ticks != other.utc.ticks;
+
+  // TODO should it consider offset?
+  public function nearEquals(other : DateTime, span : Time) {
+    var ticks = Int64s.abs(other.utc.ticks - utc.ticks);
+    return ticks <= span.abs().ticks;
+  }
+
+  @:op(A>B) inline public function greater(other : DateTime) : Bool
+    return compare(other) > 0;
+
+  @:op(A>=B) inline public function greaterEquals(other : DateTime) : Bool
+    return compare(other) >= 0;
+
+  @:op(A<B) inline public function less(other : DateTime) : Bool
+    return compare(other) < 0;
+
+  @:op(A<=B) inline public function lessEquals(other : DateTime) : Bool
+    return compare(other) <= 0;
 
   inline public function withOffset(offset : Time)
     return create(utc, offset);
