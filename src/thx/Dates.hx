@@ -465,15 +465,5 @@ Returns a new date that is modified only by the second.
     return Dates.create(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), second);
 }
 
-enum TimePeriod {
-  Second;
-  Minute;
-  Hour;
-  Day;
-  Week;
-  Month;
-  Year;
-}
-
 /** Alias of `DateTools`, included so mixins work with `using thx.Dates;` **/
 typedef HaxeDateTools = DateTools;
