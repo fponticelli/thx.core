@@ -7,11 +7,6 @@ using thx.Ints;
 using thx.Int64s;
 using thx.Strings;
 
-// TODO
-// today
-// addMonths
-// addYears
-
 abstract DateTimeUtc(Int64) {
   static var millisPerSecond = 1000;
   static var millisPerMinute = millisPerSecond * 60;
@@ -85,6 +80,11 @@ abstract DateTimeUtc(Int64) {
   }
 
   public static function create(year : Int, month : Int, day : Int, ?hour : Int = 0, ?minute : Int = 0, ?second : Int = 0, ?millisecond : Int = 0) {
+    second += Math.floor(millisecond / 1000);
+    millisecond = millisecond % 1000;
+    if(millisecond < 0)
+      millisecond += 1000;
+
     var ticks = dateToTicks(year, month, day) +
                 Time.timeToTicks(hour, minute, second) +
                 (millisecond * ticksPerMillisecondI64);
@@ -97,6 +97,48 @@ abstract DateTimeUtc(Int64) {
 
   // TODO remove validation and allow for overflowing values
   public static function dateToTicks(year : Int, month : Int, day : Int) : Int64 {
+    function fixMonthYear() {
+      if(month == 0) {
+        year--;
+        month = 12;
+      } else if(month < 0) {
+        month = -month;
+        var years = Math.ceil(month / 12);
+        year -= years;
+        month = years * 12 - month;
+      } else if(month > 12) {
+        var years = Math.floor(month / 12);
+        year += years;
+        month = month - years * 12;
+      }
+    }
+
+    while(day < 0) {
+      month--;
+      fixMonthYear();
+      day += daysInMonth(year, month);
+    }
+
+    fixMonthYear();
+    var days;
+    while(day > (days = daysInMonth(year, month))) {
+      month++;
+      fixMonthYear();
+      day -= days;
+    }
+
+    if(day == 0) {
+      month -= 1;
+      fixMonthYear();
+      day = daysInMonth(year, month);
+    }
+
+    fixMonthYear();
+
+    return rawDateToTicks(year, month, day);
+  }
+
+  public static function rawDateToTicks(year : Int, month : Int, day : Int) : Int64 {
     var days = isLeapYear(year) ? daysToMonth366: daysToMonth365;
     if(day >= 1 && day <= days[month] - days[month - 1]) {
       var y = year - 1;
@@ -107,7 +149,7 @@ abstract DateTimeUtc(Int64) {
   }
 
   public static function daysInMonth(year : Int, month : Int) : Int {
-    var days = isLeapYear(year)? daysToMonth366 : daysToMonth365;
+    var days = isLeapYear(year) ? daysToMonth366 : daysToMonth365;
     return days[month] - days[month - 1];
   }
 
