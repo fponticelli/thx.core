@@ -126,6 +126,30 @@ Returns true if this date and the `other` date share the same year, month, day, 
   public function sameSecond(other : DateTime)
     return sameMinute(other) && second == other.second;
 
+  public function withYear(year : Int)
+    return create(year, month, day, hour, minute, second, millisecond, offset);
+
+  public function withMonth(month : Int)
+    return create(year, month, day, hour, minute, second, millisecond, offset);
+
+  public function withDay(day : Int)
+    return create(year, month, day, hour, minute, second, millisecond, offset);
+
+  public function withHour(hour : Int)
+    return create(year, month, day, hour, minute, second, millisecond, offset);
+
+  public function withMinute(minute : Int)
+    return create(year, month, day, hour, minute, second, millisecond, offset);
+
+  public function withSecond(second : Int)
+    return create(year, month, day, hour, minute, second, millisecond, offset);
+
+  public function withMillisecond(millisecond : Int)
+    return create(year, month, day, hour, minute, second, millisecond, offset);
+
+  inline public function withOffset(offset : Time)
+    return new DateTime(utc, offset);
+
   @:op(A+B) inline function add(time : Time)
     return new DateTime(DateTimeUtc.fromInt64(utc.ticks + time.ticks), offset);
 
@@ -185,9 +209,6 @@ Returns true if this date and the `other` date share the same year, month, day, 
 
   @:op(A<=B) inline public function lessEquals(other : DateTime) : Bool
     return compare(other) <= 0;
-
-  inline public function withOffset(offset : Time)
-    return new DateTime(utc, offset);
 
   inline public function changeOffset(newoffset : Time)
     return new DateTime(clockDateTime() - newoffset, newoffset);

@@ -196,6 +196,27 @@ Returns true if this date and the `other` date share the same year, month, day, 
   public function sameSecond(other : DateTimeUtc)
     return sameMinute(other) && second == other.second;
 
+  public function withYear(year : Int)
+    return create(year, month, day, hour, minute, second, millisecond);
+
+  public function withMonth(month : Int)
+    return create(year, month, day, hour, minute, second, millisecond);
+
+  public function withDay(day : Int)
+    return create(year, month, day, hour, minute, second, millisecond);
+
+  public function withHour(hour : Int)
+    return create(year, month, day, hour, minute, second, millisecond);
+
+  public function withMinute(minute : Int)
+    return create(year, month, day, hour, minute, second, millisecond);
+
+  public function withSecond(second : Int)
+    return create(year, month, day, hour, minute, second, millisecond);
+
+  public function withMillisecond(millisecond : Int)
+    return create(year, month, day, hour, minute, second, millisecond);
+
   @:op(A+B) inline function add(time : Time)
     return new DateTimeUtc(ticks + time.ticks);
 
