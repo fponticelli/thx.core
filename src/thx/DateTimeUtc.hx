@@ -154,6 +154,7 @@ abstract DateTimeUtc(Int64) {
   public var second(get, never) : Int;
   public var millisecond(get, never) : Int;
 
+  public var monthDays(get, never) : Int;
   public var dayOfWeek(get, never) : Weekday;
   public var dayOfYear(get, never) : Int;
   public var timeOfDay(get, never) : Time;
@@ -280,4 +281,7 @@ abstract DateTimeUtc(Int64) {
 
   inline function get_timeOfDay() : Time
     return new Time(ticks % ticksPerDayI64);
+
+  inline function get_monthDays() : Int
+    return daysInMonth(year, month);
 }

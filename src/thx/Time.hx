@@ -9,6 +9,8 @@ import thx.DateTimeUtc.*;
 abstract Time(Int64) {
   public static var zero(default, null) = new Time(0);
 
+  inline public static function fromDays(days : Int)
+    return create(24 * days, 0, 0, 0);
   inline public static function fromHours(hours : Int)
     return create(hours, 0, 0, 0);
   inline public static function fromMinutes(minutes : Int)
