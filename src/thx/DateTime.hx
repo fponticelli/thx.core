@@ -154,6 +154,9 @@ abstract DateTime(Array<Int64>) {
   inline public function withOffset(offset : Time)
     return new DateTime(utc, offset);
 
+  inline public function changeOffset(newoffset : Time)
+    return new DateTime(clockDateTime() - newoffset, newoffset);
+
   @:to inline public function toUtc() : DateTimeUtc
     return utc;
 
