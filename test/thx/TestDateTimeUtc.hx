@@ -28,6 +28,29 @@ class TestDateTimeUtc {
     Assert.equals('2015-07-26T21:40:30Z', date.toString());
   }
 
+  public function testOverflowing() {
+    Assert.equals("2014-12-01T00:00:00Z", DateTimeUtc.create(2014,12,1).toString());
+    // month overflow
+    Assert.equals("2015-04-01T00:00:00Z", DateTimeUtc.create(2014,16,1).toString());
+    Assert.equals("2013-10-01T00:00:00Z", DateTimeUtc.create(2014,-2,1).toString());
+
+    // day overflow
+    Assert.equals("2014-03-04T00:00:00Z", DateTimeUtc.create(2014,2,32).toString());
+    Assert.equals("2013-12-31T00:00:00Z", DateTimeUtc.create(2014,1,0).toString());
+
+    // hour overflow
+    Assert.equals("2014-02-02T02:00:00Z", DateTimeUtc.create(2014,2,1,26).toString());
+    Assert.equals("2013-12-31T23:00:00Z", DateTimeUtc.create(2014,1,1,-1).toString());
+
+    // minute overflow
+    Assert.equals("2014-02-01T01:05:00Z", DateTimeUtc.create(2014,2,1,0,65).toString());
+    Assert.equals("2013-12-31T23:59:00Z", DateTimeUtc.create(2014,1,1,0,-1).toString());
+
+    // second overflow
+    Assert.equals("2014-02-01T00:01:05Z", DateTimeUtc.create(2014,2,1,0,0,65).toString());
+    Assert.equals("2013-12-31T23:59:59Z", DateTimeUtc.create(2014,1,1,0,0,-1).toString());
+  }
+
   public function testEquals() {
     Assert.isTrue(date == date);
     Assert.isTrue(date != tomorrow);
