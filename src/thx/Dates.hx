@@ -113,6 +113,10 @@ Returns `true` if the `self` date is greater than `other`.
   inline public static function greater(self : Date, other : Date) : Bool
     return compare(self, other) > 0;
 
+  @:deprecated("more is deprecated, use greater instead")
+  inline public static function more(self : Date, other : Date) : Bool
+    return greater(self, other);
+
 /**
 Returns `true` if the `self` date is lesser than `other`.
 **/
@@ -125,11 +129,19 @@ Returns `true` if the `self` date is greater than or equal to `other`.
   inline public static function greaterEquals(self : Date, other : Date) : Bool
     return compare(self, other) >= 0;
 
+  @:deprecated("moreEqual is deprecated, use greaterEquals instead")
+  inline public static function moreEqual(self : Date, other : Date) : Bool
+    return greaterEquals(self, other);
+
 /**
 Returns `true` if the `self` date is lesser than or equal to `other`.
 **/
   inline public static function lessEquals(self : Date, other : Date) : Bool
     return compare(self, other) <= 0;
+
+  @:deprecated("lessEqual is deprecated, use lessEquals instead")
+  inline public static function lessEqual(self : Date, other : Date) : Bool
+    return lessEquals(self, other);
 
 /**
 Tells if a year is a leap year.
