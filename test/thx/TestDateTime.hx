@@ -84,11 +84,13 @@ class TestDateTime {
     Assert.isTrue(date.equals(d));
   }
 
+#if !php
   public function testLocalOffset() {
     var ref   = DateHelper.localOffset(),
         delta = DateTime.localOffset();
     Assert.isTrue(ref == delta, 'expected $ref but got $delta');
   }
+#end
 
   public function testNow() {
     var ref = DateHelper.now(),
