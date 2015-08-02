@@ -44,24 +44,24 @@ and the method will normalize that value by offsetting the other arguments by th
         month = 11;
         year -=1;
       }
-      day = numDaysInMonth(month, year);
+      day = daysInMonth(year, month);
     }
 
     year += Math.floor(month / 12);
     month = month % 12;
     if(month < 0) month += 12;
 
-    var daysInMonth = numDaysInMonth(month,year);
-    while (day > daysInMonth) {
-        if (day > daysInMonth) {
-            day -= daysInMonth;
+    var days = daysInMonth(year, month);
+    while (day > days) {
+        if (day > days) {
+            day -= days;
             month++;
         }
         if (month > 11) {
             month -= 12;
             year++;
         }
-        daysInMonth = numDaysInMonth(month,year);
+        days = daysInMonth(year, month);
     }
 
     return new Date(year, month, day, hour, minute, second);
@@ -175,7 +175,7 @@ Returns the number of days in a month.
 @return Int, the number of days in the month.
 @throws Error if the month is not between 0 and 11.
 **/
-  public static function numDaysInMonth(month : Int, year : Int)
+  public static function daysInMonth(year : Int, month : Int)
     // 31: Jan, Mar, May, Jul, Aug, Oct, Dec
     // 30: Apr, Jun, Sep, Nov
     // 28or29 Feb
@@ -186,6 +186,10 @@ Returns the number of days in a month.
       default: throw 'Invalid month "$month".  Month should be a number, Jan=0, Dec=11';
     };
 
+  @:deprecated("Use daysIntMonth instead. Also notice that arguments are inverted now")
+  public static function numDaysInMonth(month : Int, year : Int)
+    return daysInMonth(year, month);
+
 /**
 Tells how many days in the month of the given date.
 
@@ -194,7 +198,7 @@ Tells how many days in the month of the given date.
 @throws Error if the month is not between 0 and 11.
 **/
   public static function numDaysInThisMonth(d : Date)
-    return numDaysInMonth(d.getMonth(), d.getFullYear());
+    return daysInMonth(d.getFullYear(), d.getMonth());
 
 /**
 Returns true if the 2 dates share the same year.
