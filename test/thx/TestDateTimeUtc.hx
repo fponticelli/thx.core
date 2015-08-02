@@ -29,9 +29,6 @@ class TestDateTimeUtc {
   }
 
   public function testEquals() {
-    var a = haxe.Int64.ofInt(10),
-        b = haxe.Int64.ofInt(10);
-
     Assert.isTrue(date == date);
     Assert.isTrue(date != tomorrow);
   }
