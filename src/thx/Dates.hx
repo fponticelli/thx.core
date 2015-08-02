@@ -194,7 +194,7 @@ Returns true if the 2 dates share the same year.
 Returns true if the 2 dates share the same year and month.
 **/
   public static function sameMonth(self : Date, other : Date)
-      return sameYear(self, other) && self.getFullYear() == other.getFullYear();
+      return sameYear(self, other) && self.getMonth() == other.getMonth();
 
 /**
 Returns true if the 2 dates share the same year, month and day.
