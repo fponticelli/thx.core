@@ -83,7 +83,6 @@ class TestDateTime {
     var d : DateTime = "2015-07-26T21:40:30-06:00";
     Assert.isTrue(date.equals(d));
   }
-
 #if !php
   public function testLocalOffset() {
     var ref   = DateHelper.localOffset(),

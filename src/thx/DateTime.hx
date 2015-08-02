@@ -69,13 +69,11 @@ abstract DateTime(Array<Int64>) {
       offset
     ).subtract(offset);
 
-  public var utc(get, never) : DateTimeUtc;
-  public var offset(get, never) : Time;
-
   inline function new(dateTime : DateTimeUtc, offset : Time)
     this = [dateTime, offset];
 
-  public var ticks(get, never) : Int64;
+  public var utc(get, never) : DateTimeUtc;
+  public var offset(get, never) : Time;
 
   public var year(get, never) : Int;
   public var month(get, never) : Month;
@@ -171,9 +169,6 @@ abstract DateTime(Array<Int64>) {
 
   @:to inline function get_offset() : Time
     return new Time(this[1]);
-
-  @:to inline function get_ticks() : Int64
-    return timeOfDay.ticks;
 
   inline function get_year() : Int
     return clockDateTime().year;
