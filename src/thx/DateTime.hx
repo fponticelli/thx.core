@@ -90,6 +90,12 @@ abstract DateTime(Array<Int64>) {
   public var dayOfYear(get, never) : Int;
   public var timeOfDay(get, never) : Time;
 
+  inline public function min(other : DateTime) : DateTime
+    return utc.compare(other.utc) <= 0 ? self() : other;
+
+  inline public function max(other : DateTime) : DateTime
+    return utc.compare(other.utc) >= 0 ? self() : other;
+
 /**
 Returns true if this date and the `other` date share the same year.
 **/
@@ -264,4 +270,7 @@ Returns true if this date and the `other` date share the same year, month, day, 
 
   inline function get_monthDays() : Int
     return daysInMonth(year, month);
+
+  inline function self() : DateTime
+    return cast this;
 }
