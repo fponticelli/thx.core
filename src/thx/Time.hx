@@ -8,6 +8,7 @@ import thx.DateTimeUtc.*;
 @:access(thx.DateTimeUtc)
 abstract Time(Int64) {
   public static var zero(default, null) = new Time(0);
+  public static var oneDay(default, null) = new Time(24);
 
   inline public static function fromDays(days : Int)
     return create(24 * days, 0, 0, 0);
@@ -72,9 +73,22 @@ abstract Time(Int64) {
   public var totalMinutes(get, never) : Int64;
   public var totalSeconds(get, never) : Int64;
   public var totalMilliseconds(get, never) : Int64;
+  public var isNegative(get, never) : Bool;
 
   public function abs() : Time
     return ticks < 0 ? new Time(-ticks) : new Time(ticks);
+
+  public function withHours(hours : Int)
+    return create(hours, minutes, seconds, milliseconds);
+
+  public function withMinutes(minutes : Int)
+    return create(hours, minutes, seconds, milliseconds);
+
+  public function withSeconds(seconds : Int)
+    return create(hours, minutes, seconds, milliseconds);
+
+  public function withMilliseconds(milliseconds : Int)
+    return create(hours, minutes, seconds, milliseconds);
 
   @:op(-A) inline public function negate()
       return new Time(-ticks);
@@ -148,4 +162,7 @@ abstract Time(Int64) {
 
   @:to inline function get_totalMilliseconds() : Int64
     return this / ticksPerMillisecondI64;
+
+  inline function get_isNegative() : Bool
+    return ticks < 0;
 }
