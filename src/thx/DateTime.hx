@@ -84,10 +84,47 @@ abstract DateTime(Array<Int64>) {
   public var second(get, never) : Int;
   public var millisecond(get, never) : Int;
 
+  public var isInLeapYear(get, never) : Bool;
   public var monthDays(get, never) : Int;
   public var dayOfWeek(get, never) : Weekday;
   public var dayOfYear(get, never) : Int;
   public var timeOfDay(get, never) : Time;
+
+/**
+Returns true if this date and the `other` date share the same year.
+**/
+  public function sameYear(other : DateTime) : Bool
+    return year == other.year;
+
+/**
+Returns true if this date and the `other` date share the same year and month.
+**/
+  public function sameMonth(other : DateTime)
+    return sameYear(other) && month == other.month;
+
+/**
+Returns true if this date and the `other` date share the same year, month and day.
+**/
+  public function sameDay(other : DateTime)
+    return sameMonth(other) && day == other.day;
+
+/**
+Returns true if this date and the `other` date share the same year, month, day and hour.
+**/
+  public function sameHour(other : DateTime)
+    return sameDay(other) && hour == other.hour;
+
+/**
+Returns true if this date and the `other` date share the same year, month, day, hour and minute.
+**/
+  public function sameMinute(other : DateTime)
+    return sameHour(other) && minute == other.minute;
+
+/**
+Returns true if this date and the `other` date share the same year, month, day, hour, minute and second.
+**/
+  public function sameSecond(other : DateTime)
+    return sameMinute(other) && second == other.second;
 
   @:op(A+B) inline function add(time : Time)
     return new DateTime(DateTimeUtc.fromInt64(utc.ticks + time.ticks), offset);
@@ -200,6 +237,9 @@ abstract DateTime(Array<Int64>) {
 
   inline function get_timeOfDay() : Time
     return clockDateTime().timeOfDay;
+
+  inline function get_isInLeapYear() : Bool
+    return isLeapYear(year);
 
   inline function get_monthDays() : Int
     return daysInMonth(year, month);
