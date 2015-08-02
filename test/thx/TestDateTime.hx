@@ -89,4 +89,10 @@ class TestDateTime {
         delta = DateTime.localOffset();
     Assert.isTrue(ref == delta, 'expected $ref but got $delta');
   }
+
+  public function testNow() {
+    var ref = DateHelper.now(),
+        date = DateTime.now();
+    Assert.isTrue(date.nearEquals(ref, Time.fromMinutes(1)), 'expected $ref but got $date');
+  }
 }

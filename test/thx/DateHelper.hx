@@ -6,7 +6,7 @@ class DateHelper {
     return macro thx.DateTimeUtc.fromString($v{date});
   }
 
-  macro public static function nowDate() {
+  macro public static function now() {
     var date = DateTime.now().toString();
     return macro thx.DateTime.fromString($v{date});
   }
