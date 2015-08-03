@@ -109,7 +109,7 @@ abstract DateTime(Array<Int64>) {
         min = minute,
         hr  = hour,
         day = day,
-        mon = month,
+        mon : Int = month,
         yr  = year;
 
     switch period {
