@@ -218,24 +218,24 @@ abstract DateTimeUtc(Int64) {
   @param amount The multiple of `period` that you wish to jump by. A positive amount moves forward in time, a negative amount moves backward.
 **/
   public function jump(period : TimePeriod, amount : Int) {
-    var sec   = second,
-        min   = minute,
-        hour  = hour,
-        day   = day,
-        month = month,
-        year  = year;
+    var sec = second,
+        min = minute,
+        hr  = hour,
+        day = day,
+        mon = month,
+        yr  = year;
 
     switch period {
-      case Second: sec   += amount;
-      case Minute: min   += amount;
-      case Hour:   hour  += amount;
-      case Day:    day   += amount;
-      case Week:   day   += amount * 7;
-      case Month:  month += amount;
-      case Year:   year  += amount;
+      case Second: sec += amount;
+      case Minute: min += amount;
+      case Hour:   hr  += amount;
+      case Day:    day += amount;
+      case Week:   day += amount * 7;
+      case Month:  mon += amount;
+      case Year:   yr  += amount;
     }
 
-    return create(year, month, day, hour, min, sec, millisecond);
+    return create(yr, mon, day, hr, min, sec, millisecond);
   }
 
 /**
