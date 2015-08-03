@@ -97,6 +97,35 @@ abstract DateTime(Array<Int64>) {
     return utc.compare(other.utc) >= 0 ? self() : other;
 
 /**
+  Get a date relative to the current date, shifting by a set period of time.
+  Please note this works by constructing a new date object, rather than using `DateTools.delta()`.
+  The key difference is that this allows us to jump over a period that may not be a set number of seconds.
+  For example, jumping between months (which have different numbers of days), leap years, leap seconds, daylight savings time changes etc.
+  @param period The TimePeriod you wish to jump by, Seconds, Minutes, Hours, Days, Weeks, Months Years.
+  @param amount The multiple of `period` that you wish to jump by. A positive amount moves forward in time, a negative amount moves backward.
+**/
+  public function jump(period : TimePeriod, amount : Int) {
+    var sec   = second,
+        min   = minute,
+        hour  = hour,
+        day   = day,
+        month = month,
+        year  = year;
+
+    switch period {
+      case Second: sec   += amount;
+      case Minute: min   += amount;
+      case Hour:   hour  += amount;
+      case Day:    day   += amount;
+      case Week:   day   += amount * 7;
+      case Month:  month += amount;
+      case Year:   year  += amount;
+    }
+
+    return create(year, month, day, hour, min, sec, millisecond, offset);
+  }
+
+/**
 Returns true if this date and the `other` date share the same year.
 **/
   public function sameYear(other : DateTime) : Bool
