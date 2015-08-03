@@ -2,6 +2,7 @@ package thx;
 
 using haxe.Int64;
 import thx.Month;
+import thx.TimePeriod;
 import thx.Weekday;
 using thx.Ints;
 using thx.Int64s;
@@ -236,6 +237,90 @@ abstract DateTimeUtc(Int64) {
 
     return create(year, month, day, hour, min, sec, millisecond);
   }
+
+/**
+Returns a new date, exactly 1 year before the given date/time.
+**/
+  inline public function prevYear()
+    return jump(Year, -1);
+
+/**
+Returns a new date, exactly 1 year after the given date/time.
+**/
+  inline public function nextYear()
+    return jump(Year, 1);
+
+/**
+Returns a new date, exactly 1 month before the given date/time.
+**/
+  inline public function prevMonth()
+    return jump(Month, -1);
+
+/**
+Returns a new date, exactly 1 month after the given date/time.
+**/
+  inline public function nextMonth()
+    return jump(Month, 1);
+
+/**
+Returns a new date, exactly 1 week before the given date/time.
+**/
+  inline public function prevWeek()
+    return jump(Week, -1);
+
+/**
+Returns a new date, exactly 1 week after the given date/time.
+**/
+  inline public function nextWeek()
+    return jump(Week, 1);
+
+/**
+Returns a new date, exactly 1 day before the given date/time.
+**/
+  inline public function prevDay()
+    return jump(Day, -1);
+
+/**
+Returns a new date, exactly 1 day after the given date/time.
+**/
+  inline public function nextDay()
+    return jump(Day, 1);
+
+/**
+Returns a new date, exactly 1 hour before the given date/time.
+**/
+  inline public function prevHour()
+    return jump(Hour, -1);
+
+/**
+Returns a new date, exactly 1 hour after the given date/time.
+**/
+  inline public function nextHour()
+    return jump(Hour, 1);
+
+/**
+Returns a new date, exactly 1 minute before the given date/time.
+**/
+  inline public function prevMinute()
+    return jump(Minute, -1);
+
+/**
+Returns a new date, exactly 1 minute after the given date/time.
+**/
+  inline public function nextMinute()
+    return jump(Minute, 1);
+
+/**
+Returns a new date, exactly 1 second before the given date/time.
+**/
+  inline public function prevSecond()
+    return jump(Second, -1);
+
+/**
+Returns a new date, exactly 1 second after the given date/time.
+**/
+  inline public function nextSecond()
+    return jump(Second, 1);
 
 /**
 Returns true if this date and the `other` date share the same year.
