@@ -44,24 +44,24 @@ and the method will normalize that value by offsetting the other arguments by th
         month = 11;
         year -=1;
       }
-      day = numDaysInMonth(month, year);
+      day = daysInMonth(year, month);
     }
 
     year += Math.floor(month / 12);
     month = month % 12;
     if(month < 0) month += 12;
 
-    var daysInMonth = numDaysInMonth(month,year);
-    while (day > daysInMonth) {
-        if (day > daysInMonth) {
-            day -= daysInMonth;
+    var days = daysInMonth(year, month);
+    while (day > days) {
+        if (day > days) {
+            day -= days;
             month++;
         }
         if (month > 11) {
             month -= 12;
             year++;
         }
-        daysInMonth = numDaysInMonth(month,year);
+        days = daysInMonth(year, month);
     }
 
     return new Date(year, month, day, hour, minute, second);
@@ -113,6 +113,10 @@ Returns `true` if the `self` date is greater than `other`.
   inline public static function greater(self : Date, other : Date) : Bool
     return compare(self, other) > 0;
 
+  @:deprecated("more is deprecated, use greater instead")
+  inline public static function more(self : Date, other : Date) : Bool
+    return greater(self, other);
+
 /**
 Returns `true` if the `self` date is lesser than `other`.
 **/
@@ -125,11 +129,19 @@ Returns `true` if the `self` date is greater than or equal to `other`.
   inline public static function greaterEquals(self : Date, other : Date) : Bool
     return compare(self, other) >= 0;
 
+  @:deprecated("moreEqual is deprecated, use greaterEquals instead")
+  inline public static function moreEqual(self : Date, other : Date) : Bool
+    return greaterEquals(self, other);
+
 /**
 Returns `true` if the `self` date is lesser than or equal to `other`.
 **/
   inline public static function lessEquals(self : Date, other : Date) : Bool
     return compare(self, other) <= 0;
+
+  @:deprecated("lessEqual is deprecated, use lessEquals instead")
+  inline public static function lessEqual(self : Date, other : Date) : Bool
+    return lessEquals(self, other);
 
 /**
 Tells if a year is a leap year.
@@ -163,7 +175,7 @@ Returns the number of days in a month.
 @return Int, the number of days in the month.
 @throws Error if the month is not between 0 and 11.
 **/
-  public static function numDaysInMonth(month : Int, year : Int)
+  public static function daysInMonth(year : Int, month : Int)
     // 31: Jan, Mar, May, Jul, Aug, Oct, Dec
     // 30: Apr, Jun, Sep, Nov
     // 28or29 Feb
@@ -174,6 +186,10 @@ Returns the number of days in a month.
       default: throw 'Invalid month "$month".  Month should be a number, Jan=0, Dec=11';
     };
 
+  @:deprecated("Use daysIntMonth instead. Also notice that arguments are inverted now")
+  public static function numDaysInMonth(month : Int, year : Int)
+    return daysInMonth(year, month);
+
 /**
 Tells how many days in the month of the given date.
 
@@ -182,7 +198,7 @@ Tells how many days in the month of the given date.
 @throws Error if the month is not between 0 and 11.
 **/
   public static function numDaysInThisMonth(d : Date)
-    return numDaysInMonth(d.getMonth(), d.getFullYear());
+    return daysInMonth(d.getFullYear(), d.getMonth());
 
 /**
 Returns true if the 2 dates share the same year.
@@ -194,7 +210,7 @@ Returns true if the 2 dates share the same year.
 Returns true if the 2 dates share the same year and month.
 **/
   public static function sameMonth(self : Date, other : Date)
-      return sameYear(self, other) && self.getFullYear() == other.getFullYear();
+      return sameYear(self, other) && self.getMonth() == other.getMonth();
 
 /**
 Returns true if the 2 dates share the same year, month and day.
@@ -463,43 +479,6 @@ Returns a new date that is modified only by the second.
 **/
   public static function withSecond(date : Date, second : Int)
     return Dates.create(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), second);
-}
-
-enum TimePeriod {
-  Second;
-  Minute;
-  Hour;
-  Day;
-  Week;
-  Month;
-  Year;
-}
-
-@:enum
-abstract Weekday(Int) from Int to Int {
-  var Sunday = 0;
-  var Monday = 1;
-  var Tuesday = 2;
-  var Wednesday = 3;
-  var Thursday = 4;
-  var Friday = 5;
-  var Saturday = 6;
-}
-
-@:enum
-abstract Month(Int) from Int to Int {
-  var January = 0;
-  var February = 1;
-  var March = 2;
-  var April = 3;
-  var May = 4;
-  var June = 5;
-  var July = 6;
-  var August = 7;
-  var September = 8;
-  var October = 9;
-  var November = 10;
-  var December = 11;
 }
 
 /** Alias of `DateTools`, included so mixins work with `using thx.Dates;` **/

@@ -9,6 +9,8 @@ class TestAll {
     runner.addCase(new thx.TestChar());
     runner.addCase(new thx.TestChars());
     runner.addCase(new thx.TestDates());
+    runner.addCase(new thx.TestDateTime());
+    runner.addCase(new thx.TestDateTimeUtc());
     runner.addCase(new thx.TestDynamics());
     runner.addCase(new thx.TestEnums());
     runner.addCase(new thx.TestERegs());
@@ -26,6 +28,7 @@ class TestAll {
     runner.addCase(new thx.TestSet());
     runner.addCase(new thx.TestStaticResource());
     runner.addCase(new thx.TestStrings());
+    runner.addCase(new thx.TestTime());
     runner.addCase(new thx.TestLambda());
     runner.addCase(new thx.TestLambdaStaticExtension());
 #if (js || flash || java)
