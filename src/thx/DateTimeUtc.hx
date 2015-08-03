@@ -239,6 +239,22 @@ abstract DateTimeUtc(Int64) {
   }
 
 /**
+Creates an array of dates that begin at `start` and end at `end` included.
+Time values are pick from the `start` value except for the last value that will
+match `end`. No interpolation is made.
+**/
+  public static function daysRange(start : DateTimeUtc, end : DateTimeUtc) {
+    if(end.less(start)) return [];
+    var days = [];
+    while(!start.sameDay(end)) {
+      days.push(start);
+      start = start.nextDay();
+    }
+    days.push(end);
+    return days;
+  }
+
+/**
 Returns a new date, exactly 1 year before the given date/time.
 **/
   inline public function prevYear()
@@ -321,6 +337,56 @@ Returns a new date, exactly 1 second after the given date/time.
 **/
   inline public function nextSecond()
     return jump(Second, 1);
+
+/**
+Snaps a date to the given weekday inside the current week.  The time within the day will stay the same.
+If you are already on the given day, the date will not change.
+@param date The date value to snap
+@param day Day to snap to.  Either `Sunday`, `Monday`, `Tuesday` etc.
+@param firstDayOfWk The first day of the week.  Default to `Sunday`.
+@return The date of the day you have snapped to.
+**/
+  public function snapToWeekDay(weekday : Weekday, ?firstDayOfWk : Weekday = Sunday) {
+    var d : Int = dayOfWeek,
+        s : Int = weekday;
+
+    // get whichever occurence happened in the current week.
+    if (s < (firstDayOfWk : Int)) s = s + 7;
+    if (d < (firstDayOfWk : Int)) d = d + 7;
+    return jump(Day, s - d);
+  }
+
+/**
+Snaps a date to the next given weekday.  The time within the day will stay the same.
+If you are already on the given day, the date will not change.
+@param date The date value to snap
+@param day Day to snap to.  Either `Sunday`, `Monday`, `Tuesday` etc.
+@return The date of the day you have snapped to.
+**/
+  public function snapNextWeekDay(weekday : Weekday) {
+    var d : Int = dayOfWeek,
+        s : Int = weekday;
+
+    // get the next occurence of that day (forward in time)
+    if (s < d) s = s + 7;
+    return jump(Day, s - d);
+  }
+
+/**
+Snaps a date to the previous given weekday.  The time within the day will stay the same.
+If you are already on the given day, the date will not change.
+@param date The date value to snap
+@param day Day to snap to.  Either `Sunday`, `Monday`, `Tuesday` etc.
+@return The date of the day you have snapped to.
+**/
+  public function snapPrevWeekDay(weekday : Weekday) {
+    var d : Int = dayOfWeek,
+        s : Int = weekday;
+
+    // get the previous occurence of that day (backward in time)
+    if (s > d) s = s - 7;
+    return jump(Day, s - d);
+  }
 
 /**
 Returns true if this date and the `other` date share the same year.
