@@ -69,7 +69,7 @@ abstract DateTime(Array<Int64>) {
       offset
     ).subtract(offset);
 
-  inline function new(dateTime : DateTimeUtc, offset : Time)
+  inline public function new(dateTime : DateTimeUtc, offset : Time)
     this = [dateTime.ticks, offset.ticks];
 
   public var utc(get, never) : DateTimeUtc;

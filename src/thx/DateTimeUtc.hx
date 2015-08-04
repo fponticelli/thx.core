@@ -530,6 +530,9 @@ Returns true if this date and the `other` date share the same year, month, day, 
     return Date.fromTime(toTime());
 #end
 
+  @:to inline public function toDateTime() : DateTime
+    return new DateTime(self(), Time.zero);
+
   //1997-07-16T19:20:30Z
   @:to inline public function toString() : String
     return '$year-${month.lpad(2)}-${day.lpad(2)}T${hour.lpad(2)}:${minute.lpad(2)}:${second.lpad(2)}${millisecond != 0 ? "."+millisecond.lpad(3, "0") : ""}Z';
