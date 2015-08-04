@@ -27,6 +27,12 @@ abstract DateTime(Array<Int64>) {
   inline public static function nowUtc() : DateTime
     return new DateTime(DateTimeUtc.now(), Time.zero);
 
+  @:from public static function fromDate(date : Date) : DateTime
+    return new DateTime(DateTimeUtc.fromTime(date.getTime()), localOffset());
+
+  @:from public static function fromTime(timestamp : Float) : DateTime
+    return new DateTime(DateTimeUtc.fromTime(timestamp), Time.zero);
+
   @:from public static function fromString(s : String) : DateTime {
     var pattern = ~/^(\d+)[-](\d{2})[-](\d{2})(?:[T ](\d{2})[:](\d{2})[:](\d{2})(?:\.(\d+))?(Z|([+-]\d{2})[:](\d{2}))?)?$/;
     if(!pattern.match(s))
