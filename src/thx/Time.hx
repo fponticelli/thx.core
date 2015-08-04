@@ -133,34 +133,34 @@ abstract Time(Int64) {
   @:to inline function get_ticks() : Int64
     return this;
 
-  @:to inline function get_days() : Int
+  inline function get_days() : Int
     return (this / ticksPerDayI64).toInt();
 
-  @:to inline function get_hours() : Int
+  inline function get_hours() : Int
     return ((this / ticksPerHourI64) % 24).toInt();
 
-  @:to inline function get_minutes() : Int
+  inline function get_minutes() : Int
     return ((this / ticksPerMinuteI64) % 60).toInt();
 
-  @:to inline function get_seconds() : Int
+  inline function get_seconds() : Int
     return ((this / ticksPerSecondI64) % 60).toInt();
 
-  @:to inline function get_milliseconds() : Int
+  inline function get_milliseconds() : Int
     return ((this / ticksPerMillisecondI64) % 1000).toInt();
 
-  @:to inline function get_totalDays() : Int64
+  inline function get_totalDays() : Int64
     return this / ticksPerDayI64;
 
-  @:to inline function get_totalHours() : Int64
+  inline function get_totalHours() : Int64
     return this / ticksPerHourI64;
 
-  @:to inline function get_totalMinutes() : Int64
+  inline function get_totalMinutes() : Int64
     return this / ticksPerMinuteI64;
 
-  @:to inline function get_totalSeconds() : Int64
+  inline function get_totalSeconds() : Int64
     return this / ticksPerSecondI64;
 
-  @:to inline function get_totalMilliseconds() : Int64
+  inline function get_totalMilliseconds() : Int64
     return this / ticksPerMillisecondI64;
 
   inline function get_isNegative() : Bool
