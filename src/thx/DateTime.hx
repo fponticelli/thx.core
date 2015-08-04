@@ -76,7 +76,7 @@ abstract DateTime(Array<Int64>) {
   public var offset(get, never) : Time;
 
   public var year(get, never) : Int;
-  public var month(get, never) : Month;
+  public var month(get, never) : Int;
   public var day(get, never) : Int;
 
   public var hour(get, never) : Int;
@@ -417,7 +417,7 @@ Returns true if this date and the `other` date share the same year, month, day, 
   inline function get_year() : Int
     return clockDateTime().year;
 
-  inline function get_month() : Month
+  inline function get_month() : Int
     return clockDateTime().month;
 
   inline function get_day() : Int

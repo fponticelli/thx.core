@@ -1,7 +1,6 @@
 package thx;
 
 using haxe.Int64;
-import thx.Month;
 import thx.TimePeriod;
 import thx.Weekday;
 using thx.Ints;
@@ -189,7 +188,7 @@ abstract DateTimeUtc(Int64) {
   public var ticks(get, never) : Int64;
 
   public var year(get, never) : Int;
-  public var month(get, never) : Month;
+  public var month(get, never) : Int;
   public var day(get, never) : Int;
 
   public var hour(get, never) : Int;
@@ -541,7 +540,7 @@ Returns true if this date and the `other` date share the same year, month, day, 
   inline function get_year() : Int
     return getDatePart(DATE_PART_YEAR);
 
-  inline function get_month() : Month
+  inline function get_month() : Int
     return getDatePart(DATE_PART_MONTH);
 
   inline function get_day() : Int

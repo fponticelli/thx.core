@@ -3,7 +3,6 @@ package thx;
 import haxe.PosInfos;
 import utest.Assert;
 using thx.DateTimeUtc;
-import thx.Month;
 import thx.Weekday;
 
 class TestDateTimeUtc {
