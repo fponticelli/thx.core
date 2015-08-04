@@ -28,7 +28,7 @@ abstract DateTime(Array<Int64>) {
     return new DateTime(DateTimeUtc.now(), Time.zero);
 
   @:from public static function fromString(s : String) : DateTime {
-    var pattern = ~/^(\d+)[-](\d{2})[-](\d{2})[T ](\d{2})[:](\d{2})[:](\d{2})(?:\.(\d+))?(Z|([+-]\d{2})[:](\d{2}))?$/;
+    var pattern = ~/^(\d+)[-](\d{2})[-](\d{2})(?:[T ](\d{2})[:](\d{2})[:](\d{2})(?:\.(\d+))?(Z|([+-]\d{2})[:](\d{2}))?)?$/;
     if(!pattern.match(s))
       throw new thx.Error('unable to parse DateTime string: "$s"');
     var smillis = pattern.matched(7),
