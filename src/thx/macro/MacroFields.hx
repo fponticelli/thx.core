@@ -7,7 +7,7 @@ Extension methods to work with class fields at macro time.
 **/
 class MacroFields {
 /**
-Returns true if the field has the `public` qualifier.
+Returns true if the `field` has the `public` qualifier.
 **/
   public static function isPublic(field : Field) {
     for(access in field.access) switch access {
@@ -18,7 +18,7 @@ Returns true if the field has the `public` qualifier.
   }
 
 /**
-Returns true if the field has the `static` qualifier.
+Returns true if the `field` has the `static` qualifier.
 **/
   public static function isStatic(field : Field) {
     for(access in field.access) switch access {
