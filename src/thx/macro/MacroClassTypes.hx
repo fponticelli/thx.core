@@ -19,5 +19,12 @@ passed `ClassType`.
       types = types.concat(parent);
     return types;
   }
+
+/**
+Returns true if the `cls` is public.
+**/
+  public static function isPublic(cls : ClassType)
+    return !cls.isPrivate;
+
 }
 #end
