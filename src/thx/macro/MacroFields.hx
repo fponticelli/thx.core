@@ -85,5 +85,30 @@ Returns the type of `field`.
       case FFun(f): TFunction(f.args.map(function(arg) return arg.type), f.ret);
       case FProp(_, _, t, _): t;
     };
+
+/**
+Extracts the first meta entry parameter for `name`. It returns `null` if it
+does not exist.
+*/
+  public static function getFirstMetaParam(field : Field, name : String)
+    return getMetaParams(field, name)[0];
+
+/**
+Returns the params of a meta with `name`. It always returns an array even if
+no matches are found.
+*/
+  public static function getMetaParams(field : Field, name : String) {
+    var entry = getMetaEntry(field, name);
+    if(null == entry) return [];
+    return entry.params;
+  }
+/**
+Returns a `MetaEntry` with `name` if it exists or `null` otherwise.
+*/
+  public static function getMetaEntry(field : Field, name : String) {
+    var meta = field.meta;
+    if(null == meta) return null;
+    return Arrays.find(meta, function(entry) return entry.name == name);
+  }
 }
 #end
