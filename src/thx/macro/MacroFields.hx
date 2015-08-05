@@ -2,6 +2,7 @@ package thx.macro;
 
 #if (neko || macro)
 import haxe.macro.Expr;
+import thx.Arrays;
 /**
 Extension methods to work with class fields at macro time.
 **/
@@ -29,12 +30,60 @@ Returns true if the `field` has the `static` qualifier.
   }
 
 /**
-Returns true if the field is a method.
+Returns true if the `field` has NOT the `static` qualifier.
+**/
+  public static function isInstance(field : Field) {
+    for(access in field.access) switch access {
+      case AStatic: return false;
+      case _:
+    }
+    return true;
+  }
+
+/**
+Returns true if the `field` is a method.
 **/
   public static function isMethod(field : Field)
     return switch field.kind {
       case FFun(_): true;
       case _:    false;
+    };
+
+/**
+Returns true if the `field` is a variable.
+**/
+  public static function isVar(field : Field)
+    return switch field.kind {
+      case FVar(_): true;
+      case _:    false;
+    };
+
+/**
+Returns true if the `field` is a property.
+**/
+  public static function isProperty(field : Field)
+    return switch field.kind {
+      case FProp(_): true;
+      case _:    false;
+    };
+
+/**
+Returns true if the `field` has a meta with the supplied `name`.
+**/
+  public static function hasMeta(field : Field, name : String) {
+    var meta = field.meta;
+    if(null == meta) return false;
+    return Arrays.any(meta, function(entry) return entry.name == name);
+  }
+
+/**
+Returns the type of `field`.
+**/
+  public static function getType(field : Field) : ComplexType
+    return switch field.kind {
+      case FVar(t, _): t;
+      case FFun(f): TFunction(f.args.map(function(arg) return arg.type), f.ret);
+      case FProp(_, _, t, _): t;
     };
 }
 #end
