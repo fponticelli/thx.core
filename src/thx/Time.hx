@@ -73,6 +73,7 @@ abstract Time(Int64) {
   public var totalMinutes(get, never) : Int64;
   public var totalSeconds(get, never) : Int64;
   public var totalMilliseconds(get, never) : Int64;
+  public var totalMicroseconds(get, never) : Int64;
   public var isNegative(get, never) : Bool;
 
   public function abs() : Time
@@ -162,6 +163,9 @@ abstract Time(Int64) {
 
   inline function get_totalMilliseconds() : Int64
     return this / ticksPerMillisecondI64;
+
+  inline function get_totalMicroseconds() : Int64
+    return this / ticksPerMicrosecondI64;
 
   inline function get_isNegative() : Bool
     return ticks < 0;
