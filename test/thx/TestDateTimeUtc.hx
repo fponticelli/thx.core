@@ -7,7 +7,7 @@ import thx.Weekday;
 
 class TestDateTimeUtc {
   var date = DateTimeUtc.create(2015, 7, 26, 21, 40, 30, 0);
-  var tomorrow = DateTimeUtc.create(2015, 7, 27, 21, 40, 30, 0);
+  var tomorrow = DateTimeUtc.create(2015, 7, 27, 21, 40, 30, 123);
 
   public function new() {}
 
@@ -19,6 +19,10 @@ class TestDateTimeUtc {
     Assert.equals(21, date.hour, 'expected 21 but got ${date.hour} for hour');
     Assert.equals(40, date.minute, 'expected 40 but got ${date.minute} for minute');
     Assert.equals(30, date.second, 'expected 30 but got ${date.second} for second');
+
+    Assert.equals(    123, tomorrow.millisecond, 'expected 123 but got ${tomorrow.millisecond} for millisecond');
+    Assert.equals( 123000, tomorrow.microsecond, 'expected 123 but got ${tomorrow.microsecond} for microsecond');
+    Assert.equals(1230000, tomorrow.tickInSecond, 'expected 123 but got ${tomorrow.tickInSecond} for tickInSecond');
 
     Assert.equals(Sunday, date.dayOfWeek);
   }
