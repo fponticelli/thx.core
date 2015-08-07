@@ -67,6 +67,8 @@ abstract Time(Int64) {
   public var minutes(get, never) : Int;
   public var seconds(get, never) : Int;
   public var milliseconds(get, never) : Int;
+  public var microseconds(get, never) : Int;
+  public var ticksInSecond(get, never) : Int;
 
   public var totalDays(get, never) : Int64;
   public var totalHours(get, never) : Int64;
@@ -147,7 +149,13 @@ abstract Time(Int64) {
     return ((this / ticksPerSecondI64) % 60).toInt();
 
   inline function get_milliseconds() : Int
-    return ((this / ticksPerMillisecondI64) % 1000).toInt();
+    return ((this / ticksPerMillisecondI64) % thousandI64).toInt();
+
+  inline function get_microseconds() : Int
+    return ((this / ticksPerMicrosecondI64) % tenThousandI64).toInt();
+
+  inline function get_ticksInSecond() : Int
+    return (this % ticksPerSecondI64).toInt();
 
   inline function get_totalDays() : Int64
     return this / ticksPerDayI64;
