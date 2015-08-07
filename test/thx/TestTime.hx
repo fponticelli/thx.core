@@ -9,17 +9,20 @@ class TestTime {
 
   public function testBasics() {
     var time = Time.createDays(10,9,8,7,6);
-    Assert.equals(10, time.days);
-    Assert.equals( 9, time.hours);
-    Assert.equals( 8, time.minutes);
-    Assert.equals( 7, time.seconds);
-    Assert.equals( 6, time.milliseconds);
+    Assert.equals(   10, time.days);
+    Assert.equals(    9, time.hours);
+    Assert.equals(    8, time.minutes);
+    Assert.equals(    7, time.seconds);
+    Assert.equals(    6, time.milliseconds);
+    Assert.equals( 6000, time.microseconds);
+    Assert.equals(60000, time.ticksInSecond);
 
-    Assert.equals(       10, time.totalDays.toInt());
-    Assert.equals(      249, time.totalHours.toInt());
-    Assert.equals(    14948, time.totalMinutes.toInt());
-    Assert.equals(   896887, time.totalSeconds.toInt());
-    Assert.equals(896887006, time.totalMilliseconds.toInt());
+    Assert.equals(           10 , time.totalDays.toInt());
+    Assert.equals(          249 , time.totalHours.toInt());
+    Assert.equals(        14948 , time.totalMinutes.toInt());
+    Assert.equals(       896887 , time.totalSeconds.toInt());
+    Assert.equals(    896887006 , time.totalMilliseconds.toInt());
+    Assert.equals("896887006000", time.totalMicroseconds.toStr());
   }
 
   public function testFromString() {
