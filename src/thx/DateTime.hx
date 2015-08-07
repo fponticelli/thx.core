@@ -89,6 +89,8 @@ abstract DateTime(Array<Int64>) {
   public var minute(get, never) : Int;
   public var second(get, never) : Int;
   public var millisecond(get, never) : Int;
+  public var microsecond(get, never) : Int;
+  public var tickInSecond(get, never) : Int;
 
   public var isInLeapYear(get, never) : Bool;
   public var monthDays(get, never) : Int;
@@ -443,6 +445,12 @@ Returns true if this date and the `other` date share the same year, month, day, 
 
   inline function get_millisecond() : Int
     return clockDateTime().millisecond;
+
+  inline function get_microsecond() : Int
+    return clockDateTime().microsecond;
+
+  inline function get_tickInSecond() : Int
+    return clockDateTime().tickInSecond;
 
   inline function get_second() : Int
     return clockDateTime().second;
