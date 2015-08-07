@@ -13,6 +13,12 @@ abstract DateTimeUtc(Int64) {
   static var millisPerHour = millisPerMinute * 60;
   static var millisPerDay = millisPerHour * 24;
 
+  static var tenI64 : Int64 = 10;
+  static var hundredI64 : Int64 = 100;
+  static var thousandI64 : Int64 = 1000;
+  static var tenThousandI64 : Int64 = 10000;
+  static var millionI64 : Int64 = 1000000;
+  static var ticksPerMicrosecondI64 : Int64 = tenI64;
   static var ticksPerMillisecond : Int = 10000;
   static var ticksPerMillisecondI64 : Int64 = Int64.ofInt(ticksPerMillisecond);
   static var ticksPerSecondI64 : Int64 = ticksPerMillisecondI64 * 1000;
