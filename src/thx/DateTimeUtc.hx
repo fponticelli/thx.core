@@ -201,6 +201,8 @@ abstract DateTimeUtc(Int64) {
   public var minute(get, never) : Int;
   public var second(get, never) : Int;
   public var millisecond(get, never) : Int;
+  public var microsecond(get, never) : Int;
+  public var tickInSecond(get, never) : Int;
 
   public var isInLeapYear(get, never) : Bool;
   public var monthDays(get, never) : Int;
@@ -569,6 +571,12 @@ Returns true if this date and the `other` date share the same year, month, day, 
 
   function get_millisecond() : Int
     return ticks.div(ticksPerMillisecondI64).mod(thousandI64).toInt();
+
+  function get_microsecond() : Int
+    return ticks.div(ticksPerMicrosecondI64).mod(millionI64).toInt();
+
+  function get_tickInSecond() : Int
+    return ticks.mod(10000000).toInt();
 
   function get_second() : Int
     return ticks.div(ticksPerSecondI64).mod(60).toInt();
