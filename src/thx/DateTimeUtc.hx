@@ -555,22 +555,22 @@ Returns true if this date and the `other` date share the same year, month, day, 
   inline function get_day() : Int
     return getDatePart(DATE_PART_DAY);
 
-  inline function get_hour() : Int
+  function get_hour() : Int
     return ticks.div(ticksPerHourI64).mod(24).toInt();
 
-  inline function get_minute() : Int
+  function get_minute() : Int
     return ticks.div(ticksPerMinuteI64).mod(60).toInt();
 
-  inline function get_dayOfWeek() : Weekday
+  function get_dayOfWeek() : Weekday
     return ticks.div(ticksPerDayI64).add(1).mod(7).toInt();
 
   inline function get_dayOfYear() : Int
     return getDatePart(DATE_PART_DAY_OF_YEAR);
 
-  inline function get_millisecond() : Int
-    return ticks.div(ticksPerMillisecondI64).mod(1000).toInt();
+  function get_millisecond() : Int
+    return ticks.div(ticksPerMillisecondI64).mod(thousandI64).toInt();
 
-  inline function get_second() : Int
+  function get_second() : Int
     return ticks.div(ticksPerSecondI64).mod(60).toInt();
 
   inline function get_timeOfDay() : Time
