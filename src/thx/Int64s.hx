@@ -32,8 +32,11 @@ using haxe.Int64;
 import StringTools;
 
 class Int64s {
+  public static var one = Int64.make(0, 1);
+  public static var zero = Int64.make(0, 0);
+
   public static function abs(value : Int64)
-    return value < 0 ? -value : value;
+    return value < zero ? -value : value;
 
   public static function compare(a : Int64, b : Int64)
     if(a > b)
@@ -76,8 +79,6 @@ class Int64s {
   }
 
   static var min = Int64.make(0x80000000, 0);
-  static var one = Int64.make(0, 1);
-  static var zero = Int64.make(0, 0);
 
 /**
 Converts an `Int64` to `Float`;
