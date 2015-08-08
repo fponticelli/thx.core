@@ -90,6 +90,11 @@ class TestDateTimeUtc {
   public function testFromToString() {
     var d : String = date;
     Assert.isTrue(date == d);
+
+    Assert.equals("-1-07-27T00:00:00Z",    ("0-06-07" : DateTimeUtc).toString());
+    Assert.equals("-1-06-07T00:00:00Z",    ("-1-06-07" : DateTimeUtc).toString());
+    Assert.equals("1-06-07T00:00:00Z",     ("1-06-07" : DateTimeUtc).toString());
+    Assert.equals("-2014-01-01T00:00:00Z", ("-2014-01-01" : DateTimeUtc).toString());
   }
 
   public function testAdd() {
