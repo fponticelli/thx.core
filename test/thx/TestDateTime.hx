@@ -84,7 +84,13 @@ class TestDateTime {
     Assert.isTrue(date.equals(d));
     var d : DateTime = "2014-01-01";
     Assert.isTrue(DateTime.create(2014, 1, 1, Time.zero).equals(d));
+
+    Assert.equals("-1-07-27T00:00:00+00:00",    ("0-06-07" : DateTime).toString());
+    Assert.equals("-1-06-07T00:00:00+00:00",    ("-1-06-07" : DateTime).toString());
+    Assert.equals("1-06-07T00:00:00+00:00",     ("1-06-07" : DateTime).toString());
+    Assert.equals("-2014-01-01T00:00:00+00:00", ("-2014-01-01" : DateTime).toString());
   }
+
 #if !php
   public function testLocalOffset() {
     var ref   = DateHelper.localOffset(),
