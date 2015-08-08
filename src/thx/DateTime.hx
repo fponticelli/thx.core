@@ -7,10 +7,8 @@ using thx.Strings;
 import thx.DateTimeUtc.*;
 
 /**
-`DateTime` represents an instant in time since 0 A.D. and some date after
-10.000 A.D.
-
-Values below zero are possible but their behaviot is unspecified.
+`DateTime` represents an instant in time since about year 29228 B.C.E. up to
+29228 C.E. (A.D.).
 
 `DateTime` supports a resolution up to 1e7th of second (a tick) and has no
 precision issues since it is mapped internally to a `Int64`.

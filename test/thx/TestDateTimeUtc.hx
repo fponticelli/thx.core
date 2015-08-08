@@ -29,6 +29,7 @@ class TestDateTimeUtc {
 
   public function testToString() {
     Assert.equals('2015-07-26T21:40:30Z', date.toString());
+    Assert.equals('1-01-01T00:00:00Z', DateTimeUtc.fromInt64(0).toString());
   }
 
   public function testOverflowing() {
