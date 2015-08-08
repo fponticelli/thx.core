@@ -64,25 +64,28 @@ abstract DateTimeUtc(Int64) {
     return new DateTimeUtc(Int64s.fromFloat(timestamp).mul(ticksPerMillisecondI64).add(unixEpochTicks));
 
   @:from public static function fromString(s : String) : DateTimeUtc {
-    var pattern = ~/^(\d+)[-](\d{2})[-](\d{2})[T ](\d{2})[:](\d{2})[:](\d{2})(?:\.(\d+))?Z?$/;
+    var pattern = ~/^([-])?(\d+)[-](\d{2})[-](\d{2})(?:[T ](\d{2})[:](\d{2})[:](\d{2})(?:\.(\d+))?Z?)?$/;
     if(!pattern.match(s))
       throw new thx.Error('unable to parse DateTimeUtc string: "$s"');
-    var smillis = pattern.matched(7),
-        millis = 0;
-    if(null != smillis) {
-      smillis = "1" + smillis.rpad("0", 3).substring(0, 3);
-      millis = Std.parseInt(smillis) - 1000;
+    var smticks = pattern.matched(8),
+        mticks = 0;
+    if(null != smticks) {
+      smticks = "1" + smticks.rpad("0", 7).substring(0, 7);
+      mticks = Std.parseInt(smticks) - 10000000;
     }
 
-    return create(
-        Std.parseInt(pattern.matched(1)),
+    var date = create(
         Std.parseInt(pattern.matched(2)),
         Std.parseInt(pattern.matched(3)),
         Std.parseInt(pattern.matched(4)),
         Std.parseInt(pattern.matched(5)),
         Std.parseInt(pattern.matched(6)),
-        millis
-      );
+        Std.parseInt(pattern.matched(7)),
+        0
+      ) + mticks;
+    if(pattern.matched(1) == "-")
+      return DateTimeUtc.fromInt64(-date.ticks);
+    return date;
   }
 
   public static function create(year : Int, month : Int, day : Int, ?hour : Int = 0, ?minute : Int = 0, ?second : Int = 0, ?millisecond : Int = 0) {
@@ -455,6 +458,9 @@ Returns true if this date and the `other` date share the same year, month, day, 
   @:op(A+B) inline function add(time : Time)
     return new DateTimeUtc(ticks + time.ticks);
 
+  @:op(A+B) inline function addTicks(tickstoadd : Int64)
+    return new DateTimeUtc(ticks + tickstoadd);
+
   @:op(A-B) inline function subtract(time : Time)
     return new DateTimeUtc(ticks - time.ticks);
 
@@ -542,8 +548,12 @@ Returns true if this date and the `other` date share the same year, month, day, 
     return new DateTime(self(), Time.zero);
 
   //1997-07-16T19:20:30Z
-  @:to inline public function toString() : String
-    return '$year-${month.lpad(2)}-${day.lpad(2)}T${hour.lpad(2)}:${minute.lpad(2)}:${second.lpad(2)}${millisecond != 0 ? "."+millisecond.lpad(3, "0") : ""}Z';
+  @:to public function toString() {
+    var abs = DateTimeUtc.fromInt64(ticks.abs());
+    var decimals = abs.tickInSecond != 0 ? '.' + abs.tickInSecond.lpad(7, "0").trimCharsRight(")") : "";
+    var isneg = ticks < Int64s.zero;
+    return (isneg ? "-" : "") + '${abs.year}-${abs.month.lpad(2)}-${abs.day.lpad(2)}T${abs.hour.lpad(2)}:${abs.minute.lpad(2)}:${abs.second.lpad(2)}${decimals}Z';
+  }
 
   @:to inline function get_ticks() : Int64
     return this;
