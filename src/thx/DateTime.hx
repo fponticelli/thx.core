@@ -84,39 +84,43 @@ timezone and can be replaced with a time offset in the format:
 In this case the sign (`+`/`-`) is not optional and seconds cannot be used.
 */
   @:from public static function fromString(s : String) : DateTime {
-    var pattern = ~/^(\d+)[-](\d{2})[-](\d{2})(?:[T ](\d{2})[:](\d{2})[:](\d{2})(?:\.(\d+))?(Z|([+-]\d{2})[:](\d{2}))?)?$/;
+    var pattern = ~/^([-])?(\d+)[-](\d{2})[-](\d{2})(?:[T ](\d{2})[:](\d{2})[:](\d{2})(?:\.(\d+))?(Z|([+-]\d{2})[:](\d{2}))?)?$/;
     if(!pattern.match(s))
       throw new thx.Error('unable to parse DateTime string: "$s"');
-    var smillis = pattern.matched(7),
-        millis = 0;
-    if(null != smillis) {
-      smillis = "1" + smillis.rpad("0", 3).substring(0, 3);
-      millis = Std.parseInt(smillis) - 1000;
+
+    var smticks = pattern.matched(8),
+        mticks = 0;
+    if(null != smticks) {
+      smticks = "1" + smticks.rpad("0", 7).substring(0, 7);
+      mticks = Std.parseInt(smticks) - 10000000;
     }
 
     var time = Time.zero,
-        timepart = pattern.matched(8);
+        timepart = pattern.matched(9);
     if(null != timepart && "Z" != timepart) {
-      var hours = pattern.matched(9);
+      var hours = pattern.matched(10);
       if(hours.substring(0, 1) == "+")
         hours = hours.substring(1);
       time = Time.create(
         Std.parseInt(hours),
-        Std.parseInt(pattern.matched(10)),
+        Std.parseInt(pattern.matched(11)),
         0
       );
     }
 
-    return create(
-        Std.parseInt(pattern.matched(1)),
+    var date = create(
         Std.parseInt(pattern.matched(2)),
         Std.parseInt(pattern.matched(3)),
         Std.parseInt(pattern.matched(4)),
         Std.parseInt(pattern.matched(5)),
         Std.parseInt(pattern.matched(6)),
-        millis,
+        Std.parseInt(pattern.matched(7)),
+        0,
         time
-      );
+      ) + mticks;
+    if(pattern.matched(1) == "-")
+      return new DateTime(DateTimeUtc.fromInt64(-date.utc.ticks), time);
+    return date;
   }
 
   inline static public function create(year : Int, month : Int, day : Int, ?hour : Int = 0, ?minute : Int = 0, ?second : Int = 0, ?millisecond : Int = 0, offset : Time)
@@ -396,6 +400,9 @@ Returns true if this date and the `other` date share the same year, month, day, 
   @:op(A+B) inline function add(time : Time)
     return new DateTime(DateTimeUtc.fromInt64(utc.ticks + time.ticks), offset);
 
+  @:op(A+B) inline function addTicks(ticks : Int64)
+    return new DateTime(DateTimeUtc.fromInt64(utc.ticks + ticks), offset);
+
   @:op(A-B) inline function subtract(time : Time)
     return new DateTime(DateTimeUtc.fromInt64(utc.ticks - time.ticks), offset);
 
@@ -463,8 +470,12 @@ Returns true if this date and the `other` date share the same year, month, day, 
     return new DateTimeUtc(utc.ticks + offset.ticks);
 
   //1997-07-16T19:20:30+01:00
-  @:to public function toString()
-    return '$year-${month.lpad(2)}-${day.lpad(2)}T${hour.lpad(2)}:${minute.lpad(2)}:${second.lpad(2)}${millisecond != 0 ? "."+millisecond.lpad(3, "0") : ""}${offset.toGmtString()}';
+  @:to public function toString() {
+    var abs = new DateTime(new DateTimeUtc(utc.ticks.abs()), offset);
+    var decimals = abs.tickInSecond != 0 ? '.' + abs.tickInSecond.lpad(7, "0").trimCharsRight(")") : "";
+    var isneg = utc.ticks < Int64s.zero;
+    return (isneg ? "-" : "") + '${abs.year}-${abs.month.lpad(2)}-${abs.day.lpad(2)}T${abs.hour.lpad(2)}:${abs.minute.lpad(2)}:${abs.second.lpad(2)}${decimals}${offset.toGmtString()}';
+  }
 
   @:to inline function get_utc() : DateTimeUtc
     return new DateTimeUtc(this[0]);
