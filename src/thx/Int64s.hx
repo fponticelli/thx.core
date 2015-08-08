@@ -35,6 +35,9 @@ class Int64s {
   public static var one = Int64.make(0, 1);
   public static var zero = Int64.make(0, 0);
 
+  public static var maxValue = haxe.Int64.make(0x7fffffff,0xffffffff);
+  public static var minValue = haxe.Int64.make(0x80000000,0x00000001);
+
   public static function abs(value : Int64)
     return value < zero ? -value : value;
 
