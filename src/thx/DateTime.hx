@@ -6,6 +6,20 @@ using thx.Int64s;
 using thx.Strings;
 import thx.DateTimeUtc.*;
 
+/**
+`DateTime` represents an instant in time since 0 A.D. and some date after
+10.000 A.D.
+
+Values below zero are possible but their behaviot is unspecified.
+
+`DateTime` supports a resolution up to 1e7th of second (a tick) and has no
+precision issues since it is mapped internally to a `Int64`.
+
+`DateTime` is an abstract and support some operator overloadings. Most notably
+subtractions (to get a `Time` value), and addition/subtraction of a `Time` value.
+
+`DateTime` also supports a time offset to describe time zone values.
+*/
 @:access(thx.DateTimeUtc)
 abstract DateTime(Array<Int64>) {
   static public function localOffset() : Time {
@@ -21,18 +35,54 @@ abstract DateTime(Array<Int64>) {
 #end
   }
 
+/**
+Generates an instance of `DateTime` for the current instant and with an offset
+as set on your local machine.
+
+Note that PHP requires a configuration setting to setup a specific timezone or
+it will default to UTC.
+*/
   inline public static function now() : DateTime
     return new DateTime(DateTimeUtc.now(), localOffset());
 
+/**
+Same as `now` but it returns the current instant as if the time zone was set to
+UTC.
+*/
   inline public static function nowUtc() : DateTime
     return new DateTime(DateTimeUtc.now(), Time.zero);
 
+/**
+Converts a `Date` type into a `DateTime` type.
+*/
   @:from public static function fromDate(date : Date) : DateTime
     return new DateTime(DateTimeUtc.fromTime(date.getTime()), localOffset());
 
+/**
+Converts a `Float` value representing the number of millisecond since Epoch into
+a `DateTime` type.
+*/
   @:from public static function fromTime(timestamp : Float) : DateTime
     return new DateTime(DateTimeUtc.fromTime(timestamp), Time.zero);
 
+/**
+Converts a string into a `DateTime` value. The format accepted is looks like
+this:
+```
+2016-08-07T23:18:22.123Z
+```
+
+The decimals of seconds can be omitted (and so should be dot separator `.`).
+
+`T` can also be replaced with a whitespace ` `. `Z` represents the `UTC`
+timezone and can be replaced with a time offset in the format:
+
+```
+-06:00
+```
+
+In this case the sign (`+`/`-`) is not optional and seconds cannot be used.
+*/
   @:from public static function fromString(s : String) : DateTime {
     var pattern = ~/^(\d+)[-](\d{2})[-](\d{2})(?:[T ](\d{2})[:](\d{2})[:](\d{2})(?:\.(\d+))?(Z|([+-]\d{2})[:](\d{2}))?)?$/;
     if(!pattern.match(s))
