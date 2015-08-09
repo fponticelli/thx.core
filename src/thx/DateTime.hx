@@ -470,9 +470,9 @@ Returns true if this date and the `other` date share the same year, month, day, 
   //1997-07-16T19:20:30+01:00
   @:to public function toString() {
     var abs = new DateTime(new DateTimeUtc(utc.ticks.abs()), offset);
-    var decimals = abs.tickInSecond != 0 ? '.' + abs.tickInSecond.lpad(7, "0").trimCharsRight(")") : "";
+    var decimals = abs.tickInSecond != 0 ? '.' + abs.tickInSecond.lpad("0", 7).trimCharsRight(")") : "";
     var isneg = utc.ticks < Int64s.zero;
-    return (isneg ? "-" : "") + '${abs.year}-${abs.month.lpad(2)}-${abs.day.lpad(2)}T${abs.hour.lpad(2)}:${abs.minute.lpad(2)}:${abs.second.lpad(2)}${decimals}${offset.toGmtString()}';
+    return (isneg ? "-" : "") + '${abs.year}-${abs.month.lpad("0", 2)}-${abs.day.lpad("0", 2)}T${abs.hour.lpad("0", 2)}:${abs.minute.lpad("0", 2)}:${abs.second.lpad("0", 2)}${decimals}${offset.toGmtString()}';
   }
 
   @:to inline function get_utc() : DateTimeUtc

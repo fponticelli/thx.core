@@ -63,7 +63,7 @@ The returned value is a rounded integer.
   inline public static function isOdd(v : Int)
     return v % 2 != 0;
 
-  public static function lpad(v : Int, len : Int, ?pad = "0") : String {
+  public static function lpad(v : Int, ?pad = "0", len : Int) : String {
     var neg = false;
     if(v < 0) {
       neg = true;
@@ -72,7 +72,7 @@ The returned value is a rounded integer.
     return (neg ? "-" : "") + StringTools.lpad('$v', pad, len);
   }
 
-  inline public static function rpad(v : Int, len : Int, ?pad = "0") : String
+  inline public static function rpad(v : Int, ?pad = "0", len : Int) : String
     return StringTools.rpad('$v', pad, len);
 
 /**

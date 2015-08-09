@@ -138,18 +138,18 @@ abstract Time(Int64) {
   @:to public function toString() {
     var timeAbs = abs(),
         ticksInSecondAbs = timeAbs.ticksInSecond,
-        decimals = ticksInSecondAbs != 0 ? ('.' + ticksInSecondAbs.lpad(7, "0").trimCharsRight("0")) : "";
+        decimals = ticksInSecondAbs != 0 ? ('.' + ticksInSecondAbs.lpad("0", 7).trimCharsRight("0")) : "";
 
     return (isNegative ? "-" : "") +
-      '${timeAbs.totalHours}:${timeAbs.minutes.lpad(2, "0")}:${timeAbs.seconds.lpad(2, "0")}' +
+      '${timeAbs.totalHours}:${timeAbs.minutes.lpad("0", 2)}:${timeAbs.seconds.lpad("0", 2)}' +
       decimals;
   }
 
   public function toGmtString() {
-    var h = totalHours.toInt().lpad(2, "0");
+    var h = totalHours.toInt().lpad("0", 2);
     if(ticks >= 0)
       h = '+$h';
-    return '${h}:${minutes.lpad(2, "0")}';
+    return '${h}:${minutes.lpad("0", 2)}';
   }
 
   @:to inline function get_ticks() : Int64

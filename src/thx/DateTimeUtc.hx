@@ -554,9 +554,9 @@ Returns true if this date and the `other` date share the same year, month, day, 
   //1997-07-16T19:20:30Z
   @:to public function toString() {
     var abs = DateTimeUtc.fromInt64(ticks.abs());
-    var decimals = abs.tickInSecond != 0 ? '.' + abs.tickInSecond.lpad(7, "0").trimCharsRight(")") : "";
+    var decimals = abs.tickInSecond != 0 ? '.' + abs.tickInSecond.lpad("0", 7).trimCharsRight(")") : "";
     var isneg = ticks < Int64s.zero;
-    return (isneg ? "-" : "") + '${abs.year}-${abs.month.lpad(2)}-${abs.day.lpad(2)}T${abs.hour.lpad(2)}:${abs.minute.lpad(2)}:${abs.second.lpad(2)}${decimals}Z';
+    return (isneg ? "-" : "") + '${abs.year}-${abs.month.lpad("0", 2)}-${abs.day.lpad("0", 2)}T${abs.hour.lpad("0", 2)}:${abs.minute.lpad("0", 2)}:${abs.second.lpad("0", 2)}${decimals}Z';
   }
 
   @:to inline function get_ticks() : Int64
