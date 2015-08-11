@@ -2,8 +2,17 @@ package thx;
 
 import thx.Error;
 
+/**
+It's a type that represents a URL.
+*/
 abstract Url(UrlType) from UrlType to UrlType {
   static var pattern = ~/^((((?:([^:\/#\?]+):)?(?:(\/\/)?((?:(([^:@\/#\?]+)(?:[:]([^:@\/#\?]+))?)@)?(([^:\/#\?\]\[]+|\[[^\/\]@#?]+\])(?:[:]([0-9]+))?))?)?)?((\/?(?:[^\/\?#]+\/+)*)([^\?#]*)))?(?:\?([^#]+))?)(?:#(.*))?/;
+/**
+Generates a URL instance from a `String`. It throws an exception if the string
+cannot be parsed to a valid URL.
+
+The URL can be either relative or absolute.
+*/
   @:from public static function parse(s : String) : Url {
     if(!pattern.match(s)) throw new Error('unable to parse "$s" to Url');
     var port = pattern.matched(12),
@@ -43,6 +52,10 @@ abstract Url(UrlType) from UrlType to UrlType {
   public var search(get, set) : String;
   public var slashes(get, set) : Bool;
 
+/**
+Matches all the URL parts with another URL and returns true if they are all
+equals.
+*/
   @:op(A == B) public function equals(other : Url) : Bool
     return
       this.protocol == other.protocol &&
