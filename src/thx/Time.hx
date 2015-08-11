@@ -120,6 +120,9 @@ abstract Time(Int64) {
   @:op(A==B) inline public function equals(other : Time)
     return ticks == other.ticks;
 
+  @:op(A!=B) inline public function notEquals(other : Time)
+    return ticks != other.ticks;
+
   @:op(A>B) inline public function greater(other : Time) : Bool
     return compare(other.ticks) > 0;
 
