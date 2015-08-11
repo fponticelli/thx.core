@@ -138,5 +138,3 @@ Implementation by Elliott Stoneham.
       return result;
   }
 }
-
-typedef Int64 = haxe.Int64;
