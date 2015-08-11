@@ -114,13 +114,13 @@ Implementation by Elliott Stoneham.
     var noFractions = f - (f % 1);
 
     // 2^53-1 and -2^53: these are parseable without loss of precision
-    if(noFractions > 9007199254740991)
+    if(noFractions >  9007199254740991.0)
       throw new Error("Conversion to Int64 failed. Conversion overflow");
-    if(noFractions < -9007199254740991)
+    if(noFractions < -9007199254740991.0)
       throw new Error("Conversion to Int64 failed. Conversion underflow");
 
-    var result = Int64.ofInt(0),
-        neg    = noFractions < 0,
+    var result = zero,
+        neg    = noFractions < 0.0,
         rest   = neg ? -noFractions : noFractions;
 
     var i = 0, curr;
@@ -133,8 +133,9 @@ Implementation by Elliott Stoneham.
     }
 
     if(neg)
-      result = Int64.neg(result);
-    return result;
+      return Int64.neg(result);
+    else
+      return result;
   }
 }
 
