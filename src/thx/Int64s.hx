@@ -32,7 +32,7 @@ using haxe.Int64;
 import StringTools;
 
 class Int64s {
-  public static var one = Int64.make(0, 1);
+  public static var one  = Int64.make(0, 1);
   public static var zero = Int64.make(0, 0);
 
   public static var maxValue = haxe.Int64.make(0x7fffffff,0xffffffff);
@@ -114,14 +114,14 @@ Implementation by Elliott Stoneham.
     var noFractions = f - (f % 1);
 
     // 2^53-1 and -2^53: these are parseable without loss of precision
-    if(noFractions > 9007199254740991)
+    if(noFractions > 9007199254740991.0)
       throw new Error("Conversion to Int64 failed. Conversion overflow");
-    if(noFractions < -9007199254740991)
+    if(noFractions < -9007199254740991.0)
       throw new Error("Conversion to Int64 failed. Conversion underflow");
 
-    var result = Int64.ofInt(0),
-        neg = noFractions < 0,
-        rest = neg ? -noFractions : noFractions;
+    var result = zero,
+        neg    = noFractions < 0.0,
+        rest   = neg ? -noFractions : noFractions;
 
     var i = 0, curr;
     while (rest >= 1) {
@@ -137,3 +137,5 @@ Implementation by Elliott Stoneham.
     return result;
   }
 }
+
+typedef Int64 = haxe.Int64;
