@@ -1,10 +1,11 @@
 package thx;
 
+import thx.Error;
+
 abstract Url(UrlType) from UrlType to UrlType {
   static var pattern = ~/^((((?:([^:\/#\?]+):)?(?:(\/\/)?((?:(([^:@\/#\?]+)(?:[:]([^:@\/#\?]+))?)@)?(([^:\/#\?\]\[]+|\[[^\/\]@#?]+\])(?:[:]([0-9]+))?))?)?)?((\/?(?:[^\/\?#]+\/+)*)([^\?#]*)))?(?:\?([^#]+))?)(?:#(.*))?/;
   @:from public static function parse(s : String) : Url {
-    if(null == s) return null;
-    if(!pattern.match(s)) throw 'unable to parse "$s" to Url';
+    if(!pattern.match(s)) throw new Error('unable to parse "$s" to Url');
     var port = pattern.matched(12),
         o : Url = {
           protocol : pattern.matched(4),
@@ -53,6 +54,12 @@ abstract Url(UrlType) from UrlType to UrlType {
       this.queryString.equals(other.queryString) &&
       this.search == other.search &&
       this.hash == other.hash;
+
+  @:to public function toString()
+    return if(isAbsolute)
+      '${hasProtocol ? protocol + ":" : ""}${slashes?"//":""}${hasAuth?auth+"@":""}$host$path${hasHash?"#"+hash:""}';
+    else
+      '$path${hasHash?"#"+hash:""}';
 
   inline function get_auth()
     return this.auth;
@@ -111,12 +118,7 @@ abstract Url(UrlType) from UrlType to UrlType {
     return this.hostName != null;
 
   inline function get_isRelative()
-  return this.hostName == null;
-  @:to public function toString()
-    return if(isAbsolute)
-      '${hasProtocol ? protocol + ":" : ""}${slashes?"//":""}${hasAuth?auth+"@":""}$host$path${hasHash?"#"+hash:""}';
-    else
-      '$path${hasHash?"#"+hash:""}';
+    return this.hostName == null;
 
   inline function get_path()
     return this.pathName + (hasSearch ? '?$search' : "");
