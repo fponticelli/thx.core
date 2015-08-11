@@ -133,8 +133,9 @@ Implementation by Elliott Stoneham.
     }
 
     if(neg)
-      result = Int64.neg(result);
-    return result;
+      return Int64.neg(result);
+    else
+      return result;
   }
 }
 
