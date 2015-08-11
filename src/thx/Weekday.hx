@@ -1,5 +1,9 @@
 package thx;
 
+/**
+Named weekdays mapped to integer values from 0 to 6 where 0 is Sunday and 6 is
+Saturday.
+*/
 @:enum
 abstract Weekday(Int) from Int to Int {
   var Sunday = 0;
