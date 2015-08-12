@@ -123,13 +123,21 @@ In this case the sign (`+`/`-`) is not optional and seconds cannot be used.
       return new DateTime(DateTimeUtc.fromInt64(-date.utc.ticks), time);
     return date;
   }
+/**
+Creates a DateTime instance from its components (year, mont, day, hour, minute,
+second, millisecond and time offset).
 
+All time components are optionals.
+*/
   inline static public function create(year : Int, month : Int, day : Int, ?hour : Int = 0, ?minute : Int = 0, ?second : Int = 0, ?millisecond : Int = 0, offset : Time)
     return new DateTime(
       DateTimeUtc.create(year, month, day, hour, minute, second, millisecond),
       offset
     ).subtract(offset);
 
+/**
+DateTime constructor, requires a utc value and an offset.
+*/
   inline public function new(dateTime : DateTimeUtc, offset : Time)
     this = [dateTime.ticks, offset.ticks];
 
