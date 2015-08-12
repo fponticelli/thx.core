@@ -52,9 +52,12 @@ UTC.
 
 /**
 Converts a `Date` type into a `DateTime` type.
+
+An optional `offset` can be provided otherwise the local server offset will be
+used.
 */
-  @:from public static function fromDate(date : Date) : DateTime
-    return new DateTime(DateTimeUtc.fromTime(date.getTime()), localOffset());
+  @:from public static function fromDate(date : Date, ?offset : Time) : DateTime
+    return new DateTime(DateTimeUtc.fromTime(date.getTime()), null != offset ? offset : localOffset());
 
 /**
 Converts a `Float` value representing the number of millisecond since Epoch into
