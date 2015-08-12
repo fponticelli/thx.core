@@ -31,9 +31,13 @@ using haxe.Int64;
 
 import StringTools;
 
+/**
+`Int64` helper methods.
+*/
 class Int64s {
   public static var one  = Int64.make(0, 1);
   public static var zero = Int64.make(0, 0);
+  public static var ten  = Int64.ofInt(10);
 
   public static var maxValue = haxe.Int64.make(0x7fffffff,0xffffffff);
   public static var minValue = haxe.Int64.make(0x80000000,0x00000001);
@@ -49,7 +53,7 @@ class Int64s {
     else
       return 0;
 
-  static var base = Int64.ofInt(10);
+
   public static function parse(s : String) : Int64 {
     var sIsNegative = false,
         multiplier = Int64.ofInt(1),
@@ -76,7 +80,7 @@ class Int64s {
         if(Int64.isNeg(current))
           throw new Error("Int64 parsing error: Overflow");
       }
-      multiplier = Int64.mul(multiplier, base);
+      multiplier = Int64.mul(multiplier, ten);
     }
     return current;
   }
