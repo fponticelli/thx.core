@@ -10,6 +10,9 @@ using thx.Strings;
 /**
 `DateTimeUtc` represents a UTC instant between `-29228-09-14T02:48:05.4775807Z`
 and `29228-09-14T02:48:05.4775807Z`.
+
+`DateTimeUtc` represents an moment in time with no time-zone offset and it is
+relative to UTC (Coordinated Universal Time).
 */
 abstract DateTimeUtc(Int64) {
   static var millisPerSecond = 1000;
@@ -46,6 +49,9 @@ abstract DateTimeUtc(Int64) {
   static var daysToMonth365 = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365];
   static var daysToMonth366 = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366];
 
+/**
+Returns the system date/time relative to UTC.
+*/
   public static function now() : DateTimeUtc
 // Date.getTime() in C# is broken hence the special case
 #if cs // because of issue https://github.com/HaxeFoundation/haxe/issues/4452
@@ -54,9 +60,16 @@ abstract DateTimeUtc(Int64) {
     return fromDate(Date.now());
 #end
 
+/**
+Returns a date/time from an `Int64` value. The value is the number of ticks
+(tenth of microseconds) since 1 C.E. (A.D.).
+*/
   public static function fromInt64(ticks : Int64) : DateTimeUtc
     return new DateTimeUtc(ticks);
 
+/**
+Transforms a Haxe native `Date` instance into `DateTimeUtc`.
+*/
   @:from public static function fromDate(date : Date) : DateTimeUtc
 #if cs // because of issue https://github.com/HaxeFoundation/haxe/issues/4452
     return new DateTimeUtc(untyped date.date.Ticks);
@@ -64,9 +77,16 @@ abstract DateTimeUtc(Int64) {
     return fromTime(date.getTime());
 #end
 
+/**
+Transforms an epoch time value in milliconds into `DateTimeUtc`.
+*/
   @:from public static function fromTime(timestamp : Float) : DateTimeUtc
     return new DateTimeUtc(Int64s.fromFloat(timestamp).mul(ticksPerMillisecondI64).add(unixEpochTicks));
 
+/**
+Parses a string into a `DateTimeUtc` value. If parsing is not possible an
+exception is thrown.
+*/
   @:from public static function fromString(s : String) : DateTimeUtc {
     var pattern = ~/^([-])?(\d+)[-](\d{2})[-](\d{2})(?:[T ](\d{2})[:](\d{2})[:](\d{2})(?:\.(\d+))?Z?)?$/;
     if(!pattern.match(s))
@@ -92,6 +112,12 @@ abstract DateTimeUtc(Int64) {
     return date;
   }
 
+/**
+Creates a DateTime instance from its components (year, mont, day, hour, minute
+second and millisecond).
+
+All time components are optionals.
+*/
   public static function create(year : Int, month : Int, day : Int, ?hour : Int = 0, ?minute : Int = 0, ?second : Int = 0, ?millisecond : Int = 0) {
     second += Math.floor(millisecond / 1000);
     millisecond = millisecond % 1000;
@@ -108,7 +134,6 @@ abstract DateTimeUtc(Int64) {
   public static function isLeapYear(year : Int) : Bool
     return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
 
-  // TODO remove validation and allow for overflowing values
   public static function dateToTicks(year : Int, month : Int, day : Int) : Int64 {
     function fixMonthYear() {
       if(month == 0) {
