@@ -66,6 +66,9 @@ Returns the lower case version if any of the character.
   public function toLowerCase() : Char
     return toString().toLowerCase();
 
+/**
+Equality method.
+*/
   @:op(A==B) inline public function equals(other : Char)
     return compare(other) == 0;
 
