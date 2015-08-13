@@ -268,7 +268,7 @@ Snaps a Date to the nearest second, minute, hour, day, week, month or year.
   For example, jumping between months (which have different numbers of days), leap years, leap seconds, daylight savings time changes etc.
 
   @param date The starting date.
-  @param period The TimePeriod you wish to jump by, Seconds, Minutes, Hours, Days, Weeks, Months Years.
+  @param period The TimePeriod you wish to jump by, Second, Minute, Hour, Day, Week, Month or Year.
   @param amount The multiple of `period` that you wish to jump by. A positive amount moves forward in time, a negative amount moves backward.
 **/
   public static function jump(date : Date, period : TimePeriod, amount : Int) {
