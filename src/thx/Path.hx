@@ -37,10 +37,9 @@ abstract Path(Array<String>) {
   public static function normalizeWin32(path : Path, ?replacement = "_")
     return path.map(function(_) return (~/[<>:"\/\|?*]/g).replace(_, replacement));
 
-  public var path(get, never) : Array<String>;
-  public var root(get, never) : String;
-  public var sep(get, never) : String;
-
+/**
+Creates an instance of `Path` from a string.
+*/
   @:from
   public static function fromString(s : String) : Path {
     if(s.contains(win32Separator)) {
@@ -60,6 +59,10 @@ abstract Path(Array<String>) {
         nixSeparator);
     }
   }
+
+  public var path(get, never) : Array<String>;
+  public var root(get, never) : String;
+  public var sep(get, never) : String;
 
   #if java inline #end //WHY????
   public static function resolve(path : Array<String>, isAbsolute : Bool) {
@@ -93,12 +96,8 @@ abstract Path(Array<String>) {
       sep
     );
 
-  public function asRelative()
-    return create(
-      "",
-      path,
-      sep
-    );
+  inline public function asRelative()
+    return create("", path, sep);
 
   public function normalize()
     return isWin32() ? normalizeWin32(get_self()) : normalizeNix(get_self());

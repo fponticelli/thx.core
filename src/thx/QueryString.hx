@@ -7,6 +7,9 @@ using thx.Strings;
 using thx.Iterators;
 import thx.Objects;
 
+/**
+Represents a URL query string.
+*/
 abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryStringValue> to Map<String, QueryStringValue>{
   public static var separator = "&";
   public static var assignment = "=";
