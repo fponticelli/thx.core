@@ -120,6 +120,14 @@ Creates an instance of `Path` from a string.
   public function isValid()
     return isWin32() ? isValidWin32(get_self()) : isValidNix(get_self());
 
+  public function noext() : String {
+    var e = ext();
+    if(e == "")
+      return base();
+    else
+      return base('.$e');
+  }
+
   public function base(?end : String) : String {
     if(path.length == 0)
       return '';
