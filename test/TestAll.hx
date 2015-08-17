@@ -6,6 +6,7 @@ class TestAll {
     runner.addCase(new thx.TestAnonymousMap());
     runner.addCase(new thx.TestArrays());
     runner.addCase(new thx.TestAssert());
+    runner.addCase(new thx.TestBigInt());
     runner.addCase(new thx.TestChar());
     runner.addCase(new thx.TestChars());
     runner.addCase(new thx.TestDates());
