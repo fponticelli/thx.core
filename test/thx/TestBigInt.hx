@@ -15,6 +15,9 @@ class TestBigInt {
     for(test in tests) {
       var out = (test : BigInt).toString();
       Assert.equals('$test', out, 'expected $test but got $out');
+
+      //var out = (-test : BigInt).toString();
+      //Assert.equals('${-test}', out, 'expected ${-test} but got $out');
     }
   }
 }
