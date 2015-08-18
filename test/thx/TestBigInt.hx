@@ -13,11 +13,11 @@ class TestBigInt {
           1000000, 10000000
         ];
     for(test in tests) {
-      var out = (test : BigInt).toString();
-      Assert.equals('$test', out, 'expected $test but got $out');
+      var out : BigInt = test;
+      Assert.equals(test, out.toInt(), 'expected $test but got ${out.toInt()}');
 
-      //var out = (-test : BigInt).toString();
-      //Assert.equals('${-test}', out, 'expected ${-test} but got $out');
+      var out : BigInt = -test;
+      Assert.equals(-test, out.toInt(), 'expected ${-test} but got ${out.toInt()}');
     }
   }
 }
