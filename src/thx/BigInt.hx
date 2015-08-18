@@ -3,6 +3,29 @@ package thx;
 abstract BigInt(Array<Int>) {
   public static var zero(default, null) = new BigInt([0]);
 
+  var value(get, never) : Int;
+  var hasWords(get, never) : Bool;
+  var numWords(get, never) : Int;
+
+  function new(arr : Array<Int>)
+    this = arr;
+
+  inline function mapWords(f : Int -> Void) {
+    for(i in 0...numWords)
+      f(this[i+1]);
+  }
+
+  inline function get_value()
+    return this[0];
+
+  inline function get_hasWords() : Bool
+    return this.length > 1;
+
+  inline function get_numWords() : Int
+    return this.length - 1;
+
+
+/*
   var sign(get, never) : Int;
   var chunks(get, never) : Array<Int>;
   var length(get, never) : Int;
@@ -17,63 +40,9 @@ abstract BigInt(Array<Int>) {
     this = arr;
 
   @:op(A+B) function addInt(that : Int) : BigInt {
-//    if(that < 0)
-//      return sub(-that);
-    var arr = this.copy(),
-        c = 0, b;
-    //trace(arr);
-    arr[0] += that;
-    for(i in 0...arr.length) {
-      c += arr[i];
-      b = 0;
-      if(c < 0) {
-        b =- (c >> bpe);
-        c += b * radix;
-      }
-      arr[i] = c & mask;
-      c = (c >> bpe) - b;
-      if(c == 0) break;
-    }
-    while(c != 0) {
-      if(c < 0) {
-        b =- (c >> bpe);
-        c += b * radix;
-      }
-      arr.push(c & mask);
-      c = (c >> bpe) - b;
-    }
-    return new BigInt(arr);
+
   }
-/*
-  @:op(A-B) function sub(that : Int) : BigInt {
-    if(that < 0)
-      return add(-that);
-    var arr = this.copy(),
-        c = 0, b;
-    //trace(arr);
-    arr[0] += that;
-    for(i in 0...arr.length) {
-      c += arr[i];
-      b = 0;
-      if(c < 0) {
-        b =- (c >> bpe);
-        c += b * radix;
-      }
-      arr[i] = c & mask;
-      c = (c >> bpe) - b;
-      if(c == 0) break;
-    }
-    while(c != 0) {
-      if(c < 0) {
-        b =- (c >> bpe);
-        c += b * radix;
-      }
-      arr.push(c & mask);
-      c = (c >> bpe) - b;
-    }
-    return new BigInt(arr);
-  }
-*/
+
   inline function get_sign()
     return this[0];
 
@@ -155,4 +124,5 @@ abstract BigInt(Array<Int>) {
     //trace('mask: $mask');
     //trace('radix: $radix');
   }
+*/
 }
