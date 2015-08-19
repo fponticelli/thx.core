@@ -50,8 +50,39 @@ abstract BigInt(Array<Int>) {
     return new BigInt(arr);
   }
 
+  // TODO
+  @:from public static function fromString(s : String)
+    return fromInt(0);
+
   function new(arr : Array<Int>)
     this = arr;
+
+  // TODO
+  @:op(-A) public function negate() : BigInt
+    return fromInt(0);
+
+  // TODO
+  @:op(A/B) public function divide(that : BigInt) : BigInt
+    return fromInt(0);
+
+  // TODO
+  @:op(A*B) public function multiply(that : BigInt) : BigInt
+    return fromInt(0);
+
+  // TODO
+  @:op(A+B) public function add(that : BigInt) : BigInt
+    return fromInt(0);
+
+  // TODO
+  @:op(A-B) public function subtract(that : BigInt) : BigInt
+    return fromInt(0);
+
+  // TODO
+  @:op(A==B) public function equals(that : BigInt) : Bool
+    return false;
+
+  @:op(A!=B) public function notEquals(that : BigInt) : Bool
+    return !equals(that);
 
   @:to public function toFloat() : Float {
     return reduceRightChunks(function(acc : Float, curr : Int) : Float {
