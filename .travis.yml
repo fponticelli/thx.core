@@ -1,5 +1,7 @@
 language: haxe
 
+sudo: false
+
 matrix:
   include:
     - env: TARGET=cpp
