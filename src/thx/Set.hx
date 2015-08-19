@@ -8,18 +8,22 @@ abstract Set<T>(Array<T>) {
 /**
 `arrayToSet` converts an `Array` into a `Set` removing all duplicated values.
 **/
-  @:from public static function arrayToSet<T>(arr : Array<T>) {
+  @:from public static function toSet<T>(arr : Array<T>) {
     var set = new Set([]);
     for(v in arr)
       set.push(v);
     return set;
   }
 
+  @:deprecated("use Set.toSet instead")
+  public static function arrayToSet<T>(arr : Array<T>)
+    return toSet(arr);
+
 /**
 Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` otherwise.
 **/
   public static function create<T>(?arr : Array<T>)
-    return null == arr ? new Set<T>([]) : arrayToSet(arr);
+    return null == arr ? new Set<T>([]) : toSet(arr);
 
   inline function new(arr : Array<T>)
     this = arr;
@@ -105,15 +109,25 @@ Same operations as `Array.splice()` but it returns a new `Set` instead of an arr
 Union creates a new Set with elements from bots sets.
 **/
   @:op(A+B) inline public function union(set : Set<T>) : Set<T>
-    return arrayToSet(this.concat(set.setToArray()));
+    return toSet(this.concat(set.toArray()));
+
+/**
+Union creates a new Set with elements from bots sets.
+**/
+  @:op(A+B) inline public function unionArray(set : Array<T>) : Set<T>
+    return toSet(this.concat(set));
 
 /**
 Converts a `Set<T>` into `Array<T>`. The returned array is a copy of the internal
 array used by `Set`. This ensures that the set is not affected by unsafe operations
 that might happen on the returned array.
 **/
-  @:to public function setToArray()
+  @:to public function toArray()
     return this.copy();
+
+  @:deprecated("use Set.toArray instead")
+  public function setToArray()
+    return toArray();
 
 /**
 Converts `Set` into `String`. To differentiate from normal `Array`s the output string
