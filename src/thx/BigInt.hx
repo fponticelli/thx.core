@@ -11,9 +11,13 @@ abstract BigInt(Array<Int>) {
   static inline var MUL_MASK = (1 << MUL_BITS) - 1;
 
   public static var zero(default, null) = new BigInt([0]);
+  public static var ten(default, null) = fromInt(10);
 
   var sign(get, never) : Int;
   var chunks(get, never) : Int;
+
+  public var isNegative(get, never) : Bool;
+  public var isZero(get, never) : Bool;
 
   @:from public static function fromInt(v : Int) {
     var arr;
@@ -147,6 +151,12 @@ abstract BigInt(Array<Int>) {
 
   inline function get_chunks() : Int
     return this.length - 1;
+
+  inline function get_isNegative() : Bool
+    return sign < 0;
+
+  inline function get_isZero() : Bool
+    return sign == 0;
 
   inline function self() : BigInt
     return new BigInt(this);
