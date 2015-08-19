@@ -41,6 +41,9 @@ class TestBigInt {
       var out : BigInt = test;
       Assert.equals(test, out.toString(), 'expected $test but got ${out.toString()}');
 
+      if(test == "0")
+        continue;
+
       var out : BigInt = '-$test';
       Assert.equals('-$test', out.toString(), 'expected -$test but got ${out.toString()}');
     }
@@ -53,11 +56,23 @@ class TestBigInt {
     Assert.isTrue((-1 : BigInt) == (-1 : BigInt));
     Assert.isTrue(("-12345678901234567890" : BigInt) == ("-12345678901234567890" : BigInt));
 
-    Assert.isFalse((0 : BigInt) != (1 : BigInt));
-    Assert.isFalse((1 : BigInt) != (2 : BigInt));
-    Assert.isFalse(("12345678901234567890" : BigInt) != ("12345678901234567891" : BigInt));
-    Assert.isFalse((-1 : BigInt) != (-2 : BigInt));
-    Assert.isFalse(("-12345678901234567890" : BigInt) != ("-12345678901234567891" : BigInt));
+    Assert.isFalse((0 : BigInt) != (0 : BigInt));
+    Assert.isFalse((1 : BigInt) != (1 : BigInt));
+    Assert.isFalse(("12345678901234567890" : BigInt) != ("12345678901234567890" : BigInt));
+    Assert.isFalse((-1 : BigInt) != (-1 : BigInt));
+    Assert.isFalse(("-12345678901234567890" : BigInt) != ("-12345678901234567890" : BigInt));
+
+    Assert.isTrue((0 : BigInt) != (1 : BigInt));
+    Assert.isTrue((1 : BigInt) != (2 : BigInt));
+    Assert.isTrue(("12345678901234567890" : BigInt) != ("12345678901234567891" : BigInt));
+    Assert.isTrue((-1 : BigInt) != (-2 : BigInt));
+    Assert.isTrue(("-12345678901234567890" : BigInt) != ("-12345678901234567891" : BigInt));
+
+    Assert.isFalse((0 : BigInt) == (1 : BigInt));
+    Assert.isFalse((1 : BigInt) == (2 : BigInt));
+    Assert.isFalse(("12345678901234567890" : BigInt) == ("12345678901234567891" : BigInt));
+    Assert.isFalse((-1 : BigInt) == (-2 : BigInt));
+    Assert.isFalse(("-12345678901234567890" : BigInt) == ("-12345678901234567891" : BigInt));
   }
 
   public function testDivision() {

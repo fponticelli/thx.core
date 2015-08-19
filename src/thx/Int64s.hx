@@ -53,7 +53,6 @@ class Int64s {
     else
       return 0;
 
-
   public static function parse(s : String) : Int64 {
     var sIsNegative = false,
         multiplier = Int64.ofInt(1),
