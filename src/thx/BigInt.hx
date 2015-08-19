@@ -169,8 +169,36 @@ abstract BigInt(Array<Int>) {
     }, 0) * sign;
   }
 
-  @:to public function toString() {
-    return "0";
+  // TODO
+  public function intDivision(that : BigInt) : { quotient : BigInt, modulus : BigInt } {
+    return {
+      quotient : zero,
+      modulus : zero
+    };
+  }
+
+  // TODO needs intDivision and less
+  @:to public function toString() : String {
+    if(sign == 0) return "0";
+    var str = "",
+        i = isNegative ? -self() : self();
+
+    if(i < ten) {
+      str ='${i.toInt()}';
+    } else {
+      while(!i.isZero) {
+        var r = i.intDivision(ten);
+        str = r.modulus.toString() + str;
+        i = r.quotient;
+      }
+    }
+
+    return (isNegative ? "-" : "") + str;
+  }
+
+  // TODO
+  public function toStringWithBase(base : Int) : String {
+    return "";
   }
 
 /*
