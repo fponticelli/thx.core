@@ -57,6 +57,21 @@ abstract BigInt(Array<Int>) {
   function new(arr : Array<Int>)
     this = arr;
 
+  public function compare(that : BigInt) : Int
+    return 0;
+
+  @:op(A>B) public function greater(that : BigInt) : Bool
+    return compare(that) > 0;
+
+  @:op(A>=B) public function greaterEqual(that : BigInt) : Bool
+    return compare(that) >= 0;
+
+  @:op(A<B) public function less(that : BigInt) : Bool
+    return compare(that) < 0;
+
+  @:op(A<=B) public function lessEqual(that : BigInt) : Bool
+    return compare(that) <= 0;
+
   // TODO
   @:op(-A) public function negate() : BigInt
     return fromInt(0);
@@ -78,11 +93,19 @@ abstract BigInt(Array<Int>) {
     return fromInt(0);
 
   // TODO
-  @:op(A==B) public function equals(that : BigInt) : Bool
-    return false;
+  @:op(A==B) public function equals(that : BigInt) : Bool {
+    if(sign != that.sign || chunks != that.chunks) return false;
+    var other = that.toArray();
+    for(i in 1...chunks + 1)
+      if(this[i] != other[i]) return false;
+    return true;
+  }
 
   @:op(A!=B) public function notEquals(that : BigInt) : Bool
     return !equals(that);
+
+  inline function toArray() : Array<Int>
+    return this;
 
   @:to public function toFloat() : Float {
     return reduceRightChunks(function(acc : Float, curr : Int) : Float {
