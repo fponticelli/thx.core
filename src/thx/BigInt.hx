@@ -3,6 +3,7 @@ package thx;
 /**
 Based on code realized by Mike Welsh: https://github.com/Herschel/hxmath/blob/master/src/hxmath/BigInt.hx
 */
+// TODO bit operations
 abstract BigInt(Array<Int>) {
   static inline var CHUNK_SIZE = 30;
   static inline var CHUNK_MASK = (1 << CHUNK_SIZE) - 1;
@@ -55,8 +56,44 @@ abstract BigInt(Array<Int>) {
   }
 
   // TODO
-  @:from public static function fromString(s : String)
+  @:from public static function fromString(s : String) {
+    /*
+    var sIsNegative = false,
+        multiplier = Int64.ofInt(1),
+        current = Int64.ofInt(0);
+    if(s.charAt(0) == "-") {
+      sIsNegative = true;
+      s = s.substring(1, s.length);
+    }
+    var len = s.length;
+
+    for (i in 0...len) {
+      var digitInt = s.charCodeAt(len - 1 - i) - '0'.code;
+
+      if(digitInt < 0 || digitInt > 9)
+        throw new Error("String should only contain digits (and an optional - sign)");
+
+      var digit = Int64.ofInt(digitInt);
+      if(sIsNegative) {
+        current = Int64.sub(current, Int64.mul(multiplier, digit));
+        if(!Int64.isNeg(current))
+          throw new Error("Int64 parsing error: Underflow");
+      } else {
+        current = Int64.add(current, Int64.mul(multiplier, digit));
+        if(Int64.isNeg(current))
+          throw new Error("Int64 parsing error: Overflow");
+      }
+      multiplier = Int64.mul(multiplier, ten);
+    }
+    return current;
+    */
     return fromInt(0);
+  }
+
+  // TODO
+  public function fromStringWithBase(s : String, base : Int) : BigInt {
+    return zero;
+  }
 
   function new(arr : Array<Int>)
     this = arr;
@@ -85,6 +122,10 @@ abstract BigInt(Array<Int>) {
 
   // TODO
   @:op(A/B) public function divide(that : BigInt) : BigInt
+    return fromInt(0);
+
+  // TODO
+  @:op(A%B) public function modulo(that : BigInt) : BigInt
     return fromInt(0);
 
   // TODO
@@ -132,11 +173,13 @@ abstract BigInt(Array<Int>) {
     return "0";
   }
 
+/*
   inline function reduceChunks<T>(f : T -> Int -> T, acc : T) : T {
     for(i in 0...chunks)
       acc = f(acc, this[i+1]);
     return acc;
   }
+*/
 
   // TODO this can probably be optimized with a Macro inlining the body
   inline function reduceRightChunks<T>(f : T -> Int -> T, acc : T) : T {
