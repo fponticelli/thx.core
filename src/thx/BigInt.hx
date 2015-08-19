@@ -34,7 +34,7 @@ abstract BigInt(Array<Int>) {
 
   @:from public static function fromFloat(v : Float) {
     var arr;
-    v = Math.ffloor(v);
+    v = v < 0 ? Math.fceil(v) : Math.ffloor(v);
     if(v < 0) {
       arr = [-1];
       v = -v;
@@ -52,6 +52,12 @@ abstract BigInt(Array<Int>) {
 
   function new(arr : Array<Int>)
     this = arr;
+
+  @:to public function toFloat() : Float {
+    return reduceRightChunks(function(acc : Float, curr : Int) : Float {
+      return acc * CHUNK_MAX_FLOAT + curr;
+    }, 0.0) * sign;
+  }
 
   // TODO explode on overflow?
   @:to public function toInt() : Int {
