@@ -73,8 +73,11 @@ abstract BigInt(Array<Int>) {
     return compare(that) <= 0;
 
   // TODO
-  @:op(-A) public function negate() : BigInt
-    return fromInt(0);
+  @:op(-A) public function negate() : BigInt {
+    var arr = this.copy();
+    arr[0] = -arr[0];
+    return new BigInt(arr);
+  }
 
   // TODO
   @:op(A/B) public function divide(that : BigInt) : BigInt

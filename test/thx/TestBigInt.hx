@@ -3,6 +3,7 @@ package thx;
 import utest.Assert;
 import thx.BigInt;
 
+// TODO add tests for greater(Equal)/less(Equal)
 class TestBigInt {
   public function new() {}
 
