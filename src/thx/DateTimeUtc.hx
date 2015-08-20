@@ -428,6 +428,30 @@ If you are already on the given day, the date will not change.
   }
 
 /**
+Snaps a time to the next second, minute, hour, day, week, month or year.
+
+@param period Either: Second, Minute, Hour, Day, Week, Month or Year
+**/
+  public function snapNext(period : TimePeriod) : DateTimeUtc
+    return self();
+
+/**
+Snaps a time to the previous second, minute, hour, day, week, month or year.
+
+@param period Either: Second, Minute, Hour, Day, Week, Month or Year
+**/
+  public function snapPrev(period : TimePeriod) : DateTimeUtc
+    return self();
+
+/**
+Snaps a time to the nearest second, minute, hour, day, week, month or year.
+
+@param period Either: Second, Minute, Hour, Day, Week, Month or Year
+**/
+  public function snapTo(period : TimePeriod) : DateTimeUtc
+    return self();
+
+/**
 Returns true if this date and the `other` date share the same year.
 **/
   public function sameYear(other : DateTimeUtc) : Bool

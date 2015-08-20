@@ -352,6 +352,57 @@ If you are already on the given day, the date will not change.
   }
 
 /**
+Snaps a time to the next second, minute, hour, day, week, month or year.
+
+@param period Either: Second, Minute, Hour, Day, Week, Month or Year
+**/
+  public function snapNext(period : TimePeriod) : DateTime
+    return self();
+
+/**
+Snaps a time to the previous second, minute, hour, day, week, month or year.
+
+@param period Either: Second, Minute, Hour, Day, Week, Month or Year
+**/
+  public function snapPrev(period : TimePeriod) : DateTime
+    return self();
+
+/**
+Snaps a time to the nearest second, minute, hour, day, week, month or year.
+
+@param period Either: Second, Minute, Hour, Day, Week, Month or Year
+**/
+  public function snapTo(period : TimePeriod) : DateTime
+    return self();
+    /*
+    return switch period {
+      case Second:
+        r(this, 1000.0);
+      case Minute:
+        r(this, 60000.0);
+      case Hour:
+        r(this, 3600000.0);
+      case Day:
+        var d = toDate(),
+            mod = (d.getHours() >= 12) ? 1 : 0;
+        create(d.getFullYear(), d.getMonth(), d.getDate() + mod, 0, 0, 0);
+      case Week:
+        var d = toDate(),
+            wd = d.getDay(),
+            mod = wd < 3 ? -wd : (wd > 3 ? 7 - wd : d.getHours() < 12 ? -wd : 7 - wd);
+        create(d.getFullYear(), d.getMonth(), d.getDate() + mod, 0, 0, 0);
+      case Month:
+        var d = toDate(),
+            mod = d.getDate() > Math.round(DateTools.getMonthDays(d) / 2) ? 1 : 0;
+        create(d.getFullYear(), d.getMonth() + mod, 1, 0, 0, 0);
+      case Year:
+        var d = toDate(),
+            mod = this > new Date(d.getFullYear(), 6, 2, 0, 0, 0).getTime() ? 1 : 0;
+        create(d.getFullYear() + mod, 0, 1, 0, 0, 0);
+    };
+    */
+
+/**
 Returns true if this date and the `other` date share the same year.
 **/
   public function sameYear(other : DateTime) : Bool

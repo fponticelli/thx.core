@@ -98,9 +98,7 @@ Snaps a time to the previous second, minute, hour, day, week, month or year.
 /**
 Snaps a time to the nearest second, minute, hour, day, week, month or year.
 
-@param time The unix time in milliseconds.  See date.getTime()
 @param period Either: Second, Minute, Hour, Day, Week, Month or Year
-@return The unix time of the snapped date (In milliseconds).
 **/
   public function snapTo(period : TimePeriod) : Timestamp
     return switch period {
