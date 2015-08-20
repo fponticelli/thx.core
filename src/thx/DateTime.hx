@@ -357,7 +357,23 @@ Snaps a time to the next second, minute, hour, day, week, month or year.
 @param period Either: Second, Minute, Hour, Day, Week, Month or Year
 **/
   public function snapNext(period : TimePeriod) : DateTime
-    return self();
+    return switch period {
+      case Second:
+        new DateTime(new DateTimeUtc(utc.ticks.divCeil(ticksPerSecondI64) * ticksPerSecondI64), offset);
+      case Minute:
+        new DateTime(new DateTimeUtc(utc.ticks.divCeil(ticksPerMinuteI64) * ticksPerMinuteI64), offset);
+      case Hour:
+        new DateTime(new DateTimeUtc(utc.ticks.divCeil(ticksPerHourI64) * ticksPerHourI64), offset);
+      case Day:
+        create(year, month, day + 1, 0, 0, 0, offset);
+      case Week:
+        var wd : Int = dayOfWeek;
+        create(year, month, day + 7 - wd, 0, 0, 0, offset);
+      case Month:
+        create(year, month + 1, 1, 0, 0, 0, offset);
+      case Year:
+        create(year + 1, 1, 1, 0, 0, 0, offset);
+    };
 
 /**
 Snaps a time to the previous second, minute, hour, day, week, month or year.
@@ -365,7 +381,23 @@ Snaps a time to the previous second, minute, hour, day, week, month or year.
 @param period Either: Second, Minute, Hour, Day, Week, Month or Year
 **/
   public function snapPrev(period : TimePeriod) : DateTime
-    return self();
+    return switch period {
+      case Second:
+        new DateTime(new DateTimeUtc(utc.ticks.divFloor(ticksPerSecondI64) * ticksPerSecondI64), offset);
+      case Minute:
+        new DateTime(new DateTimeUtc(utc.ticks.divFloor(ticksPerMinuteI64) * ticksPerMinuteI64), offset);
+      case Hour:
+        new DateTime(new DateTimeUtc(utc.ticks.divFloor(ticksPerHourI64) * ticksPerHourI64), offset);
+      case Day:
+        create(year, month, day, 0, 0, 0, offset);
+      case Week:
+        var wd : Int = dayOfWeek;
+        create(year, month, day - wd, 0, 0, 0, offset);
+      case Month:
+        create(year, month, 1, 0, 0, 0, offset);
+      case Year:
+        create(year, 1, 1, 0, 0, 0, offset);
+    };
 
 /**
 Snaps a time to the nearest second, minute, hour, day, week, month or year.
@@ -373,34 +405,27 @@ Snaps a time to the nearest second, minute, hour, day, week, month or year.
 @param period Either: Second, Minute, Hour, Day, Week, Month or Year
 **/
   public function snapTo(period : TimePeriod) : DateTime
-    return self();
-    /*
     return switch period {
       case Second:
-        r(this, 1000.0);
+        new DateTime(new DateTimeUtc(utc.ticks.divRound(ticksPerSecondI64) * ticksPerSecondI64), offset);
       case Minute:
-        r(this, 60000.0);
+        new DateTime(new DateTimeUtc(utc.ticks.divRound(ticksPerMinuteI64) * ticksPerMinuteI64), offset);
       case Hour:
-        r(this, 3600000.0);
+        new DateTime(new DateTimeUtc(utc.ticks.divRound(ticksPerHourI64) * ticksPerHourI64), offset);
       case Day:
-        var d = toDate(),
-            mod = (d.getHours() >= 12) ? 1 : 0;
-        create(d.getFullYear(), d.getMonth(), d.getDate() + mod, 0, 0, 0);
+        var mod = (hour >= 12) ? 1 : 0;
+        create(year, month, day + mod, 0, 0, 0, offset);
       case Week:
-        var d = toDate(),
-            wd = d.getDay(),
-            mod = wd < 3 ? -wd : (wd > 3 ? 7 - wd : d.getHours() < 12 ? -wd : 7 - wd);
-        create(d.getFullYear(), d.getMonth(), d.getDate() + mod, 0, 0, 0);
+        var wd : Int = dayOfWeek,
+            mod = wd < 3 ? -wd : (wd > 3 ? 7 - wd : hour < 12 ? -wd : 7 - wd);
+        create(year, month, day + mod, 0, 0, 0, offset);
       case Month:
-        var d = toDate(),
-            mod = d.getDate() > Math.round(DateTools.getMonthDays(d) / 2) ? 1 : 0;
-        create(d.getFullYear(), d.getMonth() + mod, 1, 0, 0, 0);
+        var mod = day > Math.round(daysInMonth(year, month) / 2) ? 1 : 0;
+        create(year, month + mod, 1, 0, 0, 0, offset);
       case Year:
-        var d = toDate(),
-            mod = this > new Date(d.getFullYear(), 6, 2, 0, 0, 0).getTime() ? 1 : 0;
-        create(d.getFullYear() + mod, 0, 1, 0, 0, 0);
+        var mod = self() > create(year, 6, 2, 0, 0, 0, offset) ? 1 : 0;
+        create(year + mod, 1, 1, 0, 0, 0, offset);
     };
-    */
 
 /**
 Returns true if this date and the `other` date share the same year.
