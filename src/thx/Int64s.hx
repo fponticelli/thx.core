@@ -113,8 +113,18 @@ class Int64s {
       return zero;
     if(div.isZero())
       return throw new thx.Error('Int64s.divCeil division by zero');
-    var r = num.divMod(div);
-    return r.quotient + (num.isNeg() == div.isNeg() && !(num % div).isZero() ? one : zero);
+#if cpp // haxe/cpp seems to struggle with divMod
+    var q = num / div,
+        m = num % div;
+#else
+    var r = num.divMod(div),
+        q = r.quotient,
+        m = r.modulus;
+#end
+    if(num.isNeg() == div.isNeg() && !m.isZero())
+      return q + one;
+    else
+      return q;
   }
 
   static var min = Int64.make(0x80000000, 0);
