@@ -36,6 +36,7 @@ import StringTools;
 */
 class Int64s {
   public static var one  = Int64.make(0, 1);
+  public static var two  = Int64.ofInt(2);
   public static var zero = Int64.make(0, 0);
   public static var ten  = Int64.ofInt(10);
 
@@ -83,6 +84,37 @@ class Int64s {
       multiplier = Int64.mul(multiplier, ten);
     }
     return current;
+  }
+
+  public static function divRound(num : Int64, div : Int64) : Int64 {
+    if(num.isZero())
+      return zero;
+    if(div.isZero())
+      return throw new thx.Error('Int64s.divRound division by zero');
+    if(num.isNeg() == div.isNeg()) {
+      return (num + div / two) / div;
+    } else if(div.isNeg()) {
+      return (-num + one + div / two) / -div;
+    } else {
+      return (num + one - div / two) / div;
+    }
+  }
+
+  public static function divFloor(num : Int64, div : Int64) : Int64 {
+    if(num.isZero())
+      return zero;
+    if(div.isZero())
+      return throw new thx.Error('Int64s.divFloor division by zero');
+    return num.div(div) - (num.isNeg() != div.isNeg() ? 1 : 0);
+  }
+
+  public static function divCeil(num : Int64, div : Int64) : Int64 {
+    if(num.isZero())
+      return zero;
+    if(div.isZero())
+      return throw new thx.Error('Int64s.divCeil division by zero');
+    var r = num.divMod(div);
+    return r.quotient + (num.isNeg() == div.isNeg() && !(num % div).isZero() ? one : zero);
   }
 
   static var min = Int64.make(0x80000000, 0);
