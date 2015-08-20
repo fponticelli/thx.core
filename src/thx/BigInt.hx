@@ -4,6 +4,17 @@ package thx;
 Based on code realized by Mike Welsh: https://github.com/Herschel/hxmath/blob/master/src/hxmath/BigInt.hx
 */
 // TODO bit operations
+// TODO
+// ++ ?
+// -- ?
+// ~ bitwise negation
+// &
+// |
+// ^
+// <<
+// >>
+// >>>
+
 abstract BigInt(Array<Int>) {
   static inline var CHUNK_SIZE = 30;
   static inline var CHUNK_MASK = (1 << CHUNK_SIZE) - 1;
@@ -12,6 +23,7 @@ abstract BigInt(Array<Int>) {
   static inline var MUL_MASK = (1 << MUL_BITS) - 1;
 
   public static var zero(default, null) = new BigInt([0]);
+  public static var one(default, null) = fromInt(1);
   public static var ten(default, null) = fromInt(10);
 
   var sign(get, never) : Int;
@@ -55,39 +67,28 @@ abstract BigInt(Array<Int>) {
     return new BigInt(arr);
   }
 
-  // TODO
+  // TODO needs add/subtract/multiply
   @:from public static function fromString(s : String) {
-    /*
-    var sIsNegative = false,
-        multiplier = Int64.ofInt(1),
-        current = Int64.ofInt(0);
+    var isNegative = false,
+        mul = isNegative ? -one : one,
+        current = zero;
+
     if(s.charAt(0) == "-") {
-      sIsNegative = true;
+      isNegative = true;
       s = s.substring(1, s.length);
     }
-    var len = s.length;
 
-    for (i in 0...len) {
-      var digitInt = s.charCodeAt(len - 1 - i) - '0'.code;
-
-      if(digitInt < 0 || digitInt > 9)
+    var len = s.length,
+        digit;
+    for(i in 0...len) {
+      digit = s.charCodeAt(len - 1 - i) - '0'.code;
+      if(digit < 0 || digit > 9)
         throw new Error("String should only contain digits (and an optional - sign)");
-
-      var digit = Int64.ofInt(digitInt);
-      if(sIsNegative) {
-        current = Int64.sub(current, Int64.mul(multiplier, digit));
-        if(!Int64.isNeg(current))
-          throw new Error("Int64 parsing error: Underflow");
-      } else {
-        current = Int64.add(current, Int64.mul(multiplier, digit));
-        if(Int64.isNeg(current))
-          throw new Error("Int64 parsing error: Overflow");
-      }
-      multiplier = Int64.mul(multiplier, ten);
+      current = current + (mul * fromInt(digit));
+      mul *= ten;
     }
+
     return current;
-    */
-    return fromInt(0);
   }
 
   // TODO
@@ -98,22 +99,26 @@ abstract BigInt(Array<Int>) {
   function new(arr : Array<Int>)
     this = arr;
 
+  // TODO
   public function compare(that : BigInt) : Int
     return 0;
 
+  // TODO depends on compare
   @:op(A>B) public function greater(that : BigInt) : Bool
-    return compare(that) > 0;
+    return compare(that) > zero;
 
+  // TODO depends on compare
   @:op(A>=B) public function greaterEqual(that : BigInt) : Bool
-    return compare(that) >= 0;
+    return compare(that) >= zero;
 
+  // TODO depends on compare
   @:op(A<B) public function less(that : BigInt) : Bool
-    return compare(that) < 0;
+    return compare(that) < zero;
 
+  // TODO depends on compare
   @:op(A<=B) public function lessEqual(that : BigInt) : Bool
-    return compare(that) <= 0;
+    return compare(that) <= zero;
 
-  // TODO
   @:op(-A) public function negate() : BigInt {
     var arr = this.copy();
     arr[0] = -arr[0];
@@ -200,14 +205,6 @@ abstract BigInt(Array<Int>) {
   public function toStringWithBase(base : Int) : String {
     return "";
   }
-
-/*
-  inline function reduceChunks<T>(f : T -> Int -> T, acc : T) : T {
-    for(i in 0...chunks)
-      acc = f(acc, this[i+1]);
-    return acc;
-  }
-*/
 
   // TODO this can probably be optimized with a Macro inlining the body
   inline function reduceRightChunks<T>(f : T -> Int -> T, acc : T) : T {
