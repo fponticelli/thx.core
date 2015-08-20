@@ -29,4 +29,10 @@ Returns `true`/`false` if the passed value is `true`/`false` (case insensitive);
     case "false", null, "0", "off": false;
     case v: throw 'unable to parse "$v"';
   }
+
+/**
+Returns `true` when arguments are different.
+*/
+  inline public static function xor(a : Bool, b : Bool) : Bool
+    return a != b;
 }
