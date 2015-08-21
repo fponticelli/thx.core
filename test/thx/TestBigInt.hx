@@ -159,7 +159,7 @@ class TestBigInt {
     Assert.isTrue(m == -n);
   }
 
-  public function testMultiplicaion() {
+  public function testMultiplication() {
     var a : BigInt;
     var b : BigInt;
     var m : BigInt;
