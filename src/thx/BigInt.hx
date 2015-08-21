@@ -337,46 +337,54 @@ abstract BigInt(Array<Int>) {
 
   static function addBig(big : Array<Int>, small : Array<Int>) : BigInt {
     var out = [big[0]],
-        carry = 0;
-
-    for(i in 0...big.length) {
-      var sum = big[i] + small[i] + carry;
+        carry = 0,
+        sum;
+/*
+    if(big.length != 2 || small.length != 2)
+      trace(big.length + " " + small.length);
+*/
+    for(i in 1...small.length) {
+      sum = big[i] + small[i] + carry;
       carry = sum >>> CHUNK_SIZE;
       sum &= CHUNK_MASK;
       out.push(sum);
     }
-    for(i in big.length...small.length) {
-      var sum = big[i] + carry;
+    for(i in small.length...big.length) {
+      sum = big[i] + carry;
       carry = sum >>> CHUNK_SIZE;
       sum &= CHUNK_MASK;
       out.push(sum);
     }
-    if (carry == 1)
-      out.push(1);
+    if(carry != 0)
+      out.push(carry);
 
     return new BigInt(out);
   }
 
   static function subBig(big : Array<Int>, small : Array<Int>) : BigInt {
     var out = [big[0]], // set sign
-        borrow = 0;
-
-    for(i in 1...big.length) {
-      var diff = big[i] - small[i] - borrow;
-      borrow = diff >>> CHUNK_SIZE;
-      diff &= CHUNK_MASK;
-      out.push(diff);
-    }
-    // big before small?
-    for(i in big.length...small.length) {
-      var diff = big[i] - borrow;
+        borrow = 0,
+        diff;
+/*
+    if(big.length != 2 || small.length != 2)
+      trace(big.length + " " + small.length);
+*/
+    for(i in 1...small.length) {
+      diff = big[i] - small[i] - borrow;
       borrow = diff >>> CHUNK_SIZE;
       diff &= CHUNK_MASK;
       out.push(diff);
     }
 
-    if (borrow == 1)
-      out.push(1);
+    for(i in small.length...big.length) {
+      diff = big[i] - borrow;
+      borrow = diff >>> CHUNK_SIZE;
+      diff &= CHUNK_MASK;
+      out.push(diff);
+    }
+
+    if(borrow != 0)
+      out.push(borrow);
 
     return new BigInt(out);
   }
