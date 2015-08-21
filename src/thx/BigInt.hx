@@ -138,8 +138,36 @@ abstract BigInt(Array<Int>) {
     return fromInt(0);
 
   // TODO
-  @:op(A+B) public function add(that : BigInt) : BigInt
-    return fromInt(0);
+  @:op(A+B) public function add(that : BigInt) : BigInt {
+    if(sign == 0) return that;
+    if(that.sign == 0) return self();
+    var lhs, rhs;
+    if(compareMagnitude(that) == 1) {
+      lhs = that;
+      rhs = self();
+    } else {
+      lhs = self();
+      rhs = that;
+    }
+    if(lhs.sign == rhs.sign)
+      return addBig(lhs.toArray(), rhs.toArray());
+    else
+      return subBig(lhs.toArray(), rhs.toArray());
+  }
+
+  function compareMagnitude(that : BigInt) {
+    if (chunks > that.chunks) return -1;
+    if (chunks < that.chunks) return 1;
+
+    var other = that.toArray(),
+        i = chunks;
+    while(i > 0) {
+      if(this[i] > other[i]) return -1;
+      if(this[i] < other[i]) return 1;
+      i--;
+    }
+    return 0;
+  }
 
   // TODO
   @:op(A-B) public function subtract(that : BigInt) : BigInt
@@ -228,4 +256,50 @@ abstract BigInt(Array<Int>) {
 
   inline function self() : BigInt
     return new BigInt(this);
+
+  static function addBig(big : Array<Int>, small : Array<Int>) : BigInt {
+    var out = [big[0]],
+        carry = 0;
+
+    for(i in 0...big.length) {
+      var sum = big[i] + small[i] + carry;
+      carry = sum >>> CHUNK_SIZE;
+      sum &= CHUNK_MASK;
+      out.push(sum);
+    }
+    for(i in big.length...small.length) {
+      var sum = big[i] + carry;
+      carry = sum >>> CHUNK_SIZE;
+      sum &= CHUNK_MASK;
+      out.push(sum);
+    }
+    if (carry == 1)
+      out.push(1);
+
+    return new BigInt(out);
+  }
+
+  static function subBig(big : Array<Int>, small : Array<Int>) : BigInt {
+    var out = [big[0]], // set sign
+        borrow = 0;
+
+    for(i in 1...big.length) {
+      var diff = big[i] - small[i] - borrow;
+      borrow = diff >>> CHUNK_SIZE;
+      diff &= CHUNK_MASK;
+      out.push(diff);
+    }
+    // big before small?
+    for(i in big.length...small.length) {
+      var diff = big[i] - borrow;
+      borrow = diff >>> CHUNK_SIZE;
+      diff &= CHUNK_MASK;
+      out.push(diff);
+    }
+
+    if (borrow == 1)
+      out.push(1);
+
+    return new BigInt(out);
+  }
 }
