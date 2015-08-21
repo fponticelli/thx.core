@@ -161,22 +161,21 @@ abstract BigInt(Array<Int>) {
   }
 
   function compareMagnitude(that : BigInt) {
-    if (chunks > that.chunks) return -1;
-    if (chunks < that.chunks) return 1;
+    if(chunks > that.chunks) return 1;
+    if(chunks < that.chunks) return -1;
 
     var other = that.toArray(),
         i = chunks;
     while(i > 0) {
-      if(this[i] > other[i]) return -1;
-      if(this[i] < other[i]) return 1;
+      if(this[i] > other[i]) return 1;
+      if(this[i] < other[i]) return -1;
       i--;
     }
     return 0;
   }
 
-  // TODO
   @:op(A-B) public function subtract(that : BigInt) : BigInt
-    return fromInt(0);
+    return add(-that);
 
   @:op(A==B) public function equals(that : BigInt) : Bool {
     if(sign != that.sign || chunks != that.chunks) return false;
