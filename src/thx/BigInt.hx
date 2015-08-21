@@ -3,7 +3,6 @@ package thx;
 /**
 Based on code realized by Mike Welsh: https://github.com/Herschel/hxmath/blob/master/src/hxmath/BigInt.hx
 */
-// TODO bit operations
 // TODO
 // ++ ?
 // -- ?
@@ -25,6 +24,8 @@ abstract BigInt(Array<Int>) {
   public static var zero(default, null) = new BigInt([0]);
   public static var one(default, null) = fromInt(1);
   public static var ten(default, null) = fromInt(10);
+
+  static var decs = [zero, one, fromInt(2), fromInt(3), fromInt(4), fromInt(5), fromInt(6), fromInt(7), fromInt(8), fromInt(9)];
 
   var sign(get, never) : Int;
   var chunks(get, never) : Int;
@@ -70,7 +71,6 @@ abstract BigInt(Array<Int>) {
   // TODO needs add/subtract/multiply
   @:from public static function fromString(s : String) {
     var isNegative = false,
-        mul = isNegative ? -one : one,
         current = zero;
 
     if(s.charAt(0) == "-") {
@@ -78,13 +78,14 @@ abstract BigInt(Array<Int>) {
       s = s.substring(1, s.length);
     }
 
-    var len = s.length,
+    var mul = isNegative ? -one : one,
+        len = s.length,
         digit;
     for(i in 0...len) {
       digit = s.charCodeAt(len - 1 - i) - '0'.code;
       if(digit < 0 || digit > 9)
         throw new Error("String should only contain digits (and an optional - sign)");
-      current = current + (mul * fromInt(digit));
+      current += mul * decs[digit];
       mul *= ten;
     }
 
