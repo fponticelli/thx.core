@@ -202,4 +202,54 @@ class TestBigInt {
     m = "-37037037037037037036999999999999999999962962962962962962963";
     Assert.isTrue(a*b == m);
   }
+
+  public function testComparison() {
+    var a : BigInt = 1,
+        b : BigInt = 2;
+    Assert.isTrue(a < b);
+    Assert.isTrue(a <= b);
+    Assert.isTrue(a <= a);
+
+    Assert.isTrue(b > a);
+    Assert.isTrue(b >= a);
+    Assert.isTrue(b >= b);
+    Assert.isTrue(b <= b);
+
+    Assert.equals(-1, a.compare(b));
+    Assert.equals( 1, b.compare(a));
+    Assert.equals( 0, b.compare(b));
+
+    a = "-333333333333333333333";
+    b = "111111111111111111111111111111111111111";
+
+    Assert.isTrue(a < b);
+    Assert.isTrue(a <= b);
+    Assert.isTrue(a <= a);
+
+    Assert.isTrue(b > a);
+    Assert.isTrue(b >= a);
+    Assert.isTrue(b >= b);
+    Assert.isTrue(b <= b);
+
+    Assert.equals(-1, a.compare(b));
+    Assert.equals( 1, b.compare(a));
+    Assert.equals( 0, b.compare(b));
+
+    a = "-37037037037037037036999999999999999999962962962962962962963";
+    b = "-333333333333333333333";
+
+    Assert.isTrue(a < b);  // FAILS
+    Assert.isTrue(a <= b); // FAILS
+    Assert.isTrue(a <= a);
+
+    Assert.isTrue(b > a);  // FAILS
+    Assert.isTrue(b >= a); // FAILS
+    Assert.isTrue(b >= b);
+    Assert.isTrue(b <= b);
+
+    Assert.equals(-1, a.compare(b));
+    Assert.equals( 1, b.compare(a));
+    Assert.equals( 0, a.compare(a));
+    Assert.equals( 0, b.compare(b));
+  }
 }
