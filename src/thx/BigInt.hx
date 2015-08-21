@@ -101,8 +101,12 @@ abstract BigInt(Array<Int>) {
     this = arr;
 
   // TODO
-  public function compare(that : BigInt) : Int
-    return 0;
+  public function compare(that : BigInt) : Int {
+    if(sign > that.sign) return 1;
+    if(sign < that.sign) return -1;
+    if(sign == 0) return 0;
+    return compareMagnitude(that);
+  }
 
   // TODO depends on compare
   @:op(A>B) public function greater(that : BigInt) : Bool
