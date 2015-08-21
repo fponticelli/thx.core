@@ -103,38 +103,53 @@ class TestBigInt {
     Assert.isTrue(m+n == m);
     Assert.isTrue(n+m == m);
 
+    Assert.isTrue(m-n == m);
+    Assert.isTrue(n-m == -m);
+
     // commutativity
     m = 123; n = 343; s = 466;
     Assert.isTrue(m+n == s);
     Assert.isTrue(n+m == s);
 
+    Assert.isTrue(s-n == m);
+    Assert.isTrue(n-s == -m);
+
     // associativity
     m = -234356; n = 355321; o = 234;
     Assert.isTrue((m+n)+o == m+(n+o));
 
+    Assert.isTrue((m-n)+o == m-(n+o));
+
     m = 1; n = -9999; s = -9998;
     Assert.isTrue(m+n == s);
+
+    Assert.isTrue(s-n == m);
 
     // lots of big sums
     m = 0x7fffffff;
     n = m;
     s = "4294967294";
-    Assert.isTrue(m+n == s);
+    Assert.isTrue(m+n == s, 'expected $m+$n==$s');
 
     m = "11111111111111111111110111111111111111111111111111";
     n = m;
     s = "22222222222222222222220222222222222222222222222222";
     Assert.isTrue(m+n == s);
 
+    Assert.isTrue(m-n == 0);
+    Assert.isTrue(s-n == m);
+
     m = "99499494949383948405";
     n = "-472435789789045237084578078029457809342597808204538970";
     s = "-472435789789045237084578078029457709843102858820590565";
     Assert.isTrue(m+n == s);
+    Assert.isTrue(s-n == m);
 
     m = "-1";
     n = "100000000000000000000000000000000000000000000";
     s = "99999999999999999999999999999999999999999999";
     Assert.isTrue(m+n == s);
+    Assert.isTrue(s-n == m);
   }
 
   public function testNegation() {
