@@ -105,19 +105,19 @@ abstract BigInt(Array<Int>) {
 
   // TODO depends on compare
   @:op(A>B) public function greater(that : BigInt) : Bool
-    return compare(that) > zero;
+    return compare(that) > 0;
 
   // TODO depends on compare
   @:op(A>=B) public function greaterEqual(that : BigInt) : Bool
-    return compare(that) >= zero;
+    return compare(that) >= 0;
 
   // TODO depends on compare
   @:op(A<B) public function less(that : BigInt) : Bool
-    return compare(that) < zero;
+    return compare(that) < 0;
 
   // TODO depends on compare
   @:op(A<=B) public function lessEqual(that : BigInt) : Bool
-    return compare(that) <= zero;
+    return compare(that) <= 0;
 
   @:op(-A) public function negate() : BigInt {
     var arr = this.copy();
