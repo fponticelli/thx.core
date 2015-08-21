@@ -137,17 +137,91 @@ abstract BigInt(Array<Int>) {
   // TODO
   @:op(A%B) public function modulo(that : BigInt) : BigInt
     return fromInt(0);
-
+/*
   // TODO
-  @:op(A*B) public function multiply(that : BigInt) : BigInt
-    return fromInt(0);
+  @:op(A*B) public function multiply(that : BigInt) : BigInt {
+    var out = [],
+        product,
+        carry = 0,
+        other = that.toArray();
+    for(i in 0...chunks + that.chunks)
+      out[i] = 0;
+    for(j in 0...that.chunks) {
+      for(i in 0...chunks) {
+        product = out[i+j] + this[i+1] * other[j+1] + carry;
+        out[i+j] = product & CHUNK_MASK;
+        carry = product >>> CHUNK_SIZE;
+      }
+      out[j+chunks] = carry;
+    }
 
+    var i = out.length - 1;
+    while(i >= 1 && out[i] == 0)
+      i--;
+    return new BigInt([sign * that.sign].concat(out.slice(0, i)));
+  }
+*/
+///*
+  @:op(A*B) public function multiply(that : BigInt) : BigInt {
+    var out = [];
+    var product;
+    var carry = 0;
+    var other = that.toArray();
+
+    for(i in 0...chunks + that.chunks)
+      out[i] = 0;
+
+    var rLow;
+    var rHigh;
+    var lLow;
+    var lHigh;
+    var p00;
+    var p01;
+    var p10;
+    var p11;
+    var productLow;
+    var productHigh;
+    for(j in 0...that.chunks) {
+      for(i in 0...chunks) {
+        rLow = other[i+1] & MUL_MASK;
+        rHigh = other[i+1] >>> MUL_BITS;
+        lLow = this[j+1] & MUL_MASK;
+        lHigh = this[j+1] >>> MUL_BITS;
+        p00 = rLow * lLow;
+        p01 = rLow * lHigh;
+        p10 = rHigh * lLow;
+        p11 = rHigh * lHigh;
+        //trace('$rHigh $rLow  $lHigh $lLow');
+        //trace('$p00 $p01 $p10 $p11');
+        productLow = ((p01 & MUL_MASK) << MUL_BITS) + ((p10 & MUL_MASK) << MUL_BITS) + p00;
+        productLow += out[i+j] + carry;
+        productHigh = p11 + (p01 >>> MUL_BITS) + (p10 >>> MUL_BITS);
+        productHigh += productLow >>> CHUNK_SIZE;
+        productLow &= CHUNK_MASK;
+        out[i+j] = productLow;
+        carry = productHigh;
+      }
+      out[j+chunks] = carry;
+    }
+
+    var before = out.length;
+    while(out[out.length - 1] == 0)
+      out.pop();
+/*
+    if(out.length != before) {
+      trace(this, that.toArray());
+      trace('before $before, after ${out.length}');
+    }
+*/
+    return new BigInt([sign * that.sign].concat(out));
+  }
+//*/
   // TODO
   @:op(A+B) public function add(that : BigInt) : BigInt {
     if(sign == 0) return that;
     if(that.sign == 0) return self();
     var lhs, rhs;
-    if(compareMagnitude(that) == 1) {
+    if(compareMagnitude(that) < 0) {
       lhs = that;
       rhs = self();
     } else {
