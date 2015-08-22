@@ -8,7 +8,7 @@ class Floats {
 /**
   Constant value employed to see if two `Float` values are very close.
 **/
-  public static inline var EPSILON : Float = 10e-10;
+  public static inline var EPSILON : Float = 1e-9;
 
   static var pattern_parse = ~/^(\+|-)?\d+(\.\d+)?(e-?\d+)?$/;
 
@@ -201,6 +201,12 @@ Rounds a number to the specified number of decimals.
 */
   inline public static function sign<T : Float>(value : T) : Int
     return value < 0 ? -1 : 1;
+
+  inline public static function trunc(value : Float) : Int
+    return value < 0.0 ? Math.ceil(value) : Math.floor(value);
+
+  inline public static function ftrunc(value : Float) : Float
+    return value < 0.0 ? Math.fceil(value) : Math.ffloor(value);
 
 /**
 Passed two boundaries values (`min`, `max`), `wrap` ensures that the passed value `v` will
