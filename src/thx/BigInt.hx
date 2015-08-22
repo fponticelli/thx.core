@@ -138,6 +138,128 @@ class BigIntImpl {
 
   public function toStringWithBase(base : Int) : String
     return "-7";
+
+
+  // helpers
+  static function createArray(length : Int) {
+    var x = #if js untyped __js__("new Array")(length) #else [] #end;
+    for(i in 0...length)
+      x[i] = 0;
+    return x;
+  }
+
+  static function parseInteger(s : String, from : Int, to : Int, radix : Int) {
+    var i = from - 1,
+        n = 0,
+        y = radix < 10 ? radix : 10,
+        code, v;
+    // TODO use for()
+    while (++i < to) {
+      code = s.charCodeAt(i);
+      v = code - 48;
+      if (v < 0 || y <= v) {
+        v = 10 - 65 + code;
+        if (v < 10 || radix <= v) {
+          v = 10 - 97 + code;
+          if (v < 10 || radix <= v) {
+            throw new Error('Invalid character $code');
+          }
+        }
+      }
+      n = n * radix + v;
+    }
+    return n;
+  }
+
+  static function pow(x : Int, count : Int) {
+    var accumulator = 1;
+    var v = x;
+    // TODO simplify
+    var c = count;
+    while (c > 1) {
+      var q = Floats.trunc(c / 2);
+      if (q * 2 != c) {
+        accumulator *= v;
+      }
+      v *= v;
+      c = q;
+    }
+    return accumulator * v;
+  }
+
+  static function fastTrunc(x : Float) {
+    var v = (x - BASE) + BASE;
+    return v > x ? v - 1 : v;
+  }
+
+  // Veltkamp-Dekker's algorithm
+  // see http://web.mit.edu/tabbott/Public/quaddouble-debian/qd-2.3.4-old/docs/qd.pdf
+  // with FMA:
+  // var product = a * b;
+  // var error = Math.fma(a, b, -product);
+  static function performMultiplication(carry, a, b) {
+    var at = SPLIT * a;
+    var ahi = at - (at - a);
+    var alo = a - ahi;
+    var bt = SPLIT * b;
+    var bhi = bt - (bt - b);
+    var blo = b - bhi;
+    var product = a * b;
+    var error = ((ahi * bhi - product) + ahi * blo + alo * bhi) + alo * blo;
+
+    var hi = fastTrunc(product / BASE);
+    var lo = product - hi * BASE + error;
+
+    if (lo < 0) {
+      lo += BASE;
+      hi -= 1;
+    }
+
+    lo += carry - BASE;
+    if (lo < 0) {
+      lo += BASE;
+    } else {
+      hi += 1;
+    }
+
+    return {lo: lo, hi: hi};
+  };
+
+  static function performDivision(a, b, divisor) {
+    if (a >= divisor) {
+      throw new Error('`a` ($a) is bigger than divisor ($divisor)');
+    }
+    var p = a * BASE;
+    var y = p / divisor;
+    var r = p % divisor;
+    var q = fastTrunc(y);
+    if (y == q && r > divisor - r) {
+      q -= 1;
+    }
+    r += b - divisor;
+    if (r < 0) {
+      r += divisor;
+    } else {
+      q += 1;
+    }
+    y = fastTrunc(r / divisor);
+    r -= y * divisor;
+    q += y;
+    return {q: q, r: r};
+  };
+
+  static var EPSILON = (function() {
+    var epsilon = 1 / 4503599627370496.0; // TODO test smaller values on other platforms
+    // TODO not sure why this is needed since the value of epsilon is
+    // already the one defined above
+    while(1.0 + epsilon / 2.0 != 1.0) {
+      epsilon /= 2;
+    }
+    //trace(epsilon);
+    return epsilon;
+  })();
+  static var BASE = 2 / EPSILON;
+  static var SPLIT = 67108864 * pow(2, Floats.trunc((Floats.trunc(Math.log(BASE) / Math.log(2) + 0.5) - 53) / 2) + 1) + 1;
 }
 
 /*
