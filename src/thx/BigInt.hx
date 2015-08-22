@@ -300,7 +300,7 @@ abstract BigInt(Array<Int>) {
         quotient : one,
         modulus : zero
       };
-    if(chunks <= 3) { // TODO check chunk size is reasonable
+    if(chunks <= 2) { // TODO check chunk size is reasonable
       var a = toInt(),
           b = that.toInt();
       return {
