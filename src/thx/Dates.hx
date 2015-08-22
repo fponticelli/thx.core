@@ -195,10 +195,13 @@ Tells how many days in the month of the given date.
 
 @param date The date representing the month we are checking.
 @return Int, the number of days in the month.
-@throws Error if the month is not between 0 and 11.
 **/
-  public static function numDaysInThisMonth(d : Date)
+  public static function daysInThisMonth(d : Date)
     return daysInMonth(d.getFullYear(), d.getMonth());
+
+  @:depreacated('use daysInThisMonth instead')
+  public static function numDaysInThisMonth(d : Date)
+    return daysInThisMonth(d);
 
 /**
 Returns true if the 2 dates share the same year.

@@ -191,6 +191,22 @@ All time components are optionals.
     return days[month] - days[month - 1];
   }
 
+/**
+Creates an array of dates that begin at `start` and end at `end` included.
+Time values are pick from the `start` value except for the last value that will
+match `end`. No interpolation is made.
+**/
+  public static function daysRange(start : DateTimeUtc, end : DateTimeUtc) {
+    if(end.less(start)) return [];
+    var days = [];
+    while(!start.sameDay(end)) {
+      days.push(start);
+      start = start.nextDay();
+    }
+    days.push(end);
+    return days;
+  }
+
   private function getDatePart(part : Int) {
     var n = ticks.div(ticksPerDayI64).toInt();
     var y400 = Std.int(n / daysPer400Years);
@@ -278,20 +294,12 @@ All time components are optionals.
   }
 
 /**
-Creates an array of dates that begin at `start` and end at `end` included.
-Time values are pick from the `start` value except for the last value that will
-match `end`. No interpolation is made.
+Tells how many days in the month of this date.
+
+@return Int, the number of days in the month.
 **/
-  public static function daysRange(start : DateTimeUtc, end : DateTimeUtc) {
-    if(end.less(start)) return [];
-    var days = [];
-    while(!start.sameDay(end)) {
-      days.push(start);
-      start = start.nextDay();
-    }
-    days.push(end);
-    return days;
-  }
+  public function daysInThisMonth()
+    return daysInMonth(year, month);
 
 /**
 Returns a new date, exactly 1 year before the given date/time.
