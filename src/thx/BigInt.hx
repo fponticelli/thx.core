@@ -14,6 +14,133 @@ Based on code realized by Mike Welsh: https://github.com/Herschel/hxmath/blob/ma
 // >>
 // >>>
 
+abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
+  public static var zero(default, null) : BigInt = new BigIntImpl(0, 0, 0);
+
+  @:from public static function fromFloat(value : Float) : BigInt
+    return zero;
+
+  @:from public static function fromInt(value : Int) : BigInt
+    return zero;
+
+  @:from public static function fromString(value : String) : BigInt
+    return zero;
+
+  inline public function isZero() : Bool
+    return this.isZero();
+
+  inline public function compare(that : BigInt)
+    return this.compare(that);
+
+  @:op(A>B) public function greater(that : BigInt) : Bool
+    return this.compare(that) > 0;
+
+  @:op(A>=B) public function greaterEqual(that : BigInt) : Bool
+    return this.compare(that) >= 0;
+
+  @:op(A<B) public function less(that : BigInt) : Bool
+    return this.compare(that) < 0;
+
+  @:op(A<=B) public function lessEqual(that : BigInt) : Bool
+    return this.compare(that) <= 0;
+
+  @:op(A=B) @:commutative
+  public function equals(that : BigInt) : Bool
+    return this.compare(that) == 0;
+
+  @:op(A!=B) @:commutative
+  public function notEquals(that : BigInt) : Bool
+    return this.compare(that) != 0;
+
+  @:op(A+B) @:commutative
+  inline public function add(that : BigInt) : BigInt
+    return this.add(that);
+
+  @:op(A-B)
+  inline public function subtract(that : BigInt) : BigInt
+    return this.subtract(that);
+
+  @:op(-A)
+  inline public function negate() : BigInt
+    return this.negate();
+
+  @:op(A*B) @:commutative
+  inline public function multiply(that : BigInt) : BigInt
+    return this.multiply(that);
+
+  @:op(A/B)
+  inline public function divide(that : BigInt) : BigInt
+    return this.divide(that);
+
+  @:op(A%B)
+  inline public function modulo(that : BigInt) : BigInt
+    return this.modulo(that);
+
+  @:to inline public function toFloat() : Float
+    return this.toFloat();
+
+  @:to inline public function toInt() : Int
+    return this.toInt();
+
+  @:to inline public function toString() : String
+    return this.toStringWithBase(10);
+}
+
+class BigIntImpl {
+  var signum : Int;
+  var magnitude : Int;
+  var length : Int;
+  public function new(signum : Int, magnitude : Int, length : Int) {
+    this.signum = signum;
+    this.magnitude = magnitude;
+    this.length = length;
+  }
+
+  public function add(that : BigIntImpl) : BigIntImpl {
+    return this;
+  }
+
+  public function subtract(that : BigIntImpl) : BigIntImpl {
+    return this;
+  }
+
+  public function divide(that : BigIntImpl) : BigIntImpl {
+    return this;
+  }
+
+  public function multiply(that : BigIntImpl) : BigIntImpl {
+    return this;
+  }
+
+  public function modulo(that : BigIntImpl) : BigIntImpl {
+    return this;
+  }
+
+  public function negate() : BigIntImpl {
+    return this;
+  }
+
+  public function isZero() : Bool {
+    return false;
+  }
+
+  // TODO
+  public function compare(that : BigIntImpl) : Int
+    return 0;
+
+  // TODO
+  public function toFloat() : Float
+    return 0;
+
+  // TODO
+  public function toInt() : Int
+    return 0;
+
+  public function toStringWithBase(base : Int) : String
+    return "-7";
+}
+
+/*
 abstract BigInt(Array<Int>) {
   static inline var CHUNK_SIZE = 15;
   static inline var CHUNK_MASK = (1 << CHUNK_SIZE) - 1;
@@ -103,12 +230,15 @@ abstract BigInt(Array<Int>) {
   function new(arr : Array<Int>)
     this = arr;
 
+  public function abs() : BigInt
+    return isNegative ? negate() : self();
+
   // TODO
   public function compare(that : BigInt) : Int {
     if(sign > that.sign) return 1;
     if(sign < that.sign) return -1;
     if(sign == 0) return 0;
-    return sign * compareMagnitude(that);
+    return sign * compareAbs(that);
   }
 
   // TODO depends on compare
@@ -149,6 +279,7 @@ abstract BigInt(Array<Int>) {
     var other = that.toArray(),
         otherChunks = that.chunks,
         a, b, product, carry;
+
     for(i in 0...chunks) {
       a = this[1+i];
       for(j in 0...otherChunks) {
@@ -168,7 +299,7 @@ abstract BigInt(Array<Int>) {
     if(sign == 0) return that;
     if(that.sign == 0) return self();
     var lhs, rhs;
-    if(compareMagnitude(that) < 0) {
+    if(compareAbs(that) < 0) {
       lhs = that;
       rhs = self();
     } else {
@@ -181,7 +312,7 @@ abstract BigInt(Array<Int>) {
       return subBig(lhs.toArray(), rhs.toArray());
   }
 
-  function compareMagnitude(that : BigInt) {
+  public function compareAbs(that : BigInt) {
     if(chunks > that.chunks) return 1;
     if(chunks < that.chunks) return -1;
 
@@ -238,7 +369,7 @@ abstract BigInt(Array<Int>) {
         quotient : zero,
         modulus : zero
       };
-    var comp = compareMagnitude(that);
+    var comp = compareAbs(that);
     if(comp < 0)
       return {
         quotient : zero,
@@ -258,10 +389,49 @@ abstract BigInt(Array<Int>) {
       };
     }
 
-    return {
-      quotient : zero,
-      modulus : zero
-    };
+    var out = [],
+        al = chunks + 1,
+        bl = that.chunks + 1,
+        part : BigInt = new BigInt([1]),
+        partArr = part.toArray(),
+        other = that.toArray(),
+        xlen, highx, highy, guess, check;
+
+    // var base = Std.int(Math.pow(10, CHUNK_SIZE));
+    // //trace(base);
+    // while(al > 1) {
+    //   partArr.insert(1, this[--al]);
+    //   if(part.compareAbs(that) < 0) {
+    //     out.push(0);
+    //     continue;
+    //   }
+    //   xlen = partArr.length;
+    //   highx = partArr[xlen - 1] * base + partArr[xlen - 2];
+    //   highy = other[bl - 1] * base + other[bl - 2];
+    //   if(xlen > bl) {
+    //     highx = (highx + 1) * base;
+    //   }
+    //   guess = Math.ceil(highx / highy);
+    //   trace(guess);
+    //
+    //   do {
+    //     check = that * guess; // inefficient
+    //     if(check.compareAbs(part) <= 0)
+    //       break;
+    //     guess--;
+    //     if(guess % 1000000 == 0)
+    //       trace(guess);
+    //   } while(guess > 0);
+    //
+    //   out.push(guess);
+    //   part = part - check;
+    //   partArr = part.toArray();
+    // }
+    // out.reverse();
+    // return {
+    //   quotient : new BigInt(trim([sign * that.sign].concat(out))),
+    //   modulus : new BigInt(trim([sign].concat(partArr)))
+    // };
   }
 
   // TODO needs intDivision and less
@@ -313,12 +483,6 @@ abstract BigInt(Array<Int>) {
     return new BigInt(this);
 
   static function trim(arr : Array<Int>) : Array<Int> {
-/*
-var i = arr.length - 1;
-while(i > 0 && out[i] == 0)
-  i--;
-//.slice(0, i);
-*/
     while(arr[arr.length - 1] == 0 && arr.length > 1)
       arr.pop();
     if(arr.length <= 1)
@@ -330,10 +494,6 @@ while(i > 0 && out[i] == 0)
     var out = [big[0]],
         carry = 0,
         sum;
-/*
-    if(big.length != 2 || small.length != 2)
-      trace(big.length + " " + small.length);
-*/
     for(i in 1...small.length) {
       sum = big[i] + small[i] + carry;
       carry = sum >>> CHUNK_SIZE;
@@ -356,10 +516,6 @@ while(i > 0 && out[i] == 0)
     var out = [big[0]], // set sign
         borrow = 0,
         diff;
-/*
-    if(big.length != 2 || small.length != 2)
-      trace(big.length + " " + small.length);
-*/
     for(i in 1...small.length) {
       diff = big[i] - small[i] - borrow;
       borrow = diff >>> CHUNK_SIZE;
@@ -380,3 +536,4 @@ while(i > 0 && out[i] == 0)
     return new BigInt(trim(out));
   }
 }
+*/

@@ -141,7 +141,7 @@ class TestBigInt {
     s = "22222222222222222222220222222222222222222222222222";
     Assert.isTrue(m+n == s);
 
-    Assert.isTrue((m-n).isZero, 'expected $m-$n==0 but is ${m-n}');
+    Assert.isTrue((m-n).isZero(), 'expected $m-$n==0 but is ${m-n}');
     Assert.isTrue(m-n == 0, 'expected $m-$n==0 but is ${m-n}');
     Assert.isTrue(s-n == m);
 
