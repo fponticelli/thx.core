@@ -105,7 +105,7 @@ abstract BigInt(Array<Int>) {
     if(sign > that.sign) return 1;
     if(sign < that.sign) return -1;
     if(sign == 0) return 0;
-    return compareMagnitude(that);
+    return sign * compareMagnitude(that);
   }
 
   // TODO depends on compare
