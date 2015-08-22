@@ -162,7 +162,8 @@ abstract BigInt(Array<Int>) {
   }
 */
 ///*
-  @:op(A*B) public function multiply(that : BigInt) : BigInt {
+  @:op(A*B) @:commutative
+  public function multiply(that : BigInt) : BigInt {
     var out = [];
     var product;
     var carry = 0;
@@ -217,7 +218,8 @@ abstract BigInt(Array<Int>) {
   }
 //*/
   // TODO
-  @:op(A+B) public function add(that : BigInt) : BigInt {
+  @:op(A+B) @:commutative
+  public function add(that : BigInt) : BigInt {
     if(sign == 0) return that;
     if(that.sign == 0) return self();
     var lhs, rhs;
@@ -251,7 +253,8 @@ abstract BigInt(Array<Int>) {
   @:op(A-B) public function subtract(that : BigInt) : BigInt
     return add(-that);
 
-  @:op(A==B) public function equals(that : BigInt) : Bool {
+  @:op(A==B) @:commutative
+  public function equals(that : BigInt) : Bool {
     if(sign != that.sign || chunks != that.chunks) return false;
     var other = that.toArray();
     for(i in 1...chunks + 1)
@@ -259,7 +262,8 @@ abstract BigInt(Array<Int>) {
     return true;
   }
 
-  @:op(A!=B) public function notEquals(that : BigInt) : Bool
+  @:op(A!=B) @:commutative
+  public function notEquals(that : BigInt) : Bool
     return !equals(that);
 
   inline function toArray() : Array<Int>
