@@ -282,6 +282,33 @@ abstract BigInt(Array<Int>) {
 
   // TODO
   public function intDivision(that : BigInt) : { quotient : BigInt, modulus : BigInt } {
+    if(that.isZero)
+      throw new Error('division by zero');
+    if(isZero)
+      return {
+        quotient : zero,
+        modulus : zero
+      };
+    var comp = compareMagnitudes(this, that.toArray());
+    if(comp < 0)
+      return {
+        quotient : zero,
+        modulus : self()
+      };
+    else if(comp == 0)
+      return {
+        quotient : one,
+        modulus : zero
+      };
+    if(chunks <= 3) { // TODO check chunk size is reasonable
+      var a = this.toInt(),
+          b = that.toInt();
+      return {
+        quotient : fromInt(Std.int(a / b)),
+        modulus : fromInt(a % b)
+      };
+    }
+
     return {
       quotient : zero,
       modulus : zero
