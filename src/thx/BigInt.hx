@@ -205,16 +205,14 @@ abstract BigInt(Array<Int>) {
       out[j+chunks] = carry;
     }
 
-    var before = out.length;
-    while(out[out.length - 1] == 0)
-      out.pop();
 /*
+    var before = out.length;
     if(out.length != before) {
       trace(this, that.toArray());
       trace('before $before, after ${out.length}');
     }
 */
-    return new BigInt([sign * that.sign].concat(out));
+    return new BigInt(trim([sign * that.sign].concat(out)));
   }
 //*/
   // TODO
@@ -266,7 +264,7 @@ abstract BigInt(Array<Int>) {
   public function notEquals(that : BigInt) : Bool
     return !equals(that);
 
-  inline function toArray() : Array<Int>
+  inline public function toArray() : Array<Int>
     return this;
 
   @:to public function toFloat() : Float {
@@ -366,6 +364,14 @@ abstract BigInt(Array<Int>) {
   inline function self() : BigInt
     return new BigInt(this);
 
+  static function trim(arr : Array<Int>) : Array<Int> {
+    while(arr[arr.length - 1] == 0 && arr.length > 1)
+      arr.pop();
+    if(arr.length <= 1)
+      arr[0] = 0;
+    return arr;
+  }
+
   static function addBig(big : Array<Int>, small : Array<Int>) : BigInt {
     var out = [big[0]],
         carry = 0,
@@ -417,6 +423,6 @@ abstract BigInt(Array<Int>) {
     if(borrow != 0)
       out.push(borrow);
 
-    return new BigInt(out);
+    return new BigInt(trim(out));
   }
 }
