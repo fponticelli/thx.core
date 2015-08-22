@@ -15,7 +15,7 @@ Based on code realized by Mike Welsh: https://github.com/Herschel/hxmath/blob/ma
 // >>>
 
 abstract BigInt(Array<Int>) {
-  static inline var CHUNK_SIZE = 30;
+  static inline var CHUNK_SIZE = 15;
   static inline var CHUNK_MASK = (1 << CHUNK_SIZE) - 1;
   static inline var CHUNK_MAX_FLOAT = (1 << (CHUNK_SIZE-1)) * 2.0;
   static inline var MUL_BITS = Std.int(CHUNK_SIZE / 2);
@@ -78,17 +78,20 @@ abstract BigInt(Array<Int>) {
       s = s.substring(1, s.length);
     }
 
-    var mul = isNegative ? -one : one,
+    var mul = one,
         len = s.length,
         digit;
     for(i in 0...len) {
       digit = s.charCodeAt(len - 1 - i) - '0'.code;
       if(digit < 0 || digit > 9)
         throw new Error("String should only contain digits (and an optional - sign)");
-      current += mul * decs[digit];
+      current = current + (mul * decs[digit]);
       mul *= ten;
+      //trace(digit, current, mul);
     }
 
+    if(isNegative)
+      return current.negate();
     return current;
   }
 
@@ -137,84 +140,28 @@ abstract BigInt(Array<Int>) {
   // TODO
   @:op(A%B) public function modulo(that : BigInt) : BigInt
     return intDivision(that).modulus;
-/*
-  // TODO
-  @:op(A*B) public function multiply(that : BigInt) : BigInt {
-    var out = [],
-        product,
-        carry = 0,
-        other = that.toArray();
-    for(i in 0...chunks + that.chunks)
-      out[i] = 0;
-    for(j in 0...that.chunks) {
-      for(i in 0...chunks) {
-        product = out[i+j] + this[i+1] * other[j+1] + carry;
-        out[i+j] = product & CHUNK_MASK;
-        carry = product >>> CHUNK_SIZE;
-      }
-      out[j+chunks] = carry;
-    }
 
-    var i = out.length - 1;
-    while(i >= 1 && out[i] == 0)
-      i--;
-    return new BigInt([sign * that.sign].concat(out.slice(0, i)));
-  }
-*/
-///*
   @:op(A*B) @:commutative
   public function multiply(that : BigInt) : BigInt {
     var out = [];
-    var product;
-    var carry = 0;
-    var other = that.toArray();
-
     for(i in 0...chunks + that.chunks)
       out[i] = 0;
-
-    var rLow;
-    var rHigh;
-    var lLow;
-    var lHigh;
-    var p00;
-    var p01;
-    var p10;
-    var p11;
-    var productLow;
-    var productHigh;
-    for(j in 0...that.chunks) {
-      for(i in 0...chunks) {
-        rLow = other[i+1] & MUL_MASK;
-        rHigh = other[i+1] >>> MUL_BITS;
-        lLow = this[j+1] & MUL_MASK;
-        lHigh = this[j+1] >>> MUL_BITS;
-        p00 = rLow * lLow;
-        p01 = rLow * lHigh;
-        p10 = rHigh * lLow;
-        p11 = rHigh * lHigh;
-        //trace('$rHigh $rLow  $lHigh $lLow');
-        //trace('$p00 $p01 $p10 $p11');
-        productLow = ((p01 & MUL_MASK) << MUL_BITS) + ((p10 & MUL_MASK) << MUL_BITS) + p00;
-        productLow += out[i+j] + carry;
-        productHigh = p11 + (p01 >>> MUL_BITS) + (p10 >>> MUL_BITS);
-        productHigh += productLow >>> CHUNK_SIZE;
-        productLow &= CHUNK_MASK;
-        out[i+j] = productLow;
-        carry = productHigh;
+    var other = that.toArray(),
+        otherChunks = that.chunks,
+        a, b, product, carry;
+    for(i in 0...chunks) {
+      a = this[1+i];
+      for(j in 0...otherChunks) {
+        b = other[1 + j];
+        product = a * b + out[i + j];
+        carry = product >>> CHUNK_SIZE;
+        out[i + j] = product & CHUNK_MASK;
+        out[i + j + 1] += carry;
       }
-      out[j+chunks] = carry;
     }
-
-/*
-    var before = out.length;
-    if(out.length != before) {
-      trace(this, that.toArray());
-      trace('before $before, after ${out.length}');
-    }
-*/
     return new BigInt(trim([sign * that.sign].concat(out)));
   }
-//*/
+
   // TODO
   @:op(A+B) @:commutative
   public function add(that : BigInt) : BigInt {
@@ -319,6 +266,7 @@ abstract BigInt(Array<Int>) {
 
   // TODO needs intDivision and less
   @:to public function toString() : String {
+    //return '['+toArray().join(", ")+']';
     if(sign == 0) return "0";
     var str = "",
         i = isNegative ? -self() : self();
@@ -365,6 +313,12 @@ abstract BigInt(Array<Int>) {
     return new BigInt(this);
 
   static function trim(arr : Array<Int>) : Array<Int> {
+/*
+var i = arr.length - 1;
+while(i > 0 && out[i] == 0)
+  i--;
+//.slice(0, i);
+*/
     while(arr[arr.length - 1] == 0 && arr.length > 1)
       arr.pop();
     if(arr.length <= 1)
