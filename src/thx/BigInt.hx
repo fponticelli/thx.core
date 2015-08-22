@@ -132,11 +132,11 @@ abstract BigInt(Array<Int>) {
 
   // TODO
   @:op(A/B) public function divide(that : BigInt) : BigInt
-    return fromInt(0);
+    return intDivision(that).quotient;
 
   // TODO
   @:op(A%B) public function modulo(that : BigInt) : BigInt
-    return fromInt(0);
+    return intDivision(that).modulus;
 /*
   // TODO
   @:op(A*B) public function multiply(that : BigInt) : BigInt {
@@ -289,7 +289,7 @@ abstract BigInt(Array<Int>) {
         quotient : zero,
         modulus : zero
       };
-    var comp = compareMagnitudes(this, that.toArray());
+    var comp = compareMagnitude(that);
     if(comp < 0)
       return {
         quotient : zero,
@@ -301,7 +301,7 @@ abstract BigInt(Array<Int>) {
         modulus : zero
       };
     if(chunks <= 3) { // TODO check chunk size is reasonable
-      var a = this.toInt(),
+      var a = toInt(),
           b = that.toInt();
       return {
         quotient : fromInt(Std.int(a / b)),
