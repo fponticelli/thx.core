@@ -35,7 +35,11 @@ class TestBigInt {
   }
 
   public function testStrings() {
-    var tests = ["0", "3", "20", "12345678901234567890", "999999999999999999"];
+    var tests = ["0", "3", "20",
+                  // FAILS
+                  "12345678901234567890",
+                  // FAILS
+                  "999999999999999999"];
 
     for(test in tests) {
       var out : BigInt = test;
@@ -85,6 +89,7 @@ class TestBigInt {
 
     var tests = [
       { num : (10 : BigInt), div : (2 : BigInt), res : (5 : BigInt) },
+      // FAILS
       { num : ("1000000000000000000" : BigInt), div : (50 : BigInt), res : ("20000000000000000" : BigInt) },
     ];
     for(test in tests) {
@@ -118,7 +123,7 @@ class TestBigInt {
     m = -234356; n = 355321; o = 234;
     Assert.isTrue((m+n)+o == m+(n+o));
 
-    Assert.isTrue((m-n)+o == m-(n+o));
+    Assert.isTrue((m-n)+o == m-(n-o));
 
     m = 1; n = -9999; s = -9998;
     Assert.isTrue(m+n == s);
@@ -136,25 +141,33 @@ class TestBigInt {
     s = "22222222222222222222220222222222222222222222222222";
     Assert.isTrue(m+n == s);
 
-    Assert.isTrue(m-n == 0);
+    // FAILS
+    Assert.isTrue(m-n == 0, 'expected $m-$n==0 but is ${m-n}');
     Assert.isTrue(s-n == m);
 
     m = "99499494949383948405";
     n = "-472435789789045237084578078029457809342597808204538970";
     s = "-472435789789045237084578078029457709843102858820590565";
-    Assert.isTrue(m+n == s);
-    Assert.isTrue(s-n == m);
+    // FAILS
+    Assert.isTrue(m+n == s, 'expected $m + $n == $s but got ${m + n}');
+    // FAILS
+    Assert.isTrue(s-n == m, 'expected $s - $n == $m but got ${s - n}');
 
     m = "-1";
     n = "100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
     s =  "99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999";
-    Assert.isTrue(m+n == s);
-    Assert.isTrue(s-n == m);
+    // FAILS
+    Assert.isTrue(m+n == s, 'expected $m + $n == $s but got ${m+n}');
+    // FAILS
+    Assert.isTrue(s-n == m, 'expected $s - $n == $m but got ${s-n}');
 
     m = "1";
-    Assert.isTrue(m+s == n);
-    Assert.isTrue(n-s == m);
-    Assert.isTrue(n-m == s);
+    // FAILS
+    Assert.isTrue(m+s == n, 'expected $m + $s == $n but got ${m+s}');
+    // FAILS
+    Assert.isTrue(n-s == m, 'expected $n - $s == $m but got ${n-s}');
+    // FAILS
+    Assert.isTrue(n-m == s, 'expected $n - $m == $s but got ${n-m}');
   }
 
   public function testNegation() {
@@ -205,7 +218,8 @@ class TestBigInt {
     a = "111111111111111111111111111111111111111";
     b = "-333333333333333333333";
     m = "-37037037037037037036999999999999999999962962962962962962963";
-    Assert.isTrue(a*b == m);
+    // FAILS
+    Assert.isTrue(a * b == m, 'expected $a * $b == $m but got ${a * b}');
   }
 
   public function testComparison() {
@@ -243,12 +257,12 @@ class TestBigInt {
     a = "-37037037037037037036999999999999999999962962962962962962963";
     b = "-333333333333333333333";
 
-    Assert.isTrue(a < b);  // FAILS
-    Assert.isTrue(a <= b); // FAILS
+    Assert.isTrue(a < b);
+    Assert.isTrue(a <= b);
     Assert.isTrue(a <= a);
 
-    Assert.isTrue(b > a);  // FAILS
-    Assert.isTrue(b >= a); // FAILS
+    Assert.isTrue(b > a);
+    Assert.isTrue(b >= a);
     Assert.isTrue(b >= b);
     Assert.isTrue(b <= b);
 
