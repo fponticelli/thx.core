@@ -1,10 +1,14 @@
 package thx.bigint;
 
 class Small implements BigIntImpl {
+  public var value(default, null) : Int;
+  public var sign(default, null) : Bool;
   public var isSmall(default, null) : Bool;
 
   public function new(value : Int) {
-
+    this.sign = value < 0;
+    this.value = value;
+    this.isSmall = false;
   }
 
   public function add(that : BigIntImpl) : BigIntImpl {
