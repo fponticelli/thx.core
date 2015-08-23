@@ -131,22 +131,44 @@ class Small implements BigIntImpl{
   }
 
   public function subtract(that : BigIntImpl) : BigIntImpl {
-    return this;
+    return add(that.negate());
   }
 
   public function divide(that : BigIntImpl) : BigIntImpl {
-    return this;
+    if(that.isSmall) {
+      return new Small(Std.int(value / (cast that : Small).value));
+    } else {
+      // TODO
+      return BigInt.zero;
+    }
   }
 
   public function multiply(that : BigIntImpl) : BigIntImpl {
-    return this;
+    if(that.isSmall) {
+      var x = (cast that : Small).value;
+      var value = x * value;
+      if (value > -Big.BASE && value < Big.BASE) {
+        return new Small(value);
+      } else {
+        return Big.multiplyImpl(Floats.sign(x), null, Floats.sign(Math.abs(x)), Ints.abs(x), Ints.sign(value), null, Ints.sign(Ints.abs(value)), Ints.abs(value));
+      }
+    } else {
+      var x = (cast that : Big);
+      return Big.multiplyImpl(x.signum, x.magnitude, x.length, 0, Ints.sign(value), null, Floats.sign(Ints.abs(value)), Ints.abs(value));
+    }
   }
 
   public function modulo(that : BigIntImpl) : BigIntImpl {
-    return new Small(0);
+    if(that.isSmall) {
+      return new Small(Std.int(value % (cast that : Small).value));
+    } else {
+      // TODO
+      return BigInt.zero;
+    }
   }
 
   public function negate() : BigIntImpl {
+    // TODO
     return new Small(-value);
   }
 
@@ -155,8 +177,14 @@ class Small implements BigIntImpl{
   }
 
   // TODO
-  public function compare(that : BigIntImpl) : Int
-    return 0;
+  public function compare(that : BigIntImpl) : Int {
+    if(that.isSmall) {
+      return Ints.compare(value, (cast value : Small).value);
+    } else {
+      var x : Big = cast that;
+      return Big.compareTo(x.signum, x.magnitude, x.length, 0, Floats.sign(value), null, Floats.sign(Ints.abs(value)), Ints.abs(value));
+    }
+  }
 
   // TODO
   public function toFloat() : Float
@@ -192,16 +220,21 @@ class Big implements BigIntImpl {
     }
   }
 
-  public function subtract(that : BigIntImpl) : BigIntImpl {
-    return this;
-  }
+  public function subtract(that : BigIntImpl) : BigIntImpl
+    return add(that.negate());
 
   public function divide(that : BigIntImpl) : BigIntImpl {
     return this;
   }
 
   public function multiply(that : BigIntImpl) : BigIntImpl {
-    return this;
+    if(that.isSmall) {
+      var x = (cast that : Small).value;
+      return multiplyImpl(Floats.sign(x), null, Floats.sign(Ints.abs(x)), Ints.abs(x), signum, magnitude, length, 0);
+    } else {
+      var x = (cast that : Big);
+      return multiplyImpl(x.signum, x.magnitude, x.length, 0, signum, magnitude, length, 0);
+    }
   }
 
   public function modulo(that : BigIntImpl) : BigIntImpl {
@@ -217,8 +250,14 @@ class Big implements BigIntImpl {
   }
 
   // TODO
-  public function compare(that : BigIntImpl) : Int
-    return 0;
+  public function compare(that : BigIntImpl) : Int {
+    if(that.isSmall) {
+      return -1 * that.compare(this);
+    } else {
+      var big : Big = cast that;
+      return compareTo(big.signum, big.magnitude, big.length, 0, signum, magnitude, length, 0);
+    }
+  }
 
   // TODO
   public function toFloat() : Float
@@ -300,7 +339,7 @@ class Big implements BigIntImpl {
     var error = ((ahi * bhi - product) + ahi * blo + alo * bhi) + alo * blo;
 
     var hi = fastTrunc(product / BASE);
-    var lo = Std.int(product - hi * BASE + error);
+    var lo = product - hi * BASE + error;
 
     if(lo < 0) {
       lo += BASE;
@@ -314,7 +353,7 @@ class Big implements BigIntImpl {
       hi += 1;
     }
 
-    return {lo: lo, hi: hi};
+    return {lo: Std.int(lo), hi: hi};
   };
 
   static function performDivision(a : Int, b : Int, divisor : Int) {
@@ -438,7 +477,7 @@ class Big implements BigIntImpl {
     return 0;
   };
 
-  static function compareTo(aSignum : Int, aMagnitude : Array<Int>, aLength : Int, aValue : Int, bSignum : Int, bMagnitude : Array<Int>, bLength : Int, bValue : Int) : Int {
+  public static function compareTo(aSignum : Int, aMagnitude : Array<Int>, aLength : Int, aValue : Int, bSignum : Int, bMagnitude : Array<Int>, bLength : Int, bValue : Int) : Int {
     if(aSignum == bSignum) {
       var c = compareMagnitude(aMagnitude, aLength, aValue, bMagnitude, bLength, bValue);
       return aSignum < 0 ? 0 - c : c; // positive zero will be returned for c == 0
@@ -504,7 +543,7 @@ class Big implements BigIntImpl {
     return createBigInteger(maxSignum, result, resultLength);
   };
 
-  static function multiplyImpl(aSignum : Int, aMagnitude : Array<Int>, aLength : Int, aValue : Int, bSignum : Int, bMagnitude : Array<Int>, bLength : Int, bValue : Int) : BigIntImpl {
+  public static function multiplyImpl(aSignum : Int, aMagnitude : Array<Int>, aLength : Int, aValue : Int, bSignum : Int, bMagnitude : Array<Int>, bLength : Int, bValue : Int) : BigIntImpl {
     if(aLength == 0 || bLength == 0) {
       return createBigInteger(0, createArray(0), 0);
     }
@@ -545,7 +584,7 @@ class Big implements BigIntImpl {
     return createBigInteger(resultSign, result, resultLength);
   };
 
-  static function divideAndRemainder(aSignum : Int, aMagnitude : Array<Int>, aLength : Int, aValue : Int, bSignum : Int, bMagnitude : Array<Int>, bLength : Int, bValue : Int, divide) {
+  static function divideAndRemainder(aSignum : Int, aMagnitude : Array<Int>, aLength : Int, aValue : Int, bSignum : Int, bMagnitude : Array<Int>, bLength : Int, bValue : Int, divide : Int) {
     if(bLength == 0) {
       throw new Error('division by zero');
     }
