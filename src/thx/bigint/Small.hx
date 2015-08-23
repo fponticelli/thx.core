@@ -1,6 +1,10 @@
 package thx.bigint;
 
 class Small implements BigIntImpl {
+  public static var zero(default, null) = new Small(0);
+  public static var one(default, null) = new Small(1);
+  public static var negativeOne(default, null) = new Small(-1);
+
   public var value(default, null) : Int;
   public var sign(default, null) : Bool;
   public var isSmall(default, null) : Bool;
@@ -51,15 +55,27 @@ class Small implements BigIntImpl {
   }
 
   public function divide(that : BigIntImpl) : BigIntImpl {
-    return that.isSmall ? divideSmall(cast that) : divideBig(cast that);
+    return divMod(that).quotient;
   }
 
-  public function divideSmall(small : Small) : BigIntImpl {
-    return null;
+  public function divMod(that : BigIntImpl) : { quotient : BigIntImpl, remainder : BigIntImpl } {
+    if(that.isZero())
+      throw new Error('division by zero');
+    return that.isSmall ? divModSmall(cast that) : divModBig(cast that);
   }
 
-  public function divideBig(big : Big) : BigIntImpl {
-    return null;
+  public function divModSmall(small : Small) : { quotient : BigIntImpl, remainder : BigIntImpl } {
+    return {
+      quotient : new Small(Floats.trunc(value / small.value)),
+      remainder : new Small(value % small.value)
+    };
+  }
+
+  public function divModBig(big : Big) : { quotient : BigIntImpl, remainder : BigIntImpl } {
+    return {
+      quotient : Small.zero,
+      remainder : this
+    };
   }
 
   public function multiply(that : BigIntImpl) : BigIntImpl {
@@ -67,24 +83,20 @@ class Small implements BigIntImpl {
   }
 
   public function multiplySmall(small : Small) : BigIntImpl {
-    return null;
+    if(Bigs.isPrecise(value * small.value)) {
+      return new Small(value * small.value);
+    }
+    return new Big(Bigs.smallToArray(Ints.abs(small.value)), small.sign).multiplySmall(this);
   }
 
   public function multiplyBig(big : Big) : BigIntImpl {
-    return null;
+    return new Big(Bigs.multiplyLong(big.value, Bigs.smallToArray(Ints.abs(value))), sign != big.sign);
   }
 
   public function modulo(that : BigIntImpl) : BigIntImpl {
-    return that.isSmall ? moduloSmall(cast that) : moduloBig(cast that);
+    return divMod(that).remainder;
   }
 
-  public function moduloSmall(small : Small) : BigIntImpl {
-    return null;
-  }
-
-  public function moduloBig(big : Big) : BigIntImpl {
-    return null;
-  }
 
   public function abs() : BigIntImpl {
     return new Small(Ints.abs(value));
@@ -96,31 +108,43 @@ class Small implements BigIntImpl {
     return small;
   }
 
-  public function isZero() : Bool {
-    return false;
+  public function next() : BigIntImpl {
+    return addSmall(Small.one);
   }
 
-  // TODO
+  public function prev() : BigIntImpl {
+    return addSmall(Small.negativeOne);
+  }
+
+  public function isZero() : Bool {
+    return value == 0;
+  }
+
   public function compare(that : BigIntImpl) : Int {
     return that.isSmall ? compareSmall(cast that) : compareBig(cast that);
   }
 
+  public function compareAbs(that : BigIntImpl) : Int {
+    return abs().compare(that.abs());
+  }
+
   public function compareSmall(small : Small) : Int {
-    return null;
+    return Ints.compare(value, small.value);
   }
 
   public function compareBig(big : Big) : Int {
-    return null;
+    return big.sign ? 1 : -1;
   }
 
-  // TODO
   public function toFloat() : Float
-    return 0.1;
+    return value;
 
-  // TODO
   public function toInt() : Int
-    return 1;
+    return value;
+
+  public function toString()
+    return toStringWithBase(10);
 
   public function toStringWithBase(base : Int) : String
-    return "";
+    return Ints.toString(value, base);
 }

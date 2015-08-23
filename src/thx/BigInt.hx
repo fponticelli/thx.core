@@ -15,9 +15,32 @@ Based on code realized by Mike Welsh: https://github.com/Herschel/hxmath/blob/ma
 // <<
 // >>
 // >>>
+// square
+// pow
+// modPow
+// compareAbs
+// isEven
+// isOdd
+// isUnit
+// isDivisibleBy
+// isPrime
+// next
+// prev
+// shiftLeft
+// shiftRight
+// not
+// and
+// or
+// xor
+// max
+// min
+// gcd
+// lcm
+// randBeteen
+
 
 abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
-  public static var zero(default, null) : BigInt = new Small(0);
+  public static var zero(default, null) : BigInt = Small.zero;
   // TODO
   @:from public static function fromFloat(value : Float) : BigInt
     return zero;
@@ -25,13 +48,11 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   @:from public static function fromInt(value : Int) : BigInt
     return (new Small(value) : BigIntImpl);
 
-  // TODO
   @:from public inline static function fromString(value : String) : BigInt
-    return null; //Big.parseBigInteger(value, 10);
+    return Bigs.parseBase(value, 10);
 
-  // TODO
   public inline static function fromStringWithBase(value : String, base : Int) : BigInt
-    return null; //Big.parseBigInteger(value, base);
+    return Bigs.parseBase(value, base);
 
   inline public function isZero() : Bool
     return this.isZero();
@@ -86,6 +107,9 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   inline public function modulo(that : BigInt) : BigInt
     return this.modulo(that);
 
+  inline public function divMod(that : BigInt) : { quotient : BigInt, remainder : BigInt }
+    return this.divMod(that);
+
   @:to inline public function toFloat() : Float
     return this.toFloat();
 
@@ -93,5 +117,8 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
     return this.toInt();
 
   @:to inline public function toString() : String
-    return this.toStringWithBase(10);
+    return this.toString();
+
+  inline public function toStringWithBase(base : Int) : String
+    return this.toStringWithBase(base);
 }

@@ -42,39 +42,95 @@ class Big implements BigIntImpl {
   }
 
   public function divide(that : BigIntImpl) : BigIntImpl {
-    return that.isSmall ? divideSmall(cast that) : divideBig(cast that);
+    return divMod(that).quotient;
   }
 
-  public function divideSmall(small : Small) : BigIntImpl {
-    return null;
+  public function divMod(that : BigIntImpl) : { quotient : BigIntImpl, remainder : BigIntImpl } {
+    if(that.isZero())
+      throw new Error('division by zero');
+    return that.isSmall ? divModSmall(cast that) : divModBig(cast that);
   }
 
-  public function divideBig(big : Big) : BigIntImpl {
-    return null;
+  public function divModSmall(small : Small) : { quotient : BigIntImpl, remainder : BigIntImpl } {
+    var values = Bigs.divModSmall(value, Ints.abs(small.value));
+    var quotient = Bigs.arrayToSmall(values.q);
+    var remainder = values.r;
+    if(sign) remainder = -remainder;
+    if(null != quotient) {
+      if(sign != small.sign)
+        quotient = -quotient;
+      return {
+        quotient : new Small(quotient),
+        remainder : new Small(remainder)
+      };
+    }
+    return {
+      quotient : new Big(values.q, sign != small.sign),
+      remainder : new Small(remainder)
+    };
+  }
+
+  public function divModBig(big : Big) : { quotient : BigIntImpl, remainder : BigIntImpl } {
+    var comparison = Bigs.compareAbs(value, big.value);
+    if(comparison == -1) return {
+      quotient : Small.zero,
+      remainder : this
+    };
+    if(comparison == 0) return {
+      quotient : sign == big.sign ? Small.one : Small.negativeOne,
+      remainder : Small.zero
+    };
+
+    // divMod1 is faster on smaller input sizes
+    var values = (value.length + big.value.length <= 200) ? Bigs.divMod1(value, big.value): Bigs.divMod2(value, big.value);
+    var q = values[0].small;
+    var quotient : BigIntImpl, remainder : BigIntImpl;
+    var qSign = sign != big.sign,
+        r = values[1].small,
+        mSign = sign;
+    if(null != q) {
+      if(qSign) q = -q;
+      quotient = new Small(q);
+    } else
+      quotient = new Big(values[0].big, qSign);
+    if(null != r) {
+      if(mSign) r = -r;
+      remainder = new Small(r);
+    } else
+      remainder = new Big(values[1].big, mSign);
+    return {
+      quotient : quotient,
+      remainder : remainder
+    };
   }
 
   public function multiply(that : BigIntImpl) : BigIntImpl {
+    if(that.isZero())
+      return Small.zero;
     return that.isSmall ? multiplySmall(cast that) : multiplyBig(cast that);
   }
 
   public function multiplySmall(small : Small) : BigIntImpl {
-    return null;
+    var abs = Ints.abs(small.value);
+    if(abs < Bigs.BASE) {
+      return new Big(
+        Bigs.multiplySmall(value, abs),
+        sign != small.sign
+      );
+    }
+    return multiplyBig(
+      new Big(Bigs.smallToArray(small.value), small.sign)
+    );
   }
 
   public function multiplyBig(big : Big) : BigIntImpl {
-    return null;
+    if(value.length + big.value.length > 4000)
+      return new Big(Bigs.multiplyKaratsuba(value, big.value), sign);
+    return new Big(Bigs.multiplyLong(value, big.value), sign);
   }
 
   public function modulo(that : BigIntImpl) : BigIntImpl {
-    return that.isSmall ? moduloSmall(cast that) : moduloBig(cast that);
-  }
-
-  public function moduloSmall(small : Small) : BigIntImpl {
-    return null;
-  }
-
-  public function moduloBig(big : Big) : BigIntImpl {
-    return null;
+    return divMod(that).remainder;
   }
 
   public function abs() : BigIntImpl {
@@ -83,6 +139,14 @@ class Big implements BigIntImpl {
 
   public function negate() : BigIntImpl {
     return new Big(value, !sign);
+  }
+
+  public function next() : BigIntImpl {
+    return addSmall(Small.one);
+  }
+
+  public function prev() : BigIntImpl {
+    return addSmall(Small.negativeOne);
   }
 
   public function isZero() : Bool {
@@ -94,22 +158,51 @@ class Big implements BigIntImpl {
     return that.isSmall ? compareSmall(cast that) : compareBig(cast that);
   }
 
+  public function compareAbs(that : BigIntImpl) : Int {
+    return abs().compare(that.abs());
+  }
+
   public function compareSmall(small : Small) : Int {
-    return null;
+    return sign ? -1 : 1;
   }
 
   public function compareBig(big : Big) : Int {
-    return null;
+    return Bigs.compareAbs(value, big.value) * (sign ? -1 : 1);
   }
 
   // TODO
   public function toFloat() : Float
-    return 0.1;
+    return toInt();
 
   // TODO
-  public function toInt() : Int
-    return 1;
+  public function toInt() : Int {
+    var v = Bigs.arrayToSmall(value);
+    if(null == v) throw new Error('overflow');
+    return (sign ? -1 : 1) * v;
+  }
 
-  public function toStringWithBase(base : Int) : String
-    return "";
+  public function toString()
+    return toStringWithBase(10);
+
+  public function toStringWithBase(base : Int) : String {
+    if(isZero())
+      return "0";
+
+    var out = [];
+    var baseBig = new Small(base);
+    var left : BigIntImpl = this, divmod;
+    while(left.sign || left.compareAbs(baseBig) >= 0) {
+      divmod = left.divMod(baseBig);
+      left = divmod.quotient;
+      var digit = divmod.remainder;
+      if(digit.sign) {
+        digit = baseBig.subtract(digit).abs();
+        left = left.next();
+      }
+      out.push(digit.toStringWithBase(base));
+    }
+    out.push(left.toStringWithBase(base));
+    out.reverse();
+    return (sign ? "-" : "") + out.join("");
+  }
 }
