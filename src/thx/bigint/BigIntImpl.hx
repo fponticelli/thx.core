@@ -1,6 +1,7 @@
 package thx.bigint;
 
 interface BigIntImpl {
+  var sign(default, null) : Bool;
   var isSmall(default, null) : Bool;
   function add(that : BigIntImpl) : BigIntImpl;
   function subtract(that : BigIntImpl) : BigIntImpl;

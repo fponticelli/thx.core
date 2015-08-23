@@ -1,26 +1,30 @@
 package thx.bigint;
 
+import thx.bigint.Bigs;
+
 class Big implements BigIntImpl {
   public var value(default, null) : Array<Int>;
   public var sign(default, null) : Bool;
   public var isSmall(default, null) : Bool;
 
-  public function new(sign : Bool, value : Array<Int>) {
+  public function new(value : Array<Int>, sign : Bool) {
     this.sign = sign;
     this.value = value;
     this.isSmall = false;
   }
 
   public function add(that : BigIntImpl) : BigIntImpl {
+    if(sign != that.sign)
+      return subtract(that.negate());
     return that.isSmall ? addSmall(cast that) : addBig(cast that);
   }
 
   public function addSmall(small : Small) : BigIntImpl {
-    return null;
+    return new Big(Bigs.addSmall(value, Ints.abs(small.value)), sign);
   }
 
   public function addBig(big : Big) : BigIntImpl {
-    return null;
+    return new Big(Bigs.addAny(value, big.value), sign);
   }
 
   public function subtract(that : BigIntImpl) : BigIntImpl {
