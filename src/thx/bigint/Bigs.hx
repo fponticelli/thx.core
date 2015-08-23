@@ -102,4 +102,561 @@ class Bigs {
     }
     return 0;
   }
+
+  public static function subtract(a : Array<Int>, b : Array<Int>) : Array<Int> { // assumes a and b are arrays with a >= b
+    var a_l = a.length,
+        b_l = b.length,
+        r = #if js untyped __js__("new Array")(a_l) #else [] #end,
+        borrow = 0,
+        base = BASE,
+        i, difference;
+    for (i in 0...b_l) {
+      difference = a[i] - borrow - b[i];
+      if (difference < 0) {
+        difference += base;
+        borrow = 1;
+      } else borrow = 0;
+      r[i] = difference;
+    }
+    var i = b_l;
+    while(i < a_l) {
+    //for (i in b_l; i < a_l; i++) {
+      difference = a[i] - borrow;
+      if (difference < 0) difference += base;
+      else {
+        r[i++] = difference;
+        break;
+      }
+      r[i] = difference;
+      i++;
+    }
+    while(i < a_l) {
+    //for (; i < a_l; i++) {
+      r[i] = a[i];
+      i++;
+    }
+    trim(r);
+    return r;
+  }
+
+  function subtractAny(a : Array<Int>, b : Array<Int>, sign : Bool) : BigIntImpl {
+    var value;
+    if (compareAbs(a, b) >= 0) {
+      value = subtract(a,b);
+    } else {
+      value = subtract(b, a);
+      sign = !sign;
+    }
+    var n = arrayToSmall(value);
+    if (null != n) {
+      if (sign) n = -n;
+      return new Small(n);
+    }
+    return new Big(value, sign);
+  }
+
+  function subtractSmall(a : Array<Int>, b : Int, sign : Bool) : BigIntImpl { // assumes a is array, b is number with 0 <= b < MAX_INT
+    var l = a.length,
+        r = #if js untyped __js__("new Array")(l) #else [] #end,
+        carry = -b,
+        base = BASE,
+        i, difference;
+    for (i in 0...l) {
+      difference = a[i] + carry;
+      carry = Math.floor(difference / base);
+      r[i] = difference < 0 ? difference % base + base : difference;
+    }
+    var n = arrayToSmall(r);
+    if (null != n) {
+      if (sign) n = -n;
+      return new Small(n);
+    }
+    return new Big(r, sign);
+  }
+/*
+  function multiplyLong(a, b) {
+      var a_l = a.length,
+          b_l = b.length,
+          l = a_l + b_l,
+          r = createArray(l),
+          base = BASE,
+          product, carry, i, a_i, b_j;
+      for (i = 0; i < a_l; ++i) {
+          a_i = a[i];
+          for (var j = 0; j < b_l; ++j) {
+              b_j = b[j];
+              product = a_i * b_j + r[i + j];
+              carry = Math.floor(product / base);
+              r[i + j] = product - carry * base;
+              r[i + j + 1] += carry;
+          }
+      }
+      trim(r);
+      return r;
+  }
+
+  function multiplySmall(a, b) { // assumes a is array, b is number with |b| < BASE
+      var l = a.length,
+          r = #if js untyped __js__("new Array")(l) #else [] #end,
+          base = BASE,
+          carry = 0,
+          product, i;
+      for (i = 0; i < l; i++) {
+          product = a[i] * b + carry;
+          carry = Math.floor(product / base);
+          r[i] = product - carry * base;
+      }
+      while (carry > 0) {
+          r[i++] = carry % base;
+          carry = Math.floor(carry / base);
+      }
+      return r;
+  }
+
+  function shiftLeft(x, n) {
+      var r = [];
+      while (n-- > 0) r.push(0);
+      return r.concat(x);
+  }
+
+  function multiplyKaratsuba(x, y) {
+      var n = Math.max(x.length, y.length);
+
+      if (n <= 400) return multiplyLong(x, y);
+      n = Math.ceil(n / 2);
+
+      var b = x.slice(n),
+          a = x.slice(0, n),
+          d = y.slice(n),
+          c = y.slice(0, n);
+
+      var ac = multiplyKaratsuba(a, c),
+          bd = multiplyKaratsuba(b, d),
+          abcd = multiplyKaratsuba(addAny(a, b), addAny(c, d));
+
+      return addAny(addAny(ac, shiftLeft(subtract(subtract(abcd, ac), bd), n)), shiftLeft(bd, 2 * n));
+  }
+
+  function square(a) {
+      var l = a.length,
+          r = createArray(l + l),
+          base = BASE,
+          product, carry, i, a_i, a_j;
+      for (i = 0; i < l; i++) {
+          a_i = a[i];
+          for (var j = 0; j < l; j++) {
+              a_j = a[j];
+              product = a_i * a_j + r[i + j];
+              carry = Math.floor(product / base);
+              r[i + j] = product - carry * base;
+              r[i + j + 1] += carry;
+          }
+      }
+      trim(r);
+      return r;
+  }
+
+  function divMod1(a, b) { // Left over from previous version. Performs faster than divMod2 on smaller input sizes.
+      var a_l = a.length,
+          b_l = b.length,
+          base = BASE,
+          result = createArray(b.length),
+          divisorMostSignificantDigit = b[b_l - 1],
+          // normalization
+          lambda = Math.ceil(base / (2 * divisorMostSignificantDigit)),
+          remainder = multiplySmall(a, lambda),
+          divisor = multiplySmall(b, lambda),
+          quotientDigit, shift, carry, borrow, i, l, q;
+      if (remainder.length <= a_l) remainder.push(0);
+      divisor.push(0);
+      divisorMostSignificantDigit = divisor[b_l - 1];
+      for (shift = a_l - b_l; shift >= 0; shift--) {
+          quotientDigit = base - 1;
+          quotientDigit = Math.floor((remainder[shift + b_l] * base + remainder[shift + b_l - 1]) / divisorMostSignificantDigit);
+          carry = 0;
+          borrow = 0;
+          l = divisor.length;
+          for (i = 0; i < l; i++) {
+              carry += quotientDigit * divisor[i];
+              q = Math.floor(carry / base);
+              borrow += remainder[shift + i] - (carry - q * base);
+              carry = q;
+              if (borrow < 0) {
+                  remainder[shift + i] = borrow + base;
+                  borrow = -1;
+              } else {
+                  remainder[shift + i] = borrow;
+                  borrow = 0;
+              }
+          }
+          while (borrow != 0) {
+              quotientDigit -= 1;
+              carry = 0;
+              for (i = 0; i < l; i++) {
+                  carry += remainder[shift + i] - base + divisor[i];
+                  if (carry < 0) {
+                      remainder[shift + i] = carry + base;
+                      carry = 0;
+                  } else {
+                      remainder[shift + i] = carry;
+                      carry = 1;
+                  }
+              }
+              borrow += carry;
+          }
+          result[shift] = quotientDigit;
+      }
+      // denormalization
+      remainder = divModSmall(remainder, lambda)[0];
+      return [arrayToSmall(result), arrayToSmall(remainder)];
+  }
+
+  function divMod2(a, b) { // Implementation idea shamelessly stolen from Silent Matt's library http://silentmatt.com/biginteger/
+      // Performs faster than divMod1 on larger input sizes.
+      var a_l = a.length,
+          b_l = b.length,
+          result = [],
+          part = [],
+          base = BASE,
+          guess, xlen, highx, highy, check;
+      while (a_l) {
+          part.unshift(a[--a_l]);
+          if (compareAbs(part, b) < 0) {
+              result.push(0);
+              continue;
+          }
+          xlen = part.length;
+          highx = part[xlen - 1] * base + part[xlen - 2];
+          highy = b[b_l - 1] * base + b[b_l - 2];
+          if (xlen > b_l) {
+              highx = (highx + 1) * base;
+          }
+          guess = Math.ceil(highx / highy);
+          do {
+              check = multiplySmall(b, guess);
+              if (compareAbs(check, part) <= 0) break;
+              guess--;
+          } while (guess);
+          result.push(guess);
+          part = subtract(part, check);
+      }
+      result.reverse();
+      return [arrayToSmall(result), arrayToSmall(part)];
+  }
+
+  function divModSmall(value, lambda) {
+      var length = value.length,
+          quotient = createArray(length),
+          base = BASE,
+          i, q, remainder, divisor;
+      remainder = 0;
+      for (i = length - 1; i >= 0; --i) {
+          divisor = remainder * base + value[i];
+          q = truncate(divisor / lambda);
+          remainder = divisor - q * lambda;
+          quotient[i] = q | 0;
+      }
+      return [quotient, remainder | 0];
+  }
+
+  function divModAny(self, v) {
+      var value, n = parseValue(v);
+      var a = self.value, b = n.value;
+      var quotient;
+      if (b == 0) throw new Error("Cannot divide by zero");
+      if (self.isSmall) {
+          if (n.isSmall) {
+              return [new Small(truncate(a / b)), new Small(a % b)];
+          }
+          return [CACHE[0], self];
+      }
+      if (n.isSmall) {
+          if (b == 1) return [self, CACHE[0]];
+          if (b == -1) return [self.negate(), CACHE[0]];
+          var abs = Math.abs(b);
+          if (abs < BASE) {
+              value = divModSmall(a, abs);
+              quotient = arrayToSmall(value[0]);
+              var remainder = value[1];
+              if (self.sign) remainder = -remainder;
+              if (typeof quotient == "number") {
+                  if (self.sign != n.sign) quotient = -quotient;
+                  return [new Small(quotient), new Small(remainder)];
+              }
+              return [new Big(quotient, self.sign != n.sign), new Small(remainder)];
+          }
+          b = smallToArray(abs);
+      }
+      var comparison = compareAbs(a, b);
+      if (comparison == -1) return [CACHE[0], self];
+      if (comparison == 0) return [CACHE[self.sign == n.sign ? 1 : -1], CACHE[0]];
+
+      // divMod1 is faster on smaller input sizes
+      if (a.length + b.length <= 200)
+          value = divMod1(a, b);
+      else value = divMod2(a, b);
+
+      quotient = value[0];
+      var qSign = self.sign != n.sign,
+          mod = value[1],
+          mSign = self.sign;
+      if (typeof quotient == "number") {
+          if (qSign) quotient = -quotient;
+          quotient = new Small(quotient);
+      } else quotient = new Big(quotient, qSign);
+      if (typeof mod == "number") {
+          if (mSign) mod = -mod;
+          mod = new Small(mod);
+      } else mod = new Big(mod, mSign);
+      return [quotient, mod];
+  }
+
+  function compareAbs(a, b) {
+      if (a.length != b.length) {
+          return a.length > b.length ? 1 : -1;
+      }
+      for (var i = a.length - 1; i >= 0; i--) {
+          if (a[i] != b[i]) return a[i] > b[i] ? 1 : -1;
+      }
+      return 0;
+  }
+
+  function shift_isSmall(n) {
+      return ((typeof n == "number" || typeof n == "string") && +Math.abs(n) <= BASE) ||
+          (n instanceof Big && n.value.length <= 1);
+  }
+
+
+
+      function bitwise(x, y, fn) {
+          y = parseValue(y);
+          var xSign = x.isNegative(), ySign = y.isNegative();
+          var xRem = xSign ? x.not() : x,
+              yRem = ySign ? y.not() : y;
+          var xBits = [], yBits = [];
+          var xStop = false, yStop = false;
+          while (!xStop || !yStop) {
+              if (xRem.isZero()) { // virtual sign extension for simulating two's complement
+                  xStop = true;
+                  xBits.push(xSign ? 1 : 0);
+              }
+              else if (xSign) xBits.push(xRem.isEven() ? 1 : 0); // two's complement for negative numbers
+              else xBits.push(xRem.isEven() ? 0 : 1);
+
+              if (yRem.isZero()) {
+                  yStop = true;
+                  yBits.push(ySign ? 1 : 0);
+              }
+              else if (ySign) yBits.push(yRem.isEven() ? 1 : 0);
+              else yBits.push(yRem.isEven() ? 0 : 1);
+
+              xRem = xRem.over(2);
+              yRem = yRem.over(2);
+          }
+          var result = [];
+          for (var i = 0; i < xBits.length; i++) result.push(fn(xBits[i], yBits[i]));
+          var sum = bigInt(result.pop()).negate().times(bigInt(2).pow(result.length));
+          while (result.length) {
+              sum = sum.add(bigInt(result.pop()).times(bigInt(2).pow(result.length)));
+          }
+          return sum;
+
+
+
+              function max(a, b) {
+                  a = parseValue(a);
+                  b = parseValue(b);
+                  return a.greater(b) ? a : b;
+              }
+              function min(a,b) {
+                  a = parseValue(a);
+                  b = parseValue(b);
+                  return a.lesser(b) ? a : b;
+              }
+              function gcd(a, b) {
+                  a = parseValue(a).abs();
+                  b = parseValue(b).abs();
+                  if (a.equals(b)) return a;
+                  if (a.isZero()) return b;
+                  if (b.isZero()) return a;
+                  if (a.isEven()) {
+                      if (b.isOdd()) {
+                          return gcd(a.divide(2), b);
+                      }
+                      return gcd(a.divide(2), b.divide(2)).multiply(2);
+                  }
+                  if (b.isEven()) {
+                      return gcd(a, b.divide(2));
+                  }
+                  if (a.greater(b)) {
+                      return gcd(a.subtract(b).divide(2), b);
+                  }
+                  return gcd(b.subtract(a).divide(2), a);
+              }
+              function lcm(a, b) {
+                  a = parseValue(a).abs();
+                  b = parseValue(b).abs();
+                  return a.multiply(b).divide(gcd(a, b));
+              }
+              function randBetween(a, b) {
+                  a = parseValue(a);
+                  b = parseValue(b);
+                  var low = min(a, b), high = max(a, b);
+                  var range = high.subtract(low);
+                  if (range.isSmall) return low.add(Math.random() * range);
+                  var length = range.value.length - 1;
+                  var result = [], restricted = true;
+                  for (var i = length; i >= 0; i--) {
+                      var top = restricted ? range.value[i] : BASE;
+                      var digit = truncate(Math.random() * top);
+                      result.unshift(digit);
+                      if (digit < top) restricted = false;
+                  }
+                  result = arrayToSmall(result);
+                  return low.add(new Big(result, false, typeof result == "number"));
+              }
+              var parseBase = function (text, base) {
+                  var val = CACHE[0], pow = CACHE[1],
+                      length = text.length;
+                  if (2 <= base && base <= 36) {
+                      if (length <= LOG_MAX_INT / Math.log(base)) {
+                          return new Small(parseInt(text, base));
+                      }
+                  }
+                  base = parseValue(base);
+                  var digits = [];
+                  var i;
+                  var isNegative = text[0] == "-";
+                  for (i = isNegative ? 1 : 0; i < text.length; i++) {
+                      var c = text[i].toLowerCase(),
+                          charCode = c.charCodeAt(0);
+                      if (48 <= charCode && charCode <= 57) digits.push(parseValue(c));
+                      else if (97 <= charCode && charCode <= 122) digits.push(parseValue(c.charCodeAt(0) - 87));
+                      else if (c == "<") {
+                          var start = i;
+                          do { i++; } while (text[i] != ">");
+                          digits.push(parseValue(text.slice(start + 1, i)));
+                      }
+                      else throw new Error(c + " is not a valid character");
+                  }
+                  digits.reverse();
+                  for (i = 0; i < digits.length; i++) {
+                      val = val.add(digits[i].times(pow));
+                      pow = pow.times(base);
+                  }
+                  return isNegative ? val.negate() : val;
+              };
+
+              function stringify(digit) {
+                  var v = digit.value;
+                  if (typeof v == "number") v = [v];
+                  if (v.length == 1 && v[0] <= 36) {
+                      return "0123456789abcdefghijklmnopqrstuvwxyz".charAt(v[0]);
+                  }
+                  return "<" + v + ">";
+              }
+              function toBase(n, base) {
+                  base = bigInt(base);
+                  if (base.isZero()) {
+                      if (n.isZero()) return "0";
+                      throw new Error("Cannot convert nonzero numbers to base 0.");
+                  }
+                  if (base.equals(-1)) {
+                      if (n.isZero()) return "0";
+                      if (n.isNegative()) return new Array(1 - n).join("10");
+                      return "1" + new Array(+n).join("01");
+                  }
+                  var minusSign = "";
+                  if (n.isNegative() && base.isPositive()) {
+                      minusSign = "-";
+                      n = n.abs();
+                  }
+                  if (base.equals(1)) {
+                      if (n.isZero()) return "0";
+                      return minusSign + new Array(+n + 1).join(1);
+                  }
+                  var out = [];
+                  var left = n, divmod;
+                  while (left.isNegative() || left.compareAbs(base) >= 0) {
+                      divmod = left.divmod(base);
+                      left = divmod.quotient;
+                      var digit = divmod.remainder;
+                      if (digit.isNegative()) {
+                          digit = base.minus(digit).abs();
+                          left = left.next();
+                      }
+                      out.push(stringify(digit));
+                  }
+                  out.push(stringify(left));
+                  return minusSign + out.reverse().join("");
+              }
+
+
+                  function parseValue(v) {
+                      if (v instanceof Big || v instanceof Small) return v;
+                      if (typeof v == "number") {
+                          if (isPrecise(v)) return new Small(v);
+                          v = String(v);
+                      }
+                      if (typeof v == "string") {
+                          if (isPrecise(+v)) {
+                              var x = +v;
+                              if (x == truncate(x))
+                                  return new Small(x);
+                              throw "Invalid integer: " + v;
+                          }
+                          var sign = v[0] == "-";
+                          if (sign) v = v.slice(1);
+                          var split = v.split(/e/i);
+                          if (split.length > 2) throw new Error("Invalid integer: " + text.join("e"));
+                          if (split.length == 2) {
+                              var exp = split[1];
+                              if (exp[0] == "+") exp = exp.slice(1);
+                              exp = +exp;
+                              if (exp != truncate(exp) || !isPrecise(exp)) throw new Error("Invalid integer: " + exp + " is not a valid exponent.");
+                              var text = split[0];
+                              var decimalPlace = text.indexOf(".");
+                              if (decimalPlace >= 0) {
+                                  exp -= text.length - decimalPlace;
+                                  text = text.slice(0, decimalPlace) + text.slice(decimalPlace + 1);
+                              }
+                              if (exp < 0) throw new Error("Cannot include negative exponent part for integers");
+                              text += (new Array(exp + 1)).join("0");
+                              v = text;
+                          }
+                          var isValid = /^([0-9][0-9]*)$/.test(v);
+                          if (!isValid) throw new Error("Invalid integer: " + v);
+                          var r = [], max = v.length, l = LOG_BASE, min = max - l;
+                          while (max > 0) {
+                              r.push(+v.slice(min, max));
+                              min -= l;
+                              if (min < 0) min = 0;
+                              max -= l;
+                          }
+                          trim(r);
+                          return new Big(r, sign);
+                      }
+                  }
+                  // Pre-define numbers in range [-999,999]
+                  var CACHE = function (v, radix) {
+                      if (typeof v == "undefined") return CACHE[0];
+                      if (typeof radix != "undefined") return +radix == 10 ? parseValue(v) : parseBase(v, radix);
+                      return parseValue(v);
+                  };
+                  for (var i = 0; i < 1000; i++) {
+                      CACHE[i] = new Small(i);
+                      if (i > 0) CACHE[-i] = new Small(-i);
+                  }
+                  // Backwards compatibility
+                  CACHE.one = CACHE[1];
+                  CACHE.zero = CACHE[0];
+                  CACHE.minusOne = CACHE[-1];
+                  CACHE.max = max;
+                  CACHE.min = min;
+                  CACHE.gcd = gcd;
+                  CACHE.lcm = lcm;
+                  CACHE.isInstance = function (x) { return x instanceof Big || x instanceof Small; };
+                  CACHE.randBetween = randBetween;
+                  return CACHE;
+*/
 }

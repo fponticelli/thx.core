@@ -18,16 +18,18 @@ Based on code realized by Mike Welsh: https://github.com/Herschel/hxmath/blob/ma
 
 abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   public static var zero(default, null) : BigInt = new Small(0);
-
+  // TODO
   @:from public static function fromFloat(value : Float) : BigInt
     return zero;
 
   @:from public static function fromInt(value : Int) : BigInt
     return (new Small(value) : BigIntImpl);
 
+  // TODO
   @:from public inline static function fromString(value : String) : BigInt
     return null; //Big.parseBigInteger(value, 10);
 
+  // TODO
   public inline static function fromStringWithBase(value : String, base : Int) : BigInt
     return null; //Big.parseBigInteger(value, base);
 
