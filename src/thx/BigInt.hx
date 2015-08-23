@@ -108,7 +108,7 @@ interface BigIntImpl {
 }
 
 class Small implements BigIntImpl{
-  var value : Int;
+  public var value : Int;
   public var isSmall(default, null) : Bool;
   public function new(value : Int) {
     this.value = value;
@@ -116,7 +116,18 @@ class Small implements BigIntImpl{
   }
 
   public function add(that : BigIntImpl) : BigIntImpl {
-    return this;
+    if(that.isSmall) {
+      var x = (cast that : Small).value;
+      var value = x + value;
+      if (value > -Big.BASE && value < Big.BASE) {
+        return new Small(value);
+      } else {
+        return Big.addImpl(Floats.sign(x), null, Floats.sign(Math.abs(x)), Ints.abs(x), Ints.sign(value), null, Ints.sign(Ints.abs(value)), Ints.abs(value));
+      }
+    } else {
+      var x = (cast that : Big);
+      return Big.addImpl(x.signum, x.magnitude, x.length, 0, Ints.sign(value), null, Floats.sign(Ints.abs(value)), Ints.abs(value));
+    }
   }
 
   public function subtract(that : BigIntImpl) : BigIntImpl {
@@ -161,9 +172,9 @@ class Small implements BigIntImpl{
 
 class Big implements BigIntImpl {
   public var isSmall(default, null) : Bool;
-  var signum : Int;
-  var magnitude : Array<Int>;
-  var length : Int;
+  public var signum : Int;
+  public var magnitude : Array<Int>;
+  public var length : Int;
   public function new(signum : Int, magnitude : Array<Int>, length : Int) {
     this.signum = signum;
     this.magnitude = magnitude;
@@ -172,7 +183,13 @@ class Big implements BigIntImpl {
   }
 
   public function add(that : BigIntImpl) : BigIntImpl {
-    return this;
+    if(that.isSmall) {
+      var v = (cast that : Small).value;
+      return addImpl(Ints.sign(v), null, Floats.sign(Math.abs(v)), Ints.abs(v), signum, magnitude, length, 0);
+    } else {
+      var big : Big = cast that;
+      return addImpl(big.signum, big.magnitude, big.length, 0, signum, magnitude, length, 0);
+    }
   }
 
   public function subtract(that : BigIntImpl) : BigIntImpl {
@@ -432,7 +449,7 @@ class Big implements BigIntImpl {
     return aSignum;
   };
 
-  static function addImpl(aSignum : Int, aMagnitude : Array<Int>, aLength : Int, aValue : Int, bSignum : Int, bMagnitude : Array<Int>, bLength : Int, bValue : Int) : BigIntImpl {
+  public static function addImpl(aSignum : Int, aMagnitude : Array<Int>, aLength : Int, aValue : Int, bSignum : Int, bMagnitude : Array<Int>, bLength : Int, bValue : Int) : BigIntImpl {
     var z = compareMagnitude(aMagnitude, aLength, aValue, bMagnitude, bLength, bValue);
     var minSignum = z < 0 ? aSignum : bSignum;
     var minMagnitude = z < 0 ? aMagnitude : bMagnitude;
@@ -765,10 +782,10 @@ class Big implements BigIntImpl {
     return epsilon;
   })();
   */
-  static var BASE : Int = 10000000; //Std.parseInt('${2 / EPSILON}');
+  public static var BASE : Int = 10000000; //Std.parseInt('${2 / EPSILON}');
   // TODO 64 * 1024 * 1024
   //static var SPLIT : Int = 67108864 * pow(2, Floats.trunc((Floats.trunc(Math.log(BASE) / Math.log(2) + 0.5) - 53) / 2) + 1) + 1;
-  static var SPLIT : Float = 14680064 * pow(2, Floats.trunc((Floats.trunc(Math.log(BASE) / Math.log(2) + 0.5) - 53) / 2) + 1) + 1;
+  public static var SPLIT : Float = 14680064 * pow(2, Floats.trunc((Floats.trunc(Math.log(BASE) / Math.log(2) + 0.5) - 53) / 2) + 1) + 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
