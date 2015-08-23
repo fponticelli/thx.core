@@ -139,7 +139,7 @@ class Bigs {
     return r;
   }
 
-  function subtractAny(a : Array<Int>, b : Array<Int>, sign : Bool) : BigIntImpl {
+  public static function subtractAny(a : Array<Int>, b : Array<Int>, sign : Bool) : BigIntImpl {
     var value;
     if (compareAbs(a, b) >= 0) {
       value = subtract(a,b);
@@ -155,7 +155,7 @@ class Bigs {
     return new Big(value, sign);
   }
 
-  function subtractSmall(a : Array<Int>, b : Int, sign : Bool) : BigIntImpl { // assumes a is array, b is number with 0 <= b < MAX_INT
+  public static function subtractSmall(a : Array<Int>, b : Int, sign : Bool) : BigIntImpl { // assumes a is array, b is number with 0 <= b < MAX_INT
     var l = a.length,
         r = #if js untyped __js__("new Array")(l) #else [] #end,
         carry = -b,
@@ -174,7 +174,7 @@ class Bigs {
     return new Big(r, sign);
   }
 /*
-  function multiplyLong(a, b) {
+  public static function multiplyLong(a, b) {
       var a_l = a.length,
           b_l = b.length,
           l = a_l + b_l,
@@ -195,7 +195,7 @@ class Bigs {
       return r;
   }
 
-  function multiplySmall(a, b) { // assumes a is array, b is number with |b| < BASE
+  public static function multiplySmall(a, b) { // assumes a is array, b is number with |b| < BASE
       var l = a.length,
           r = #if js untyped __js__("new Array")(l) #else [] #end,
           base = BASE,
@@ -213,13 +213,13 @@ class Bigs {
       return r;
   }
 
-  function shiftLeft(x, n) {
+  public static function shiftLeft(x, n) {
       var r = [];
       while (n-- > 0) r.push(0);
       return r.concat(x);
   }
 
-  function multiplyKaratsuba(x, y) {
+  public static function multiplyKaratsuba(x, y) {
       var n = Math.max(x.length, y.length);
 
       if (n <= 400) return multiplyLong(x, y);
@@ -237,7 +237,7 @@ class Bigs {
       return addAny(addAny(ac, shiftLeft(subtract(subtract(abcd, ac), bd), n)), shiftLeft(bd, 2 * n));
   }
 
-  function square(a) {
+  public static function square(a) {
       var l = a.length,
           r = createArray(l + l),
           base = BASE,
@@ -256,7 +256,7 @@ class Bigs {
       return r;
   }
 
-  function divMod1(a, b) { // Left over from previous version. Performs faster than divMod2 on smaller input sizes.
+  public static function divMod1(a, b) { // Left over from previous version. Performs faster than divMod2 on smaller input sizes.
       var a_l = a.length,
           b_l = b.length,
           base = BASE,
@@ -311,7 +311,7 @@ class Bigs {
       return [arrayToSmall(result), arrayToSmall(remainder)];
   }
 
-  function divMod2(a, b) { // Implementation idea shamelessly stolen from Silent Matt's library http://silentmatt.com/biginteger/
+  public static function divMod2(a, b) { // Implementation idea shamelessly stolen from Silent Matt's library http://silentmatt.com/biginteger/
       // Performs faster than divMod1 on larger input sizes.
       var a_l = a.length,
           b_l = b.length,
@@ -344,7 +344,7 @@ class Bigs {
       return [arrayToSmall(result), arrayToSmall(part)];
   }
 
-  function divModSmall(value, lambda) {
+  public static function divModSmall(value, lambda) {
       var length = value.length,
           quotient = createArray(length),
           base = BASE,
@@ -359,7 +359,7 @@ class Bigs {
       return [quotient, remainder | 0];
   }
 
-  function divModAny(self, v) {
+  public static function divModAny(self, v) {
       var value, n = parseValue(v);
       var a = self.value, b = n.value;
       var quotient;
@@ -411,7 +411,7 @@ class Bigs {
       return [quotient, mod];
   }
 
-  function compareAbs(a, b) {
+  public static function compareAbs(a, b) {
       if (a.length != b.length) {
           return a.length > b.length ? 1 : -1;
       }
@@ -421,45 +421,45 @@ class Bigs {
       return 0;
   }
 
-  function shift_isSmall(n) {
+  public static function shift_isSmall(n) {
       return ((typeof n == "number" || typeof n == "string") && +Math.abs(n) <= BASE) ||
           (n instanceof Big && n.value.length <= 1);
   }
 
 
 
-      function bitwise(x, y, fn) {
-          y = parseValue(y);
-          var xSign = x.isNegative(), ySign = y.isNegative();
-          var xRem = xSign ? x.not() : x,
-              yRem = ySign ? y.not() : y;
-          var xBits = [], yBits = [];
-          var xStop = false, yStop = false;
-          while (!xStop || !yStop) {
-              if (xRem.isZero()) { // virtual sign extension for simulating two's complement
-                  xStop = true;
-                  xBits.push(xSign ? 1 : 0);
-              }
-              else if (xSign) xBits.push(xRem.isEven() ? 1 : 0); // two's complement for negative numbers
-              else xBits.push(xRem.isEven() ? 0 : 1);
-
-              if (yRem.isZero()) {
-                  yStop = true;
-                  yBits.push(ySign ? 1 : 0);
-              }
-              else if (ySign) yBits.push(yRem.isEven() ? 1 : 0);
-              else yBits.push(yRem.isEven() ? 0 : 1);
-
-              xRem = xRem.over(2);
-              yRem = yRem.over(2);
+  public static function bitwise(x, y, fn) {
+      y = parseValue(y);
+      var xSign = x.isNegative(), ySign = y.isNegative();
+      var xRem = xSign ? x.not() : x,
+          yRem = ySign ? y.not() : y;
+      var xBits = [], yBits = [];
+      var xStop = false, yStop = false;
+      while (!xStop || !yStop) {
+          if (xRem.isZero()) { // virtual sign extension for simulating two's complement
+              xStop = true;
+              xBits.push(xSign ? 1 : 0);
           }
-          var result = [];
-          for (var i = 0; i < xBits.length; i++) result.push(fn(xBits[i], yBits[i]));
-          var sum = bigInt(result.pop()).negate().times(bigInt(2).pow(result.length));
-          while (result.length) {
-              sum = sum.add(bigInt(result.pop()).times(bigInt(2).pow(result.length)));
+          else if (xSign) xBits.push(xRem.isEven() ? 1 : 0); // two's complement for negative numbers
+          else xBits.push(xRem.isEven() ? 0 : 1);
+
+          if (yRem.isZero()) {
+              yStop = true;
+              yBits.push(ySign ? 1 : 0);
           }
-          return sum;
+          else if (ySign) yBits.push(yRem.isEven() ? 1 : 0);
+          else yBits.push(yRem.isEven() ? 0 : 1);
+
+          xRem = xRem.over(2);
+          yRem = yRem.over(2);
+      }
+      var result = [];
+      for (var i = 0; i < xBits.length; i++) result.push(fn(xBits[i], yBits[i]));
+      var sum = bigInt(result.pop()).negate().times(bigInt(2).pow(result.length));
+      while (result.length) {
+          sum = sum.add(bigInt(result.pop()).times(bigInt(2).pow(result.length)));
+      }
+      return sum;
 
 
 

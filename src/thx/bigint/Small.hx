@@ -12,27 +12,42 @@ class Small implements BigIntImpl {
   }
 
   public function add(that : BigIntImpl) : BigIntImpl {
+    if(sign != that.sign)
+      return subtract(that.negate());
     return that.isSmall ? addSmall(cast that) : addBig(cast that);
   }
 
   public function addSmall(small : Small) : BigIntImpl {
-    return null;
+    if(Bigs.isPrecise(value + small.value)) {
+      return new Small(value + small.value);
+    } else {
+      return new Big(Bigs.addSmall(
+        Bigs.smallToArray(Ints.abs(small.value)),
+        Ints.abs(small.value)),
+        sign
+      );
+    }
   }
 
   public function addBig(big : Big) : BigIntImpl {
-    return null;
+    return new Big(
+      Bigs.addSmall(big.value, Ints.abs(value)),
+      sign
+    );
   }
 
   public function subtract(that : BigIntImpl) : BigIntImpl {
+    if(sign != that.sign)
+      return add(that.negate());
     return that.isSmall ? subtractSmall(cast that) : subtractBig(cast that);
   }
 
   public function subtractSmall(small : Small) : BigIntImpl {
-    return null;
+    return new Small(value - small.value);
   }
 
   public function subtractBig(big : Big) : BigIntImpl {
-    return null;
+    return Bigs.subtractSmall(big.value, Ints.abs(value), value >= 0);
   }
 
   public function divide(that : BigIntImpl) : BigIntImpl {
@@ -71,8 +86,14 @@ class Small implements BigIntImpl {
     return null;
   }
 
+  public function abs() : BigIntImpl {
+    return new Small(Ints.abs(value));
+  }
+
   public function negate() : BigIntImpl {
-    return null;
+    var small = new Small(-value);
+    small.sign = !sign;
+    return small;
   }
 
   public function isZero() : Bool {

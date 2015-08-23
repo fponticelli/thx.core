@@ -28,15 +28,17 @@ class Big implements BigIntImpl {
   }
 
   public function subtract(that : BigIntImpl) : BigIntImpl {
+    if(sign != that.sign)
+      return add(that.negate());
     return that.isSmall ? subtractSmall(cast that) : subtractBig(cast that);
   }
 
   public function subtractSmall(small : Small) : BigIntImpl {
-    return null;
+    return Bigs.subtractSmall(value, Ints.abs(small.value), sign);
   }
 
   public function subtractBig(big : Big) : BigIntImpl {
-    return null;
+    return Bigs.subtractAny(value, big.value, sign);
   }
 
   public function divide(that : BigIntImpl) : BigIntImpl {
@@ -75,8 +77,12 @@ class Big implements BigIntImpl {
     return null;
   }
 
+  public function abs() : BigIntImpl {
+    return new Big(value, false);
+  }
+
   public function negate() : BigIntImpl {
-    return null;
+    return new Big(value, !sign);
   }
 
   public function isZero() : Bool {

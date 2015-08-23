@@ -36,6 +36,9 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   inline public function isZero() : Bool
     return this.isZero();
 
+  inline public function abs() : BigInt
+    return this.abs();
+
   inline public function compare(that : BigInt)
     return this.compare(that);
 
