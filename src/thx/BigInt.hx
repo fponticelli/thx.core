@@ -75,7 +75,7 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   @:op(A<=B) public function lessEqual(that : BigInt) : Bool
     return this.compare(that) <= 0;
 
-  @:op(A=B) @:commutative
+  @:op(A==B) @:commutative
   public function equals(that : BigInt) : Bool
     return this.compare(that) == 0;
 
