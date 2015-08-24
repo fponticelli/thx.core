@@ -27,7 +27,7 @@ class Small implements BigIntImpl {
     } else {
       return new Big(Bigs.addSmall(
         Bigs.smallToArray(Ints.abs(small.value)),
-        Ints.abs(small.value)),
+        Ints.abs(value)),
         sign
       );
     }
