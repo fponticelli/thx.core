@@ -35,9 +35,11 @@ class Bigs {
   }
 
   public static function trim(v : Array<Int>) {
-    var i = v.length;
-    while(v[--i] == 0){}
-    v.splice(i, v.length);
+    while(v.length > 0) {
+      if(v[v.length - 1] != 0)
+        break;
+      v.pop();
+    }
   }
 
   public static function createArray(length : Int) : Array<Int> {
@@ -53,11 +55,11 @@ class Bigs {
         r = #if js untyped __js__("new Array")(l_a) #else [] #end,
         carry = 0,
         base = BASE,
-        sum, i;
-    for(i in 0...l_b) {
+        sum, i = 0;
+    while(i < l_b) {
       sum = a[i] + b[i] + carry;
       carry = sum >= base ? 1 : 0;
-      r[i] = sum - carry * base;
+      r[i++] = sum - carry * base;
     }
     while(i < l_a) {
       sum = a[i] + carry;
@@ -77,11 +79,11 @@ class Bigs {
     var l = a.length,
         r = #if js untyped __js__("new Array")(l) #else [] #end,
         base = BASE,
-        sum, i;
-    for(i in 0...l) {
+        sum, i = 0;
+    while(i < l) {
       sum = a[i] - base + carry;
       carry = Math.floor(sum / base);
-      r[i] = sum - carry * base;
+      r[i++] = sum - carry * base;
       carry += 1;
     }
     while(carry > 0) {
@@ -109,16 +111,15 @@ class Bigs {
         r = #if js untyped __js__("new Array")(a_l) #else [] #end,
         borrow = 0,
         base = BASE,
-        i, difference;
-    for(i in 0...b_l) {
+        i = 0, difference;
+    while(i < b_l) {
       difference = a[i] - borrow - b[i];
       if(difference < 0) {
         difference += base;
         borrow = 1;
       } else borrow = 0;
-      r[i] = difference;
+      r[i++] = difference;
     }
-    var i = b_l;
     while(i < a_l) {
     //for(i in b_l; i < a_l; i++) {
       difference = a[i] - borrow;
@@ -127,8 +128,7 @@ class Bigs {
         r[i++] = difference;
         break;
       }
-      r[i] = difference;
-      i++;
+      r[i++] = difference;
     }
     while(i < a_l) {
     //for(; i < a_l; i++) {
@@ -200,11 +200,11 @@ class Bigs {
         r = #if js untyped __js__("new Array")(l) #else [] #end,
         base = BASE,
         carry = 0,
-        product, i;
-    for(i in 0...l) {
+        product, i = 0;
+    while(i < l) {
       product = a[i] * b + carry;
       carry = Math.floor(product / base);
-      r[i] = product - carry * base;
+      r[i++] = product - carry * base;
     }
     while(carry > 0) {
       r[i++] = carry % base;
@@ -587,8 +587,10 @@ class Bigs {
       else throw new Error('$text is not a valid string');
     }
     digits.reverse();
+    var mul;
     for(i in 0...digits.length) {
-      val = val.add(digits[i].multiply(pow));
+      mul = digits[i].multiply(pow);
+      val = val.add(mul);
       pow = pow.multiply(bigBase);
     }
     return isNegative ? val.negate() : val;

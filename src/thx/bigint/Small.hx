@@ -12,7 +12,7 @@ class Small implements BigIntImpl {
   public function new(value : Int) {
     this.sign = value < 0;
     this.value = value;
-    this.isSmall = false;
+    this.isSmall = true;
   }
 
   public function add(that : BigIntImpl) : BigIntImpl {
@@ -86,7 +86,13 @@ class Small implements BigIntImpl {
     if(Bigs.isPrecise(value * small.value)) {
       return new Small(value * small.value);
     }
-    return new Big(Bigs.smallToArray(Ints.abs(small.value)), small.sign).multiplySmall(this);
+    var arr = Bigs.smallToArray(Ints.abs(small.value));
+    var abs = Ints.abs(value);
+    if(abs < Bigs.BASE) {
+      return new Big(Bigs.multiplySmall(arr, abs), sign != small.sign);
+    } else {
+      return new Big(Bigs.multiplyLong(arr, Bigs.smallToArray(abs)), sign != small.sign);
+    }
   }
 
   public function multiplyBig(big : Big) : BigIntImpl {

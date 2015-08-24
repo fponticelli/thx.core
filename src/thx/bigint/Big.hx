@@ -1,6 +1,7 @@
 package thx.bigint;
 
 import thx.bigint.Bigs;
+using thx.Strings;
 
 class Big implements BigIntImpl {
   public var value(default, null) : Array<Int>;
@@ -150,7 +151,7 @@ class Big implements BigIntImpl {
   }
 
   public function isZero() : Bool {
-    return false;
+    return value.length == 0;
   }
 
   // TODO
@@ -187,7 +188,20 @@ class Big implements BigIntImpl {
   public function toStringWithBase(base : Int) : String {
     if(isZero())
       return "0";
+    if(base == 10) {
+      var l = value.length,
+          out = '${value[--l]}',
+          zeros = "0000000",
+          digit;
+      //trace(value);
+      while(--l >= 0) {
+        digit = '${value[l]}';
+        out += zeros.substring(digit.length) + digit;
+      }
+      return (sign ? "-" : "") + out;
+    }
 
+    // TODO check implementation
     var out = [];
     var baseBig = new Small(base);
     var left : BigIntImpl = this, divmod;
