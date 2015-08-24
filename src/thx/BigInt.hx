@@ -43,7 +43,7 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   public static var zero(default, null) : BigInt = Small.zero;
   // TODO
   @:from public static function fromFloat(value : Float) : BigInt
-    return zero;
+    return fromString(""+Math.round(value));
 
   @:from public static function fromInt(value : Int) : BigInt
     return (new Small(value) : BigIntImpl);
