@@ -168,6 +168,8 @@ class Big implements BigIntImpl {
   }
 
   public function compareBig(big : Big) : Int {
+    if(sign != big.sign)
+      return sign ? -1 : 1;
     return Bigs.compareAbs(value, big.value) * (sign ? -1 : 1);
   }
 
