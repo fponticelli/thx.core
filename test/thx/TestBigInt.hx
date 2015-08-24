@@ -21,25 +21,25 @@ class TestBigInt {
       Assert.equals(-test, out.toInt(), 'expected ${-test} but got ${out.toInt()}');
     }
   }
-
-  public function testFloats() {
-    var tests = [0.0, 1.0, 5.0, 1.234e63, 5.432e80, 0.00001, 1.2345e-50];
-
-    for(test in tests) {
-      var out : BigInt = test;
-      Assert.floatEquals(test, out.toFloat(), 'expected $test but got ${out.toFloat()}');
-
-      var out : BigInt = -test;
-      Assert.floatEquals(-test, out.toFloat(), 'expected ${-test} but got ${out.toFloat()}');
-    }
-  }
-
+//
+// /*
+//   public function testFloats() {
+//     var tests = [0.0, 1.0, 5.0, 1.234e63, 5.432e80, 0.00001, 1.2345e-50];
+//
+//     for(test in tests) {
+//       var out : BigInt = test;
+//       Assert.floatEquals(test, out.toFloat(), 'expected $test but got ${out.toFloat()}');
+//
+//       var out : BigInt = -test;
+//       Assert.floatEquals(-test, out.toFloat(), 'expected ${-test} but got ${out.toFloat()}');
+//     }
+//   }
+// */
   public function testStrings() {
     var tests = ["0", "3", "20",
-                  // FAILS
-                  "12345678901234567890",
-                  // FAILS
-                  "999999999999999999"];
+                 "12345678901234567890",
+                 "999999999999999999"
+                ];
 
     for(test in tests) {
       var out : BigInt = test;
@@ -130,20 +130,14 @@ class TestBigInt {
 
     Assert.isTrue(s-n == m);
 
-    // lots of big sums
-    m = 0x7fffffff;
-    n = m;
-    s = "4294967294";
-    Assert.isTrue(m+n == s, 'expected $m+$n==$s');
-
     m = "11111111111111111111110111111111111111111111111111";
     n = m;
     s = "22222222222222222222220222222222222222222222222222";
-    Assert.isTrue(m+n == s);
+    Assert.isTrue(m+n == s, 'expected $m + $n == $s but is ${m+n}');
 
     Assert.isTrue((m-n).isZero(), 'expected $m-$n==0 but is ${m-n}');
-    Assert.isTrue(m-n == 0, 'expected $m-$n==0 but is ${m-n}');
-    Assert.isTrue(s-n == m);
+    Assert.isTrue(m-n == 0, 'expected $m - $n==0 but is ${m-n}');
+    Assert.isTrue(s-n == m, 'expected $s - $n == $m but is ${s-n}');
 
     m = "99499494949383948405";
     n = "-472435789789045237084578078029457809342597808204538970";
@@ -241,8 +235,8 @@ class TestBigInt {
     a = "-333333333333333333333";
     b = "111111111111111111111111111111111111111";
 
-    Assert.isTrue(a < b);
-    Assert.isTrue(a <= b);
+    Assert.isTrue(a < b, 'expected $a < $b == true but it is ${a<b}');
+    Assert.isTrue(a <= b, 'expected $a <= $b == true but it is ${a<=b}');
     Assert.isTrue(a <= a);
 
     Assert.isTrue(b > a);
@@ -250,7 +244,7 @@ class TestBigInt {
     Assert.isTrue(b >= b);
     Assert.isTrue(b <= b);
 
-    Assert.equals(-1, a.compare(b));
+    Assert.equals(-1, a.compare(b), 'expected $a.compare($b) t0 be -1 but it is ${a.compare(b)}');
     Assert.equals( 1, b.compare(a));
     Assert.equals( 0, b.compare(b));
 
