@@ -3,41 +3,34 @@ package thx;
 import thx.bigint.*;
 
 /**
-Based on code realized by Mike Welsh: https://github.com/Herschel/hxmath/blob/master/src/hxmath/BigInt.hx
+Heavily based on code realized by Peter Olson:
+https://github.com/peterolson/BigInteger.js
 */
 // TODO
+// toFloat/fromFloat
+// toInt64/fromInt64
 // ++ ?
 // -- ?
-// ~ bitwise negation
-// &
-// |
-// ^
-// <<
-// >>
+// ~ bitwise negation (not)
+// & and
+// | or
+// ^ xor
+// << shiftLeft
+// >> shiftRight
 // >>>
 // square
 // pow
 // modPow
-// compareAbs
 // isEven
 // isOdd
 // isUnit
 // isDivisibleBy
 // isPrime
-// next
-// prev
-// shiftLeft
-// shiftRight
-// not
-// and
-// or
-// xor
 // max
 // min
 // gcd
 // lcm
-// randBeteen
-
+// randBetween
 
 abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   public static var zero(default, null) : BigInt = Small.zero;
@@ -62,6 +55,15 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
 
   inline public function compare(that : BigInt)
     return this.compare(that);
+
+  inline public function compareAbs(that : BigInt)
+    return this.compareAbs(that);
+
+  inline public function next()
+    return this.next();
+
+  inline public function prev()
+    return this.prev();
 
   @:op(A>B) public function greater(that : BigInt) : Bool
     return this.compare(that) > 0;
