@@ -4,7 +4,7 @@ class Bigs {
   public static var BASE(default, null) : Int = 10000000; // 1e7
   public static var DOUBLE_BASE(default, null) = 100000000000000.0; // 1e14
   public static var LOG_BASE(default, null) : Int = 7; // 1e7
-  public static var MAX_INT(default, null) : Int = 2147483647; //9007199254740992; // 2147483648
+  public static var MAX_INT(default, null) : Int = #if js untyped __js__("9007199254740992") #else 1000000000 #end; // 2147483648
   public static var MAX_INT_ARR(default, null) = smallToArray(MAX_INT);
   public static var LOG_MAX_INT(default, null) = Math.log(MAX_INT);
 
