@@ -154,6 +154,10 @@ class Big implements BigIntImpl {
     return value.length == 0;
   }
 
+  public function isUnit() : Bool {
+    return false;
+  }
+
   // TODO
   public function compare(that : BigIntImpl) : Int {
     return that.isSmall ? compareSmall(cast that) : compareBig(cast that);

@@ -126,6 +126,10 @@ class Small implements BigIntImpl {
     return value == 0;
   }
 
+  public function isUnit() : Bool {
+    return Ints.abs(value) == 1;
+  }
+
   public function compare(that : BigIntImpl) : Int {
     return that.isSmall ? compareSmall(cast that) : compareBig(cast that);
   }

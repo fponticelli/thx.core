@@ -65,6 +65,9 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   inline public function prev()
     return this.prev();
 
+  inline public function isUnit() : Bool
+    return this.isUnit();
+
   @:op(A>B) public function greater(that : BigInt) : Bool
     return this.compare(that) > 0;
 
