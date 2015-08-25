@@ -225,6 +225,32 @@ class TestBigInt {
     Assert.isTrue(("93453764643534523" : BigInt) % -2342 == 1119);
     Assert.isTrue((-32542543 : BigInt) % 100000000 == -32542543);
   }
+
+  public function testPrevNextWorksForSmallValues() {
+    Assert.isTrue((546 : BigInt).prev() == 545);
+    Assert.isTrue((1 : BigInt).prev() == 0);
+    Assert.isTrue((0 : BigInt).prev() == -1);
+    Assert.isTrue((-1 : BigInt).prev() == -2);
+    Assert.isTrue((-1987 : BigInt).prev() == -1988);
+
+    Assert.isTrue((546 : BigInt).next() == 547);
+    Assert.isTrue((1 : BigInt).next() == 2);
+    Assert.isTrue((0 : BigInt).next() == 1);
+    Assert.isTrue((-1 : BigInt).next() == 0);
+    Assert.isTrue((-1987 : BigInt).next() == -1986);
+  }
+
+  public function testPrevNextWorksForLargeValues() {
+    Assert.isTrue(("109874981950949849811049" : BigInt).prev() == "109874981950949849811048");
+    Assert.isTrue(("109874981950949849811049" : BigInt).next() == "109874981950949849811050");
+    Assert.isTrue(("-109874981950949849811049" : BigInt).prev() == "-109874981950949849811050");
+    Assert.isTrue(("-109874981950949849811049" : BigInt).next() == "-109874981950949849811048");
+  }
+
+  public function testPrevNextCarriesOverCorrectly() {
+    Assert.isTrue((9999999 : BigInt).next() == 10000000);
+    Assert.isTrue((10000000 : BigInt).prev() == 9999999);
+  }
   public function testDivision() {
     Assert.raises(function() {
       (1 : BigInt) / (0 : BigInt);
