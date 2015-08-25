@@ -203,6 +203,28 @@ class TestBigInt {
     Assert.isTrue((-0 : BigInt) / "1234567890987654321" == 0);
     Assert.isTrue((0 : BigInt) / "-1234567890987654321" == 0);
   }
+
+  public function testModulo0ThrowsError() {
+    Assert.raises(function() (0 : BigInt) % 0, Error);
+    Assert.raises(function() (-0 : BigInt) % 0, Error);
+    Assert.raises(function() (5 : BigInt) % 0, Error);
+    Assert.raises(function() (-5 : BigInt) % 0, Error);
+    Assert.raises(function() ("9549841598749874951041" : BigInt) % 0, Error);
+    Assert.raises(function() ("-20964918940987496110974948" : BigInt) % 0, Error);
+  }
+
+  public function testModuloHandlesSignsCorrectly() {
+    Assert.isTrue((124234233 : BigInt) % 2 == 1);
+    Assert.isTrue((124234233 : BigInt) % -2 == 1);
+    Assert.isTrue((-124234233 : BigInt) % 2 == -1);
+    Assert.isTrue((-124234233 : BigInt) % -2 == -1);
+    Assert.isTrue((2 : BigInt) % -1243233 == 2);
+    Assert.isTrue((-2 : BigInt) % -1243233 == -2);
+
+    Assert.isTrue(("786456456335437356436" : BigInt) % "-5423424653" == "2663036842");
+    Assert.isTrue(("93453764643534523" : BigInt) % -2342 == 1119);
+    Assert.isTrue((-32542543 : BigInt) % 100000000 == -32542543);
+  }
   public function testDivision() {
     Assert.raises(function() {
       (1 : BigInt) / (0 : BigInt);
