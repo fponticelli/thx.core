@@ -158,6 +158,51 @@ class TestBigInt {
     Assert.isTrue(("10000000000000000" : BigInt) + "10" == "10000000000000010");
     Assert.isTrue(("10000000000000000" : BigInt) + "10000000000000000" == "20000000000000000");
   }
+
+  public function testHandlesSignsCorectly() {
+    Assert.isTrue((100 : BigInt) * 100 == 10000);
+    Assert.isTrue((100 : BigInt) * -100 == -10000);
+    Assert.isTrue((-100 : BigInt) * 100 == -10000);
+    Assert.isTrue((-100 : BigInt) * -100 == 10000);
+
+    Assert.isTrue((13579 : BigInt) * "163500573666152634716420931676158" == "2220174289812686626814279831230549482");
+    Assert.isTrue((13579 : BigInt) * "-163500573666152634716420931676158" == "-2220174289812686626814279831230549482");
+    Assert.isTrue((-13579 : BigInt) * "163500573666152634716420931676158" == "-2220174289812686626814279831230549482");
+    Assert.isTrue((-13579 : BigInt) * "-163500573666152634716420931676158" == "2220174289812686626814279831230549482");
+    Assert.isTrue(("163500573666152634716420931676158" : BigInt) * 13579 == "2220174289812686626814279831230549482");
+    Assert.isTrue(("163500573666152634716420931676158" : BigInt) * -13579 == "-2220174289812686626814279831230549482");
+    Assert.isTrue(("-163500573666152634716420931676158" : BigInt) * 13579 == "-2220174289812686626814279831230549482");
+    Assert.isTrue(("-163500573666152634716420931676158" : BigInt) * -13579 == "2220174289812686626814279831230549482");
+    Assert.isTrue(("163500573666152634716420931676158" : BigInt) * -1 == "-163500573666152634716420931676158");
+    Assert.isTrue(("1234567890987654321" : BigInt) * "132435465768798" == "163500573666152634716420931676158");
+    Assert.isTrue(("1234567890987654321" : BigInt) * "-132435465768798" == "-163500573666152634716420931676158");
+    Assert.isTrue(("-1234567890987654321" : BigInt) * "132435465768798" == "-163500573666152634716420931676158");
+    Assert.isTrue(("-1234567890987654321" : BigInt) * "-132435465768798" == "163500573666152634716420931676158");
+  }
+
+  public function testDivisionBy1IsTheIdentity() {
+    Assert.isTrue((1 : BigInt) / 1 == 1);
+    Assert.isTrue((-1 : BigInt) / 1 == -1);
+    Assert.isTrue((1 : BigInt) / -1 == -1);
+    Assert.isTrue((153 : BigInt) / 1 == 153);
+    Assert.isTrue((-153 : BigInt) / 1 == -153);
+    Assert.isTrue(("9844190321790980841789" : BigInt) / 1 == "9844190321790980841789");
+    Assert.isTrue(("-9844190321790980841789" : BigInt) / 1 == "-9844190321790980841789");
+  }
+
+  public function testDivisionBySelfIs1() {
+    Assert.isTrue((5 : BigInt) / 5 == 1);
+    Assert.isTrue((-5 : BigInt) / -5 == 1);
+    Assert.isTrue(("20194965098495006574" : BigInt) / "20194965098495006574" == 1);
+    Assert.isTrue(("-20194965098495006574" : BigInt) / "-20194965098495006574" == 1);
+  }
+
+  public function testDivisionOf0Equals0() {
+    Assert.isTrue((0 : BigInt) / 1 == 0);
+    Assert.isTrue((-0 : BigInt) / 1 == 0);
+    Assert.isTrue((-0 : BigInt) / "1234567890987654321" == 0);
+    Assert.isTrue((0 : BigInt) / "-1234567890987654321" == 0);
+  }
   public function testDivision() {
     Assert.raises(function() {
       (1 : BigInt) / (0 : BigInt);
