@@ -54,17 +54,16 @@ class Bigs {
         l_b = b.length,
         r = #if js untyped __js__("new Array")(l_a) #else [] #end,
         carry = 0,
-        base = BASE,
         sum, i = 0;
     while(i < l_b) {
       sum = a[i] + b[i] + carry;
-      carry = sum >= base ? 1 : 0;
-      r[i++] = sum - carry * base;
+      carry = sum >= BASE ? 1 : 0;
+      r[i++] = sum - carry * BASE;
     }
     while(i < l_a) {
       sum = a[i] + carry;
-      carry = sum == base ? 1 : 0;
-      r[i++] = sum - carry * base;
+      carry = sum == BASE ? 1 : 0;
+      r[i++] = sum - carry * BASE;
     }
     if(carry > 0) r.push(carry);
     return r;
@@ -78,17 +77,16 @@ class Bigs {
   public static function addSmall(a : Array<Int>, carry : Int) : Array<Int> { // assumes a is array, carry is number with 0 <= carry < MAX_INT
     var l = a.length,
         r = #if js untyped __js__("new Array")(l) #else [] #end,
-        base = BASE,
         sum, i = 0;
     while(i < l) {
-      sum = a[i] - base + carry;
-      carry = Math.floor(sum / base);
-      r[i++] = sum - carry * base;
+      sum = a[i] - BASE + carry;
+      carry = Math.floor(sum / BASE);
+      r[i++] = sum - carry * BASE;
       carry += 1;
     }
     while(carry > 0) {
-      r[i++] = carry % base;
-      carry = Math.floor(carry / base);
+      r[i++] = carry % BASE;
+      carry = Math.floor(carry / BASE);
     }
     return r;
   }
@@ -110,12 +108,11 @@ class Bigs {
         b_l = b.length,
         r = #if js untyped __js__("new Array")(a_l) #else [] #end,
         borrow = 0,
-        base = BASE,
         i = 0, difference;
     while(i < b_l) {
       difference = a[i] - borrow - b[i];
       if(difference < 0) {
-        difference += base;
+        difference += BASE;
         borrow = 1;
       } else borrow = 0;
       r[i++] = difference;
@@ -123,7 +120,7 @@ class Bigs {
     while(i < a_l) {
     //for(i in b_l; i < a_l; i++) {
       difference = a[i] - borrow;
-      if(difference < 0) difference += base;
+      if(difference < 0) difference += BASE;
       else {
         r[i++] = difference;
         break;
@@ -159,12 +156,11 @@ class Bigs {
     var l = a.length,
         r = #if js untyped __js__("new Array")(l) #else [] #end,
         carry = -b,
-        base = BASE,
         i, difference;
     for(i in 0...l) {
       difference = a[i] + carry;
-      carry = Math.floor(difference / base);
-      r[i] = difference < 0 ? difference % base + base : difference;
+      carry = Math.floor(difference / BASE);
+      r[i] = difference < 0 ? difference % BASE + BASE : difference;
     }
     var n = arrayToSmall(r);
     if(null != n) {
@@ -179,15 +175,14 @@ class Bigs {
         b_l = b.length,
         l = a_l + b_l,
         r = createArray(l),
-        base = BASE,
         product, carry, i, a_i, b_j;
     for(i in 0...a_l) {
       a_i = a[i];
       for(j in 0...b_l) {
         b_j = b[j];
         product = a_i * b_j + r[i + j];
-        carry = Math.floor(product / base);
-        r[i + j] = product - carry * base;
+        carry = Math.floor(product / BASE);
+        r[i + j] = product - carry * BASE;
         r[i + j + 1] += carry;
       }
     }
@@ -198,17 +193,16 @@ class Bigs {
   public static function multiplySmall(a : Array<Int>, b : Int) : Array<Int> { // assumes a is array, b is number with |b| < BASE
     var l = a.length,
         r = #if js untyped __js__("new Array")(l) #else [] #end,
-        base = BASE,
         carry = 0,
         product, i = 0;
     while(i < l) {
       product = a[i] * b + carry;
-      carry = Math.floor(product / base);
-      r[i++] = product - carry * base;
+      carry = Math.floor(product / BASE);
+      r[i++] = product - carry * BASE;
     }
     while(carry > 0) {
-      r[i++] = carry % base;
-      carry = Math.floor(carry / base);
+      r[i++] = carry % BASE;
+      carry = Math.floor(carry / BASE);
     }
     return r;
   }
@@ -242,15 +236,14 @@ class Bigs {
   public static function square(a) {
       var l = a.length,
           r = createArray(l + l),
-          base = BASE,
           product, carry, i, a_i, a_j;
       for(i = 0; i < l; i++) {
           a_i = a[i];
           for(var j = 0; j < l; j++) {
               a_j = a[j];
               product = a_i * a_j + r[i + j];
-              carry = Math.floor(product / base);
-              r[i + j] = product - carry * base;
+              carry = Math.floor(product / BASE);
+              r[i + j] = product - carry * BASE;
               r[i + j + 1] += carry;
           }
       }
@@ -261,11 +254,10 @@ class Bigs {
   public static function divMod1(a : Array<Int>, b : Array<Int>) : Array<{ small : Null<Int>, big : Array<Int> }> { // Left over from previous version. Performs faster than divMod2 on smaller input sizes.
     var a_l = a.length,
         b_l = b.length,
-        base = BASE,
         result = createArray(b.length),
         divisorMostSignificantDigit = b[b_l - 1],
         // normalization
-        lambda = Math.ceil(base / (2 * divisorMostSignificantDigit)),
+        lambda = Math.ceil(BASE / (2 * divisorMostSignificantDigit)),
         remainder = multiplySmall(a, lambda),
         divisor = multiplySmall(b, lambda),
         quotientDigit, shift, carry, borrow, i, l, q;
@@ -275,18 +267,18 @@ class Bigs {
     shift = a_l - b_l;
     while(shift >= 0) {
     //for(shift = a_l - b_l; shift >= 0; shift--) {
-      quotientDigit = base - 1;
-      quotientDigit = Math.floor((remainder[shift + b_l] * base + remainder[shift + b_l - 1]) / divisorMostSignificantDigit);
+      quotientDigit = BASE - 1;
+      quotientDigit = Math.floor((remainder[shift + b_l] * BASE + remainder[shift + b_l - 1]) / divisorMostSignificantDigit);
       carry = 0;
       borrow = 0;
       l = divisor.length;
       for(i in 0...l) {
         carry += quotientDigit * divisor[i];
-        q = Math.floor(carry / base);
-        borrow += remainder[shift + i] - (carry - q * base);
+        q = Math.floor(carry / BASE);
+        borrow += remainder[shift + i] - (carry - q * BASE);
         carry = q;
         if(borrow < 0) {
-          remainder[shift + i] = borrow + base;
+          remainder[shift + i] = borrow + BASE;
           borrow = -1;
         } else {
           remainder[shift + i] = borrow;
@@ -297,9 +289,9 @@ class Bigs {
         quotientDigit -= 1;
         carry = 0;
         for(i in 0...l) {
-          carry += remainder[shift + i] - base + divisor[i];
+          carry += remainder[shift + i] - BASE + divisor[i];
           if(carry < 0) {
-            remainder[shift + i] = carry + base;
+            remainder[shift + i] = carry + BASE;
             carry = 0;
           } else {
             remainder[shift + i] = carry;
@@ -328,7 +320,6 @@ class Bigs {
         b_l = b.length,
         result = [],
         part = [],
-        base = BASE,
         guess, xlen, highx, highy, check;
     while(a_l != 0) {
       part.unshift(a[--a_l]);
@@ -337,10 +328,10 @@ class Bigs {
         continue;
       }
       xlen = part.length;
-      highx = part[xlen - 1] * base + part[xlen - 2];
-      highy = b[b_l - 1] * base + b[b_l - 2];
+      highx = part[xlen - 1] * BASE + part[xlen - 2];
+      highy = b[b_l - 1] * BASE + b[b_l - 2];
       if(xlen > b_l) {
-        highx = (highx + 1) * base;
+        highx = (highx + 1) * BASE;
       }
       guess = Math.ceil(highx / highy);
       do {
@@ -364,13 +355,12 @@ class Bigs {
   public static function divModSmall(value : Array<Int>, lambda : Int) : { q : Array<Int>, r : Int } {
     var length = value.length,
         quotient = createArray(length),
-        base = BASE,
         i, q, remainder, divisor;
     remainder = 0;
     i = length - 1;
     while(i >= 0) {
     //for(i = length - 1; i >= 0; --i) {
-      divisor = remainder * base + value[i];
+      divisor = remainder * BASE + value[i];
       q = Floats.trunc(divisor / lambda);
       remainder = divisor - q * lambda;
       quotient[i] = q | 0;
