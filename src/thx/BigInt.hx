@@ -34,6 +34,9 @@ https://github.com/peterolson/BigInteger.js
 
 abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   public static var zero(default, null) : BigInt = Small.zero;
+  public static var one(default, null) : BigInt = Small.one;
+  public static var negativeOne(default, null) : BigInt = Small.negativeOne;
+
   // TODO
   @:from public static function fromFloat(value : Float) : BigInt
     return fromString(""+Math.round(value));
@@ -53,17 +56,23 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   inline public function abs() : BigInt
     return this.abs();
 
-  inline public function compare(that : BigInt)
+  inline public function compare(that : BigInt) : Int
     return this.compare(that);
 
-  inline public function compareAbs(that : BigInt)
+  inline public function compareAbs(that : BigInt) : Int
     return this.compareAbs(that);
 
-  inline public function next()
+  inline public function next() : BigInt
     return this.next();
 
-  inline public function prev()
+  inline public function prev() : BigInt
     return this.prev();
+
+  inline public function isNegative() : Bool
+    return this.sign;
+
+  inline public function isPositive() : Bool
+    return !this.sign;
 
   inline public function isUnit() : Bool
     return this.isUnit();
