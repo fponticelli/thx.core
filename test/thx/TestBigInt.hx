@@ -251,6 +251,36 @@ class TestBigInt {
     Assert.isTrue((9999999 : BigInt).next() == 10000000);
     Assert.isTrue((10000000 : BigInt).prev() == 9999999);
   }
+
+  public function testAbs() {
+    Assert.isTrue((0 : BigInt).abs() == 0);
+    Assert.isTrue(("-0" : BigInt).abs() == 0);
+    Assert.isTrue((54 : BigInt).abs() == 54);
+    Assert.isTrue((-54 : BigInt).abs() == 54);
+    Assert.isTrue(("13412564654613034984065434" : BigInt).abs() == "13412564654613034984065434");
+    Assert.isTrue(("-13412564654613034984065434" : BigInt).abs() == "13412564654613034984065434");
+  }
+
+  public function testIsPositiveAndIsNegative() {
+    Assert.isFalse((0 : BigInt).isPositive());
+    Assert.isFalse((0 : BigInt).isNegative());
+    Assert.isFalse((-0 : BigInt).isPositive());
+    Assert.isFalse((-0 : BigInt).isNegative());
+  }
+
+  public function testIsPositiveAndIsNegativeWorkForSmallNumbers() {
+    Assert.isTrue((1 : BigInt).isPositive());
+    Assert.isFalse((543 : BigInt).isNegative());
+    Assert.isFalse((-1 : BigInt).isPositive());
+    Assert.isTrue((-765 : BigInt).isNegative());
+  }
+
+  public function testIsPositiveAndIsNegativeWorkForBigNumbers() {
+    Assert.isTrue(("651987498619879841" : BigInt).isPositive());
+    Assert.isFalse(("0054984980098460" : BigInt).isNegative());
+    Assert.isFalse(("-1961987984109078496" : BigInt).isPositive());
+    Assert.isTrue(("-98800984196109540984" : BigInt).isNegative());
+  }
   public function testDivision() {
     Assert.raises(function() {
       (1 : BigInt) / (0 : BigInt);
