@@ -550,8 +550,8 @@ class Bigs {
         pow : BigIntImpl = Small.one,
         bigBase = new Small(base),
         length = text.length;
-    if(2 >= base || base > 36)
-      throw new Error('base ($base) must be a number between 2 and 36');
+    if(1 >= base || base > 36)
+      throw new Error('base ($base) must be a number between 1 and 36');
 
     if(length <= LOG_MAX_INT / Math.log(base))
       return new Small(Ints.parse(text, base));
