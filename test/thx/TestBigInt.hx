@@ -47,20 +47,19 @@ class TestBigInt {
       Assert.equals(-test, out.toInt(), 'expected ${-test} but got ${out.toInt()}');
     }
   }
-//
-// /*
-//   public function testFloats() {
-//     var tests = [0.0, 1.0, 5.0, 1.234e63, 5.432e80, 0.00001, 1.2345e-50];
-//
-//     for(test in tests) {
-//       var out : BigInt = test;
-//       Assert.floatEquals(test, out.toFloat(), 'expected $test but got ${out.toFloat()}');
-//
-//       var out : BigInt = -test;
-//       Assert.floatEquals(-test, out.toFloat(), 'expected ${-test} but got ${out.toFloat()}');
-//     }
-//   }
-// */
+
+  public function testFloats() {
+    var tests = [0.0, 1.0, 5.0, 1.234e63, 5.432e80, 0.00001, 1.2345e-50];
+
+    for(test in tests) {
+      var out : BigInt = test;
+      Assert.floatEquals(test, out.toFloat(), 'expected $test but got ${out.toFloat()}');
+
+      var out : BigInt = -test;
+      Assert.floatEquals(-test, out.toFloat(), 'expected ${-test} but got ${out.toFloat()}');
+    }
+  }
+
   public function testStrings() {
     var tests = ["0", "3", "20",
                  "12345678901234567890",
