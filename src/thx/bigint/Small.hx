@@ -153,7 +153,7 @@ class Small implements BigIntImpl {
     return value;
 
   public function toString()
-    return toStringWithBase(10);
+    return Ints.toString(value, 10);
 
   public function toStringWithBase(base : Int) : String
     return Ints.toString(value, base);
