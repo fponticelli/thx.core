@@ -37,12 +37,12 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   public static var one(default, null) : BigInt = Small.one;
   public static var negativeOne(default, null) : BigInt = Small.negativeOne;
 
-  // TODO
-  @:from public static function fromFloat(value : Float) : BigInt
-    return fromString(""+Math.round(value));
-
   @:from public static function fromInt(value : Int) : BigInt
     return (new Small(value) : BigIntImpl);
+
+  // TODO
+  @:from inline public static function fromFloat(value : Float) : BigInt
+    return Bigs.fromFloat(value);
 
   @:from public inline static function fromString(value : String) : BigInt
     return Bigs.parseBase(value, 10);

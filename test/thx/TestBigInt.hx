@@ -77,7 +77,7 @@ class TestBigInt {
       Assert.equals('-$test', out.toString(), 'expected -$test but got ${out.toString()}');
     }
   }
-
+  
   public function testEquals() {
     Assert.isTrue((0 : BigInt) == (0 : BigInt));
     Assert.isTrue((1 : BigInt) == (1 : BigInt));
