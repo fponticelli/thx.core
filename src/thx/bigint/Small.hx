@@ -117,6 +117,42 @@ class Small implements BigIntImpl {
   public function prev() : BigIntImpl
     return addSmall(Small.negativeOne);
 
+  public function pow(exp : BigIntImpl) : BigIntImpl {
+    if(!exp.isSmall) throw new Error('The exponent $exp is too large.');
+    var b = (cast exp : Small).value,
+        res;
+    if(Bigs.isPrecise(res = Floats.trunc(Math.pow(value, b))))
+      return new Small(res);
+    return new Big(Bigs.smallToArray(value), sign).pow(exp);
+  }
+
+  public function shiftLeft(n : Int) : BigIntImpl {
+    if(n < Bigs.BASE)
+      return shiftRight(-n);
+    var result : BigIntImpl = this;
+    while (n >= Bigs.powers2Length) {
+      result = result.multiply(Bigs.bigHighestPower2);
+      n -= Bigs.powers2Length - 1;
+    }
+    return result.multiply(Bigs.bigPowersOfTwo[n]);
+  }
+
+  public function shiftRight(n : Int) : BigIntImpl {
+    if(n < Bigs.BASE)
+      return shiftLeft(-n);
+    var result : BigIntImpl = this,
+        remQuo;
+    while (n >= Bigs.powers2Length) {
+      if (result.isZero())
+        return result;
+      remQuo = result.divMod(Bigs.bigHighestPower2);
+      result = remQuo.remainder.sign ? remQuo.quotient.prev() : remQuo.quotient;
+      n -= Bigs.powers2Length - 1;
+    }
+    remQuo = result.divMod(Bigs.bigPowersOfTwo[n]);
+    return remQuo.remainder.sign ? remQuo.quotient.prev() : remQuo.quotient;
+  }
+
   public function square() : BigIntImpl {
     var sq = value * value;
     if(Bigs.isPrecise(value))

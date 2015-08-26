@@ -12,6 +12,9 @@ interface BigIntImpl {
   function negate() : BigIntImpl;
   function next() : BigIntImpl;
   function prev() : BigIntImpl;
+  function pow(exp : BigIntImpl) : BigIntImpl;
+  function shiftLeft(value : Int) : BigIntImpl;
+  function shiftRight(value : Int) : BigIntImpl;
   function square() : BigIntImpl;
   function isUnit() : Bool;
   function isZero() : Bool;

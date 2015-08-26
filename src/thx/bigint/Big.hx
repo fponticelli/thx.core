@@ -145,6 +145,50 @@ class Big implements BigIntImpl {
   public function prev() : BigIntImpl
     return addSmall(Small.negativeOne);
 
+  public function pow(exp : BigIntImpl) : BigIntImpl {
+    if(!exp.isSmall) throw new Error('The exponent $exp is too large.');
+    var b = (cast exp : Small).value,
+        x : BigIntImpl = this,
+        y : BigIntImpl = Small.one;
+    while(true) {
+      if(b & 1 == 1) {
+        y = y.multiply(x);
+        --b;
+      }
+      if(b == 0) break;
+      b = Std.int(b / 2);
+      x = x.square();
+    }
+    return y;
+  }
+
+  public function shiftLeft(n : Int) : BigIntImpl {
+    if(n < Bigs.BASE)
+      return shiftRight(-n);
+    var result : BigIntImpl = this;
+    while (n >= Bigs.powers2Length) {
+      result = result.multiply(Bigs.bigHighestPower2);
+      n -= Bigs.powers2Length - 1;
+    }
+    return result.multiply(Bigs.bigPowersOfTwo[n]);
+  }
+
+  public function shiftRight(n : Int) : BigIntImpl {
+    if(n < Bigs.BASE)
+      return shiftLeft(-n);
+    var result : BigIntImpl = this,
+        remQuo;
+    while (n >= Bigs.powers2Length) {
+      if (result.isZero())
+        return result;
+      remQuo = result.divMod(Bigs.bigHighestPower2);
+      result = remQuo.remainder.sign ? remQuo.quotient.prev() : remQuo.quotient;
+      n -= Bigs.powers2Length - 1;
+    }
+    remQuo = result.divMod(Bigs.bigPowersOfTwo[n]);
+    return remQuo.remainder.sign ? remQuo.quotient.prev() : remQuo.quotient;
+  }
+
   public function square() : BigIntImpl {
     return new Big(Bigs.square(value), false);
   }
