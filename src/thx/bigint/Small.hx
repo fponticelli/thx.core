@@ -116,6 +116,12 @@ class Small implements BigIntImpl {
 
   public function prev() : BigIntImpl
     return addSmall(Small.negativeOne);
+
+  public function square() : BigIntImpl {
+    var sq = value * value;
+    if(Bigs.isPrecise(value))
+      return new Small(sq);
+    return new Big(Bigs.square(Bigs.smallToArray(Ints.abs(sq))), false);
   }
 
   public function isZero() : Bool {

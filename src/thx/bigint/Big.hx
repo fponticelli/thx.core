@@ -144,6 +144,9 @@ class Big implements BigIntImpl {
 
   public function prev() : BigIntImpl
     return addSmall(Small.negativeOne);
+
+  public function square() : BigIntImpl {
+    return new Big(Bigs.square(value), false);
   }
 
   public function isZero() : Bool {

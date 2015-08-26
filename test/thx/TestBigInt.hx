@@ -77,7 +77,7 @@ class TestBigInt {
       Assert.equals('-$test', out.toString(), 'expected -$test but got ${out.toString()}');
     }
   }
-  
+
   public function testEquals() {
     Assert.isTrue((0 : BigInt) == (0 : BigInt));
     Assert.isTrue((1 : BigInt) == (1 : BigInt));
@@ -322,6 +322,13 @@ class TestBigInt {
     Assert.isTrue(BigInt.fromStringWithBase("secretmessage000", 36).toStringWithBase(36) == "secretmessage000");
     Assert.isTrue((-256 : BigInt).toStringWithBase(16) == "-100");
     Assert.isTrue((256 : BigInt).toStringWithBase(2).length == 256);
+  }
+
+  public function testSquare() {
+    Assert.isTrue((0 : BigInt).square() == 0);
+    Assert.isTrue((16 : BigInt).square() == 256);
+    Assert.isTrue((-16 : BigInt).square() == 256);
+    Assert.isTrue(("65536" : BigInt).square() == "4294967296");
   }
   public function testDivision() {
     Assert.raises(function() {
