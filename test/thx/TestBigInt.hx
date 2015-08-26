@@ -342,6 +342,53 @@ class TestBigInt {
     Assert.isTrue(("-1" : BigInt).shiftRight(25) == -1);
   }
 
+  public function testPowerOf0to0is1() {
+    Assert.isTrue((0 : BigInt).pow(0) == 1);
+    Assert.isTrue((0 : BigInt).pow("-0") == 1);
+    Assert.isTrue(("-0" : BigInt).pow(0) == 1);
+    Assert.isTrue(("-0" : BigInt).pow("-0") == 1);
+  };
+
+  public function testPowerToNegativeNumbersIs0() {
+    Assert.isTrue((0 : BigInt).pow(-298) == 0);
+    Assert.isTrue((543 : BigInt).pow(-2) == 0);
+    Assert.isTrue(("323434643534523" : BigInt).pow(-1) == 0);
+    Assert.isTrue((-54302 : BigInt).pow("-543624724341214223562") == 0);
+    Assert.isTrue(("-20199605604968" : BigInt).pow(-99) == 0);
+
+    Assert.isTrue((1 : BigInt).pow(-1) == 1);
+    Assert.isTrue((-1 : BigInt).pow(-1) == 1);
+    Assert.isTrue((-1 : BigInt).pow(-2) == 1);
+  }
+
+  public function testPowerHandlesSignsCorrectly() {
+    Assert.isTrue((2 : BigInt).pow(3) == 8);
+    Assert.isTrue((-2 : BigInt).pow(3) == 8);
+    Assert.isTrue(("1036350201654" : BigInt).pow(4) == "1153522698998527286707879497611725813209153232656");
+    Assert.isTrue(("-1036350201654" : BigInt).pow(4) == "1153522698998527286707879497611725813209153232656");
+    Assert.isTrue(("-154654987" : BigInt).pow(3) == "-3699063497752861435082803");
+
+    Assert.isTrue((1 : BigInt).pow(1) == 1);
+    Assert.isTrue((-1 : BigInt).pow(1) == 1);
+    Assert.isTrue((-1 : BigInt).pow(2) == 1);
+  }
+
+  public function testPowerCarriesOverCorrectly() {
+    Assert.isTrue(("16" : BigInt).pow("13") == "4503599627370496");
+    Assert.isTrue(("123456789123456789" : BigInt).pow(10) == "822526267372365207989468699031914332476569003445489153619518989325083908083922133639704420166045905346960117046949453426283086050487204639652635846010822673782217799736601");
+    Assert.isTrue(("2" : BigInt).pow("63") == "9223372036854775808");
+    Assert.isTrue((100 : BigInt).pow(56) != 0);
+  }
+
+  public function testPowerThrowsAnErrorWhenTheExponentIsTooLarge() {
+    Assert.raises(function() {
+      var a = (2 : BigInt).pow("1e100");
+    }, thx.Error);
+
+    Assert.isTrue((1 : BigInt).pow("1e100") == 1);
+    Assert.isTrue((-1 : BigInt).pow("1e100") == 1);
+    Assert.isTrue((0 : BigInt).pow("1e100") == 0);
+  }
   public function testDivision() {
     Assert.raises(function() {
       (1 : BigInt) / (0 : BigInt);
