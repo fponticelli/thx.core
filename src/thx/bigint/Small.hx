@@ -3,6 +3,7 @@ package thx.bigint;
 class Small implements BigIntImpl {
   public static var zero(default, null) = new Small(0);
   public static var one(default, null) = new Small(1);
+  public static var two(default, null) = new Small(2);
   public static var negativeOne(default, null) = new Small(-1);
 
   public var value(default, null) : Int;
@@ -95,18 +96,14 @@ class Small implements BigIntImpl {
     }
   }
 
-  public function multiplyBig(big : Big) : BigIntImpl {
+  public function multiplyBig(big : Big) : BigIntImpl
     return new Big(Bigs.multiplyLong(big.value, Bigs.smallToArray(Ints.abs(value))), sign != big.sign);
-  }
 
-  public function modulo(that : BigIntImpl) : BigIntImpl {
+  public function modulo(that : BigIntImpl) : BigIntImpl
     return divMod(that).remainder;
-  }
 
-
-  public function abs() : BigIntImpl {
+  public function abs() : BigIntImpl
     return new Small(Ints.abs(value));
-  }
 
   public function negate() : BigIntImpl {
     var small = new Small(-value);
@@ -114,11 +111,10 @@ class Small implements BigIntImpl {
     return small;
   }
 
-  public function next() : BigIntImpl {
+  public function next() : BigIntImpl
     return addSmall(Small.one);
-  }
 
-  public function prev() : BigIntImpl {
+  public function prev() : BigIntImpl
     return addSmall(Small.negativeOne);
   }
 

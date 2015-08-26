@@ -130,23 +130,19 @@ class Big implements BigIntImpl {
     return new Big(Bigs.multiplyLong(value, big.value), sign != big.sign);
   }
 
-  public function modulo(that : BigIntImpl) : BigIntImpl {
+  public function modulo(that : BigIntImpl) : BigIntImpl
     return divMod(that).remainder;
-  }
 
-  public function abs() : BigIntImpl {
+  public function abs() : BigIntImpl
     return new Big(value, false);
-  }
 
-  public function negate() : BigIntImpl {
+  public function negate() : BigIntImpl
     return new Big(value, !sign);
-  }
 
-  public function next() : BigIntImpl {
+  public function next() : BigIntImpl
     return addSmall(Small.one);
-  }
 
-  public function prev() : BigIntImpl {
+  public function prev() : BigIntImpl
     return addSmall(Small.negativeOne);
   }
 

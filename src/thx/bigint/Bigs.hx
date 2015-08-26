@@ -232,25 +232,48 @@ class Bigs {
     return addAny(addAny(ac, shiftLeft(subtract(subtract(abcd, ac), bd), n)), shiftLeft(bd, 2 * n));
   }
 
-/*
-  public static function square(a) {
-      var l = a.length,
-          r = createArray(l + l),
-          product, carry, i, a_i, a_j;
-      for(i = 0; i < l; i++) {
-          a_i = a[i];
-          for(var j = 0; j < l; j++) {
-              a_j = a[j];
-              product = a_i * a_j + r[i + j];
-              carry = Math.floor(product / BASE);
-              r[i + j] = product - carry * BASE;
-              r[i + j + 1] += carry;
-          }
-      }
-      trim(r);
-      return r;
+  public static function fromFloat(value : Float) : BigIntImpl {
+    if(Math.isNaN(value) || !Math.isFinite(value))
+      throw new Error("Conversion to BigInt failed. Number is NaN or Infinite");
+
+    var noFractions = value - (value % 1),
+        result : BigIntImpl = Small.zero,
+        neg    = noFractions < 0.0,
+        rest   = neg ? -noFractions : noFractions;
+
+    var i= 0, curr;
+    while (rest >= 1) {
+      curr = rest % 2;
+      rest = rest / 2;
+      if(curr >= 1)
+        result = result.add(Small.one.shiftLeft(BigInt.fromInt(i)));
+      i++;
+    }
+
+    if(neg)
+      return result.negate();
+    else
+      return result;
   }
-*/
+
+  public static function square(a : Array<Int>) : Array<Int> {
+    var l = a.length,
+        r = createArray(l + l),
+        product, carry, i, a_i, a_j;
+    for(i in 0...l) {
+      a_i = a[i];
+      for(j in 0...l) {
+        a_j = a[j];
+        product = a_i * a_j + r[i + j];
+        carry = Math.floor(product / BASE);
+        r[i + j] = product - carry * BASE;
+        r[i + j + 1] += carry;
+      }
+    }
+    trim(r);
+    return r;
+  }
+
   public static function divMod1(a : Array<Int>, b : Array<Int>) : Array<{ small : Null<Int>, big : Array<Int> }> { // Left over from previous version. Performs faster than divMod2 on smaller input sizes.
     var a_l = a.length,
         b_l = b.length,
@@ -368,181 +391,126 @@ class Bigs {
     }
     return { q : quotient, r : Std.int(remainder) };
   }
+
+  public static var powersOfTwo(default, null) = (function() {
+      var powers = [1];
+      while (powers[powers.length - 1] <= BASE)
+        powers.push(2 * powers[powers.length - 1]);
+      return powers;
+    })();
+  public static var bigPowersOfTwo(default, null) : Array<BigIntImpl> = powersOfTwo.map(function(v) : BigIntImpl return new Small(v));
+  public static var powers2Length(default, null) = powersOfTwo.length;
+  public static var highestPower2(default, null) = powersOfTwo[powers2Length - 1];
+  public static var bigHighestPower2(default, null) : BigIntImpl = new Small(highestPower2);
+
 /*
-  public static function divModAny(self, v) {
-    var value, n = parseValue(v);
-    var a = self.value, b = n.value;
-    var quotient;
-    if(b == 0) throw new Error("Cannot divide by zero");
-    if(n.isSmall) {
-        if(b == 1) return [self, Small.zero];
-        if(b == -1) return [self.negate(), Small.zero];
-        var abs = Math.abs(b);
-        if(abs < BASE) {
-          value = divModSmall(a, abs);
-          quotient = arrayToSmall(value[0]);
-          var remainder = value[1];
-          if(self.sign) remainder = -remainder;
-          if(typeof quotient == "number") {
-            if(self.sign != n.sign) quotient = -quotient;
-            return [new Small(quotient), new Small(remainder)];
-          }
-          return [new Big(quotient, self.sign != n.sign), new Small(remainder)];
-        }
-        b = smallToArray(abs);
-    }
-    var comparison = compareAbs(a, b);
-    if(comparison == -1) return [Small.zero, self];
-    if(comparison == 0) return [CACHE[self.sign == n.sign ? 1 : -1], Small.zero];
-
-    // divMod1 is faster on smaller input sizes
-    if(a.length + b.length <= 200)
-      value = divMod1(a, b);
-    else value = divMod2(a, b);
-
-    quotient = value[0];
-    var qSign = self.sign != n.sign,
-        mod = value[1],
-        mSign = self.sign;
-    if(typeof quotient == "number") {
-      if(qSign) quotient = -quotient;
-      quotient = new Small(quotient);
-    } else
-      quotient = new Big(quotient, qSign);
-    if(typeof mod == "number") {
-      if(mSign) mod = -mod;
-      mod = new Small(mod);
-    } else
-      mod = new Big(mod, mSign);
-    return [quotient, mod];
-  }
-  */
-/*
-  public static function compareAbs(a, b) {
-      if(a.length != b.length) {
-          return a.length > b.length ? 1 : -1;
-      }
-      for(var i = a.length - 1; i >= 0; i--) {
-          if(a[i] != b[i]) return a[i] > b[i] ? 1 : -1;
-      }
-      return 0;
-  }
-
-  public static function shift_isSmall(n) {
-      return ((typeof n == "number" || typeof n == "string") && +Math.abs(n) <= BASE) ||
-          (n instanceof Big && n.value.length <= 1);
-  }
-
-
-
   public static function bitwise(x, y, fn) {
-      y = parseValue(y);
-      var xSign = x.isNegative(), ySign = y.isNegative();
-      var xRem = xSign ? x.not() : x,
-          yRem = ySign ? y.not() : y;
-      var xBits = [], yBits = [];
-      var xStop = false, yStop = false;
-      while(!xStop || !yStop) {
-          if(xRem.isZero()) { // virtual sign extension for simulating two's complement
-              xStop = true;
-              xBits.push(xSign ? 1 : 0);
-          }
-          else if(xSign) xBits.push(xRem.isEven() ? 1 : 0); // two's complement for negative numbers
-          else xBits.push(xRem.isEven() ? 0 : 1);
-
-          if(yRem.isZero()) {
-              yStop = true;
-              yBits.push(ySign ? 1 : 0);
-          }
-          else if(ySign) yBits.push(yRem.isEven() ? 1 : 0);
-          else yBits.push(yRem.isEven() ? 0 : 1);
-
-          xRem = xRem.over(2);
-          yRem = yRem.over(2);
+    y = parseValue(y);
+    var xSign = x.isNegative(), ySign = y.isNegative();
+    var xRem = xSign ? x.not() : x,
+        yRem = ySign ? y.not() : y;
+    var xBits = [], yBits = [];
+    var xStop = false, yStop = false;
+    while(!xStop || !yStop) {
+      if(xRem.isZero()) { // virtual sign extension for simulating two's complement
+        xStop = true;
+        xBits.push(xSign ? 1 : 0);
       }
-      var result = [];
-      for(var i = 0; i < xBits.length; i++) result.push(fn(xBits[i], yBits[i]));
-      var sum = bigInt(result.pop()).negate().times(bigInt(2).pow(result.length));
-      while(result.length) {
-          sum = sum.add(bigInt(result.pop()).times(bigInt(2).pow(result.length)));
+      else if(xSign) xBits.push(xRem.isEven() ? 1 : 0); // two's complement for negative numbers
+      else xBits.push(xRem.isEven() ? 0 : 1);
+
+      if(yRem.isZero()) {
+        yStop = true;
+        yBits.push(ySign ? 1 : 0);
       }
-      return sum;
+      else if(ySign) yBits.push(yRem.isEven() ? 1 : 0);
+      else yBits.push(yRem.isEven() ? 0 : 1);
 
+      xRem = xRem.over(2);
+      yRem = yRem.over(2);
+    }
+    var result = [];
+    for(var i = 0; i < xBits.length; i++) result.push(fn(xBits[i], yBits[i]));
+    var sum = bigInt(result.pop()).negate().times(bigInt(2).pow(result.length));
+    while(result.length) {
+      sum = sum.add(bigInt(result.pop()).times(bigInt(2).pow(result.length)));
+    }
+    return sum;
+  }
 
-
-              function max(a, b) {
-                  a = parseValue(a);
-                  b = parseValue(b);
-                  return a.greater(b) ? a : b;
-              }
-              function min(a,b) {
-                  a = parseValue(a);
-                  b = parseValue(b);
-                  return a.lesser(b) ? a : b;
-              }
-              function gcd(a, b) {
-                  a = parseValue(a).abs();
-                  b = parseValue(b).abs();
-                  if(a.equals(b)) return a;
-                  if(a.isZero()) return b;
-                  if(b.isZero()) return a;
-                  if(a.isEven()) {
-                      if(b.isOdd()) {
-                          return gcd(a.divide(2), b);
-                      }
-                      return gcd(a.divide(2), b.divide(2)).multiply(2);
-                  }
-                  if(b.isEven()) {
-                      return gcd(a, b.divide(2));
-                  }
-                  if(a.greater(b)) {
-                      return gcd(a.subtract(b).divide(2), b);
-                  }
-                  return gcd(b.subtract(a).divide(2), a);
-              }
-              function lcm(a, b) {
-                  a = parseValue(a).abs();
-                  b = parseValue(b).abs();
-                  return a.multiply(b).divide(gcd(a, b));
-              }
-              function randBetween(a, b) {
-                  a = parseValue(a);
-                  b = parseValue(b);
-                  var low = min(a, b), high = max(a, b);
-                  var range = high.subtract(low);
-                  if(range.isSmall) return low.add(Math.random() * range);
-                  var length = range.value.length - 1;
-                  var result = [], restricted = true;
-                  for(var i = length; i >= 0; i--) {
-                      var top = restricted ? range.value[i] : BASE;
-                      var digit = Floats.trunc(Math.random() * top);
-                      result.unshift(digit);
-                      if(digit < top) restricted = false;
-                  }
-                  result = arrayToSmall(result);
-                  return low.add(new Big(result, false, typeof result == "number"));
-              }
-                  // Pre-define numbers in range [-999,999]
-                  var CACHE = function(v, radix) {
-                      if(typeof v == "undefined") return Small.zero;
-                      if(typeof radix != "undefined") return +radix == 10 ? parseValue(v) : parseBase(v, radix);
-                      return parseValue(v);
-                  };
-                  for(var i = 0; i < 1000; i++) {
-                      CACHE[i] = new Small(i);
-                      if(i > 0) CACHE[-i] = new Small(-i);
-                  }
-                  // Backwards compatibility
-                  CACHE.one = Small.one;
-                  CACHE.zero = Small.zero;
-                  CACHE.minusOne = CACHE[-1];
-                  CACHE.max = max;
-                  CACHE.min = min;
-                  CACHE.gcd = gcd;
-                  CACHE.lcm = lcm;
-                  CACHE.isInstance = function(x) { return x instanceof Big || x instanceof Small; };
-                  CACHE.randBetween = randBetween;
-                  return CACHE;
+  function max(a, b) {
+    a = parseValue(a);
+    b = parseValue(b);
+    return a.greater(b) ? a : b;
+  }
+  function min(a,b) {
+    a = parseValue(a);
+    b = parseValue(b);
+    return a.lesser(b) ? a : b;
+  }
+  function gcd(a, b) {
+    a = parseValue(a).abs();
+    b = parseValue(b).abs();
+    if(a.equals(b)) return a;
+    if(a.isZero()) return b;
+    if(b.isZero()) return a;
+    if(a.isEven()) {
+      if(b.isOdd()) {
+        return gcd(a.divide(2), b);
+      }
+      return gcd(a.divide(2), b.divide(2)).multiply(2);
+    }
+    if(b.isEven()) {
+      return gcd(a, b.divide(2));
+    }
+    if(a.greater(b)) {
+      return gcd(a.subtract(b).divide(2), b);
+    }
+    return gcd(b.subtract(a).divide(2), a);
+  }
+  function lcm(a, b) {
+    a = parseValue(a).abs();
+    b = parseValue(b).abs();
+    return a.multiply(b).divide(gcd(a, b));
+  }
+  function randBetween(a, b) {
+    a = parseValue(a);
+    b = parseValue(b);
+    var low = min(a, b), high = max(a, b);
+    var range = high.subtract(low);
+    if(range.isSmall) return low.add(Math.random() * range);
+    var length = range.value.length - 1;
+    var result = [], restricted = true;
+    for(var i = length; i >= 0; i--) {
+      var top = restricted ? range.value[i] : BASE;
+      var digit = Floats.trunc(Math.random() * top);
+      result.unshift(digit);
+      if(digit < top) restricted = false;
+    }
+    result = arrayToSmall(result);
+    return low.add(new Big(result, false, typeof result == "number"));
+  }
+  // Pre-define numbers in range [-999,999]
+  var CACHE = function(v, radix) {
+    if(typeof v == "undefined") return Small.zero;
+    if(typeof radix != "undefined") return +radix == 10 ? parseValue(v) : parseBase(v, radix);
+    return parseValue(v);
+  };
+  for(var i = 0; i < 1000; i++) {
+    CACHE[i] = new Small(i);
+    if(i > 0) CACHE[-i] = new Small(-i);
+  }
+  // Backwards compatibility
+  CACHE.one = Small.one;
+  CACHE.zero = Small.zero;
+  CACHE.minusOne = CACHE[-1];
+  CACHE.max = max;
+  CACHE.min = min;
+  CACHE.gcd = gcd;
+  CACHE.lcm = lcm;
+  CACHE.isInstance = function(x) { return x instanceof Big || x instanceof Small; };
+  CACHE.randBetween = randBetween;
+  return CACHE;
 */
 
   public static function parseBase(text : String, base : Int) : BigIntImpl {
