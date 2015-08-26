@@ -330,6 +330,18 @@ class TestBigInt {
     Assert.isTrue((-16 : BigInt).square() == 256);
     Assert.isTrue(("65536" : BigInt).square() == "4294967296");
   }
+
+  public function testShiftingLeftAndRight() {
+    Assert.isTrue((-5 : BigInt).shiftRight(2) == -2);
+    Assert.isTrue((5 : BigInt).shiftRight(-2) == 20);
+    Assert.isTrue((5 : BigInt).shiftLeft(-2) == 1);
+    Assert.isTrue((1024 : BigInt).shiftLeft(100) == "1298074214633706907132624082305024");
+    Assert.isTrue(("2596148429267413814265248164610049" : BigInt).shiftRight(100) == 2048);
+    Assert.isTrue(("8589934592" : BigInt).shiftRight(-50) == "9671406556917033397649408");
+    Assert.isTrue(("38685626227668133590597632" : BigInt).shiftLeft(-50) == "34359738368");
+    Assert.isTrue(("-1" : BigInt).shiftRight(25) == -1);
+  }
+
   public function testDivision() {
     Assert.raises(function() {
       (1 : BigInt) / (0 : BigInt);

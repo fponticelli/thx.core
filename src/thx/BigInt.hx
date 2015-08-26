@@ -104,6 +104,14 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   inline public function add(that : BigInt) : BigInt
     return this.add(that);
 
+  @:op(A << B)
+  inline public function shiftLeft(that : Int) : BigInt
+    return this.shiftLeft(that);
+
+  @:op(A >> B)
+  inline public function shiftRight(that : Int) : BigInt
+    return this.shiftRight(that);
+
   @:op(A-B)
   inline public function subtract(that : BigInt) : BigInt
     return this.subtract(that);
