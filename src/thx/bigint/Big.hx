@@ -120,13 +120,13 @@ class Big implements BigIntImpl {
       );
     }
     return multiplyBig(
-      new Big(Bigs.smallToArray(small.value), sign != small.sign)
+      new Big(Bigs.smallToArray(abs), small.sign)
     );
   }
 
   public function multiplyBig(big : Big) : BigIntImpl {
     if(value.length + big.value.length > 4000)
-      return new Big(Bigs.multiplyKaratsuba(value, big.value), sign);
+      return new Big(Bigs.multiplyKaratsuba(value, big.value), sign != big.sign);
     return new Big(Bigs.multiplyLong(value, big.value), sign != big.sign);
   }
 
