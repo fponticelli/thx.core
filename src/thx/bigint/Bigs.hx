@@ -232,9 +232,17 @@ class Bigs {
     return addAny(addAny(ac, shiftLeft(subtract(subtract(abcd, ac), bd), n)), shiftLeft(bd, 2 * n));
   }
 
+  public static function fromInt(value : Int) : BigIntImpl {
+    if(value < BASE)
+      return new Small(value);
+    else
+      return new Big(smallToArray(value), value < 0);
+  }
+
   public static function fromFloat(value : Float) : BigIntImpl {
     if(Math.isNaN(value) || !Math.isFinite(value))
       throw new Error("Conversion to BigInt failed. Number is NaN or Infinite");
+
 
     var noFractions = value - (value % 1),
         result : BigIntImpl = Small.zero,

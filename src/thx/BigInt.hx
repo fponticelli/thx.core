@@ -38,7 +38,7 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   public static var negativeOne(default, null) : BigInt = Small.negativeOne;
 
   @:from public static function fromInt(value : Int) : BigInt
-    return (new Small(value) : BigIntImpl);
+    return Bigs.fromInt(value);
 
   // TODO
   @:from inline public static function fromFloat(value : Float) : BigInt
