@@ -242,7 +242,6 @@ class Big implements BigIntImpl {
           out = '${value[--l]}',
           zeros = "0000000",
           digit;
-      //trace(value);
       while(--l >= 0) {
         digit = '${value[l]}';
         out += zeros.substring(digit.length) + digit;

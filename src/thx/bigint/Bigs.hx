@@ -534,10 +534,22 @@ class Bigs {
       text = text.substring(1);
     }
     text = text.trimCharsLeft("0").toLowerCase();
-    var length = text.length;
 
-    if(base == 10 && text.contains("e"))
-      return fromFloat(Std.parseFloat(text));
+    var e;
+    if(base == 10 && (e = text.indexOf("e")) > 0) {
+      var sexp = text.substring(e + 1);
+      text = text.substring(0, e);
+      var exp = sexp.startsWith("+") ? Std.parseInt(sexp.substring(1)) : Std.parseInt(sexp);
+      var decimalPlace = text.indexOf(".");
+      if(decimalPlace >= 0) {
+        exp -= text.length - decimalPlace;
+        text = text.substring(0, decimalPlace) + text.substring(1 + decimalPlace);
+      }
+      if(exp < 0) throw new Error("Cannot include negative exponent part for integers");
+
+      text = text.rpad("0", text.length + exp);
+    }
+    var length = text.length;
 
     if(length <= LOG_MAX_INT / Math.log(base))
       return new Small(Ints.parse(text, base) * (isNegative ? -1 : 1));
