@@ -1,5 +1,7 @@
 package thx.bigint;
 
+using thx.Strings;
+
 class Bigs {
   inline public static var BASE : Int = 10000000; // 1e7
   inline public static var DOUBLE_BASE = 100000000000000.0; // 1e14
@@ -247,14 +249,13 @@ class Bigs {
     var noFractions = value - (value % 1),
         result : BigIntImpl = Small.zero,
         neg    = noFractions < 0.0,
-        rest   = neg ? -noFractions : noFractions;
-
-    var i= 0, curr;
+        rest   = neg ? -noFractions : noFractions,
+        i = 0, curr;
     while (rest >= 1) {
       curr = rest % 2;
       rest = rest / 2;
       if(curr >= 1)
-        result = result.add(Small.one.shiftLeft(BigInt.fromInt(i)));
+        result = result.add(Small.one.shiftLeft(i));
       i++;
     }
 
@@ -522,21 +523,27 @@ class Bigs {
 */
 
   public static function parseBase(text : String, base : Int) : BigIntImpl {
+
     var val : BigIntImpl = Small.zero,
         pow : BigIntImpl = Small.one,
         bigBase = new Small(base),
-        length = text.length;
+        isNegative = text.substring(0, 1) == "-";
     if(1 >= base || base > 36)
       throw new Error('base ($base) must be a number between 1 and 36');
+    if(isNegative) {
+      text = text.substring(1);
+    }
+    text = text.trimCharsLeft("0").toLowerCase();
+    var length = text.length;
+
+    if(base == 10 && text.contains("e"))
+      return fromFloat(Std.parseFloat(text));
 
     if(length <= LOG_MAX_INT / Math.log(base))
-      return new Small(Ints.parse(text, base));
+      return new Small(Ints.parse(text, base) * (isNegative ? -1 : 1));
 
     var digits : Array<Small> = [];
-    var i;
-    var isNegative = text.substring(0, 1) == "-";
-    text = text.toLowerCase();
-    for(i in (isNegative ? 1 : 0)...text.length) {
+    for(i in 0...length) {
       var charCode = text.charCodeAt(i);
       if(48 <= charCode && charCode <= 57)
         digits.push(new Small(charCode - 48));

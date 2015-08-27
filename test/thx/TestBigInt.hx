@@ -21,8 +21,7 @@ class TestBigInt {
     Assert.isTrue(factorial(10) == tenFactorial);
     Assert.isTrue(factorial(100) == hundredFactorial);
 
-    // TODO
-    //Assert.isTrue((3 : BigInt).pow(10000) == threeToTenThousand);
+    Assert.isTrue((3 : BigInt).pow(10000) == threeToTenThousand);
   }
 
   public function testIsImmutable() {
@@ -49,7 +48,7 @@ class TestBigInt {
   }
 
   public function testFloats() {
-    var tests = [0.0, 1.0, 5.0, 1.234e63, 5.432e80, 0.00001, 1.2345e-50];
+    var tests = [0.0, 1.0, 5.0, 1.2e20, 1.2e40, 1.234e63, 5.432e80, 0.00001, 1.2345e-50];
 
     for(test in tests) {
       var out : BigInt = test;

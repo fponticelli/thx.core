@@ -222,7 +222,7 @@ class Big implements BigIntImpl {
 
   // TODO
   public function toFloat() : Float
-    return toInt();
+    return Std.parseFloat(toString());
 
   // TODO
   public function toInt() : Int {

@@ -127,8 +127,11 @@ class Small implements BigIntImpl {
   }
 
   public function shiftLeft(n : Int) : BigIntImpl {
-    if(n < Bigs.BASE)
+    if(n < 0)
       return shiftRight(-n);
+    if(Ints.abs(n) > Bigs.BASE) {
+      return multiply(Small.two.pow(Bigs.fromInt(n)));
+    }
     var result : BigIntImpl = this;
     while (n >= Bigs.powers2Length) {
       result = result.multiply(Bigs.bigHighestPower2);
@@ -138,10 +141,14 @@ class Small implements BigIntImpl {
   }
 
   public function shiftRight(n : Int) : BigIntImpl {
-    if(n < Bigs.BASE)
-      return shiftLeft(-n);
-    var result : BigIntImpl = this,
-        remQuo;
+    if(n < 0)
+      return shiftRight(-n);
+    var remQuo;
+    if(Ints.abs(n) > Bigs.BASE) {
+      remQuo = divMod(Small.two.pow(Bigs.fromInt(n)));
+      return remQuo.remainder.sign ? remQuo.quotient.prev() : remQuo.quotient;
+    }
+    var result : BigIntImpl = this;
     while (n >= Bigs.powers2Length) {
       if (result.isZero())
         return result;
@@ -160,29 +167,23 @@ class Small implements BigIntImpl {
     return new Big(Bigs.square(Bigs.smallToArray(Ints.abs(sq))), false);
   }
 
-  public function isZero() : Bool {
+  public function isZero() : Bool
     return value == 0;
-  }
 
-  public function isUnit() : Bool {
+  public function isUnit() : Bool
     return Ints.abs(value) == 1;
-  }
 
-  public function compare(that : BigIntImpl) : Int {
+  public function compare(that : BigIntImpl) : Int
     return that.isSmall ? compareSmall(cast that) : compareBig(cast that);
-  }
 
-  public function compareAbs(that : BigIntImpl) : Int {
+  public function compareAbs(that : BigIntImpl) : Int
     return abs().compare(that.abs());
-  }
 
-  public function compareSmall(small : Small) : Int {
+  public function compareSmall(small : Small) : Int
     return Ints.compare(value, small.value);
-  }
 
-  public function compareBig(big : Big) : Int {
+  public function compareBig(big : Big) : Int
     return big.sign ? 1 : -1;
-  }
 
   public function toFloat() : Float
     return value;
