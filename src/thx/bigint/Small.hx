@@ -173,8 +173,11 @@ class Small implements BigIntImpl {
   public function isUnit() : Bool
     return Ints.abs(value) == 1;
 
-  public function compare(that : BigIntImpl) : Int
+  public function compare(that : BigIntImpl) : Int {
+    if(sign != that.sign)
+      return sign ? -1 : 1;
     return that.isSmall ? compareSmall(cast that) : compareBig(cast that);
+  }
 
   public function compareAbs(that : BigIntImpl) : Int
     return abs().compare(that.abs());
@@ -183,7 +186,7 @@ class Small implements BigIntImpl {
     return Ints.compare(value, small.value);
 
   public function compareBig(big : Big) : Int
-    return big.sign ? 1 : -1;
+    return Bigs.compareAbs(Bigs.smallToArray(value), big.value) * (sign ? -1 : 1);
 
   public function toFloat() : Float
     return value;

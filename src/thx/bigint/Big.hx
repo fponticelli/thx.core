@@ -203,6 +203,8 @@ class Big implements BigIntImpl {
 
   // TODO
   public function compare(that : BigIntImpl) : Int {
+    if(sign != that.sign)
+      return sign ? -1 : 1;
     return that.isSmall ? compareSmall(cast that) : compareBig(cast that);
   }
 
@@ -210,15 +212,11 @@ class Big implements BigIntImpl {
     return abs().compare(that.abs());
   }
 
-  public function compareSmall(small : Small) : Int {
-    return sign ? -1 : 1;
-  }
+  public function compareSmall(small : Small) : Int
+    return Bigs.compareAbs(value, Bigs.smallToArray(small.value)) * (sign ? -1 : 1);
 
-  public function compareBig(big : Big) : Int {
-    if(sign != big.sign)
-      return sign ? -1 : 1;
+  public function compareBig(big : Big) : Int
     return Bigs.compareAbs(value, big.value) * (sign ? -1 : 1);
-  }
 
   // TODO
   public function toFloat() : Float
