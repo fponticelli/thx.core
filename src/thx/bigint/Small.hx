@@ -105,11 +105,8 @@ class Small implements BigIntImpl {
   public function abs() : BigIntImpl
     return new Small(Ints.abs(value));
 
-  public function negate() : BigIntImpl {
-    var small = new Small(-value);
-    small.sign = !sign;
-    return small;
-  }
+  public function negate() : BigIntImpl
+    return new Small(-value);
 
   public function next() : BigIntImpl
     return addSmall(Small.one);
@@ -119,11 +116,13 @@ class Small implements BigIntImpl {
 
   public function pow(exp : BigIntImpl) : BigIntImpl {
     if(!exp.isSmall) throw new Error('The exponent $exp is too large.');
+    if(exp.sign)
+      return Small.zero;
     var b = (cast exp : Small).value,
         res;
     if(Bigs.isPrecise(res = Floats.trunc(Math.pow(value, b))))
       return new Small(res);
-    return new Big(Bigs.smallToArray(value), sign).pow(exp);
+    return new Big(Bigs.smallToArray(Ints.abs(value)), sign).pow(exp);
   }
 
   public function shiftLeft(n : Int) : BigIntImpl {
@@ -195,7 +194,7 @@ class Small implements BigIntImpl {
     return value;
 
   public function toString()
-    return Ints.toString(value, 10);
+    return '$value';
 
   public function toStringWithBase(base : Int) : String
     return Ints.toString(value, base);
