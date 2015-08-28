@@ -16,6 +16,8 @@ interface BigIntImpl {
   function shiftLeft(value : Int) : BigIntImpl;
   function shiftRight(value : Int) : BigIntImpl;
   function square() : BigIntImpl;
+  function isEven() : Bool;
+  function isOdd() : Bool;
   function isUnit() : Bool;
   function isZero() : Bool;
   function compare(that : BigIntImpl) : Int;

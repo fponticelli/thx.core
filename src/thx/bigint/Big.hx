@@ -208,6 +208,14 @@ class Big implements BigIntImpl {
     return new Big(Bigs.square(value), false);
   }
 
+  public function isEven() : Bool {
+    return (value[0] & 1) == 0;
+  }
+
+  public function isOdd() : Bool {
+    return (value[0] & 1) == 1;
+  }
+
   public function isZero() : Bool {
     return value.length == 0;
   }

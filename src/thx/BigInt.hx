@@ -75,6 +75,12 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   inline public function pow(exp : BigInt) : BigInt
     return this.pow(exp);
 
+  inline public function isEven() : Bool
+    return this.isEven();
+
+  inline public function isOdd() : Bool
+    return this.isOdd();
+
   inline public function isNegative() : Bool
     return this.sign;
 

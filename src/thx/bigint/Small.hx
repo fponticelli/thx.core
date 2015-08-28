@@ -168,6 +168,14 @@ class Small implements BigIntImpl {
     return new Big(Bigs.square(Bigs.smallToArray(Ints.abs(sq))), false);
   }
 
+  public function isEven() : Bool {
+    return (value & 1) == 0;
+  }
+
+  public function isOdd() : Bool {
+    return (value & 1) == 1;
+  }
+
   public function isZero() : Bool
     return value == 0;
 

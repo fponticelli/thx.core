@@ -572,6 +572,35 @@ class TestBigInt {
     Assert.isTrue(("38685626227668133590597632" : BigInt).shiftLeft(-50) == "34359738368");
     Assert.isTrue(("-1" : BigInt).shiftRight(25) == -1);
   }
+  public function testIsEvenAndIsOdd() {
+    Assert.isTrue((0 : BigInt).isEven());
+    Assert.isFalse((0 : BigInt).isOdd());
+
+    Assert.isTrue((654 : BigInt).isEven());
+    Assert.isFalse((654 : BigInt).isOdd());
+
+    Assert.isTrue((653 : BigInt).isOdd());
+    Assert.isFalse((653 : BigInt).isEven());
+
+    Assert.isTrue((-984 : BigInt).isEven());
+    Assert.isFalse((-984 : BigInt).isOdd());
+
+    Assert.isTrue((-987 : BigInt).isOdd());
+    Assert.isFalse((-987 : BigInt).isEven());
+
+    Assert.isTrue(("9888651888888888" : BigInt).isEven());
+    Assert.isFalse(("9888651888888888" : BigInt).isOdd());
+
+    Assert.isTrue(("1026377777777777" : BigInt).isOdd());
+    Assert.isFalse(("1026377777777777" : BigInt).isEven());
+
+    Assert.isTrue(("-9888651888888888" : BigInt).isEven());
+    Assert.isFalse(("-9888651888888888" : BigInt).isOdd());
+
+    Assert.isTrue(("-1026377777777777" : BigInt).isOdd());
+    Assert.isFalse(("-1026377777777777" : BigInt).isEven());
+  }
+
 
 //////////////////////////////////
 
