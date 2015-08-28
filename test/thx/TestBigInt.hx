@@ -52,10 +52,10 @@ class TestBigInt {
 
     for(test in tests) {
       var out : BigInt = test;
-      Assert.floatEquals(test, out.toFloat(), 'expected $test but got ${out.toFloat()}');
+      Assert.floatEquals(Floats.roundTo(test, 0), out.toFloat(), 'expected $test but got ${out.toFloat()}');
 
       var out : BigInt = -test;
-      Assert.floatEquals(-test, out.toFloat(), 'expected ${-test} but got ${out.toFloat()}');
+      Assert.floatEquals(Floats.roundTo(-test, 0), out.toFloat(), 'expected ${-test} but got ${out.toFloat()}');
     }
   }
 
