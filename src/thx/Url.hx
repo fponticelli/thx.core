@@ -1,6 +1,7 @@
 package thx;
 
 import thx.Error;
+using thx.Strings;
 
 /**
 It's a type that represents a URL.
@@ -68,11 +69,40 @@ equals.
       this.search == other.search &&
       this.hash == other.hash;
 
+  @:op(A / B) public function concatString(other : String) : Url {
+    var copy = clone();
+    if(pathName.isEmpty()) {
+      copy.pathName = other;
+    } else {
+      if(other.startsWith("/"))
+        other = other.substring(1);
+      if(pathName.endsWith("/"))
+        copy.pathName = copy.pathName + other;
+      else
+        copy.pathName = copy.pathName + "/" + other;
+    }
+    return copy;
+  }
+
   @:to public function toString()
     return if(isAbsolute)
       '${hasProtocol ? protocol + ":" : ""}${slashes?"//":""}${hasAuth?auth+"@":""}$host$path${hasHash?"#"+hash:""}';
     else
       '$path${hasHash?"#"+hash:""}';
+
+  public function clone() : Url {
+    return {
+      protocol: protocol,
+      slashes: slashes,
+      auth: auth,
+      hostName: hostName,
+      port: port,
+      pathName: pathName,
+      queryString: queryString,
+      search: search,
+      hash: hash
+    };
+  }
 
   inline function get_auth()
     return this.auth;
@@ -165,7 +195,6 @@ equals.
 
   function set_protocol(value : String)
     return this.protocol = null == value ? null : value.toLowerCase();
-
 
   inline function get_hash()
     return this.hash;
