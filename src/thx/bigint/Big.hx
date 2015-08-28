@@ -155,6 +155,8 @@ class Big implements BigIntImpl {
 
   public function pow(exp : BigIntImpl) : BigIntImpl {
     if(!exp.isSmall) throw new Error('The exponent $exp is too large.');
+    if(exp.sign)
+      return Small.zero;
     var b = (cast exp : Small).value,
         x : BigIntImpl = this,
         y : BigIntImpl = Small.one;
