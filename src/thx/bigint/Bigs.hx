@@ -395,10 +395,9 @@ class Bigs {
       divisor = remainder * BASE + value[i];
       q = Floats.trunc(divisor / lambda);
       remainder = divisor - q * lambda;
-      quotient[i] = q | 0;
-      --i;
+      quotient[i--] = q | 0;
     }
-    return { q : quotient, r : Std.int(remainder) };
+    return { q : quotient, r : remainder };
   }
 
   public static var powersOfTwo(default, null) = (function() {
@@ -523,13 +522,12 @@ class Bigs {
 */
 
   public static function parseBase(text : String, base : Int) : BigIntImpl {
-
     var val : BigIntImpl = Small.zero,
         pow : BigIntImpl = Small.one,
         bigBase = new Small(base),
         isNegative = text.substring(0, 1) == "-";
-    if(1 >= base || base > 36)
-      throw new Error('base ($base) must be a number between 1 and 36');
+    if(2 > base || base > 36)
+      throw new Error('base ($base) must be a number between 2 ad 36');
     if(isNegative) {
       text = text.substring(1);
     }
