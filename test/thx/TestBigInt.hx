@@ -556,13 +556,15 @@ class TestBigInt {
     Assert.isTrue((1 : BigInt).pow(1) == 1);
     Assert.isTrue((-1 : BigInt).pow(1) == -1);
     Assert.isTrue((-1 : BigInt).pow(2) == 1);
-  }
 
-//////////////////////////////////
+    Assert.isTrue((1 : BigInt).pow("1e100") == 1);
+    Assert.isTrue((-1 : BigInt).pow("1e100") == 1);
+    Assert.isTrue((0 : BigInt).pow("1e100") == 0);
+  }
 
   public function testShiftingLeftAndRight() {
     Assert.isTrue((-5 : BigInt).shiftRight(2) == -2);
-    Assert.isTrue((5 : BigInt).shiftRight(-2) == 20);
+    Assert.isTrue((5 : BigInt).shiftRight(-2) == 20, 'expected ${(5 : BigInt).shiftRight(-2)} == 20');
     Assert.isTrue((5 : BigInt).shiftLeft(-2) == 1);
     Assert.isTrue((1024 : BigInt).shiftLeft(100) == "1298074214633706907132624082305024");
     Assert.isTrue(("2596148429267413814265248164610049" : BigInt).shiftRight(100) == 2048);
@@ -570,4 +572,7 @@ class TestBigInt {
     Assert.isTrue(("38685626227668133590597632" : BigInt).shiftLeft(-50) == "34359738368");
     Assert.isTrue(("-1" : BigInt).shiftRight(25) == -1);
   }
+
+//////////////////////////////////
+
 }
