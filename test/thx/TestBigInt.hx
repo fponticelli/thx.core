@@ -601,6 +601,17 @@ class TestBigInt {
     Assert.isFalse(("-1026377777777777" : BigInt).isEven());
   }
 
+  public function testPowerToNegativeNumbersIs0() {
+    Assert.isTrue((0 : BigInt).pow(-298) == 0);
+    Assert.isTrue((543 : BigInt).pow(-2) == 0);
+    Assert.isTrue(("323434643534523" : BigInt).pow(-1) == 0);
+    Assert.isTrue((-54302 : BigInt).pow("-543624724341214223562") == 0);
+    Assert.isTrue(("-20199605604968" : BigInt).pow(-99) == 0);
+
+    Assert.isTrue((1 : BigInt).pow(-1) == 1);
+    Assert.isTrue((-1 : BigInt).pow(-1) == -1);
+    Assert.isTrue((-1 : BigInt).pow(-2) == 1);
+  }
 
 //////////////////////////////////
 
