@@ -24,13 +24,11 @@ class Big implements BigIntImpl {
     return that.isSmall ? addSmall(cast that) : addBig(cast that);
   }
 
-  public function addSmall(small : Small) : BigIntImpl {
+  public function addSmall(small : Small) : BigIntImpl
     return new Big(Bigs.addSmall(value, Ints.abs(small.value)), sign);
-  }
 
-  public function addBig(big : Big) : BigIntImpl {
+  public function addBig(big : Big) : BigIntImpl
     return new Big(Bigs.addAny(value, big.value), sign);
-  }
 
   public function subtract(that : BigIntImpl) : BigIntImpl {
     if(that.isZero())
@@ -42,17 +40,14 @@ class Big implements BigIntImpl {
     return that.isSmall ? subtractSmall(cast that) : subtractBig(cast that);
   }
 
-  public function subtractSmall(small : Small) : BigIntImpl {
+  public function subtractSmall(small : Small) : BigIntImpl
     return Bigs.subtractSmall(value, Ints.abs(small.value), sign);
-  }
 
-  public function subtractBig(big : Big) : BigIntImpl {
+  public function subtractBig(big : Big) : BigIntImpl
     return Bigs.subtractAny(value, big.value, sign);
-  }
 
-  public function divide(that : BigIntImpl) : BigIntImpl {
+  public function divide(that : BigIntImpl) : BigIntImpl
     return divMod(that).quotient;
-  }
 
   public function divMod(that : BigIntImpl) : { quotient : BigIntImpl, remainder : BigIntImpl } {
     if(that.isZero())
@@ -209,25 +204,20 @@ class Big implements BigIntImpl {
     return remQuo.remainder.sign ? remQuo.quotient.prev() : remQuo.quotient;
   }
 
-  public function square() : BigIntImpl {
+  public function square() : BigIntImpl
     return new Big(Bigs.square(value), false);
-  }
 
-  public function isEven() : Bool {
+  public function isEven() : Bool
     return (value[0] & 1) == 0;
-  }
 
-  public function isOdd() : Bool {
+  public function isOdd() : Bool
     return (value[0] & 1) == 1;
-  }
 
-  public function isZero() : Bool {
+  public function isZero() : Bool
     return value.length == 0;
-  }
 
-  public function isUnit() : Bool {
+  public function isUnit() : Bool
     return false;
-  }
 
   // TODO
   public function compare(that : BigIntImpl) : Int {
@@ -236,9 +226,8 @@ class Big implements BigIntImpl {
     return that.isSmall ? compareSmall(cast that) : compareBig(cast that);
   }
 
-  public function compareAbs(that : BigIntImpl) : Int {
+  public function compareAbs(that : BigIntImpl) : Int
     return abs().compare(that.abs());
-  }
 
   public function compareSmall(small : Small) : Int
     return Bigs.compareAbs(value, Bigs.smallToArray(small.value)) * (sign ? -1 : 1);

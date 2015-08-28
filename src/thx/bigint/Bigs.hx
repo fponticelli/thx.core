@@ -94,14 +94,11 @@ class Bigs {
   }
 
   public static function compareAbs(a : Array<Int>, b : Array<Int>) : Int {
-    if(a.length != b.length) {
+    if(a.length != b.length)
       return a.length > b.length ? 1 : -1;
-    }
     var i = a.length;
-    while(--i >= 0) {
-    //for(var i = a.length - 1; i >= 0; i--) {
+    while(--i >= 0)
       if(a[i] != b[i]) return a[i] > b[i] ? 1 : -1;
-    }
     return 0;
   }
 
@@ -120,7 +117,6 @@ class Bigs {
       r[i++] = difference;
     }
     while(i < a_l) {
-    //for(i in b_l; i < a_l; i++) {
       difference = a[i] - borrow;
       if(difference < 0) difference += BASE;
       else {
@@ -130,7 +126,6 @@ class Bigs {
       r[i++] = difference;
     }
     while(i < a_l) {
-    //for(; i < a_l; i++) {
       r[i] = a[i];
       i++;
     }
@@ -245,7 +240,6 @@ class Bigs {
     if(Math.isNaN(value) || !Math.isFinite(value))
       throw new Error("Conversion to BigInt failed. Number is NaN or Infinite");
 
-
     var noFractions = value - (value % 1),
         result : BigIntImpl = Small.zero,
         neg    = noFractions < 0.0,
@@ -298,7 +292,6 @@ class Bigs {
     divisorMostSignificantDigit = divisor[b_l - 1];
     shift = a_l - b_l;
     while(shift >= 0) {
-    //for(shift = a_l - b_l; shift >= 0; shift--) {
       quotientDigit = BASE - 1;
       quotientDigit = Math.floor((remainder[shift + b_l] * BASE + remainder[shift + b_l - 1]) / divisorMostSignificantDigit);
       carry = 0;
@@ -391,7 +384,6 @@ class Bigs {
     remainder = 0;
     i = length - 1;
     while(i >= 0) {
-    //for(i = length - 1; i >= 0; --i) {
       divisor = remainder * BASE + value[i];
       q = Floats.trunc(divisor / lambda);
       remainder = divisor - q * lambda;
@@ -410,116 +402,6 @@ class Bigs {
   public static var powers2Length(default, null) = powersOfTwo.length;
   public static var highestPower2(default, null) = powersOfTwo[powers2Length - 1];
   public static var bigHighestPower2(default, null) : BigIntImpl = new Small(highestPower2);
-
-/*
-  public static function bitwise(x, y, fn) {
-    y = parseValue(y);
-    var xSign = x.isNegative(), ySign = y.isNegative();
-    var xRem = xSign ? x.not() : x,
-        yRem = ySign ? y.not() : y;
-    var xBits = [], yBits = [];
-    var xStop = false, yStop = false;
-    while(!xStop || !yStop) {
-      if(xRem.isZero()) { // virtual sign extension for simulating two's complement
-        xStop = true;
-        xBits.push(xSign ? 1 : 0);
-      }
-      else if(xSign) xBits.push(xRem.isEven() ? 1 : 0); // two's complement for negative numbers
-      else xBits.push(xRem.isEven() ? 0 : 1);
-
-      if(yRem.isZero()) {
-        yStop = true;
-        yBits.push(ySign ? 1 : 0);
-      }
-      else if(ySign) yBits.push(yRem.isEven() ? 1 : 0);
-      else yBits.push(yRem.isEven() ? 0 : 1);
-
-      xRem = xRem.over(2);
-      yRem = yRem.over(2);
-    }
-    var result = [];
-    for(var i = 0; i < xBits.length; i++) result.push(fn(xBits[i], yBits[i]));
-    var sum = bigInt(result.pop()).negate().times(bigInt(2).pow(result.length));
-    while(result.length) {
-      sum = sum.add(bigInt(result.pop()).times(bigInt(2).pow(result.length)));
-    }
-    return sum;
-  }
-
-  function max(a, b) {
-    a = parseValue(a);
-    b = parseValue(b);
-    return a.greater(b) ? a : b;
-  }
-  function min(a,b) {
-    a = parseValue(a);
-    b = parseValue(b);
-    return a.lesser(b) ? a : b;
-  }
-  function gcd(a, b) {
-    a = parseValue(a).abs();
-    b = parseValue(b).abs();
-    if(a.equals(b)) return a;
-    if(a.isZero()) return b;
-    if(b.isZero()) return a;
-    if(a.isEven()) {
-      if(b.isOdd()) {
-        return gcd(a.divide(2), b);
-      }
-      return gcd(a.divide(2), b.divide(2)).multiply(2);
-    }
-    if(b.isEven()) {
-      return gcd(a, b.divide(2));
-    }
-    if(a.greater(b)) {
-      return gcd(a.subtract(b).divide(2), b);
-    }
-    return gcd(b.subtract(a).divide(2), a);
-  }
-  function lcm(a, b) {
-    a = parseValue(a).abs();
-    b = parseValue(b).abs();
-    return a.multiply(b).divide(gcd(a, b));
-  }
-  function randBetween(a, b) {
-    a = parseValue(a);
-    b = parseValue(b);
-    var low = min(a, b), high = max(a, b);
-    var range = high.subtract(low);
-    if(range.isSmall) return low.add(Math.random() * range);
-    var length = range.value.length - 1;
-    var result = [], restricted = true;
-    for(var i = length; i >= 0; i--) {
-      var top = restricted ? range.value[i] : BASE;
-      var digit = Floats.trunc(Math.random() * top);
-      result.unshift(digit);
-      if(digit < top) restricted = false;
-    }
-    result = arrayToSmall(result);
-    return low.add(new Big(result, false, typeof result == "number"));
-  }
-  // Pre-define numbers in range [-999,999]
-  var CACHE = function(v, radix) {
-    if(typeof v == "undefined") return Small.zero;
-    if(typeof radix != "undefined") return +radix == 10 ? parseValue(v) : parseBase(v, radix);
-    return parseValue(v);
-  };
-  for(var i = 0; i < 1000; i++) {
-    CACHE[i] = new Small(i);
-    if(i > 0) CACHE[-i] = new Small(-i);
-  }
-  // Backwards compatibility
-  CACHE.one = Small.one;
-  CACHE.zero = Small.zero;
-  CACHE.minusOne = CACHE[-1];
-  CACHE.max = max;
-  CACHE.min = min;
-  CACHE.gcd = gcd;
-  CACHE.lcm = lcm;
-  CACHE.isInstance = function(x) { return x instanceof Big || x instanceof Small; };
-  CACHE.randBetween = randBetween;
-  return CACHE;
-*/
 
   public static function parseBase(text : String, base : Int) : BigIntImpl {
     var val : BigIntImpl = Small.zero,
@@ -578,7 +460,85 @@ class Bigs {
     }
     return isNegative ? val.negate() : val;
   }
+
 /*
+  public static function bitwise(x, y, fn) {
+    y = parseValue(y);
+    var xSign = x.isNegative(), ySign = y.isNegative();
+    var xRem = xSign ? x.not() : x,
+        yRem = ySign ? y.not() : y;
+    var xBits = [], yBits = [];
+    var xStop = false, yStop = false;
+    while(!xStop || !yStop) {
+      if(xRem.isZero()) { // virtual sign extension for simulating two's complement
+        xStop = true;
+        xBits.push(xSign ? 1 : 0);
+      }
+      else if(xSign) xBits.push(xRem.isEven() ? 1 : 0); // two's complement for negative numbers
+      else xBits.push(xRem.isEven() ? 0 : 1);
+
+      if(yRem.isZero()) {
+        yStop = true;
+        yBits.push(ySign ? 1 : 0);
+      }
+      else if(ySign) yBits.push(yRem.isEven() ? 1 : 0);
+      else yBits.push(yRem.isEven() ? 0 : 1);
+
+      xRem = xRem.over(2);
+      yRem = yRem.over(2);
+    }
+    var result = [];
+    for(var i = 0; i < xBits.length; i++) result.push(fn(xBits[i], yBits[i]));
+    var sum = bigInt(result.pop()).negate().times(bigInt(2).pow(result.length));
+    while(result.length) {
+      sum = sum.add(bigInt(result.pop()).times(bigInt(2).pow(result.length)));
+    }
+    return sum;
+  }
+
+  function gcd(a, b) {
+    a = parseValue(a).abs();
+    b = parseValue(b).abs();
+    if(a.equals(b)) return a;
+    if(a.isZero()) return b;
+    if(b.isZero()) return a;
+    if(a.isEven()) {
+      if(b.isOdd()) {
+        return gcd(a.divide(2), b);
+      }
+      return gcd(a.divide(2), b.divide(2)).multiply(2);
+    }
+    if(b.isEven()) {
+      return gcd(a, b.divide(2));
+    }
+    if(a.greater(b)) {
+      return gcd(a.subtract(b).divide(2), b);
+    }
+    return gcd(b.subtract(a).divide(2), a);
+  }
+  function lcm(a, b) {
+    a = parseValue(a).abs();
+    b = parseValue(b).abs();
+    return a.multiply(b).divide(gcd(a, b));
+  }
+  function randBetween(a, b) {
+    a = parseValue(a);
+    b = parseValue(b);
+    var low = min(a, b), high = max(a, b);
+    var range = high.subtract(low);
+    if(range.isSmall) return low.add(Math.random() * range);
+    var length = range.value.length - 1;
+    var result = [], restricted = true;
+    for(var i = length; i >= 0; i--) {
+      var top = restricted ? range.value[i] : BASE;
+      var digit = Floats.trunc(Math.random() * top);
+      result.unshift(digit);
+      if(digit < top) restricted = false;
+    }
+    result = arrayToSmall(result);
+    return low.add(new Big(result, false, typeof result == "number"));
+  }
+
   public static function stringify(digit) {
     var v = digit.value;
     if(typeof v == "number") v = [v];
@@ -587,87 +547,5 @@ class Bigs {
     }
     return "<" + v + ">";
   }
-
-  public static function toBase(n, base) {
-    base = bigInt(base);
-    if(base.isZero()) {
-        if(n.isZero()) return "0";
-        throw new Error("Cannot convert nonzero numbers to base 0.");
-    }
-    if(base.equals(-1)) {
-        if(n.isZero()) return "0";
-        if(n.isNegative()) return new Array(1 - n).join("10");
-        return "1" + new Array(+n).join("01");
-    }
-    var minusSign = "";
-    if(n.isNegative() && base.isPositive()) {
-        minusSign = "-";
-        n = n.abs();
-    }
-    if(base.equals(1)) {
-        if(n.isZero()) return "0";
-        return minusSign + new Array(+n + 1).join(1);
-    }
-    var out = [];
-    var left = n, divmod;
-    while(left.isNegative() || left.compareAbs(base) >= 0) {
-        divmod = left.divmod(base);
-        left = divmod.quotient;
-        var digit = divmod.remainder;
-        if(digit.isNegative()) {
-            digit = base.minus(digit).abs();
-            left = left.next();
-        }
-        out.push(stringify(digit));
-    }
-    out.push(stringify(left));
-    return minusSign + out.reverse().join("");
-  }
-
-  public static function parseValue(v) {
-        if(v instanceof Big || v instanceof Small) return v;
-        if(typeof v == "number") {
-            if(isPrecise(v)) return new Small(v);
-            v = String(v);
-        }
-        if(typeof v == "string") {
-            if(isPrecise(+v)) {
-                var x = +v;
-                if(x == Floats.trunc(x))
-                    return new Small(x);
-                throw "Invalid integer: " + v;
-            }
-            var sign = v[0] == "-";
-            if(sign) v = v.slice(1);
-            var split = v.split(/e/i);
-            if(split.length > 2) throw new Error("Invalid integer: " + text.join("e"));
-            if(split.length == 2) {
-                var exp = split[1];
-                if(exp[0] == "+") exp = exp.slice(1);
-                exp = +exp;
-                if(exp != Floats.trunc(exp) || !isPrecise(exp)) throw new Error("Invalid integer: " + exp + " is not a valid exponent.");
-                var text = split[0];
-                var decimalPlace = text.indexOf(".");
-                if(decimalPlace >= 0) {
-                    exp -= text.length - decimalPlace;
-                    text = text.slice(0, decimalPlace) + text.slice(decimalPlace + 1);
-                }
-                if(exp < 0) throw new Error("Cannot include negative exponent part for integers");
-                text += (new Array(exp + 1)).join("0");
-                v = text;
-            }
-            var isValid = /^([0-9][0-9]*)$/.test(v);
-            if(!isValid) throw new Error("Invalid integer: " + v);
-            var r = [], max = v.length, l = LOG_BASE, min = max - l;
-            while(max > 0) {
-                r.push(+v.slice(min, max));
-                min -= l;
-                if(min < 0) min = 0;
-                max -= l;
-            }
-            trim(r);
-            return new Big(r, sign);
-        }
-    }
 */
 }

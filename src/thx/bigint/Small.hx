@@ -34,12 +34,11 @@ class Small implements BigIntImpl {
     }
   }
 
-  public function addBig(big : Big) : BigIntImpl {
+  public function addBig(big : Big) : BigIntImpl
     return new Big(
       Bigs.addSmall(big.value, Ints.abs(value)),
       sign
     );
-  }
 
   public function subtract(that : BigIntImpl) : BigIntImpl {
     if(sign != that.sign)
@@ -47,17 +46,14 @@ class Small implements BigIntImpl {
     return that.isSmall ? subtractSmall(cast that) : subtractBig(cast that);
   }
 
-  public function subtractSmall(small : Small) : BigIntImpl {
+  public function subtractSmall(small : Small) : BigIntImpl
     return new Small(value - small.value);
-  }
 
-  public function subtractBig(big : Big) : BigIntImpl {
+  public function subtractBig(big : Big) : BigIntImpl
     return Bigs.subtractSmall(big.value, Ints.abs(value), value >= 0);
-  }
 
-  public function divide(that : BigIntImpl) : BigIntImpl {
+  public function divide(that : BigIntImpl) : BigIntImpl
     return divMod(that).quotient;
-  }
 
   public function divMod(that : BigIntImpl) : { quotient : BigIntImpl, remainder : BigIntImpl } {
     if(that.isZero())
@@ -79,9 +75,8 @@ class Small implements BigIntImpl {
     };
   }
 
-  public function multiply(that : BigIntImpl) : BigIntImpl {
+  public function multiply(that : BigIntImpl) : BigIntImpl
     return that.isSmall ? multiplySmall(cast that) : multiplyBig(cast that);
-  }
 
   public function multiplySmall(small : Small) : BigIntImpl {
     if(Bigs.isPrecise(value * small.value)) {
@@ -172,13 +167,11 @@ class Small implements BigIntImpl {
     return new Big(Bigs.square(Bigs.smallToArray(Ints.abs(sq))), false);
   }
 
-  public function isEven() : Bool {
+  public function isEven() : Bool
     return (value & 1) == 0;
-  }
 
-  public function isOdd() : Bool {
+  public function isOdd() : Bool
     return (value & 1) == 1;
-  }
 
   public function isZero() : Bool
     return value == 0;
