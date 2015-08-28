@@ -173,8 +173,10 @@ class Big implements BigIntImpl {
   }
 
   public function shiftLeft(n : Int) : BigIntImpl {
-    if(n < Bigs.BASE)
+    if(n < 0)
       return shiftRight(-n);
+//    if(n > Bigs.BASE)
+//      return multiply(Small.two.pow(Bigs.fromInt(n)));
     var result : BigIntImpl = this;
     while (n >= Bigs.powers2Length) {
       result = result.multiply(Bigs.bigHighestPower2);
@@ -184,8 +186,9 @@ class Big implements BigIntImpl {
   }
 
   public function shiftRight(n : Int) : BigIntImpl {
-    if(n < Bigs.BASE)
+    if(n < 0)
       return shiftLeft(-n);
+//    if(n < Bigs.BASE)
     var result : BigIntImpl = this,
         remQuo;
     while (n >= Bigs.powers2Length) {

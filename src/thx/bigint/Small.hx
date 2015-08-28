@@ -141,7 +141,7 @@ class Small implements BigIntImpl {
 
   public function shiftRight(n : Int) : BigIntImpl {
     if(n < 0)
-      return shiftRight(-n);
+      return shiftLeft(-n);
     var remQuo;
     if(Ints.abs(n) > Bigs.BASE) {
       remQuo = divMod(Small.two.pow(Bigs.fromInt(n)));
