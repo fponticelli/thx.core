@@ -7,8 +7,6 @@ Heavily based on code realized by Peter Olson:
 https://github.com/peterolson/BigInteger.js
 */
 // TODO
-// toFloat/fromFloat
-// toInt64/fromInt64
 // ++ ?
 // -- ?
 // ~ bitwise negation (not)
@@ -18,16 +16,10 @@ https://github.com/peterolson/BigInteger.js
 // << shiftLeft
 // >> shiftRight
 // >>>
-// square
-// pow
 // modPow
-// isEven
-// isOdd
-// isUnit
 // isDivisibleBy
 // isPrime
-// max
-// min
+// max/min
 // gcd
 // lcm
 // randBetween
