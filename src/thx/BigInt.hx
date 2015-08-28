@@ -32,6 +32,7 @@ https://github.com/peterolson/BigInteger.js
 // lcm
 // randBetween
 
+@:forward(sign)
 abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   public static var zero(default, null) : BigInt = Small.zero;
   public static var one(default, null) : BigInt = Small.one;
@@ -78,7 +79,7 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
     return this.sign;
 
   inline public function isPositive() : Bool
-    return !this.sign;
+    return this.compare(zero) > 0;
 
   inline public function isUnit() : Bool
     return this.isUnit();
