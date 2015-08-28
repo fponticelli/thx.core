@@ -148,10 +148,10 @@ class Big implements BigIntImpl {
     return new Big(value, !sign);
 
   public function next() : BigIntImpl
-    return addSmall(Small.one);
+    return add(Small.one);
 
   public function prev() : BigIntImpl
-    return addSmall(Small.negativeOne);
+    return subtract(Small.one);
 
   public function pow(exp : BigIntImpl) : BigIntImpl {
     if(!exp.isSmall) throw new Error('The exponent $exp is too large.');
