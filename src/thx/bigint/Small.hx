@@ -79,9 +79,13 @@ class Small implements BigIntImpl {
     return that.isSmall ? multiplySmall(cast that) : multiplyBig(cast that);
 
   public function multiplySmall(small : Small) : BigIntImpl {
-    if(Bigs.isPrecise(value * small.value)) {
+    trace("canMultiply", value, small.value, value * small.value, Bigs.canMultiply(value, small.value));
+    #if (js || cs || java || cpp || neko)
+    if(Bigs.canMultiply(value, small.value))
+    #else
+    if(Bigs.isPrecise(value * small.value))
+    #end
       return new Small(value * small.value);
-    }
     var arr = Bigs.smallToArray(Ints.abs(small.value));
     var abs = Ints.abs(value);
     if(abs < Bigs.BASE) {
