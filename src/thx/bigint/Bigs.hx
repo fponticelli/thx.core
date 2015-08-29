@@ -251,10 +251,11 @@ class Bigs {
   }
 
   public static function fromInt(value : Int) : BigIntImpl {
-    if(value < BASE)
+    var abs = Ints.abs(value);
+    if(abs < BASE)
       return new Small(value);
     else
-      return new Big(smallToArray(value), value < 0);
+      return new Big(smallToArray(abs), value < 0);
   }
 
   public static function fromFloat(value : Float) : BigIntImpl {
