@@ -43,8 +43,9 @@ class Big implements BigIntImpl {
   public function subtractSmall(small : Small) : BigIntImpl
     return Bigs.subtractSmall(value, Ints.abs(small.value), sign);
 
-  public function subtractBig(big : Big) : BigIntImpl
+  public function subtractBig(big : Big) : BigIntImpl {
     return Bigs.subtractAny(value, big.value, sign);
+  }
 
   public function divide(that : BigIntImpl) : BigIntImpl
     return divMod(that).quotient;
@@ -210,15 +211,11 @@ class Big implements BigIntImpl {
   public function isUnit() : Bool
     return false;
 
-  // TODO
   public function compare(that : BigIntImpl) : Int {
     if(sign != that.sign)
       return sign ? -1 : 1;
     return that.isSmall ? compareSmall(cast that) : compareBig(cast that);
   }
-
-  public function compareAbs(that : BigIntImpl) : Int
-    return abs().compare(that.abs());
 
   public function compareSmall(small : Small) : Int
     return Bigs.compareAbs(value, Bigs.smallToArray(small.value)) * (sign ? -1 : 1);
@@ -243,7 +240,6 @@ class Big implements BigIntImpl {
   public function toFloat() : Float
     return Std.parseFloat(toString());
 
-  // TODO
   public function toInt() : Int {
     var v = Bigs.arrayToSmall(value);
     if(null == v) throw new Error('overflow');
@@ -268,7 +264,6 @@ class Big implements BigIntImpl {
       return (sign ? "-" : "") + out;
     }
 
-    // TODO check implementation
     var out = [];
     var baseBig = new Small(base);
     var left : BigIntImpl = this, divmod;

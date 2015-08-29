@@ -28,15 +28,15 @@ class Bigs {
     return true;
   }
 
-  public static function smallToArray(n : Int) : Array<Int> { // For performance reasons doesn't reference BASE, need to change this function if BASE changes
+  public static function smallToArray(n : Int) : Array<Int> {
     if(n < BASE)
       return [n];
-    if(n < DOUBLE_BASE) // TODO not cross friendly
+    if(n < DOUBLE_BASE)
       return [n % BASE, Math.floor(n / BASE)];
     return [n % BASE, Math.floor(n / BASE) % BASE, Math.floor(n / DOUBLE_BASE)];
   }
 
-  public static function arrayToSmall(arr : Array<Int>) : Null<Int> { // If BASE changes this function may need to change
+  public static function arrayToSmall(arr : Array<Int>) : Null<Int> {
     trim(arr);
     var length = arr.length;
     if(length < 4 && compareAbs(arr, MAX_INT_ARR) < 0) {

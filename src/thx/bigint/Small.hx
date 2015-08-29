@@ -28,6 +28,7 @@ class Small implements BigIntImpl {
     #else
     if(Bigs.isPrecise(value + small.value))
     #end
+    //if(Bigs.isPrecise(value + small.value))
     {
       return new Small(value + small.value);
     } else {
@@ -51,8 +52,9 @@ class Small implements BigIntImpl {
     return that.isSmall ? subtractSmall(cast that) : subtractBig(cast that);
   }
 
-  public function subtractSmall(small : Small) : BigIntImpl
+  public function subtractSmall(small : Small) : BigIntImpl {
     return new Small(value - small.value);
+  }
 
   public function subtractBig(big : Big) : BigIntImpl
     return Bigs.subtractSmall(big.value, Ints.abs(value), value >= 0);
@@ -84,7 +86,6 @@ class Small implements BigIntImpl {
     return that.isSmall ? multiplySmall(cast that) : multiplyBig(cast that);
 
   public function multiplySmall(small : Small) : BigIntImpl {
-    trace("canMultiply", value, small.value, value * small.value, Bigs.canMultiply(value, small.value));
     #if (js || cs || java || cpp || neko)
     if(Bigs.canMultiply(value, small.value))
     #else
@@ -100,8 +101,9 @@ class Small implements BigIntImpl {
     }
   }
 
-  public function multiplyBig(big : Big) : BigIntImpl
+  public function multiplyBig(big : Big) : BigIntImpl {
     return new Big(Bigs.multiplyLong(big.value, Bigs.smallToArray(Ints.abs(value))), sign != big.sign);
+  }
 
   public function modulo(that : BigIntImpl) : BigIntImpl
     return divMod(that).remainder;
@@ -196,9 +198,6 @@ class Small implements BigIntImpl {
       return sign ? -1 : 1;
     return that.isSmall ? compareSmall(cast that) : compareBig(cast that);
   }
-
-  public function compareAbs(that : BigIntImpl) : Int
-    return abs().compare(that.abs());
 
   public function compareSmall(small : Small) : Int
     return Ints.compare(value, small.value);
