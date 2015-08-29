@@ -226,6 +226,19 @@ class Big implements BigIntImpl {
   public function compareBig(big : Big) : Int
     return Bigs.compareAbs(value, big.value) * (sign ? -1 : 1);
 
+  public function compareAbs(that : BigIntImpl) : Int {
+    if(that.isSmall)
+      return compareAbsSmall(cast that);
+    else
+      return compareAbsBig(cast that);
+    }
+
+  public function compareAbsSmall(small : Small) : Int
+    return Bigs.compareAbs(value, Bigs.smallToArray(small.value));
+
+  public function compareAbsBig(big : Big) : Int
+    return Bigs.compareAbs(value, big.value);
+
   // TODO
   public function toFloat() : Float
     return Std.parseFloat(toString());
