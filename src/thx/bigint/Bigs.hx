@@ -21,6 +21,15 @@ class Bigs {
     return isPrecise(v);
   }
 
+  public static function canAdd(a : Int, b : Int) {
+    if(a == 0 || b == 0) return true;
+    var v = a + b;
+    if(Ints.sign(a) * Ints.sign(b) != Ints.sign(v))
+      return false;
+    if(a != v - b) return false;
+    return isPrecise(v);
+  }
+
   public static function smallToArray(n : Int) : Array<Int> { // For performance reasons doesn't reference BASE, need to change this function if BASE changes
     if(n < BASE)
       return [n];
@@ -150,7 +159,7 @@ class Bigs {
   public static function subtractAny(a : Array<Int>, b : Array<Int>, sign : Bool) : BigIntImpl {
     var value;
     if(compareAbs(a, b) >= 0) {
-      value = subtract(a,b);
+      value = subtract(a, b);
     } else {
       value = subtract(b, a);
       sign = !sign;
@@ -222,6 +231,7 @@ class Bigs {
       carry = Floats.ftrunc(carry / BASE);
     }
     var arr = r.map(function(v) return Std.int(v));
+    trim(arr);
     return arr;
   }
 
@@ -305,13 +315,13 @@ class Bigs {
   public static function divMod1(a : Array<Int>, b : Array<Int>) : Array<{ small : Null<Int>, big : Array<Int> }> { // Left over from previous version. Performs faster than divMod2 on smaller input sizes.
     var a_l = a.length,
         b_l = b.length,
-        result = createArray(b.length),
+        result = createFloatArray(b.length),
         divisorMostSignificantDigit = b[b_l - 1],
         // normalization
         lambda = Math.ceil(BASE / (2 * divisorMostSignificantDigit)),
-        remainder = multiplySmall(a, lambda),
+        remainder : Array<Float> = multiplySmall(a, lambda).map(function(v) : Float return v),
         divisor = multiplySmall(b, lambda),
-        quotientDigit, shift, carry, borrow, i, l, q;
+        quotientDigit, shift, carry : Float, borrow : Float, i, l, q : Float;
     if(remainder.length <= a_l) remainder.push(0);
     divisor.push(0);
     divisorMostSignificantDigit = divisor[b_l - 1];
@@ -319,12 +329,12 @@ class Bigs {
     while(shift >= 0) {
       quotientDigit = BASE - 1;
       quotientDigit = Math.floor((remainder[shift + b_l] * BASE + remainder[shift + b_l - 1]) / divisorMostSignificantDigit);
-      carry = 0;
-      borrow = 0;
+      carry = 0.0;
+      borrow = 0.0;
       l = divisor.length;
       for(i in 0...l) {
-        carry += quotientDigit * divisor[i];
-        q = Math.floor(carry / BASE);
+        carry += quotientDigit * (divisor[i] : Float);
+        q = Floats.ftrunc(carry / BASE);
         borrow += remainder[shift + i] - (carry - q * BASE);
         carry = q;
         if(borrow < 0) {
@@ -354,14 +364,20 @@ class Bigs {
       shift--;
     }
     // denormalization
-    remainder = divModSmall(remainder, lambda).q;
-    return [{
-        small : arrayToSmall(result),
-        big : result
-      }, {
-        small : arrayToSmall(remainder),
-        big : remainder
-      }];
+    var arr : Array<Int> = remainder.map(function(v) : Int return Std.int(v));
+    var remainder = divModSmall(arr, lambda).q;
+    var arr : Array<Int> = result.map(function(v) : Int return Std.int(v));
+    trim(arr);
+
+    var q = {
+          small : arrayToSmall(arr),
+          big : arr
+        },
+        r = {
+          small : arrayToSmall(remainder),
+          big : remainder
+        };
+    return [q, r];
   }
 
   public static function divMod2(a : Array<Int>, b : Array<Int>) : Array<{ small : Null<Int>, big : Array<Int> }> { // Implementation idea shamelessly stolen from Silent Matt's library http://silentmatt.com/biginteger/
@@ -405,16 +421,16 @@ class Bigs {
   public static function divModSmall(value : Array<Int>, lambda : Int) : { q : Array<Int>, r : Int } {
     var length = value.length,
         quotient = createArray(length),
-        i, q, remainder, divisor;
+        i, q : Float, remainder : Float, divisor;
     remainder = 0;
     i = length - 1;
     while(i >= 0) {
       divisor = remainder * BASE + value[i];
-      q = Floats.trunc(divisor / lambda);
+      q = Floats.ftrunc(divisor / lambda);
       remainder = divisor - q * lambda;
-      quotient[i--] = q | 0;
+      quotient[i--] = Std.int(q);
     }
-    return { q : quotient, r : remainder };
+    return { q : quotient, r : Floats.trunc(remainder) };
   }
 
   public static var powersOfTwo(default, null) = (function() {

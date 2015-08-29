@@ -23,7 +23,12 @@ class Small implements BigIntImpl {
   }
 
   public function addSmall(small : Small) : BigIntImpl {
-    if(Bigs.isPrecise(value + small.value)) {
+    #if (js || cs || java || cpp || neko)
+    if(Bigs.canAdd(value, small.value))
+    #else
+    if(Bigs.isPrecise(value + small.value))
+    #end
+    {
       return new Small(value + small.value);
     } else {
       return new Big(Bigs.addSmall(
