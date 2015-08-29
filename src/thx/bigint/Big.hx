@@ -115,16 +115,7 @@ class Big implements BigIntImpl {
   }
 
   public function multiplySmall(small : Small) : BigIntImpl {
-    var abs = Ints.abs(small.value);
-    if(abs < Bigs.BASE) {
-      return new Big(
-        Bigs.multiplySmall(value, abs),
-        sign != small.sign
-      );
-    }
-    return multiplyBig(
-      new Big(Bigs.smallToArray(abs), small.sign)
-    );
+    return new Big(Bigs.multiplyLong(value, Bigs.smallToArray(Ints.abs(small.value))), sign != small.sign);
   }
 
   public function multiplyBig(big : Big) : BigIntImpl {
