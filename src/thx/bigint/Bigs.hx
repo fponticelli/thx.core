@@ -58,6 +58,13 @@ class Bigs {
     return x;
   }
 
+  public static function createFloatArray(length : Int) : Array<Float> {
+    var x = #if js untyped __js__("new Array")(length) #else [] #end;
+    for(i in 0...length)
+      x[i] = 0.0;
+    return x;
+  }
+
   public static function add(a : Array<Int>, b : Array<Int>) : Array<Int> { // assumes a and b are arrays with a.length >= b.length
     var l_a = a.length,
         l_b = b.length,
@@ -174,41 +181,48 @@ class Bigs {
     return new Big(r, sign);
   }
 
+  // TODO float conversion is not required in JS, optimize by typing as Int
+  // and remove r.map
   public static function multiplyLong(a : Array<Int>, b : Array<Int>) : Array<Int> {
     var a_l = a.length,
         b_l = b.length,
         l = a_l + b_l,
-        r = createArray(l),
-        product, carry, i, a_i, b_j;
+        r : Array<Float> = createFloatArray(l),
+        product : Float, carry, i, a_i : Float, b_j : Float;
     for(i in 0...a_l) {
       a_i = a[i];
       for(j in 0...b_l) {
         b_j = b[j];
         product = a_i * b_j + r[i + j];
-        carry = Math.floor(product / BASE);
-        r[i + j] = product - carry * BASE;
+        carry = Floats.ftrunc(product / BASE);
+        r[i + j] = Floats.ftrunc(product - carry * BASE);
         r[i + j + 1] += carry;
       }
     }
-    trim(r);
-    return r;
+    var arr = r.map(function(v) return Std.int(v));
+    trim(arr);
+    return arr;
   }
 
   public static function multiplySmall(a : Array<Int>, b : Int) : Array<Int> { // assumes a is array, b is number with |b| < BASE
     var l = a.length,
-        r = #if js untyped __js__("new Array")(l) #else [] #end,
-        carry = 0,
-        product, i = 0;
+        r : Array<Float> = #if js untyped __js__("new Array")(l) #else [] #end,
+        carry  : Float = 0.0,
+        product : Float, i = 0,
+        a_i : Float,
+        bf : Float = b;
     while(i < l) {
-      product = a[i] * b + carry;
-      carry = Math.floor(product / BASE);
+      a_i = a[i];
+      product = carry + a[i] * bf;
+      carry = Floats.ftrunc(product / BASE);
       r[i++] = product - carry * BASE;
     }
     while(carry > 0) {
       r[i++] = carry % BASE;
-      carry = Math.floor(carry / BASE);
+      carry = Floats.ftrunc(carry / BASE);
     }
-    return r;
+    var arr = r.map(function(v) return Std.int(v));
+    return arr;
   }
 
   public static function shiftLeft(x : Array<Int>, n : Int) : Array<Int> {
@@ -266,22 +280,25 @@ class Bigs {
       return result;
   }
 
+  // TODO float conversion is not required in JS, optimize by typing as Int
+  // and remove r.map
   public static function square(a : Array<Int>) : Array<Int> {
     var l = a.length,
-        r = createArray(l + l),
-        product, carry, i, a_i, a_j;
+        r = createFloatArray(l + l),
+        product : Float, carry, i, a_i : Float, a_j : Float;
     for(i in 0...l) {
       a_i = a[i];
       for(j in 0...l) {
         a_j = a[j];
         product = a_i * a_j + r[i + j];
-        carry = Math.floor(product / BASE);
-        r[i + j] = product - carry * BASE;
+        carry = Floats.ftrunc(product / BASE);
+        r[i + j] = Floats.ftrunc(product - carry * BASE);
         r[i + j + 1] += carry;
       }
     }
-    trim(r);
-    return r;
+    var arr = r.map(function(v) return Std.int(v));
+    trim(arr);
+    return arr;
   }
 
   public static function divMod1(a : Array<Int>, b : Array<Int>) : Array<{ small : Null<Int>, big : Array<Int> }> { // Left over from previous version. Performs faster than divMod2 on smaller input sizes.
