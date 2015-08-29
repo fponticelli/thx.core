@@ -22,12 +22,10 @@ class Bigs {
   }
 
   public static function canAdd(a : Int, b : Int) {
-    if(a == 0 || b == 0) return true;
-    var v = a + b;
-    if(Ints.sign(a) * Ints.sign(b) != Ints.sign(v))
+    var c = a + b;
+    if (a > 0 && b > 0 && c < 0)
       return false;
-    if(a != v - b) return false;
-    return isPrecise(v);
+    return true;
   }
 
   public static function smallToArray(n : Int) : Array<Int> { // For performance reasons doesn't reference BASE, need to change this function if BASE changes
