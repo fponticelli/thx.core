@@ -5,8 +5,8 @@ using thx.Strings;
 class Bigs {
   inline public static var BASE : Int = 10000000; // 1e7
   inline public static var DOUBLE_BASE = 100000000000000.0; // 1e14
-  inline public static var LOG_BASE : Int = 7; // 1e7
-  public static var MAX_INT(default, null) : Int = #if js untyped __js__("9007199254740992") #else 1000000000 #end; // 2147483648
+  inline public static var LOG_BASE : Int = 7;
+  public static var MAX_INT(default, null) : Int = #if js untyped __js__("9007199254740992") #else 2147483647 #end;
   public static var MAX_INT_ARR(default, null) = smallToArray(MAX_INT);
   public static var LOG_MAX_INT(default, null) = Math.log(MAX_INT);
 
@@ -22,10 +22,10 @@ class Bigs {
   }
 
   public static function canAdd(a : Int, b : Int) {
-    var c = a + b;
-    if (a > 0 && b > 0 && c < 0)
+    var v = a + b;
+    if (a > 0 && b > 0 && v < 0)
       return false;
-    return true;
+    return isPrecise(v);
   }
 
   public static function smallToArray(n : Int) : Array<Int> {
