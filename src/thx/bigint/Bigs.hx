@@ -14,6 +14,13 @@ class Bigs {
   public static function isPrecise(value : Int)
     return -MAX_INT < value && value < MAX_INT;
 
+  public static function canMultiply(a : Int, b : Int) {
+    if(a == 0 || b == 0) return true;
+    var v = a * b;
+    if(a != v / b) return false;
+    return isPrecise(v);
+  }
+
   public static function smallToArray(n : Int) : Array<Int> { // For performance reasons doesn't reference BASE, need to change this function if BASE changes
     if(n < BASE)
       return [n];

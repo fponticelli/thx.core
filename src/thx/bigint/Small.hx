@@ -161,10 +161,13 @@ class Small implements BigIntImpl {
   }
 
   public function square() : BigIntImpl {
-    var sq = value * value;
-    if(Bigs.isPrecise(value))
-      return new Small(sq);
-    return new Big(Bigs.square(Bigs.smallToArray(Ints.abs(sq))), false);
+    #if (js || cs || java || cpp || neko)
+    if(Bigs.canMultiply(value, value))
+    #else
+    if(Bigs.isPrecise(value * value))
+    #end
+      return new Small(value * value);
+    return new Big(Bigs.square(Bigs.smallToArray(Ints.abs(value))), false);
   }
 
   public function isEven() : Bool
