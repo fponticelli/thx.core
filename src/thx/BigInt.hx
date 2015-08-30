@@ -13,8 +13,6 @@ https://github.com/peterolson/BigInteger.js
 // & and
 // | or
 // ^ xor
-// << shiftLeft
-// >> shiftRight
 // >>>
 // modPow
 // isDivisibleBy
