@@ -212,9 +212,9 @@ class Bigs {
         r : Array<Float> = createFloatArray(l),
         product : Float, carry, i, a_i : Float, b_j : Float;
     for(i in 0...a_l) {
-      a_i = a[i];
+      a_i = a[i] #if neko + 0.0 #end;
       for(j in 0...b_l) {
-        b_j = b[j];
+        b_j = b[j] #if neko + 0.0 #end;
         product = a_i * b_j + r[i + j];
         carry = Floats.ftrunc(product / BASE);
         r[i + j] = Floats.ftrunc(product - carry * BASE);
@@ -232,7 +232,7 @@ class Bigs {
         carry  : Float = 0.0,
         product : Float, i = 0,
         a_i : Float,
-        bf : Float = b;
+        bf : Float = b #if neko + 0.0 #end;
     while(i < l) {
       a_i = a[i];
       product = carry + a[i] * bf;
@@ -311,9 +311,9 @@ class Bigs {
         r = createFloatArray(l + l),
         product : Float, carry, i, a_i : Float, a_j : Float;
     for(i in 0...l) {
-      a_i = a[i];
+      a_i = a[i] #if neko + 0.0 #end;
       for(j in 0...l) {
-        a_j = a[j];
+        a_j = a[j] #if neko + 0.0 #end;
         product = a_i * a_j + r[i + j];
         carry = Floats.ftrunc(product / BASE);
         r[i + j] = Floats.ftrunc(product - carry * BASE);
@@ -329,19 +329,20 @@ class Bigs {
     var a_l = a.length,
         b_l = b.length,
         result = createFloatArray(b.length),
-        divisorMostSignificantDigit = b[b_l - 1],
+        divisorMostSignificantDigit : Float = b[b_l - 1] #if neko + 0.0 #end,
         // normalization
         lambda = Math.ceil(BASE / (2 * divisorMostSignificantDigit)),
         remainder : Array<Float> = multiplySmall(a, lambda).map(function(v) : Float return v),
         divisor = multiplySmall(b, lambda),
-        quotientDigit, shift, carry : Float, borrow : Float, i, l, q : Float;
-    if(remainder.length <= a_l) remainder.push(0);
+        quotientDigit : Float, shift, carry : Float, borrow : Float, i, l, q : Float;
+    if(remainder.length <= a_l)
+      remainder.push(0.0);
     divisor.push(0);
     divisorMostSignificantDigit = divisor[b_l - 1];
     shift = a_l - b_l;
     while(shift >= 0) {
-      quotientDigit = BASE - 1;
-      quotientDigit = Math.floor((remainder[shift + b_l] * BASE + remainder[shift + b_l - 1]) / divisorMostSignificantDigit);
+      quotientDigit = BASE - 1.0;
+      quotientDigit = Math.ffloor(((remainder[shift + b_l] #if neko + 0.0000000001 #end) * BASE + remainder[shift + b_l - 1]) / divisorMostSignificantDigit);
       carry = 0.0;
       borrow = 0.0;
       l = divisor.length;
@@ -350,12 +351,12 @@ class Bigs {
         q = Floats.ftrunc(carry / BASE);
         borrow += remainder[shift + i] - (carry - q * BASE);
         carry = q;
-        if(borrow < 0) {
+        if(borrow < 0.0) {
           remainder[shift + i] = borrow + BASE;
-          borrow = -1;
+          borrow = -1.0;
         } else {
           remainder[shift + i] = borrow;
-          borrow = 0;
+          borrow = 0.0;
         }
       }
       while(borrow != 0) {
