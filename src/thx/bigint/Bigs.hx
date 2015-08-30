@@ -26,7 +26,7 @@ class Bigs {
     var a = Math.abs(a);
     var b = Math.abs(b);
     var v = Std.int(Math.pow(a, b));
-    if(Math.pow(v, 1.0 / b) != a)
+    if(Std.int(Math.pow(v, 1.0 / b)) != a)
       return false;
     return isPrecise(v);
   }
