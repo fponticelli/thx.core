@@ -129,12 +129,11 @@ class Small implements BigIntImpl {
         Small.one;
     if(exp.sign)
       return Small.zero;
-    var b = (cast exp : Small).value,
-        res;
-    if(Bigs.isPrecise(res = Floats.trunc(Math.pow(value, b))))
-      return new Small(res);
     if(!exp.isSmall)
       throw new Error('The exponent $exp is too large.');
+    var b = (cast exp : Small).value;
+    if(Bigs.canPower(value, b))
+      return new Small(Std.int(Math.pow(value, b)));
     return new Big(Bigs.smallToArray(Ints.abs(value)), sign).pow(exp);
   }
 

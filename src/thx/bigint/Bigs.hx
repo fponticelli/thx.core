@@ -21,6 +21,14 @@ class Bigs {
     return isPrecise(v);
   }
 
+  public static function canPower(a : Int, b : Int) {
+    if(a == 0 || b == 0) return true;
+    var v = Math.pow(a, b);
+    if(Math.pow(v, 1 / b) != a)
+      return false;
+    return isPrecise(Std.int(v));
+  }
+
   public static function canAdd(a : Int, b : Int) {
     var v = a + b;
     if (a > 0 && b > 0 && v < 0)
