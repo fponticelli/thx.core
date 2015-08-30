@@ -20,9 +20,11 @@ class TestBigInt {
     Assert.isTrue(factorial(10) == tenFactorial);
     Assert.isTrue(factorial(100) == hundredFactorial);
 
+    var pow = (3 : BigInt).pow(10000);
+
     Assert.isTrue(
-      (3 : BigInt).pow(10000) == threeToTenThousand,
-      'expected ${(3 : BigInt)}.pow(10000) == $threeToTenThousand but got ${(3 : BigInt).pow(10000)}'
+      pow == threeToTenThousand,
+      'expected ${(3 : BigInt)}.pow(10000) == $threeToTenThousand but got $pow'
     );
   }
 

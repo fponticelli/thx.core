@@ -25,7 +25,12 @@ class Bigs {
     if(a == 0 || b == 0) return true;
     var a = Math.abs(a);
     var b = Math.abs(b);
-    var v = Std.int(Math.pow(a, b));
+    var v;
+    try {
+      v = Std.int(Math.pow(a, b));
+    } catch(e : Dynamic) {
+      return false; // for Python
+    }
     if(Std.int(Math.pow(v, 1.0 / b)) != a)
       return false;
     return isPrecise(v);
