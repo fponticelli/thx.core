@@ -10,7 +10,6 @@ class Bigs {
   public static var MAX_INT_ARR(default, null) = smallToArray(MAX_INT);
   public static var LOG_MAX_INT(default, null) = Math.log(MAX_INT);
 
-  // TODO excluded boundary values?
   public static function isPrecise(value : Int)
     return -MAX_INT < value && value < MAX_INT;
 
@@ -498,14 +497,6 @@ class Bigs {
         digits.push(new Small(charCode - 48));
       else if(97 <= charCode && charCode <= 122)
         digits.push(new Small(charCode - 87));
-      // TODO
-      /*
-      else if(charCode == "<".code) {
-        var start = i;
-        do { i++; } while(text.charCodeAt(i) != ">".code);
-        digits.push(parseValue(text.substring(start + 1, i)));
-      }
-      */
       else throw new Error('$text is not a valid string');
     }
     digits.reverse();
@@ -594,15 +585,6 @@ class Bigs {
     }
     result = arrayToSmall(result);
     return low.add(new Big(result, false, typeof result == "number"));
-  }
-
-  public static function stringify(digit) {
-    var v = digit.value;
-    if(typeof v == "number") v = [v];
-    if(v.length == 1 && v[0] <= 36) {
-        return "0123456789abcdefghijklmnopqrstuvwxyz".charAt(v[0]);
-    }
-    return "<" + v + ">";
   }
 */
 }

@@ -28,7 +28,6 @@ class Small implements BigIntImpl {
     #else
     if(Bigs.isPrecise(value + small.value))
     #end
-    //if(Bigs.isPrecise(value + small.value))
     {
       return new Small(value + small.value);
     } else {
@@ -70,14 +69,14 @@ class Small implements BigIntImpl {
 
   public function divModSmall(small : Small) : { quotient : BigIntImpl, remainder : BigIntImpl } {
     return {
-      quotient : new Small(Floats.trunc(value / small.value)),
+      quotient  : new Small(Floats.trunc(value / small.value)),
       remainder : new Small(#if python value - Std.int(value/small.value) * small.value  #else value % small.value #end)
     };
   }
 
   public function divModBig(big : Big) : { quotient : BigIntImpl, remainder : BigIntImpl } {
     return {
-      quotient : Small.zero,
+      quotient  : Small.zero,
       remainder : this
     };
   }
