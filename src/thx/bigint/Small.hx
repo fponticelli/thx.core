@@ -121,7 +121,6 @@ class Small implements BigIntImpl {
     return addSmall(Small.negativeOne);
 
   public function pow(exp : BigIntImpl) : BigIntImpl {
-    //if(!exp.isSmall) throw new Error('The exponent $exp is too large.');
     if(isZero())
       return exp.isZero() ? Small.one : this;
     if(isUnit())
@@ -134,6 +133,8 @@ class Small implements BigIntImpl {
         res;
     if(Bigs.isPrecise(res = Floats.trunc(Math.pow(value, b))))
       return new Small(res);
+    if(!exp.isSmall)
+      throw new Error('The exponent $exp is too large.');
     return new Big(Bigs.smallToArray(Ints.abs(value)), sign).pow(exp);
   }
 
