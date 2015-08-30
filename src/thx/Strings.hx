@@ -115,7 +115,7 @@ of `symbol`.
 'thx is a nice library'.ellipsis(8); // returns 'thx is …'
 ```
 **/
-  public static function ellipsis(s : String, maxlen = 20, symbol = "…") {
+  public static function ellipsis(s : String, ?maxlen = 20, ?symbol = "…") {
     var sl = Utf8.length(s),
         symboll = Utf8.length(symbol);
     if (sl > maxlen) {
