@@ -461,6 +461,8 @@ class Bigs {
       text = text.substring(1);
     }
     text = text.trimCharsLeft("0").toLowerCase();
+    if(text.length == 0)
+      text = "0";
 
     var e;
     if(base == 10 && (e = text.indexOf("e")) > 0) {
