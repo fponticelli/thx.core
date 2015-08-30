@@ -366,12 +366,12 @@ class TestBigInt {
     Assert.isTrue((0 : BigInt).pow("-0") == 1);
     Assert.isTrue(("-0" : BigInt).pow(0) == 1);
     Assert.isTrue(("-0" : BigInt).pow("-0") == 1);
-  };
+  }
 
   public function testPowerCarriesOverCorrectly() {
     Assert.isTrue(("16" : BigInt).pow("13") == "4503599627370496");
     Assert.isTrue(("123456789123456789" : BigInt).pow(10) == "822526267372365207989468699031914332476569003445489153619518989325083908083922133639704420166045905346960117046949453426283086050487204639652635846010822673782217799736601");
-    Assert.isTrue(("2" : BigInt).pow("63") == "9223372036854775808");
+    Assert.isTrue(("2" : BigInt).pow(63) == "9223372036854775808", 'expected 2.pow(63) == ${("9223372036854775808" : BigInt)} but got ${("2" : BigInt).pow(63)}');
     Assert.isTrue((100 : BigInt).pow(56) != 0);
   }
 
