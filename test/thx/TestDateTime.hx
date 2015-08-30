@@ -103,7 +103,7 @@ class TestDateTime {
   public function testNow() {
     var ref = DateHelper.now(),
         date = DateTime.now();
-    Assert.isTrue(date.nearEquals(ref, Time.fromMinutes(5)), 'expected $ref but got $date');
+    Assert.isTrue(date.nearEquals(ref, Time.fromMinutes(10)), 'expected $ref but got $date');
   }
 
   public function testSnapNext() {

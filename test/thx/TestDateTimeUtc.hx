@@ -115,7 +115,7 @@ class TestDateTimeUtc {
   public function testNow() {
     var ref = DateHelper.nowUtc(),
         date = DateTimeUtc.now();
-    Assert.isTrue(date.nearEquals(ref, Time.fromMinutes(5)), 'expected $ref but got $date');
+    Assert.isTrue(date.nearEquals(ref, Time.fromMinutes(10)), 'expected $ref but got $date');
   }
 
   public function testSnapNext() {
