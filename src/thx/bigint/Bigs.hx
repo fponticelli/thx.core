@@ -23,10 +23,12 @@ class Bigs {
 
   public static function canPower(a : Int, b : Int) {
     if(a == 0 || b == 0) return true;
-    var v = Math.pow(a, b);
-    if(Math.pow(v, 1 / b) != a)
+    var a = Math.abs(a);
+    var b = Math.abs(b);
+    var v = Std.int(Math.pow(a, b));
+    if(Math.pow(v, 1.0 / b) != a)
       return false;
-    return isPrecise(Std.int(v));
+    return isPrecise(v);
   }
 
   public static function canAdd(a : Int, b : Int) {
