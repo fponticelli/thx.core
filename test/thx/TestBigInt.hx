@@ -228,8 +228,8 @@ class TestBigInt {
     Assert.isTrue((124234233 : BigInt) % -2 == 1);
     Assert.isTrue((-124234233 : BigInt) % 2 == -1);
     Assert.isTrue((-124234233 : BigInt) % -2 == -1);
-    Assert.isTrue((2 : BigInt) % -1243233 == 2);
-    Assert.isTrue((-2 : BigInt) % -1243233 == -2);
+    Assert.isTrue((2 : BigInt) % -1243233 == 2, 'excpected ${(2 : BigInt)} % ${(-1243233 : BigInt)} == 2 but got ${(2 : BigInt) % -1243233}');
+    Assert.isTrue((-2 : BigInt) % -1243233 == -2, 'excpected ${(-2 : BigInt)} % ${(-1243233 : BigInt)} == -2 but got ${(-2 : BigInt) % -1243233}');
     Assert.isTrue(("786456456335437356436" : BigInt) % "-5423424653" == "2663036842", 'expected ${("786456456335437356436" : BigInt)} % ${("-5423424653" : BigInt)} == ${("2663036842" : BigInt)} but got ${("786456456335437356436" : BigInt) % "-5423424653"}');
     Assert.isTrue(("93453764643534523" : BigInt) % -2342 == 1119);
     Assert.isTrue((-32542543 : BigInt) % 100000000 == -32542543);

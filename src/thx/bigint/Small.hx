@@ -71,7 +71,7 @@ class Small implements BigIntImpl {
   public function divModSmall(small : Small) : { quotient : BigIntImpl, remainder : BigIntImpl } {
     return {
       quotient : new Small(Floats.trunc(value / small.value)),
-      remainder : new Small(value % small.value)
+      remainder : new Small(#if python value - Std.int(value/small.value) * small.value  #else value % small.value #end)
     };
   }
 
