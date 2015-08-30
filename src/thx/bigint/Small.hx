@@ -23,7 +23,7 @@ class Small implements BigIntImpl {
   }
 
   public function addSmall(small : Small) : BigIntImpl {
-    #if (cs || java || cpp || neko)
+    #if (cs || java || cpp || neko || flash)
     if(Bigs.canAdd(value, small.value))
     #else
     if(Bigs.isPrecise(value + small.value))
@@ -86,7 +86,7 @@ class Small implements BigIntImpl {
     return that.isSmall ? multiplySmall(cast that) : multiplyBig(cast that);
 
   public function multiplySmall(small : Small) : BigIntImpl {
-    #if (cs || java || cpp || neko)
+    #if (cs || java || cpp || neko || flash)
     if(Bigs.canMultiply(value, small.value))
     #else
     if(Bigs.isPrecise(value * small.value))
@@ -172,7 +172,7 @@ class Small implements BigIntImpl {
   }
 
   public function square() : BigIntImpl {
-    #if (cs || java || cpp || neko)
+    #if (cs || java || cpp || neko || flash)
     if(Bigs.canMultiply(value, value))
     #else
     if(Bigs.isPrecise(value * value))
