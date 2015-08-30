@@ -26,6 +26,24 @@ https://github.com/peterolson/BigInteger.js
 
 @:forward(sign)
 abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
+#if python
+  public static var zero(default, null) : BigInt = PyInt.zero;
+  public static var one(default, null) : BigInt = PyInt.one;
+  public static var negativeOne(default, null) : BigInt = PyInt.negativeOne;
+
+  @:from public static function fromInt(value : Int) : BigInt
+    return new PyInt(value);
+
+  // TODO
+  @:from inline public static function fromFloat(value : Float) : BigInt
+    return cast new PyInt(Math.round(value));
+
+  @:from public inline static function fromString(value : String) : BigInt
+    return fromFloat(Std.parseFloat(value));
+
+  public inline static function fromStringWithBase(value : String, base : Int) : BigInt
+    return fromFloat(Std.parseFloat(value));
+#else
   public static var zero(default, null) : BigInt = Small.zero;
   public static var one(default, null) : BigInt = Small.one;
   public static var negativeOne(default, null) : BigInt = Small.negativeOne;
@@ -42,7 +60,7 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
 
   public inline static function fromStringWithBase(value : String, base : Int) : BigInt
     return Bigs.parseBase(value, base);
-
+#end
   inline public function isZero() : Bool
     return this.isZero();
 
