@@ -12,6 +12,11 @@ class Decimals {
 
   // TODO
   public static function parse(value : String) {
-    return new DecimalImpl(Bigs.fromInt(0), 0);
+    var pdec = value.indexOf(".");
+    if(pdec < 0)
+      return new DecimalImpl(BigInt.fromString(value), 0);
+
+    var i = value.substring(0, pdec) + value.substring(pdec + 1);
+    return new DecimalImpl(Bigs.parseBase(i, 10), value.length - pdec - 1);
   }
 }

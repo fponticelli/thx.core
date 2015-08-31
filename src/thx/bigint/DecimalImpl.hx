@@ -1,5 +1,7 @@
 package thx.bigint;
 
+using thx.Strings;
+
 class DecimalImpl {
   public var value(default, null) : BigIntImpl;
   public var scale(default, null) : Int;
@@ -86,6 +88,16 @@ class DecimalImpl {
   public function toInt() : Int
     return 3;
 
-  public function toString()
-    return '';
+  public function toString() {
+    var sign = value.sign,
+        i = (sign ? value.negate() : value).toString(),
+        l = i.length;
+    if(scale == 0) {
+      return (sign ? "-" : "") + i;
+    } else if(i.length < scale) {
+      return (sign ? "-" : "") + "0." + i.lpad("0", scale);
+    } else {
+      return (sign ? "-" : "") + i.substring(0, l - scale) + "." + i.substring(l - scale);
+    }
+  }
 }
