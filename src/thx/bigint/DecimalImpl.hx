@@ -90,13 +90,13 @@ class DecimalImpl {
   public function compare(that : DecimalImpl) : Int {
     var lhs = this.matchScale(that),
         rhs = that.matchScale(this);
-    return lhs.compare(rhs);
+    return lhs.value.compare(rhs.value);
   }
 
   public function compareAbs(that : DecimalImpl) : Int {
     var lhs = this.matchScale(that),
         rhs = that.matchScale(this);
-    return lhs.compareAbs(rhs);
+    return lhs.value.compareAbs(rhs.value);
   }
 
   // TODO needs better implementation

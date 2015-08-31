@@ -6,6 +6,15 @@ import thx.Decimal;
 class TestDecimal {
   public function new() {}
 
+  public function testComparison() {
+    Assert.isTrue(("1" : Decimal) > "0.11111");
+    Assert.isTrue(("1" : Decimal) > -1);
+    Assert.isFalse(("1" : Decimal) > 1);
+    Assert.isTrue(("1" : Decimal) >= 1);
+    Assert.isTrue(("1" : Decimal) == 1);
+    Assert.isTrue(("1.01001" : Decimal) == "1.0100100");
+  }
+
   public function testString() {
     var tests = ["0", "0.00000789", "0.001", "0.123", "1.0", "1", "1.1", "123456789.0123456789", "123456789.012345678900000"],
         dec : Decimal;
