@@ -6,6 +6,12 @@ import thx.Decimal;
 class TestDecimal {
   public function new() {}
 
+  public function testAddition() {
+    Assert.isTrue(("123.456" : Decimal) + "76.544000" == "200");
+    Assert.isTrue(("123.456" : Decimal) + "0.004" == "123.46");
+    Assert.isTrue(("123.456" : Decimal) + "-0.456" == "123");
+  }
+
   public function testComparison() {
     Assert.isTrue(("1" : Decimal) > "0.11111");
     Assert.isTrue(("1" : Decimal) > -1);

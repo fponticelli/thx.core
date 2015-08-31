@@ -3,6 +3,9 @@ package thx.bigint;
 using thx.Strings;
 
 class DecimalImpl {
+  public static var zero(default, null) = Decimals.fromInt(0);
+  public static var one(default, null) = Decimals.fromInt(1);
+
   public var value(default, null) : BigIntImpl;
   public var scale(default, null) : Int;
 
