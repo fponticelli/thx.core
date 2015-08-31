@@ -12,11 +12,15 @@ class DecimalImpl {
   }
 
   public function add(that : DecimalImpl) : DecimalImpl {
-    return this;
+    var lhs = this.matchScale(that),
+        rhs = that.matchScale(this);
+    return new DecimalImpl(lhs.value.add(rhs.value), lhs.scale);
   }
 
   public function subtract(that : DecimalImpl) : DecimalImpl {
-    return this;
+    var lhs = this.matchScale(that),
+        rhs = that.matchScale(this);
+    return new DecimalImpl(lhs.value.subtract(rhs.value), lhs.scale);
   }
 
   public function divMod(that : DecimalImpl) : { quotient : DecimalImpl, remainder : DecimalImpl } {
@@ -29,23 +33,24 @@ class DecimalImpl {
   public function divide(that : DecimalImpl) : DecimalImpl
     return divMod(that).quotient;
 
-  public function multiply(that : DecimalImpl) : DecimalImpl
-    return this;
+  public function multiply(that : DecimalImpl) : DecimalImpl {
+    return new DecimalImpl(value.multiply(that.value), scale + that.scale);
+  }
 
   public function modulo(that : DecimalImpl) : DecimalImpl
     return divMod(that).remainder;
 
   public function abs() : DecimalImpl
-    return this;
+    return new DecimalImpl(value.abs(), scale);
 
   public function negate() : DecimalImpl
-    return this;
+    return new DecimalImpl(value.negate(), scale);
 
   public function next() : DecimalImpl
-    return this;
+    return add(one);
 
   public function prev() : DecimalImpl
-    return this;
+    return subtract(one);
 
   public function pow(exp : DecimalImpl) : DecimalImpl {
     return this;
@@ -64,31 +69,49 @@ class DecimalImpl {
   }
 
   public function square() : DecimalImpl {
-    return this;
+    return multiply(this);
   }
 
   public function isNegative() : Bool
-    return false;
+    return value.sign;
 
   public function isEven() : Bool
-    return false;
+    return value.isEven();
 
   public function isOdd() : Bool
-    return false;
+    return value.isOdd();
 
   public function isZero() : Bool
-    return false;
+    return value.isZero();
 
   public function isUnit() : Bool
     return false;
 
   public function compare(that : DecimalImpl) : Int {
-    return -2;
+    var lhs = this.matchScale(that),
+        rhs = that.matchScale(this);
+    return lhs.compare(rhs);
   }
 
   public function compareAbs(that : DecimalImpl) : Int {
-    return -2;
+    var lhs = this.matchScale(that),
+        rhs = that.matchScale(this);
+    return lhs.compareAbs(rhs);
   }
+
+  // TODO needs better implementation
+  public function trim() : DecimalImpl {
+    var s = toString();
+    if(s.indexOf(".") >= 0) {
+      s = s.trimCharsRight("0");
+      if(s.endsWith("."))
+        s += "0";
+      return Decimals.parse(s);
+    } else {
+      return this;
+    }
+  }
+
 
   public function toFloat() : Float
     return 0.003;
