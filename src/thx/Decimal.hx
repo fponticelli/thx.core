@@ -12,6 +12,7 @@ https://github.com/peterolson/Decimaleger.js
 // max/min
 // randBetween
 
+@:forward(scale)
 abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
   public static var zero(default, null) = fromInt(0);
 
@@ -64,7 +65,7 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
   inline public function isUnit() : Bool
     return this.isUnit();
 
-  inline public function scale(decimals : Int) : Decimal
+  inline public function scaleTo(decimals : Int) : Decimal
     return this.scaleTo(decimals);
 
   @:op(A>B) public function greater(that : Decimal) : Bool

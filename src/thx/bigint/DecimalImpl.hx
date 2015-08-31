@@ -92,9 +92,10 @@ class DecimalImpl {
     var sign = value.sign,
         i = (sign ? value.negate() : value).toString(),
         l = i.length;
+
     if(scale == 0) {
       return (sign ? "-" : "") + i;
-    } else if(i.length < scale) {
+    } else if(i.length <= scale) {
       return (sign ? "-" : "") + "0." + i.lpad("0", scale);
     } else {
       return (sign ? "-" : "") + i.substring(0, l - scale) + "." + i.substring(l - scale);

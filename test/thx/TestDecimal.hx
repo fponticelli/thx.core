@@ -7,7 +7,7 @@ class TestDecimal {
   public function new() {}
 
   public function testString() {
-    var tests = ["0", "0.00000789", "1.0", "1", "1.1", "123456789.0123456789", "123456789.012345678900000"],
+    var tests = ["0", "0.00000789", "0.001", "0.123", "1.0", "1", "1.1", "123456789.0123456789", "123456789.012345678900000"],
         dec : Decimal;
     for(test in tests) {
       dec = test;
