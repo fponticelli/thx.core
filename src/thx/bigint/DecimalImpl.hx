@@ -37,6 +37,7 @@ class DecimalImpl {
     return divMod(that).quotient;
 
   public function multiply(that : DecimalImpl) : DecimalImpl {
+    // TODO scale sum can overflow
     return new DecimalImpl(value.multiply(that.value), scale + that.scale);
   }
 

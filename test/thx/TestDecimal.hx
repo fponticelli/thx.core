@@ -3,6 +3,13 @@ package thx;
 import utest.Assert;
 import thx.Decimal;
 
+/*
+TODO
+1.23E+7
+-1.23E-12
+0E+7
+*/
+
 class TestDecimal {
   public function new() {}
 

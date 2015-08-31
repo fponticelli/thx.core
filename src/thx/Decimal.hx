@@ -11,6 +11,7 @@ https://github.com/peterolson/Decimaleger.js
 // -- ?
 // max/min
 // randBetween
+// support negative scale?
 
 @:forward(scale)
 abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
