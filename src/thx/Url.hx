@@ -72,6 +72,8 @@ equals.
   @:op(A / B) public function concatString(other : String) : Url {
     var copy = clone();
     if(pathName.isEmpty()) {
+      if(!other.startsWith("/"))
+        other = "/" + other;
       copy.pathName = other;
     } else {
       if(other.startsWith("/"))
