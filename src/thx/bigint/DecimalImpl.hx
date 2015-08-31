@@ -51,8 +51,16 @@ class DecimalImpl {
     return this;
   }
 
-  public function scaleTo(decimals : Int) : Decimal {
-    return this;
+  public function scaleTo(newscale : Int) : DecimalImpl {
+    if(newscale == scale)
+      return this;
+    if(newscale > scale) {
+      var mul = Small.ten.pow(Bigs.fromInt(newscale - scale));
+      return new DecimalImpl(value.multiply(mul), newscale);
+    } else {
+      var div = Small.ten.pow(Bigs.fromInt(scale - newscale));
+      return new DecimalImpl(value.divide(div), newscale);
+    }
   }
 
   public function square() : DecimalImpl {
@@ -100,5 +108,13 @@ class DecimalImpl {
     } else {
       return (sign ? "-" : "") + i.substring(0, l - scale) + "." + i.substring(l - scale);
     }
+  }
+
+  ///////////////////////
+
+  function matchScale(that : DecimalImpl) : DecimalImpl {
+    if(scale >= that.scale)
+      return this;
+    return scaleTo(that.scale);
   }
 }

@@ -4,6 +4,7 @@ class Small implements BigIntImpl {
   public static var zero(default, null) = new Small(0);
   public static var one(default, null) = new Small(1);
   public static var two(default, null) = new Small(2);
+  public static var ten(default, null) = new Small(10);
   public static var negativeOne(default, null) = new Small(-1);
 
   public var value(default, null) : Int;
