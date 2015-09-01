@@ -13,10 +13,32 @@ TODO
 class TestDecimal {
   public function new() {}
 
+  public function testInts() {
+    Assert.isTrue((123 : Decimal) == ("123" : Decimal));
+    Assert.isTrue((-123 : Decimal) == ("-123" : Decimal));
+    Assert.isTrue((1234567890 : Decimal) == ("1234567890" : Decimal));
+  }
+
+  public function testFloats() {
+    Assert.isTrue((123.456 : Decimal) == ("123.456" : Decimal));
+    Assert.isTrue((-123.456 : Decimal) == ("-123.456" : Decimal));
+    Assert.isTrue((0.1234567890123456 : Decimal) == ("0.1234567890123456" : Decimal));
+  }
+
+  public function testEquality() {
+    Assert.isTrue(("123.456" : Decimal) == ("123.4560000" : Decimal));
+  }
+
   public function testAddition() {
     Assert.isTrue(("123.456" : Decimal) + "76.544000" == "200");
     Assert.isTrue(("123.456" : Decimal) + "0.004" == "123.46");
     Assert.isTrue(("123.456" : Decimal) + "-0.456" == "123");
+  }
+
+  public function testSubtraction() {
+    Assert.isTrue(("123.456" : Decimal) - "76.544000" == "46.912000");
+    Assert.isTrue(("123.456" : Decimal) - "0.004" == "123.452");
+    Assert.isTrue(("123.456" : Decimal) - "-0.456" == "123.912");
   }
 
   public function testComparison() {

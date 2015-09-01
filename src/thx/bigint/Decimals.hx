@@ -7,8 +7,9 @@ class Decimals {
     return new DecimalImpl(Bigs.fromInt(value), 0);
 
   // TODO
-  public static function fromFloat(value : Float)
-    return new DecimalImpl(Bigs.fromFloat(value), 0);
+  public static function fromFloat(value : Float) {
+    return parse('$value');
+  }
 
   // TODO
   public static function parse(value : String) {

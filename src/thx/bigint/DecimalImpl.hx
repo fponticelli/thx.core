@@ -116,12 +116,14 @@ class DecimalImpl {
     }
   }
 
+  // TODO
+  public function toFloat() : Float {
+    return Std.parseFloat(toString());
+  }
 
-  public function toFloat() : Float
-    return 0.003;
-
+  // TODO
   public function toInt() : Int
-    return 3;
+    return Std.int(toFloat());
 
   public function toString() {
     var sign = value.sign,
