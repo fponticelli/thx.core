@@ -22,7 +22,7 @@ class TestDecimal {
   public function testFloats() {
     Assert.isTrue((123.456 : Decimal) == ("123.456" : Decimal));
     Assert.isTrue((-123.456 : Decimal) == ("-123.456" : Decimal));
-    Assert.isTrue((0.1234567890123456 : Decimal) == ("0.1234567890123456" : Decimal));
+    Assert.isTrue((0.123456789 : Decimal) == ("0.123456789" : Decimal));
   }
 
   public function testEquality() {
