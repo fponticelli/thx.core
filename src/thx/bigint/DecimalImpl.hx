@@ -56,8 +56,9 @@ class DecimalImpl {
   public function prev() : DecimalImpl
     return subtract(one);
 
-  public function pow(exp : DecimalImpl) : DecimalImpl {
-    return this;
+  public function pow(exp : Int) : DecimalImpl {
+    var i = value.pow(Bigs.fromInt(exp));
+    return new DecimalImpl(i, scale * exp);
   }
 
   public function scaleTo(newscale : Int) : DecimalImpl {
@@ -88,9 +89,6 @@ class DecimalImpl {
   public function isZero() : Bool
     return value.isZero();
 
-  public function isUnit() : Bool
-    return false;
-
   public function compare(that : DecimalImpl) : Int {
     var lhs = this.matchScale(that),
         rhs = that.matchScale(this);
@@ -105,15 +103,13 @@ class DecimalImpl {
 
   // TODO needs better implementation
   public function trim() : DecimalImpl {
-    var s = toString();
-    if(s.indexOf(".") >= 0) {
-      s = s.trimCharsRight("0");
-      if(s.endsWith("."))
-        s += "0";
-      return Decimals.parse(s);
-    } else {
+    if(scale == 0)
       return this;
-    }
+    var s = toString();
+    s = s.trimCharsRight("0");
+    if(s.endsWith("."))
+      s += "0";
+    return Decimals.parse(s);
   }
 
   // TODO

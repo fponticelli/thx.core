@@ -64,9 +64,6 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
   inline public function isPositive() : Bool
     return this.compare(zero) > 0;
 
-  inline public function isUnit() : Bool
-    return this.isUnit();
-
   inline public function scaleTo(decimals : Int) : Decimal
     return this.scaleTo(decimals);
 
