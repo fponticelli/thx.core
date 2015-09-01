@@ -49,7 +49,7 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
   inline public function square() : Decimal
     return this.square();
 
-  inline public function pow(exp : Decimal) : Decimal
+  inline public function pow(exp : Int) : Decimal
     return this.pow(exp);
 
   inline public function isEven() : Bool
