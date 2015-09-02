@@ -7,6 +7,7 @@ Heavily based on code realized by Peter Olson:
 https://github.com/peterolson/Decimaleger.js
 */
 // TODO
+// Int64
 // ++ ?
 // -- ?
 // max/min
@@ -16,7 +17,7 @@ https://github.com/peterolson/Decimaleger.js
 @:forward(scale)
 abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
   public static var zero(default, null) = DecimalImpl.zero;
-  public static var one(default, null) = DecimalImpl.one;
+  public static var one(default, null)  = DecimalImpl.one;
 
   @:from public static function fromInt(value : Int) : Decimal
     return Decimals.fromInt(value);

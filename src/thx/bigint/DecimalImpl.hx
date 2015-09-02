@@ -117,9 +117,10 @@ class DecimalImpl {
     return Std.parseFloat(toString());
   }
 
-  // TODO
-  public function toInt() : Int
-    return Std.int(toFloat());
+  public function toInt() : Int {
+    var i = value.divide(Small.ten.pow(Bigs.fromInt(scale)));
+    return i.toInt();
+  }
 
   public function toString() {
     var sign = value.sign,

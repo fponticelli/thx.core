@@ -7,6 +7,7 @@ Heavily based on code realized by Peter Olson:
 https://github.com/peterolson/BigInteger.js
 */
 // TODO
+// Int64
 // ++ ?
 // -- ?
 // ~ bitwise negation (not)
