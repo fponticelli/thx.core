@@ -27,9 +27,7 @@ class TestDecimal {
 
     Assert.isTrue( (0 : Decimal) % 3 == "0.0");
 
-    Assert.raises(function() {
-      (1 : Decimal) % 0;
-    }, thx.Error);
+    Assert.raises(function() (1 : Decimal) % 0);
   }
 
   public function testDivision() {
@@ -47,9 +45,7 @@ class TestDecimal {
 
     Assert.isTrue( (0 : Decimal) / 3 == "0.0");
 
-    Assert.raises(function() {
-      (1 : Decimal) / 0;
-    }, thx.Error);
+    Assert.raises(function() (1 : Decimal) / 0);
   }
 
   public function testMultiply() {
