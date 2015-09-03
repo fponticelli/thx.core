@@ -42,14 +42,24 @@ class DecimalImpl {
     return new DecimalImpl(qr.quotient, rhs.scale + scale).trim();
   }
 
+  public function moduloWithScale(that : DecimalImpl, scale : Int) : DecimalImpl {
+    if(that.isZero())
+      throw new Error('division by zero');
+    var lhs  = this.matchScale(that),
+        rhs  = that.matchScale(this),
+        pow  = Small.ten.pow(Bigs.fromInt(scale)),
+        qr   = lhs.value.multiply(pow).divMod(rhs.value.multiply(pow));
+    return new DecimalImpl(qr.remainder, lhs.scale + scale).trim();
+  }
 
   public function multiply(that : DecimalImpl) : DecimalImpl {
     // TODO scale sum can overflow
     return new DecimalImpl(value.multiply(that.value), scale + that.scale);
   }
 
-  public function modulo(that : DecimalImpl) : DecimalImpl
-    return divMod(that).remainder;
+  public function modulo(that : DecimalImpl) : DecimalImpl {
+    return moduloWithScale(that, divisionExtraScale);
+  }
 
   public function abs() : DecimalImpl
     return new DecimalImpl(value.abs(), scale);
