@@ -26,11 +26,6 @@ class DecimalImpl {
     return new DecimalImpl(lhs.value.subtract(rhs.value), lhs.scale);
   }
 
-  public function divMod(that : DecimalImpl) : { quotient : DecimalImpl, remainder : DecimalImpl } {
-    return {
-      quotient  : this,
-      remainder : this
-    };
   }
 
   public function divide(that : DecimalImpl) : DecimalImpl

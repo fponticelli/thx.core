@@ -112,9 +112,6 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
   inline public function modulo(that : Decimal) : Decimal
     return this.modulo(that);
 
-  inline public function divMod(that : Decimal) : { quotient : Decimal, remainder : Decimal }
-    return this.divMod(that);
-
   @:to inline public function toInt() : Int
     return this.toInt();
 
