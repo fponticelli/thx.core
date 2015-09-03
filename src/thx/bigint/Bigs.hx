@@ -481,7 +481,7 @@ class Bigs {
         exp -= text.length - decimalPlace;
         text = text.substring(0, decimalPlace) + text.substring(1 + decimalPlace);
       }
-      if(exp < 0) throw new Error("Cannot include negative exponent part for integers");
+      //if(exp < 0) throw new Error("Cannot include negative exponent part for integers");
 
       text = text.rpad("0", text.length + exp);
     }
