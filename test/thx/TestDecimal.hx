@@ -13,6 +13,49 @@ TODO
 class TestDecimal {
   public function new() {}
 
+  public function testModulo() {
+    Assert.isTrue((10 : Decimal) % 3 == 1);
+    Assert.isTrue((10.2 : Decimal) % 3 == 1.2);
+    Assert.isTrue(("12345678900000000" : Decimal) %  "0.0000000012345678" == "0.0000000009832122");
+    Assert.isTrue((16.80 : Decimal) % 4.10 == "0.4");
+    Assert.isTrue((10 : Decimal) % 3 == 1);
+    Assert.isTrue((10.2 : Decimal) % 3 == 1.2);
+
+    Assert.isTrue( (10 : Decimal) % -3 ==  1);
+    Assert.isTrue((-10 : Decimal) % -3 == -1);
+    Assert.isTrue((-10 : Decimal) %  3 == -1);
+
+    Assert.isTrue( (0 : Decimal) % 3 == "0.0");
+
+    Assert.raises(function() {
+      (1 : Decimal) % 0;
+    }, thx.Error);
+  }
+
+  public function testDivision() {
+    Assert.isTrue(("12345678900000000" : Decimal) /  "0.0000000012345678" == "10000000729000059778004901.79640194730495967900669367854888");
+    Assert.isTrue(("12345678901234567890.12346789" : Decimal) / 987654321.987654321 == "12499999874.843750381095711318195287");
+    Assert.isTrue(("12345678901234567890.12346789" : Decimal) / -987654321.987654321 == "-12499999874.843750381095711318195287");
+    Assert.isTrue(("-12345678901234567890.12346789" : Decimal) / -987654321.987654321 == "12499999874.843750381095711318195287");
+    Assert.isTrue(("-12345678901234567890.12346789" : Decimal) / 987654321.987654321 == "-12499999874.843750381095711318195287");
+    Assert.isTrue(("-12345678901234567890.12346789" : Decimal) / 1 == "-12345678901234567890.12346789");
+    Assert.isTrue(("-12345678901234567890.12346789" : Decimal) / ("-12345678901234567890.12346789" : Decimal) == 1);
+    Assert.isTrue((10 : Decimal) / 2 == 5);
+    Assert.isTrue((10 : Decimal) / 3 == "3.3333333333333333");
+    Assert.isTrue( (1 : Decimal) / 2 == 0.5);
+    Assert.isTrue( (1 : Decimal) / 3 == "0.3333333333333333");
+
+    Assert.isTrue( (0 : Decimal) / 3 == "0.0");
+
+    Assert.raises(function() {
+      (1 : Decimal) / 0;
+    }, thx.Error);
+  }
+
+  public function testMultiply() {
+    Assert.isTrue(("12345678900000000" : Decimal) *  "0.0000000012345678" == "15241577.63907942");
+  }
+
   public function testInts() {
     Assert.isTrue((123 : Decimal) == ("123" : Decimal));
     Assert.isTrue((-123 : Decimal) == ("-123" : Decimal));
