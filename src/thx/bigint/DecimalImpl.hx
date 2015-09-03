@@ -1,10 +1,13 @@
 package thx.bigint;
 
 using thx.Strings;
+import thx.Error;
 
 class DecimalImpl {
   public static var zero(default, null) = Decimals.fromInt(0);
   public static var one(default, null) = Decimals.fromInt(1);
+  // TODO is 16 too much?
+  public static var divisionExtraScale = 16;
 
   public var value(default, null) : BigIntImpl;
   public var scale(default, null) : Int;
@@ -26,10 +29,19 @@ class DecimalImpl {
     return new DecimalImpl(lhs.value.subtract(rhs.value), lhs.scale);
   }
 
+  public function divide(that : DecimalImpl) : DecimalImpl
+    return divideWithScale(that, divisionExtraScale);
+
+  public function divideWithScale(that : DecimalImpl, scale : Int) : DecimalImpl {
+    if(that.isZero())
+      throw new Error('division by zero');
+    var lhs  = this.matchScale(that),
+        rhs  = that.matchScale(this),
+        pow  = Small.ten.pow(Bigs.fromInt(rhs.scale + scale)),
+        qr   = lhs.value.multiply(pow).divMod(rhs.value);
+    return new DecimalImpl(qr.quotient, rhs.scale + scale).trim();
   }
 
-  public function divide(that : DecimalImpl) : DecimalImpl
-    return divMod(that).quotient;
 
   public function multiply(that : DecimalImpl) : DecimalImpl {
     // TODO scale sum can overflow
