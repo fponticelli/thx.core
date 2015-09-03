@@ -207,7 +207,6 @@ Assert.nearEquals(Math.PI, value);
 @param msg: An optional error message. If not passed a default one will be used
 @param pos: Code position where the Assert call has been executed. Don't fill it
 unless you know what you are doing.
-@todo test the approximation argument
 */
   #if no_asserts inline #end
   public static function nearEquals(expected : Float, value : Float, ?approx : Float, ?msg : String , ?pos : PosInfos) : Void {
@@ -280,7 +279,6 @@ Assert.raises(function() { throw "Error!"; }, String);
      of a different type than the one expected. If not passed a default one will be used
 @param pos: Code position where the Assert call has been executed. Don't fill it
 unless you know what you are doing.
-@todo test the optional type parameter
 */
   #if no_asserts inline #end
   public static function raises(method:Void -> Void, ?type : Dynamic, ?msgNotThrown : String , ?msgWrongType : String, ?pos : PosInfos) {
@@ -288,18 +286,18 @@ unless you know what you are doing.
     try {
       method();
       if (null == msgNotThrown) {
-        var name = Types.anyValueToString(type);
+        var name = null == type ? "Dynamic" : Types.anyValueToString(type);
         msgNotThrown = 'exception of type $name not raised';
       }
       fail(msgNotThrown, pos);
     } catch (ex : Dynamic) {
-      if (null == msgWrongType) {
-        var name = Types.anyValueToString(type);
-        msgWrongType = 'expected throw of type $name but it is $ex';
-      }
       if(null == type) {
         pass(pos);
       } else {
+        if (null == msgWrongType) {
+          var name = Types.anyValueToString(type);
+          msgWrongType = 'expected throw of type $name but it is $ex';
+        }
         isTrue(Std.is(ex, type), msgWrongType, pos);
       }
     }
