@@ -509,58 +509,45 @@ class Bigs {
     return isNegative ? val.negate() : val;
   }
 
-/*
-  public static function bitwise(x, y, fn) {
-    y = parseValue(y);
-    var xSign = x.isNegative(), ySign = y.isNegative();
+  public static function bitwise(x : BigIntImpl, y : BigIntImpl, fn : Int -> Int -> Int) {
+    var xSign = x.sign,
+        ySign = y.sign;
     var xRem = xSign ? x.not() : x,
         yRem = ySign ? y.not() : y;
-    var xBits = [], yBits = [];
-    var xStop = false, yStop = false;
+    var xBits = [],
+        yBits = [];
+    var xStop = false,
+        yStop = false;
     while(!xStop || !yStop) {
       if(xRem.isZero()) { // virtual sign extension for simulating two's complement
         xStop = true;
         xBits.push(xSign ? 1 : 0);
-      }
-      else if(xSign) xBits.push(xRem.isEven() ? 1 : 0); // two's complement for negative numbers
-      else xBits.push(xRem.isEven() ? 0 : 1);
+      } else if(xSign)
+        xBits.push(xRem.isEven() ? 1 : 0); // two's complement for negative numbers
+      else
+        xBits.push(xRem.isEven() ? 0 : 1);
 
       if(yRem.isZero()) {
         yStop = true;
         yBits.push(ySign ? 1 : 0);
-      }
-      else if(ySign) yBits.push(yRem.isEven() ? 1 : 0);
-      else yBits.push(yRem.isEven() ? 0 : 1);
+      } else if(ySign)
+        yBits.push(yRem.isEven() ? 1 : 0);
+      else
+        yBits.push(yRem.isEven() ? 0 : 1);
 
-      xRem = xRem.over(2);
-      yRem = yRem.over(2);
+      xRem = xRem.divide(Small.two);
+      yRem = yRem.divide(Small.two);
     }
     var result = [];
-    for(var i = 0; i < xBits.length; i++) result.push(fn(xBits[i], yBits[i]));
-    var sum = bigInt(result.pop()).negate().times(bigInt(2).pow(result.length));
-    while(result.length) {
-      sum = sum.add(bigInt(result.pop()).times(bigInt(2).pow(result.length)));
+    for(i in 0...xBits.length)
+      result.push(fn(xBits[i], yBits[i]));
+    var sum = Bigs.fromInt(result.pop()).negate().multiply(Small.two.pow(Bigs.fromInt(result.length)));
+    while(result.length > 0) {
+      sum = sum.add(Bigs.fromInt(result.pop()).multiply(Small.two.pow(Bigs.fromInt(result.length))));
     }
     return sum;
   }
 
-  function gcd(a, b) {
-    a = parseValue(a).abs();
-    b = parseValue(b).abs();
-    if(a.equals(b)) return a;
-    if(a.isZero()) return b;
-    if(b.isZero()) return a;
-    if(a.isEven()) {
-      if(b.isOdd()) {
-        return gcd(a.divide(2), b);
-      }
-      return gcd(a.divide(2), b.divide(2)).multiply(2);
-    }
-    if(b.isEven()) {
-      return gcd(a, b.divide(2));
-    }
-    if(a.greater(b)) {
-      return gcd(a.subtract(b).divide(2), b);
     }
     return gcd(b.subtract(a).divide(2), a);
   }
