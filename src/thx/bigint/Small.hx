@@ -18,6 +18,10 @@ class Small implements BigIntImpl {
   }
 
   public function add(that : BigIntImpl) : BigIntImpl {
+    if(this.isZero())
+      return that;
+    if(that.isZero())
+      return this;
     if(sign != that.sign)
       return subtract(that.negate());
     return that.isSmall ? addSmall(cast that) : addBig(cast that);
@@ -47,6 +51,10 @@ class Small implements BigIntImpl {
     );
 
   public function subtract(that : BigIntImpl) : BigIntImpl {
+    if(this.isZero())
+      return that.negate();
+    if(that.isZero())
+      return this;
     if(sign != that.sign)
       return add(that.negate());
     return that.isSmall ? subtractSmall(cast that) : subtractBig(cast that);
