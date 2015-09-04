@@ -81,6 +81,40 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
     return modulo(that).isZero();
   }
 
+  public function isPrime() : Bool {
+    var n = abs(),
+        nPrev = n.prev();
+    if(n.isUnit())
+      return false;
+    if(n.equals(2) || n.equals(3) || n.equals(5))
+      return true;
+    if(n.isEven() || n.isDivisibleBy(3) || n.isDivisibleBy(5))
+      return false;
+    if(n.less(25))
+      return true;
+    var a = [2, 3, 5, 7, 11, 13, 17, 19],
+        b = nPrev,
+        d, t, i, x;
+    while(b.isEven())
+      b = b.divide(2);
+    for(i in 0...a.length) {
+      x = (a[i] : BigInt).modPow(b, n);
+      if(x.equals(one) || x.equals(nPrev))
+        continue;
+      t = true;
+      d = b;
+      while(t && d.less(nPrev)) {
+        x = x.square().modulo(n);
+        if(x.equals(nPrev))
+          t = false;
+        d = d.multiply(2);
+      }
+      if(t)
+        return false;
+    }
+    return false;
+  }
+
   public function modPow(exp : BigInt, mod : BigInt) : BigInt {
     if (mod.isZero())
       throw new Error("Cannot take modPow with modulus 0");
