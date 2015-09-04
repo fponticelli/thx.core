@@ -1,7 +1,7 @@
 package thx.macro;
 
 #if (neko || macro)
-import thx.Arrays;
+using thx.Arrays;
 import haxe.macro.TypeTools;
 import haxe.macro.Type.ClassType;
 /**
@@ -12,12 +12,60 @@ class MacroClassTypes {
 It returns an array of types in string format representing the inheritance chain of the
 passed `ClassType`.
 **/
-  public static function inheritance(cls : haxe.macro.Type.ClassType) : Array<String> {
-    var types = [cls.pack.concat([cls.name]).join(".")],
-      parent = null == cls.superClass ? null : inheritance(cls.superClass.t.get());
+  public static function inheritance(cls : ClassType) : Array<ClassType> {
+    var types = [cls],
+        parent = null == cls.superClass ? null : inheritance(cls.superClass.t.get());
     if(null != parent)
       types = types.concat(parent);
     return types;
+  }
+
+  public static function inheritanceAsStrings(cls : ClassType) : Array<String> {
+    return inheritance(cls).map(function(c) return toString(c));
+  }
+
+  public static function interfaces(cls : ClassType) : Array<ClassType> {
+    var types = [],
+        current = cls;
+    while(null != current) {
+      types = types.concat(current.interfaces.map(function(int) {
+        return int.t.get();
+      }));
+      current = null == current.superClass ? null : current.superClass.t.get();
+    }
+    return types;
+  }
+
+  public static function interfacesAsStrings(cls : ClassType) : Array<String> {
+    return interfaces(cls).map(function(c) return toString(c));
+  }
+
+  public static function classExtends(cls : ClassType, superCls : ClassType) : Bool {
+    var match = toString(superCls),
+        types = inheritanceAsStrings(cls);
+    return types.contains(match);
+  }
+
+  public static function classImplements(cls : ClassType, interf : ClassType) : Bool {
+    var match = toString(interf),
+        types = interfacesAsStrings(cls);
+    return types.contains(match);
+  }
+
+  public static function resolveClass(fullname : String) : ClassType {
+    var t = haxe.macro.Context.getType(fullname);
+    return switch t {
+      case TInst(ref, _): ref.get();
+      case _: haxe.macro.Context.error('$fullname is not a class or interface type: $t', haxe.macro.Context.currentPos());
+    };
+  }
+
+  public static function toString(cls : ClassType) : String {
+    return parts(cls).join(".");
+  }
+
+  public static function parts(cls : ClassType) : Array<String> {
+    return cls.pack.concat([cls.name]);
   }
 
 /**
