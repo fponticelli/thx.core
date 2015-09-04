@@ -9,6 +9,7 @@ interface BigIntImpl {
   function divide(that : BigIntImpl) : BigIntImpl;
   function multiply(that : BigIntImpl) : BigIntImpl;
   function modulo(that : BigIntImpl) : BigIntImpl;
+  function random() : BigIntImpl;
   function negate() : BigIntImpl;
   function next() : BigIntImpl;
   function prev() : BigIntImpl;

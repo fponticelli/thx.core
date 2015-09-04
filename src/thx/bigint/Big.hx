@@ -128,6 +128,27 @@ class Big implements BigIntImpl {
   public function modulo(that : BigIntImpl) : BigIntImpl
     return divMod(that).remainder;
 
+  public function random() : BigIntImpl {
+    var length = value.length - 1,
+        result = [],
+        restricted = true,
+        i = length,
+        top, digit;
+    while(i >= 0) {
+      top = restricted ? value[i] : Bigs.BASE;
+      digit = Floats.trunc(Math.random() * top);
+      result.unshift(digit);
+      if(digit < top)
+        restricted = false;
+      i--;
+    }
+    var v = Bigs.arrayToSmall(result);
+    if(null != v)
+      return new Small(v);
+    else
+      return new Big(result, false);
+  }
+
   public function abs() : BigIntImpl
     return new Big(value, false);
 

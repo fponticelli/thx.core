@@ -116,6 +116,9 @@ class Small implements BigIntImpl {
   public function modulo(that : BigIntImpl) : BigIntImpl
     return divMod(that).remainder;
 
+  public function random() : BigIntImpl
+    return Bigs.fromInt(Std.int(Math.random() * value));
+
   public function abs() : BigIntImpl
     return new Small(Ints.abs(value));
 
