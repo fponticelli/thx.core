@@ -71,7 +71,7 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   inline public function isUnit() : Bool
     return this.isUnit();
 
-  public function isDivisbleBy(that : BigInt) {
+  public function isDivisibleBy(that : BigInt) {
     if(that.isZero())
       return false;
     if(that.isUnit())
