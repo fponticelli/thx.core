@@ -22,6 +22,10 @@ interface BigIntImpl {
   function isZero() : Bool;
   function compare(that : BigIntImpl) : Int;
   function compareAbs(that : BigIntImpl) : Int;
+  function not() : BigIntImpl;
+  function and(that : BigIntImpl) : BigIntImpl;
+  function or(that : BigIntImpl) : BigIntImpl;
+  function xor(that : BigIntImpl) : BigIntImpl;
   function toFloat() : Float;
   function toInt() : Int;
   function toString() : String;

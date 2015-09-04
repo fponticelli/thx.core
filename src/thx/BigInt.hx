@@ -8,16 +8,10 @@ https://github.com/peterolson/BigInteger.js
 */
 // TODO
 // Int64
-// ~ bitwise negation (not)
-// & and
-// | or
-// ^ xor
 // >>>
 // modPow
 // isDivisibleBy
 // isPrime
-// gcd
-// lcm
 // randBetween
 
 @:forward(sign)
@@ -184,6 +178,22 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   @:op(A >> B)
   inline public function shiftRight(that : Int) : BigInt
     return this.shiftRight(that);
+
+  @:op(~A)
+  inline public function not() : BigInt
+    return this.not();
+
+  @:op(A & B)
+  inline public function and(that : BigInt) : BigInt
+    return this.and(that);
+
+  @:op(A | B)
+  inline public function or(that : BigInt) : BigInt
+    return this.or(that);
+
+  @:op(A ^ B)
+  inline public function xor(that : BigInt) : BigInt
+    return this.xor(that);
 
   inline public function divMod(that : BigInt) : { quotient : BigInt, remainder : BigInt }
     return this.divMod(that);

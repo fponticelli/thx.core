@@ -613,6 +613,20 @@ class TestBigInt {
     Assert.isTrue(("-1" : BigInt).shiftRight(25) == -1);
   }
 
+  public function testBitwiseOperations() {
+    Assert.isTrue(("435783453" : BigInt) & "902345074" == "298352912");
+    Assert.isTrue(("435783453" : BigInt) | "902345074" == "1039775615");
+    Assert.isTrue(("435783453" : BigInt) ^ "902345074" == "741422703");
+    Assert.isTrue(~("94981987261387596" : BigInt) == "-94981987261387597");
+    Assert.isTrue(("-6931047708307681506" : BigInt) ^ "25214903917" == "-6931047723896018573");
+    Assert.isTrue(("-6931047723896018573" : BigInt) & "281474976710655" == "273577603885427");
+    Assert.isTrue(("-65" : BigInt) ^ "-42" == "105");
+    Assert.isTrue(("6" : BigInt) & "-3" == "4");
+    Assert.isTrue(~("0" : BigInt) == "-1");
+    Assert.isTrue(("13" : BigInt) | -8 == "-3");
+    Assert.isTrue(("12" : BigInt) ^ -5 == "-9");
+  }
+
   public function testIsEvenAndIsOdd() {
     Assert.isTrue((0 : BigInt).isEven());
     Assert.isFalse((0 : BigInt).isOdd());

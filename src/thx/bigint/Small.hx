@@ -226,6 +226,18 @@ class Small implements BigIntImpl {
   public function compareAbsBig(big : Big) : Int
     return Bigs.compareAbs(Bigs.smallToArray(value), big.value);
 
+  public function not() : BigIntImpl
+    return negate().prev();
+
+  public function and(that : BigIntImpl) : BigIntImpl
+    return Bigs.bitwise(this, that, function(a : Int, b : Int) return a & b);
+
+  public function or(that : BigIntImpl) : BigIntImpl
+    return Bigs.bitwise(this, that, function(a : Int, b : Int) return a | b);
+
+  public function xor(that : BigIntImpl) : BigIntImpl
+    return Bigs.bitwise(this, that, function(a : Int, b : Int) return a ^ b);
+
   public function toFloat() : Float
     return value;
 
