@@ -81,6 +81,32 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
     return modulo(that).isZero();
   }
 
+  public function modPow(exp : BigInt, mod : BigInt) : BigInt {
+    if (mod.isZero())
+      throw new Error("Cannot take modPow with modulus 0");
+
+    var r : BigIntImpl = Small.one,
+        base = modulo(mod);
+
+    if(exp.isOdd())
+       r = base;
+
+    if (base.isZero())
+      return Small.zero;
+
+    while (exp.greater(Small.one)) {
+      exp = exp.divide(2);
+      base = base.square().modulo(mod);
+      if (exp.isOdd())
+        r = r.multiply(base).modulo(mod);
+    }
+
+    if(r.sign)
+      r = r.add(mod);
+
+    return r;
+  }
+
   inline public function max(that : BigInt) : BigInt
     return greater(that) ? this : that;
 
