@@ -547,31 +547,4 @@ class Bigs {
     }
     return sum;
   }
-
-    }
-    return gcd(b.subtract(a).divide(2), a);
-  }
-  function lcm(a, b) {
-    a = parseValue(a).abs();
-    b = parseValue(b).abs();
-    return a.multiply(b).divide(gcd(a, b));
-  }
-  function randBetween(a, b) {
-    a = parseValue(a);
-    b = parseValue(b);
-    var low = min(a, b), high = max(a, b);
-    var range = high.subtract(low);
-    if(range.isSmall) return low.add(Math.random() * range);
-    var length = range.value.length - 1;
-    var result = [], restricted = true;
-    for(var i = length; i >= 0; i--) {
-      var top = restricted ? range.value[i] : BASE;
-      var digit = Floats.trunc(Math.random() * top);
-      result.unshift(digit);
-      if(digit < top) restricted = false;
-    }
-    result = arrayToSmall(result);
-    return low.add(new Big(result, false, typeof result == "number"));
-  }
-*/
 }
