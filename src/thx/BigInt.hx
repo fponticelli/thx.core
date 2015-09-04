@@ -8,8 +8,6 @@ https://github.com/peterolson/BigInteger.js
 */
 // TODO
 // Int64
-// ++ ?
-// -- ?
 // ~ bitwise negation (not)
 // & and
 // | or
@@ -112,6 +110,28 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   @:op(A-B)
   inline public function subtract(that : BigInt) : BigInt
     return this.subtract(that);
+
+  @:op(++A)
+  inline public function preIncrement() : BigInt
+    return this = add(Small.one);
+
+  @:op(A++)
+  inline public function postIncrement() : BigInt {
+    var v = this;
+    this = add(Small.one);
+    return v;
+  }
+
+  @:op(--A)
+  inline public function preDecrement() : BigInt
+    return this = subtract(Small.one);
+
+  @:op(A--)
+  inline public function postDecrement() : BigInt {
+    var v = this;
+    this = subtract(Small.one);
+    return v;
+  }
 
   @:op(-A)
   inline public function negate() : BigInt

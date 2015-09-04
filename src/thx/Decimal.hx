@@ -2,14 +2,8 @@ package thx;
 
 import thx.bigint.*;
 
-/**
-Heavily based on code realized by Peter Olson:
-https://github.com/peterolson/Decimaleger.js
-*/
 // TODO
 // Int64
-// ++ ?
-// -- ?
 // randBetween
 // support negative scale?
 
@@ -104,6 +98,28 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
   @:op(-A)
   inline public function negate() : Decimal
     return this.negate();
+
+  @:op(++A)
+  inline public function preIncrement() : Decimal
+    return this = add(Decimal.one);
+
+  @:op(A++)
+  inline public function postIncrement() : Decimal {
+    var v = this;
+    this = add(Decimal.one);
+    return v;
+  }
+
+  @:op(--A)
+  inline public function preDecrement() : Decimal
+    return this = subtract(Decimal.one);
+
+  @:op(A--)
+  inline public function postDecrement() : Decimal {
+    var v = this;
+    this = subtract(Decimal.one);
+    return v;
+  }
 
   @:op(A*B) @:commutative
   inline public function multiply(that : Decimal) : Decimal

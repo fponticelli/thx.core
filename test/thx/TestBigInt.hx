@@ -6,6 +6,21 @@ import thx.BigInt;
 class TestBigInt {
   public function new() {}
 
+  public function testIncrements() {
+    Assert.isTrue(BigInt.zero.isZero());
+    var a = BigInt.zero,
+        b = ++a,
+        c = a++,
+        d = --a,
+        e = a--;
+    Assert.isTrue(BigInt.zero.isZero());
+    Assert.isTrue(b == 1);
+    Assert.isTrue(c == 1);
+    Assert.isTrue(d == 1);
+    Assert.isTrue(e == 1);
+    Assert.isTrue(a == 0);
+  }
+
   public function testCanHandleLargeNumbers() {
     var tenFactorial : BigInt = "3628800",
         hundredFactorial : BigInt = "93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000",
