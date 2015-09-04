@@ -18,7 +18,6 @@ https://github.com/peterolson/BigInteger.js
 // modPow
 // isDivisibleBy
 // isPrime
-// max/min
 // gcd
 // lcm
 // randBetween
@@ -32,7 +31,6 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   @:from public static function fromInt(value : Int) : BigInt
     return Bigs.fromInt(value);
 
-  // TODO
   @:from inline public static function fromFloat(value : Float) : BigInt
     return Bigs.fromFloat(value);
 
@@ -81,6 +79,12 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   inline public function isUnit() : Bool
     return this.isUnit();
 
+  inline public function max(that : BigInt) : BigInt
+    return greater(that) ? this : that;
+
+  inline public function min(that : BigInt) : BigInt
+    return less(that) ? this : that;
+
   @:op(A>B) public function greater(that : BigInt) : Bool
     return this.compare(that) > 0;
 
@@ -105,14 +109,6 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   inline public function add(that : BigInt) : BigInt
     return this.add(that);
 
-  @:op(A << B)
-  inline public function shiftLeft(that : Int) : BigInt
-    return this.shiftLeft(that);
-
-  @:op(A >> B)
-  inline public function shiftRight(that : Int) : BigInt
-    return this.shiftRight(that);
-
   @:op(A-B)
   inline public function subtract(that : BigInt) : BigInt
     return this.subtract(that);
@@ -132,6 +128,14 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   @:op(A%B)
   inline public function modulo(that : BigInt) : BigInt
     return this.modulo(that);
+
+  @:op(A << B)
+  inline public function shiftLeft(that : Int) : BigInt
+    return this.shiftLeft(that);
+
+  @:op(A >> B)
+  inline public function shiftRight(that : Int) : BigInt
+    return this.shiftRight(that);
 
   inline public function divMod(that : BigInt) : { quotient : BigInt, remainder : BigInt }
     return this.divMod(that);

@@ -10,7 +10,6 @@ https://github.com/peterolson/Decimaleger.js
 // Int64
 // ++ ?
 // -- ?
-// max/min
 // randBetween
 // support negative scale?
 
@@ -64,6 +63,12 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
 
   inline public function isPositive() : Bool
     return this.compare(zero) > 0;
+
+  inline public function max(that : Decimal) : Decimal
+    return greater(that) ? this : that;
+
+  inline public function min(that : Decimal) : Decimal
+    return less(that) ? this : that;
 
   inline public function scaleTo(decimals : Int) : Decimal
     return this.scaleTo(decimals);
