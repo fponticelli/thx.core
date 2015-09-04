@@ -83,6 +83,34 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   inline public function min(that : BigInt) : BigInt
     return less(that) ? this : that;
 
+  public function gcd(that : BigInt) : BigInt {
+    var a = abs(),
+        b = that.abs();
+    if(a.equals(b) || a.isZero())
+      return b;
+    if(b.isZero())
+      return a;
+    if(a.isEven()) {
+      if(b.isOdd()) {
+        return a.divide(Small.two).gcd(b);
+      }
+      return a.divide(Small.two).gcd(b.divide(Small.two)).multiply(Small.two);
+    }
+    if(b.isEven()) {
+      return a.gcd(b.divide(Small.two));
+    }
+    if(a.greater(b)) {
+      return a.subtract(b).divide(Small.two).gcd(b);
+    }
+    return b.subtract(a).divide(Small.two).gcd(a);
+  }
+
+  public function lcm(that : BigInt) : BigInt {
+    var a = abs(),
+        b = that.abs();
+    return a.multiply(b).divide(a.gcd(b));
+  }
+
   @:op(A>B) public function greater(that : BigInt) : Bool
     return this.compare(that) > 0;
 

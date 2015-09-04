@@ -6,6 +6,14 @@ import thx.BigInt;
 class TestBigInt {
   public function new() {}
 
+  public function testLcmAndGcd() {
+    Assert.isTrue((21 : BigInt).lcm(6) == 42);
+    Assert.isTrue((42 : BigInt).gcd(56) == 14);
+    Assert.isTrue((0 : BigInt).gcd(56) == 56);
+    Assert.isTrue((42 : BigInt).gcd(0) == 42);
+    Assert.isTrue((17 : BigInt).gcd(103) == 1);
+  }
+
   public function testIncrements() {
     Assert.isTrue(BigInt.zero.isZero());
     var a = BigInt.zero,
