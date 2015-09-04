@@ -13,6 +13,17 @@ TODO
 class TestDecimal {
   public function new() {}
 
+  var divisionSize : Int;
+
+  public function setup() {
+    this.divisionSize = Decimal.divisionScale;
+    Decimal.divisionScale = 16;
+  }
+
+  public function teardown() {
+    Decimal.divisionScale = this.divisionSize;
+  }
+
   public function testModulo() {
     Assert.isTrue((10 : Decimal) % 3 == 1);
     Assert.isTrue((10.2 : Decimal) % 3 == 1.2);

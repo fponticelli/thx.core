@@ -6,9 +6,11 @@ import thx.bigint.*;
 // Int64
 // randBetween
 // support negative scale?
+// support 10e+5
 
 @:forward(scale)
 abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
+  public static var divisionScale(get, set) : Int;
   public static var zero(default, null) = DecimalImpl.zero;
   public static var one(default, null)  = DecimalImpl.one;
 
@@ -143,4 +145,10 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
 
   @:to inline public function toString() : String
     return this.toString();
+
+  inline static function get_divisionScale()
+    return Decimals.divisionExtraScale;
+
+  inline static function set_divisionScale(v : Int)
+    return Decimals.divisionExtraScale = v;
 }

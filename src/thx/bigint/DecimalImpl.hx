@@ -6,8 +6,6 @@ import thx.Error;
 class DecimalImpl {
   public static var zero(default, null) = Decimals.fromInt(0);
   public static var one(default, null) = Decimals.fromInt(1);
-  // TODO is 16 too much?
-  public static var divisionExtraScale = 16;
 
   public var value(default, null) : BigIntImpl;
   public var scale(default, null) : Int;
@@ -30,7 +28,7 @@ class DecimalImpl {
   }
 
   public function divide(that : DecimalImpl) : DecimalImpl
-    return divideWithScale(that, divisionExtraScale);
+    return divideWithScale(that, Decimals.divisionExtraScale);
 
   public function divideWithScale(that : DecimalImpl, scale : Int) : DecimalImpl {
     if(that.isZero())
@@ -58,7 +56,7 @@ class DecimalImpl {
   }
 
   public function modulo(that : DecimalImpl) : DecimalImpl {
-    return moduloWithScale(that, divisionExtraScale);
+    return moduloWithScale(that, Decimals.divisionExtraScale);
   }
 
   public function abs() : DecimalImpl
