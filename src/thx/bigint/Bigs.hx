@@ -541,9 +541,14 @@ class Bigs {
     var result = [];
     for(i in 0...xBits.length)
       result.push(fn(xBits[i], yBits[i]));
-    var sum = Bigs.fromInt(result.pop()).negate().multiply(Small.two.pow(Bigs.fromInt(result.length)));
+
+    var a = Bigs.fromInt(result.pop()),
+        p = Small.two.pow(Bigs.fromInt(result.length)),
+        sum = a.negate().multiply(p);
     while(result.length > 0) {
-      sum = sum.add(Bigs.fromInt(result.pop()).multiply(Small.two.pow(Bigs.fromInt(result.length))));
+      a = Bigs.fromInt(result.pop());
+      p = Small.two.pow(Bigs.fromInt(result.length));
+      sum = sum.add(a.multiply(p));
     }
     return sum;
   }

@@ -614,7 +614,7 @@ class TestBigInt {
   }
 
   public function testBitwiseOperations() {
-    Assert.isTrue(("435783453" : BigInt) & "902345074" == "298352912");
+    Assert.isTrue(("435783453" : BigInt) & "902345074" == "298352912", 'expected ${("435783453" : BigInt) & "902345074"} to be 298352912');
     Assert.isTrue(("435783453" : BigInt) | "902345074" == "1039775615");
     Assert.isTrue(("435783453" : BigInt) ^ "902345074" == "741422703");
     Assert.isTrue(~("94981987261387596" : BigInt) == "-94981987261387597");
