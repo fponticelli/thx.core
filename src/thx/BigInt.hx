@@ -10,7 +10,6 @@ https://github.com/peterolson/BigInteger.js
 // Int64
 // >>>
 // modPow
-// isDivisibleBy
 // isPrime
 // randBetween
 
@@ -18,6 +17,7 @@ https://github.com/peterolson/BigInteger.js
 abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   public static var zero(default, null) : BigInt = Small.zero;
   public static var one(default, null) : BigInt = Small.one;
+  public static var two(default, null) : BigInt = Small.two;
   public static var negativeOne(default, null) : BigInt = Small.negativeOne;
 
   @:from public static function fromInt(value : Int) : BigInt
@@ -70,6 +70,16 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
 
   inline public function isUnit() : Bool
     return this.isUnit();
+
+  public function isDivisbleBy(that : BigInt) {
+    if(that.isZero())
+      return false;
+    if(that.isUnit())
+      return true;
+    if(that.equals(two))
+      return isEven();
+    return modulo(that).isZero();
+  }
 
   inline public function max(that : BigInt) : BigInt
     return greater(that) ? this : that;
