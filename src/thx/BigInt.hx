@@ -32,6 +32,13 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   public inline static function fromStringWithBase(value : String, base : Int) : BigInt
     return Bigs.parseBase(value, base);
 
+  public static function randomBetween(a : BigInt, b : BigInt) {
+    var low  = a.min(b),
+        high = a.max(b),
+        range : BigIntImpl = high.subtract(low);
+    return low.add(range.random());
+  }
+
   inline public function isZero() : Bool
     return this.isZero();
 
