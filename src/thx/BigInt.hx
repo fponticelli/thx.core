@@ -9,9 +9,6 @@ https://github.com/peterolson/BigInteger.js
 // TODO
 // Int64
 // >>>
-// modPow
-// isPrime
-// randBetween
 
 @:forward(sign)
 abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
