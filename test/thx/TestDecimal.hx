@@ -3,13 +3,6 @@ package thx;
 import utest.Assert;
 import thx.Decimal;
 
-/*
-TODO
-1.23E+7
--1.23E-12
-0E+7
-*/
-
 class TestDecimal {
   public function new() {}
 
@@ -22,6 +15,14 @@ class TestDecimal {
 
   public function teardown() {
     Decimal.divisionScale = this.divisionSize;
+  }
+
+  public function testStringExp() {
+    Assert.isTrue(("1.12345e-10" : Decimal) == "0.000000000112345", 'expected ${("0.000000000112345" : Decimal)} but got ${("1.12345e-10" : Decimal)}');
+    Assert.isTrue(("1.12345e+10" : Decimal) == "11234500000", 'expected ${("11234500000" : Decimal)} but got ${("1.12345e+10" : Decimal)}');
+    Assert.isTrue(("-1.12345e-10" : Decimal) == "-0.000000000112345", 'expected ${("-0.000000000112345" : Decimal)} but got ${("-1.12345e-10" : Decimal)}');
+    Assert.isTrue(("-1.12345e+10" : Decimal) == "-11234500000", 'expected ${("-11234500000" : Decimal)} but got ${("-1.12345e+10" : Decimal)}');
+    Assert.isTrue(("0E7" : Decimal) == "0", 'expected ${("0" : Decimal)} but got ${("0E7" : Decimal)}');
   }
 
   public function testModulo() {
