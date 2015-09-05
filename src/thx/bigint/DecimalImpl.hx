@@ -40,21 +40,23 @@ class DecimalImpl {
   public function divideWithScale(that : DecimalImpl, scale : Int) : DecimalImpl {
     if(that.isZero())
       throw new Error('division by zero');
-    var lhs  = this.matchScale(that),
-        rhs  = that.matchScale(this),
-        pow  = Small.ten.pow(Bigs.fromInt(rhs.scale + scale)),
-        qr   = lhs.value.multiply(pow).divMod(rhs.value);
-    return new DecimalImpl(qr.quotient, rhs.scale + scale).trim();
+    var lhs    = this.matchScale(that),
+        rhs    = that.matchScale(this),
+        pow    = Small.ten.pow(Bigs.fromInt(rhs.scale + scale)),
+        qr     = lhs.value.multiply(pow).divMod(rhs.value),
+        nscale = rhs.scale + scale;
+    return new DecimalImpl(qr.quotient, nscale).trim(nscale);
   }
 
   public function moduloWithScale(that : DecimalImpl, scale : Int) : DecimalImpl {
     if(that.isZero())
-      throw new Error('division by zero');
-    var lhs  = this.matchScale(that),
-        rhs  = that.matchScale(this),
-        pow  = Small.ten.pow(Bigs.fromInt(scale)),
-        qr   = lhs.value.multiply(pow).divMod(rhs.value.multiply(pow));
-    return new DecimalImpl(qr.remainder, lhs.scale + scale).trim();
+      throw new Error('modulo by zero');
+    var lhs    = this.matchScale(that),
+        rhs    = that.matchScale(this),
+        pow    = Small.ten.pow(Bigs.fromInt(scale)),
+        qr     = lhs.value.multiply(pow).divMod(rhs.value.multiply(pow)),
+        nscale = lhs.scale + scale;
+    return new DecimalImpl(qr.remainder, nscale).trim(nscale);
   }
 
   public function multiply(that : DecimalImpl) : DecimalImpl {
