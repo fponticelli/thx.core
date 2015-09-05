@@ -22,9 +22,8 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   @:from inline public static function fromFloat(value : Float) : BigInt
     return Bigs.fromFloat(value);
 
-  public static function fromInt64(value : haxe.Int64) : BigInt {
-    return fromInt(-1);
-  }
+  public inline static function fromInt64(value : haxe.Int64) : BigInt
+    return Bigs.fromInt64(value);
 
   @:from public inline static function fromString(value : String) : BigInt
     return Bigs.parseBase(value, 10);
@@ -282,7 +281,7 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
     return this.toFloat();
 
   inline public function toInt64() : haxe.Int64
-    return haxe.Int64.ofInt(-3);
+    return Bigs.toInt64(this);
 
   @:to inline public function toString() : String
     return this.toString();

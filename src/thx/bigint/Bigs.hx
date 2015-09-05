@@ -10,6 +10,17 @@ class Bigs {
   public static var MAX_INT_ARR(default, null) = smallToArray(MAX_INT);
   public static var LOG_MAX_INT(default, null) = Math.log(MAX_INT);
 
+  public static var powersOfTwo(default, null) = (function() {
+      var powers = [1];
+      while (powers[powers.length - 1] <= BASE)
+        powers.push(2 * powers[powers.length - 1]);
+      return powers;
+    })();
+  public static var bigPowersOfTwo(default, null) : Array<BigIntImpl> = powersOfTwo.map(function(v) : BigIntImpl return new Small(v));
+  public static var powers2Length(default, null) = powersOfTwo.length;
+  public static var highestPower2(default, null) = powersOfTwo[powers2Length - 1];
+  public static var bigHighestPower2(default, null) : BigIntImpl = new Small(highestPower2);
+
   public static function isPrecise(value : Int)
     return -MAX_INT < value && value < MAX_INT;
 
@@ -281,6 +292,14 @@ class Bigs {
       return new Big(smallToArray(abs), value < 0);
   }
 
+  // TODO
+  public static function fromInt64(value : haxe.Int64) : BigInt
+    return Bigs.parseBase(haxe.Int64.toStr(value), 10);
+
+  // TODO
+  public static function toInt64(value : BigIntImpl) : haxe.Int64
+    return thx.Int64s.parse(value.toString());
+
   public static function fromFloat(value : Float) : BigIntImpl {
     if(Math.isNaN(value) || !Math.isFinite(value))
       throw new Error("Conversion to BigInt failed. Number is NaN or Infinite");
@@ -446,17 +465,6 @@ class Bigs {
     }
     return { q : quotient, r : Floats.trunc(remainder) };
   }
-
-  public static var powersOfTwo(default, null) = (function() {
-      var powers = [1];
-      while (powers[powers.length - 1] <= BASE)
-        powers.push(2 * powers[powers.length - 1]);
-      return powers;
-    })();
-  public static var bigPowersOfTwo(default, null) : Array<BigIntImpl> = powersOfTwo.map(function(v) : BigIntImpl return new Small(v));
-  public static var powers2Length(default, null) = powersOfTwo.length;
-  public static var highestPower2(default, null) = powersOfTwo[powers2Length - 1];
-  public static var bigHighestPower2(default, null) : BigIntImpl = new Small(highestPower2);
 
   public static function parseBase(text : String, base : Int) : BigIntImpl {
     var val : BigIntImpl = Small.zero,
