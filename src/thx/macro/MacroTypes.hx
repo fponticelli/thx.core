@@ -91,14 +91,6 @@ It returns an array of type parameters.
 
 /**
 It returns an array of types in string format representing the inheritance chain of the
-passed `ClassType`.
-**/
-  @:deprecated("use thx.macro.MacroClassTypes.inheritance instead")
-  public static function classInheritance(cls : haxe.macro.Type.ClassType) : Array<String>
-    return MacroClassTypes.inheritance(cls);
-
-/**
-It returns an array of types in string format representing the inheritance chain of the
 passed `Type`.
 **/
   public static function typeInheritance(type : haxe.macro.Type) : Array<String>
