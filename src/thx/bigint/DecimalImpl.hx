@@ -124,7 +124,7 @@ class DecimalImpl {
   }
 
   // TODO needs better implementation
-  public function trim() : DecimalImpl {
+  public function trim(?min = 0) : DecimalImpl {
     if(scale == 0)
       return this;
     var s = toString();

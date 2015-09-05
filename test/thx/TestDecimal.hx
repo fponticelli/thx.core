@@ -17,6 +17,19 @@ class TestDecimal {
     Decimal.divisionScale = this.divisionSize;
   }
 
+  public function testTrim() {
+    var v : Decimal = "10234.0001040000";
+    Assert.isTrue(v.scale == 10);
+    Assert.isTrue(v.trim().scale == 6);
+    Assert.isTrue(v.trim(8).scale == 8, 'expected ${v.trim(8)} to have a scale 8 but it is ${v.trim(8).scale}');
+    Assert.isTrue(v.trim(2).scale == 6, 'expected ${v.trim(2)} to have a scale 6 but it is ${v.trim(2).scale}');
+    v = "10234.00000000";
+    Assert.isTrue(v.trim().scale == 0);
+    Assert.isTrue(v.trim(2).scale == 2, 'expected ${v.trim(2)}.scale == 2 but is ${v.trim(2).scale}');
+    v = "1.20000000";
+    Assert.isTrue(v.trim().scale == 1, 'expected ${v.trim()}.scale == 1 but got ${v.trim().scale}');
+  }
+
   public function testStringExp() {
     Assert.isTrue(("1.12345e-10" : Decimal) == "0.000000000112345", 'expected ${("0.000000000112345" : Decimal)} but got ${("1.12345e-10" : Decimal)}');
     Assert.isTrue(("1.12345e+10" : Decimal) == "11234500000", 'expected ${("11234500000" : Decimal)} but got ${("1.12345e+10" : Decimal)}');

@@ -71,6 +71,9 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
   inline public function scaleTo(decimals : Int) : Decimal
     return this.scaleTo(decimals);
 
+  inline public function trim(?mindecimals : Int) : Decimal
+    return this.trim(mindecimals);
+
   @:op(A>B) public function greater(that : Decimal) : Bool
     return this.compare(that) > 0;
 
