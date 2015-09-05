@@ -26,6 +26,9 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
   @:from public inline static function fromString(value : String) : Decimal
     return Decimals.parse(value);
 
+  inline public static function randomBetween(a : Decimal, b : Decimal) : Decimal
+    return DecimalImpl.randomBetween(a, b);
+
   inline public function isZero() : Bool
     return this.isZero();
 

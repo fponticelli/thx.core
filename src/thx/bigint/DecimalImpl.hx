@@ -6,6 +6,13 @@ import thx.Error;
 class DecimalImpl {
   public static var zero(default, null) = Decimals.fromInt(0);
   public static var one(default, null) = Decimals.fromInt(1);
+  public static var ten(default, null) = Decimals.fromInt(10);
+
+  public static function randomBetween(a : DecimalImpl, b : DecimalImpl) {
+    var lhs = a.matchScale(b),
+        rhs = b.matchScale(a);
+    return new DecimalImpl(thx.BigInt.randomBetween(lhs.value, rhs.value), lhs.scale);
+  }
 
   public var value(default, null) : BigIntImpl;
   public var scale(default, null) : Int;
