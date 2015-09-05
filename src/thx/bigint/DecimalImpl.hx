@@ -127,10 +127,13 @@ class DecimalImpl {
   public function trim(?min = 0) : DecimalImpl {
     if(scale == 0)
       return this;
-    var s = toString();
-    s = s.trimCharsRight("0");
-    if(s.endsWith("."))
-      s += "0";
+    var s = toString(),
+        parts = s.split("."),
+        dec = parts[1].trimCharsRight("0").rpad("0", min);
+    if(dec.length > 0)
+      s = parts[0]+"."+dec;
+    else
+      s = parts[0];
     return Decimals.parse(s);
   }
 
