@@ -98,6 +98,12 @@ class TestDecimal {
     Assert.isTrue(("1" : Decimal) >= 1);
     Assert.isTrue(("1" : Decimal) == 1);
     Assert.isTrue(("1.01001" : Decimal) == "1.0100100");
+    Assert.isTrue(("0" : Decimal) == "0");
+    Assert.isTrue(("0.000" : Decimal) == 0);
+    Assert.isTrue(("-1.12345e+10" : Decimal) >= "-11234500000");
+    Assert.isTrue(("-1.12345e+10" : Decimal) <= "-11234500000");
+    Assert.isTrue(("1.12345e+10" : Decimal) >= "11234500000");
+    Assert.isTrue(("1.12345e+10" : Decimal) <= "11234500000");
   }
 
   public function testString() {
