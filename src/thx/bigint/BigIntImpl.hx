@@ -9,6 +9,7 @@ interface BigIntImpl {
   function divide(that : BigIntImpl) : BigIntImpl;
   function multiply(that : BigIntImpl) : BigIntImpl;
   function modulo(that : BigIntImpl) : BigIntImpl;
+  function random() : BigIntImpl;
   function negate() : BigIntImpl;
   function next() : BigIntImpl;
   function prev() : BigIntImpl;
@@ -22,6 +23,10 @@ interface BigIntImpl {
   function isZero() : Bool;
   function compare(that : BigIntImpl) : Int;
   function compareAbs(that : BigIntImpl) : Int;
+  function not() : BigIntImpl;
+  function and(that : BigIntImpl) : BigIntImpl;
+  function or(that : BigIntImpl) : BigIntImpl;
+  function xor(that : BigIntImpl) : BigIntImpl;
   function toFloat() : Float;
   function toInt() : Int;
   function toString() : String;

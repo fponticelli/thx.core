@@ -10,6 +10,17 @@ class Bigs {
   public static var MAX_INT_ARR(default, null) = smallToArray(MAX_INT);
   public static var LOG_MAX_INT(default, null) = Math.log(MAX_INT);
 
+  public static var powersOfTwo(default, null) = (function() {
+      var powers = [1];
+      while (powers[powers.length - 1] <= BASE)
+        powers.push(2 * powers[powers.length - 1]);
+      return powers;
+    })();
+  public static var bigPowersOfTwo(default, null) : Array<BigIntImpl> = powersOfTwo.map(function(v) : BigIntImpl return new Small(v));
+  public static var powers2Length(default, null) = powersOfTwo.length;
+  public static var highestPower2(default, null) = powersOfTwo[powers2Length - 1];
+  public static var bigHighestPower2(default, null) : BigIntImpl = new Small(highestPower2);
+
   public static function isPrecise(value : Int)
     return -MAX_INT < value && value < MAX_INT;
 
@@ -43,6 +54,7 @@ class Bigs {
   }
 
   public static function smallToArray(n : Int) : Array<Int> {
+    thx.Assert.isTrue(n >= 0, 'Bigs.smallToArray should always be non-negative: $n');
     if(n < BASE)
       return [n];
     if(n < DOUBLE_BASE)
@@ -65,7 +77,7 @@ class Bigs {
   }
 
   public static function trim(v : Array<Int>) {
-    while(v.length > 0) {
+    while(v.length > 1) {
       if(v[v.length - 1] != 0)
         break;
       v.pop();
@@ -280,6 +292,14 @@ class Bigs {
       return new Big(smallToArray(abs), value < 0);
   }
 
+  // TODO needs better implementation
+  public static function fromInt64(value : haxe.Int64) : BigInt
+    return Bigs.parseBase(haxe.Int64.toStr(value), 10);
+
+  // TODO needs better implementation
+  public static function toInt64(value : BigIntImpl) : haxe.Int64
+    return thx.Int64s.parse(value.toString());
+
   public static function fromFloat(value : Float) : BigIntImpl {
     if(Math.isNaN(value) || !Math.isFinite(value))
       throw new Error("Conversion to BigInt failed. Number is NaN or Infinite");
@@ -446,17 +466,6 @@ class Bigs {
     return { q : quotient, r : Floats.trunc(remainder) };
   }
 
-  public static var powersOfTwo(default, null) = (function() {
-      var powers = [1];
-      while (powers[powers.length - 1] <= BASE)
-        powers.push(2 * powers[powers.length - 1]);
-      return powers;
-    })();
-  public static var bigPowersOfTwo(default, null) : Array<BigIntImpl> = powersOfTwo.map(function(v) : BigIntImpl return new Small(v));
-  public static var powers2Length(default, null) = powersOfTwo.length;
-  public static var highestPower2(default, null) = powersOfTwo[powers2Length - 1];
-  public static var bigHighestPower2(default, null) : BigIntImpl = new Small(highestPower2);
-
   public static function parseBase(text : String, base : Int) : BigIntImpl {
     var val : BigIntImpl = Small.zero,
         pow : BigIntImpl = Small.one,
@@ -481,7 +490,7 @@ class Bigs {
         exp -= text.length - decimalPlace;
         text = text.substring(0, decimalPlace) + text.substring(1 + decimalPlace);
       }
-      if(exp < 0) throw new Error("Cannot include negative exponent part for integers");
+      //if(exp < 0) throw new Error("Cannot include negative exponent part for integers");
 
       text = text.rpad("0", text.length + exp);
     }
@@ -509,82 +518,47 @@ class Bigs {
     return isNegative ? val.negate() : val;
   }
 
-/*
-  public static function bitwise(x, y, fn) {
-    y = parseValue(y);
-    var xSign = x.isNegative(), ySign = y.isNegative();
+  public static function bitwise(x : BigIntImpl, y : BigIntImpl, fn : Int -> Int -> Int) {
+    var xSign = x.sign,
+        ySign = y.sign;
     var xRem = xSign ? x.not() : x,
         yRem = ySign ? y.not() : y;
-    var xBits = [], yBits = [];
-    var xStop = false, yStop = false;
+    var xBits = [],
+        yBits = [];
+    var xStop = false,
+        yStop = false;
     while(!xStop || !yStop) {
       if(xRem.isZero()) { // virtual sign extension for simulating two's complement
         xStop = true;
         xBits.push(xSign ? 1 : 0);
-      }
-      else if(xSign) xBits.push(xRem.isEven() ? 1 : 0); // two's complement for negative numbers
-      else xBits.push(xRem.isEven() ? 0 : 1);
+      } else if(xSign)
+        xBits.push(xRem.isEven() ? 1 : 0); // two's complement for negative numbers
+      else
+        xBits.push(xRem.isEven() ? 0 : 1);
 
       if(yRem.isZero()) {
         yStop = true;
         yBits.push(ySign ? 1 : 0);
-      }
-      else if(ySign) yBits.push(yRem.isEven() ? 1 : 0);
-      else yBits.push(yRem.isEven() ? 0 : 1);
+      } else if(ySign)
+        yBits.push(yRem.isEven() ? 1 : 0);
+      else
+        yBits.push(yRem.isEven() ? 0 : 1);
 
-      xRem = xRem.over(2);
-      yRem = yRem.over(2);
+      xRem = xRem.divide(Small.two);
+      yRem = yRem.divide(Small.two);
     }
     var result = [];
-    for(var i = 0; i < xBits.length; i++) result.push(fn(xBits[i], yBits[i]));
-    var sum = bigInt(result.pop()).negate().times(bigInt(2).pow(result.length));
-    while(result.length) {
-      sum = sum.add(bigInt(result.pop()).times(bigInt(2).pow(result.length)));
+    for(i in 0...xBits.length)
+      result.push(fn(xBits[i], yBits[i]));
+
+    var a = Bigs.fromInt(result.pop()),
+        p = Small.two.pow(Bigs.fromInt(result.length)),
+        sum = a.negate().multiply(p);
+    while(result.length > 0) {
+      a = Bigs.fromInt(result.pop());
+      p = Small.two.pow(Bigs.fromInt(result.length));
+      sum = sum.add(a.multiply(p));
     }
     return sum;
   }
-
-  function gcd(a, b) {
-    a = parseValue(a).abs();
-    b = parseValue(b).abs();
-    if(a.equals(b)) return a;
-    if(a.isZero()) return b;
-    if(b.isZero()) return a;
-    if(a.isEven()) {
-      if(b.isOdd()) {
-        return gcd(a.divide(2), b);
-      }
-      return gcd(a.divide(2), b.divide(2)).multiply(2);
-    }
-    if(b.isEven()) {
-      return gcd(a, b.divide(2));
-    }
-    if(a.greater(b)) {
-      return gcd(a.subtract(b).divide(2), b);
-    }
-    return gcd(b.subtract(a).divide(2), a);
-  }
-  function lcm(a, b) {
-    a = parseValue(a).abs();
-    b = parseValue(b).abs();
-    return a.multiply(b).divide(gcd(a, b));
-  }
-  function randBetween(a, b) {
-    a = parseValue(a);
-    b = parseValue(b);
-    var low = min(a, b), high = max(a, b);
-    var range = high.subtract(low);
-    if(range.isSmall) return low.add(Math.random() * range);
-    var length = range.value.length - 1;
-    var result = [], restricted = true;
-    for(var i = length; i >= 0; i--) {
-      var top = restricted ? range.value[i] : BASE;
-      var digit = Floats.trunc(Math.random() * top);
-      result.unshift(digit);
-      if(digit < top) restricted = false;
-    }
-    result = arrayToSmall(result);
-    return low.add(new Big(result, false, typeof result == "number"));
-  }
-*/
 }

@@ -4,6 +4,7 @@ class Small implements BigIntImpl {
   public static var zero(default, null) = new Small(0);
   public static var one(default, null) = new Small(1);
   public static var two(default, null) = new Small(2);
+  public static var ten(default, null) = new Small(10);
   public static var negativeOne(default, null) = new Small(-1);
 
   public var value(default, null) : Int;
@@ -17,6 +18,10 @@ class Small implements BigIntImpl {
   }
 
   public function add(that : BigIntImpl) : BigIntImpl {
+    if(this.isZero())
+      return that;
+    if(that.isZero())
+      return this;
     if(sign != that.sign)
       return subtract(that.negate());
     return that.isSmall ? addSmall(cast that) : addBig(cast that);
@@ -46,6 +51,10 @@ class Small implements BigIntImpl {
     );
 
   public function subtract(that : BigIntImpl) : BigIntImpl {
+    if(this.isZero())
+      return that.negate();
+    if(that.isZero())
+      return this;
     if(sign != that.sign)
       return add(that.negate());
     return that.isSmall ? subtractSmall(cast that) : subtractBig(cast that);
@@ -106,6 +115,9 @@ class Small implements BigIntImpl {
 
   public function modulo(that : BigIntImpl) : BigIntImpl
     return divMod(that).remainder;
+
+  public function random() : BigIntImpl
+    return Bigs.fromInt(Std.int(Math.random() * value));
 
   public function abs() : BigIntImpl
     return new Small(Ints.abs(value));
@@ -202,7 +214,7 @@ class Small implements BigIntImpl {
     return Ints.compare(value, small.value);
 
   public function compareBig(big : Big) : Int
-    return Bigs.compareAbs(Bigs.smallToArray(value), big.value) * (sign ? -1 : 1);
+    return Bigs.compareAbs(Bigs.smallToArray(Ints.abs(value)), big.value) * (sign ? -1 : 1);
 
   public function compareAbs(that : BigIntImpl) : Int {
     if(that.isSmall)
@@ -215,7 +227,19 @@ class Small implements BigIntImpl {
     return Ints.compare(Ints.abs(value), Ints.abs(small.value));
 
   public function compareAbsBig(big : Big) : Int
-    return Bigs.compareAbs(Bigs.smallToArray(value), big.value);
+    return Bigs.compareAbs(Bigs.smallToArray(Ints.abs(value)), big.value);
+
+  public function not() : BigIntImpl
+    return negate().prev();
+
+  public function and(that : BigIntImpl) : BigIntImpl
+    return Bigs.bitwise(this, that, function(a : Int, b : Int) return a & b);
+
+  public function or(that : BigIntImpl) : BigIntImpl
+    return Bigs.bitwise(this, that, function(a : Int, b : Int) return a | b);
+
+  public function xor(that : BigIntImpl) : BigIntImpl
+    return Bigs.bitwise(this, that, function(a : Int, b : Int) return a ^ b);
 
   public function toFloat() : Float
     return value;

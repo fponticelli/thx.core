@@ -128,6 +128,27 @@ class Big implements BigIntImpl {
   public function modulo(that : BigIntImpl) : BigIntImpl
     return divMod(that).remainder;
 
+  public function random() : BigIntImpl {
+    var length = value.length - 1,
+        result = [],
+        restricted = true,
+        i = length,
+        top, digit;
+    while(i >= 0) {
+      top = restricted ? value[i] : Bigs.BASE;
+      digit = Floats.trunc(Math.random() * top);
+      result.unshift(digit);
+      if(digit < top)
+        restricted = false;
+      i--;
+    }
+    var v = Bigs.arrayToSmall(result);
+    if(null != v)
+      return new Small(v);
+    else
+      return new Big(result, false);
+  }
+
   public function abs() : BigIntImpl
     return new Big(value, false);
 
@@ -215,7 +236,7 @@ class Big implements BigIntImpl {
   }
 
   public function compareSmall(small : Small) : Int
-    return Bigs.compareAbs(value, Bigs.smallToArray(small.value)) * (sign ? -1 : 1);
+    return Bigs.compareAbs(value, Bigs.smallToArray(Ints.abs(small.value))) * (sign ? -1 : 1);
 
   public function compareBig(big : Big) : Int
     return Bigs.compareAbs(value, big.value) * (sign ? -1 : 1);
@@ -228,10 +249,22 @@ class Big implements BigIntImpl {
     }
 
   public function compareAbsSmall(small : Small) : Int
-    return Bigs.compareAbs(value, Bigs.smallToArray(small.value));
+    return Bigs.compareAbs(value, Bigs.smallToArray(Ints.abs(small.value)));
 
   public function compareAbsBig(big : Big) : Int
     return Bigs.compareAbs(value, big.value);
+
+  public function not() : BigIntImpl
+    return negate().prev();
+
+  public function and(that : BigIntImpl) : BigIntImpl
+    return Bigs.bitwise(this, that, function(a : Int, b : Int) return a & b);
+
+  public function or(that : BigIntImpl) : BigIntImpl
+    return Bigs.bitwise(this, that, function(a : Int, b : Int) return a | b);
+
+  public function xor(that : BigIntImpl) : BigIntImpl
+    return Bigs.bitwise(this, that, function(a : Int, b : Int) return a ^ b);
 
   public function toFloat() : Float
     return Std.parseFloat(toString());

@@ -12,6 +12,7 @@ class TestAll {
     runner.addCase(new thx.TestDates());
     runner.addCase(new thx.TestDateTime());
     runner.addCase(new thx.TestDateTimeUtc());
+    runner.addCase(new thx.TestDecimal());
     runner.addCase(new thx.TestDynamics());
     runner.addCase(new thx.TestEnums());
     runner.addCase(new thx.TestERegs());

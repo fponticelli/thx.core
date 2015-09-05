@@ -2,9 +2,43 @@ package thx;
 
 import utest.Assert;
 import thx.BigInt;
+import thx.Int64s;
+using haxe.Int64;
 
 class TestBigInt {
   public function new() {}
+
+  public function testFromInt64() {
+    var values = [Int64s.minValue, Int64.ofInt(-1), Int64.ofInt(0), Int64.ofInt(1), Int64s.maxValue];
+    for(value in values) {
+      var r = BigInt.fromInt64(value),
+          i = r.toInt64();
+      Assert.isTrue(i == value, 'Int64 parsed as ${r} and converted to ${i} but expected $value');
+    }
+  }
+
+  public function testLcmAndGcd() {
+    Assert.isTrue((21 : BigInt).lcm(6) == 42);
+    Assert.isTrue((42 : BigInt).gcd(56) == 14);
+    Assert.isTrue((0 : BigInt).gcd(56) == 56);
+    Assert.isTrue((42 : BigInt).gcd(0) == 42);
+    Assert.isTrue((17 : BigInt).gcd(103) == 1);
+  }
+
+  public function testIncrements() {
+    Assert.isTrue(BigInt.zero.isZero());
+    var a = BigInt.zero,
+        b = ++a,
+        c = a++,
+        d = --a,
+        e = a--;
+    Assert.isTrue(BigInt.zero.isZero());
+    Assert.isTrue(b == 1);
+    Assert.isTrue(c == 1);
+    Assert.isTrue(d == 1);
+    Assert.isTrue(e == 1);
+    Assert.isTrue(a == 0);
+  }
 
   public function testCanHandleLargeNumbers() {
     var tenFactorial : BigInt = "3628800",
@@ -588,6 +622,20 @@ class TestBigInt {
     Assert.isTrue(("8589934592" : BigInt).shiftRight(-50) == "9671406556917033397649408");
     Assert.isTrue(("38685626227668133590597632" : BigInt).shiftLeft(-50) == "34359738368");
     Assert.isTrue(("-1" : BigInt).shiftRight(25) == -1);
+  }
+
+  public function testBitwiseOperations() {
+    Assert.isTrue(("435783453" : BigInt) & "902345074" == "298352912", 'expected ${("435783453" : BigInt) & "902345074"} to be 298352912');
+    Assert.isTrue(("435783453" : BigInt) | "902345074" == "1039775615");
+    Assert.isTrue(("435783453" : BigInt) ^ "902345074" == "741422703");
+    Assert.isTrue(~("94981987261387596" : BigInt) == "-94981987261387597");
+    Assert.isTrue(("-6931047708307681506" : BigInt) ^ "25214903917" == "-6931047723896018573");
+    Assert.isTrue(("-6931047723896018573" : BigInt) & "281474976710655" == "273577603885427");
+    Assert.isTrue(("-65" : BigInt) ^ "-42" == "105");
+    Assert.isTrue(("6" : BigInt) & "-3" == "4");
+    Assert.isTrue(~("0" : BigInt) == "-1");
+    Assert.isTrue(("13" : BigInt) | -8 == "-3");
+    Assert.isTrue(("12" : BigInt) ^ -5 == "-9");
   }
 
   public function testIsEvenAndIsOdd() {
