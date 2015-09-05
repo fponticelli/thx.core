@@ -43,6 +43,7 @@ class Bigs {
   }
 
   public static function smallToArray(n : Int) : Array<Int> {
+    thx.Assert.isTrue(n >= 0, 'Bigs.smallToArray should always be non-negative: $n');
     if(n < BASE)
       return [n];
     if(n < DOUBLE_BASE)
@@ -65,7 +66,7 @@ class Bigs {
   }
 
   public static function trim(v : Array<Int>) {
-    while(v.length > 0) {
+    while(v.length > 1) {
       if(v[v.length - 1] != 0)
         break;
       v.pop();

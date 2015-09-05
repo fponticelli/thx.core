@@ -236,7 +236,7 @@ class Big implements BigIntImpl {
   }
 
   public function compareSmall(small : Small) : Int
-    return Bigs.compareAbs(value, Bigs.smallToArray(small.value)) * (sign ? -1 : 1);
+    return Bigs.compareAbs(value, Bigs.smallToArray(Ints.abs(small.value))) * (sign ? -1 : 1);
 
   public function compareBig(big : Big) : Int
     return Bigs.compareAbs(value, big.value) * (sign ? -1 : 1);
