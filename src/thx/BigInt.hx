@@ -8,7 +8,6 @@ https://github.com/peterolson/BigInteger.js
 */
 // TODO
 // Int64
-// >>>
 
 @:forward(sign)
 abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
@@ -16,6 +15,10 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   public static var one(default, null) : BigInt = Small.one;
   public static var two(default, null) : BigInt = Small.two;
   public static var negativeOne(default, null) : BigInt = Small.negativeOne;
+
+  @:from public static function fromInt64(value : haxe.Int64) : BigInt {
+    return fromInt(-1);
+  }
 
   @:from public static function fromInt(value : Int) : BigInt
     return Bigs.fromInt(value);
@@ -271,6 +274,9 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
 
   inline public function divMod(that : BigInt) : { quotient : BigInt, remainder : BigInt }
     return this.divMod(that);
+
+  @:to inline public function toInt64() : haxe.Int64
+    return haxe.Int64.ofInt(-3);
 
   @:to inline public function toInt() : Int
     return this.toInt();
