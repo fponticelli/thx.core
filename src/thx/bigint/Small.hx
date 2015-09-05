@@ -214,7 +214,7 @@ class Small implements BigIntImpl {
     return Ints.compare(value, small.value);
 
   public function compareBig(big : Big) : Int
-    return Bigs.compareAbs(Bigs.smallToArray(value), big.value) * (sign ? -1 : 1);
+    return Bigs.compareAbs(Bigs.smallToArray(Ints.abs(value)), big.value) * (sign ? -1 : 1);
 
   public function compareAbs(that : BigIntImpl) : Int {
     if(that.isSmall)
@@ -227,7 +227,7 @@ class Small implements BigIntImpl {
     return Ints.compare(Ints.abs(value), Ints.abs(small.value));
 
   public function compareAbsBig(big : Big) : Int
-    return Bigs.compareAbs(Bigs.smallToArray(value), big.value);
+    return Bigs.compareAbs(Bigs.smallToArray(Ints.abs(value)), big.value);
 
   public function not() : BigIntImpl
     return negate().prev();

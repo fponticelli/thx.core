@@ -249,7 +249,7 @@ class Big implements BigIntImpl {
     }
 
   public function compareAbsSmall(small : Small) : Int
-    return Bigs.compareAbs(value, Bigs.smallToArray(small.value));
+    return Bigs.compareAbs(value, Bigs.smallToArray(Ints.abs(small.value)));
 
   public function compareAbsBig(big : Big) : Int
     return Bigs.compareAbs(value, big.value);
