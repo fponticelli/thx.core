@@ -292,11 +292,11 @@ class Bigs {
       return new Big(smallToArray(abs), value < 0);
   }
 
-  // TODO
+  // TODO needs better implementation
   public static function fromInt64(value : haxe.Int64) : BigInt
     return Bigs.parseBase(haxe.Int64.toStr(value), 10);
 
-  // TODO
+  // TODO needs better implementation
   public static function toInt64(value : BigIntImpl) : haxe.Int64
     return thx.Int64s.parse(value.toString());
 

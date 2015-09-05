@@ -134,7 +134,7 @@ class DecimalImpl {
     return Decimals.parse(s);
   }
 
-  // TODO
+  // TODO needs better implementation
   public function toFloat() : Float {
     return Std.parseFloat(toString());
   }

@@ -6,9 +6,6 @@ import thx.bigint.*;
 Heavily based on code realized by Peter Olson:
 https://github.com/peterolson/BigInteger.js
 */
-// TODO
-// Int64
-
 @:forward(sign)
 abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   public static var zero(default, null) : BigInt = Small.zero;

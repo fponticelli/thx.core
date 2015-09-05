@@ -8,10 +8,6 @@ class TestDynamics {
   public function new() { }
 
   public function testDynamics() {
-    // TODO: Test equals()
-
-    // Test clone()
-
     Assert.equals(null, Dynamics.clone(null));
     Assert.equals(true, true.clone());
     Assert.equals("hello", "hello".clone());

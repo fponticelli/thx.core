@@ -8,7 +8,7 @@ class Decimals {
   public static function fromInt(value : Int) : DecimalImpl
     return new DecimalImpl(Bigs.fromInt(value), 0);
 
-  // TODO
+  // TODO needs better implementation
   public static function fromFloat(value : Float) : DecimalImpl {
     return parse('$value');
   }
