@@ -8,10 +8,10 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
   public static var zero(default, null) = DecimalImpl.zero;
   public static var one(default, null)  = DecimalImpl.one;
 
-  @:from public static function fromInt64(value : haxe.Int64) : Decimal
+  public static function fromInt64(value : haxe.Int64) : Decimal
     return new DecimalImpl(BigInt.fromInt64(value), 0);
 
-  @:from public static function fromBigInt(value : BigInt) : Decimal
+  public static function fromBigInt(value : BigInt) : Decimal
     return new DecimalImpl(value, 0);
 
   @:from public static function fromInt(value : Int) : Decimal
