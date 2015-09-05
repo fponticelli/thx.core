@@ -5,16 +5,32 @@ using thx.Strings;
 class Decimals {
   public static var divisionExtraScale = 4;
 
-  public static function fromInt(value : Int)
+  public static function fromInt(value : Int) : DecimalImpl
     return new DecimalImpl(Bigs.fromInt(value), 0);
 
   // TODO
-  public static function fromFloat(value : Float) {
+  public static function fromFloat(value : Float) : DecimalImpl {
     return parse('$value');
   }
 
-  // TODO
-  public static function parse(value : String) {
+  public static function parse(value : String) : DecimalImpl {
+    value = value.toLowerCase();
+    var pose = value.indexOf("e");
+    if(pose > 0) {
+      var isNeg = false,
+          f = value.substring(0, pose),
+          e = value.substring(pose+1);
+      if(e.substring(0, 1) == "-") {
+        isNeg = true;
+        e = e.substring(1);
+      }
+      var p = Bigs.parseBase(e, 10),
+          m = Small.ten.pow(p);
+      if(isNeg)
+        return fromFloat(Std.parseFloat(f)).divide(thx.Decimal.fromBigInt(m));
+      else
+        return fromFloat(Std.parseFloat(f)).multiply(thx.Decimal.fromBigInt(m));
+    }
     var pdec = value.indexOf(".");
     if(pdec < 0)
       return new DecimalImpl(BigInt.fromString(value), 0);
