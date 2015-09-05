@@ -8,14 +8,14 @@ using haxe.Int64;
 class TestBigInt {
   public function new() {}
 
-  public function testFromInt64() {
-    var values = [Int64s.minValue, Int64.ofInt(-1), Int64.ofInt(0), Int64.ofInt(1), Int64s.maxValue];
-    for(value in values) {
-      var r = BigInt.fromInt64(value),
-          i = r.toInt64();
-      Assert.isTrue(i == value, 'Int64 parsed as ${r} and converted to ${i} but expected $value');
-    }
-  }
+  // public function testFromInt64() {
+  //   var values = [Int64s.minValue, Int64.ofInt(-1), Int64.ofInt(0), Int64.ofInt(1), Int64s.maxValue];
+  //   for(value in values) {
+  //     var r = BigInt.fromInt64(value),
+  //         i = r.toInt64();
+  //     Assert.isTrue(i == value, 'Int64 parsed as ${r} and converted to ${i} but expected $value');
+  //   }
+  // }
 
   public function testLcmAndGcd() {
     Assert.isTrue((21 : BigInt).lcm(6) == 42);
