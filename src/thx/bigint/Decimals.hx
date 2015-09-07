@@ -10,6 +10,8 @@ class Decimals {
 
   // TODO needs better implementation
   public static function fromFloat(value : Float) : DecimalImpl {
+    if(!Math.isFinite(value))
+      throw 'Value is not a finite Float: $value';
     return parse('$value');
   }
 
