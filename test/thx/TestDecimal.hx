@@ -17,6 +17,11 @@ class TestDecimal {
     Decimal.divisionScale = this.divisionSize;
   }
 
+  public function testToBigInt() {
+    var v : Decimal = "10234.0001040000";
+    Assert.isTrue(v.toBigInt() == "10234", 'expected 10234 but got ${v.toBigInt()}');
+  }
+
   public function testTrim() {
     var v : Decimal = "10234.0001040000";
     Assert.isTrue(v.scale == 10);
