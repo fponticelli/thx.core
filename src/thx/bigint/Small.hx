@@ -60,9 +60,8 @@ class Small implements BigIntImpl {
     return that.isSmall ? subtractSmall(cast that) : subtractBig(cast that);
   }
 
-  public function subtractSmall(small : Small) : BigIntImpl {
+  public function subtractSmall(small : Small) : BigIntImpl
     return new Small(value - small.value);
-  }
 
   public function subtractBig(big : Big) : BigIntImpl
     return Bigs.subtractSmall(big.value, Ints.abs(value), value >= 0);
@@ -76,19 +75,14 @@ class Small implements BigIntImpl {
     return that.isSmall ? divModSmall(cast that) : divModBig(cast that);
   }
 
-  public function divModSmall(small : Small) : { quotient : BigIntImpl, remainder : BigIntImpl } {
+  public function divModSmall(small : Small) : { quotient : BigIntImpl, remainder : BigIntImpl }
     return {
       quotient  : new Small(Floats.trunc(value / small.value)),
       remainder : new Small(#if python value - Std.int(value/small.value) * small.value  #else value % small.value #end)
     };
-  }
 
-  public function divModBig(big : Big) : { quotient : BigIntImpl, remainder : BigIntImpl } {
-    return {
-      quotient  : Small.zero,
-      remainder : this
-    };
-  }
+  public function divModBig(big : Big) : { quotient : BigIntImpl, remainder : BigIntImpl }
+    return new Big(Bigs.smallToArray(Ints.abs(this.value)), this.value < 0).divModBig(big);
 
   public function multiply(that : BigIntImpl) : BigIntImpl
     return that.isSmall ? multiplySmall(cast that) : multiplyBig(cast that);

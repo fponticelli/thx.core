@@ -397,6 +397,11 @@ class TestBigInt {
     Assert.isTrue((0 : BigInt).pow("1e100") == 0);
   }
 
+  public function testPower() {
+    var i : BigInt = "102340001040000";
+    Assert.isTrue(("10000000000" : BigInt) == BigInt.fromInt(10).pow(10));
+  }
+
   public function testPowerOf0to0is1() {
     Assert.isTrue((0 : BigInt).pow(0) == 1);
     Assert.isTrue((0 : BigInt).pow("-0") == 1);
@@ -421,7 +426,7 @@ class TestBigInt {
 
     var tests = [
       { num : (10 : BigInt), div : (2 : BigInt), res : (5 : BigInt) },
-      // FAILS
+      { num : ("102340001040000" : BigInt), div : ("10000000000" : BigInt), res : (10234 : BigInt)},
       { num : ("1000000000000000000" : BigInt), div : (50 : BigInt), res : ("20000000000000000" : BigInt) },
     ];
     for(test in tests) {
