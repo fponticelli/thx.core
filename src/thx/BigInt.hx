@@ -137,6 +137,11 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
     return r;
   }
 
+  public function euclideanModPow(exp : BigInt, mod : BigInt) : BigInt {
+    var x = modPow(exp, mod);
+    return x.isNegative() ? x.add(mod) : x;
+  }
+
   inline public function max(that : BigInt) : BigInt
     return greater(that) ? this : that;
 
