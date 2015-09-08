@@ -125,22 +125,15 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
     var r : BigIntImpl = Small.one,
         base = modulo(mod);
 
-    if(exp.isOdd())
-       r = base;
-
     if (base.isZero())
       return Small.zero;
 
-    while (exp.greater(Small.one)) {
-      exp = exp.divide(2);
-      base = base.square().modulo(mod);
+    while(exp.isPositive()) {
       if (exp.isOdd())
         r = r.multiply(base).modulo(mod);
+      exp = exp.divide(Small.two);
+      base = base.square().modulo(mod);
     }
-
-    if(r.sign)
-      r = r.add(mod);
-
     return r;
   }
 
