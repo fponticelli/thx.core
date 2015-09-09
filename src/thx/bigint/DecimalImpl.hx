@@ -81,8 +81,13 @@ class DecimalImpl {
     return subtract(one);
 
   public function pow(exp : Int) : DecimalImpl {
-    var i = value.pow(Bigs.fromInt(exp));
-    return new DecimalImpl(i, scale * exp);
+    if(exp < 0) {
+      var i = value.pow(Bigs.fromInt(-exp));
+      return Decimal.one.divideWithScale(Decimal.fromBigInt(i), (scale + 1) * -exp);
+    } else {
+      var i = value.pow(Bigs.fromInt(exp));
+      return new DecimalImpl(i, scale * exp);
+    }
   }
 
   public function scaleTo(newscale : Int) : DecimalImpl {

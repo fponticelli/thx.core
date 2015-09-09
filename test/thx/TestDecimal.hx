@@ -160,4 +160,8 @@ class TestDecimal {
       Assert.equals('-${test.exp}', dec.scaleTo(test.scale).toString(), 'expected -${test.src} to be -${test.exp} when scaled to ${test.scale} but got -${dec.scaleTo(test.scale).toString()}');
     }
   }
+
+  public function testNegativePow() {
+    Assert.isTrue((10 : Decimal).pow(-2) == 0.01);
+  }
 }
