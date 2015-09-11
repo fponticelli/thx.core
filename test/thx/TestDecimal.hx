@@ -144,6 +144,13 @@ class TestDecimal {
   }
 
   public function testRound() {
+    assertDecimalEquals((1 : Decimal).round(), 1);
+    assertDecimalEquals((-1 : Decimal).round(), -1);
+    assertDecimalEquals((1 : Decimal).ceil(), 1);
+    assertDecimalEquals((-1 : Decimal).ceil(), -1);
+    assertDecimalEquals((1 : Decimal).floor(), 1);
+    assertDecimalEquals((-1 : Decimal).floor(), -1);
+
     assertDecimalEquals(("1234567890.1234567890" : Decimal).roundTo(0), "1234567890");
     assertDecimalEquals(("1234567890.1234567890" : Decimal).roundTo(3), "1234567890.123");
     assertDecimalEquals(("1234567890.1234567890" : Decimal).roundTo(5), "1234567890.12346");
