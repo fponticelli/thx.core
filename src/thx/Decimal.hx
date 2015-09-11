@@ -68,6 +68,15 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
   inline public function min(that : Decimal) : Decimal
     return less(that) ? this : that;
 
+  inline public function ceilTo(decimals : Int) : Decimal
+    return this.ceilTo(decimals);
+
+  inline public function floorTo(decimals : Int) : Decimal
+    return this.floorTo(decimals);
+
+  inline public function roundTo(decimals : Int) : Decimal
+    return this.roundTo(decimals);
+
   inline public function scaleTo(decimals : Int) : Decimal
     return this.scaleTo(decimals);
 

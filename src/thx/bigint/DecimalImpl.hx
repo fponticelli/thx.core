@@ -90,6 +90,27 @@ class DecimalImpl {
     }
   }
 
+  public function ceilTo(newscale : Int) : DecimalImpl {
+    return this;
+  }
+
+  public function floorTo(newscale : Int) : DecimalImpl {
+    return this;
+  }
+
+  public function roundTo(newscale : Int) : DecimalImpl {
+    trace(this);
+    trace(scaleTo(newscale + 1));
+    trace(scaleTo(newscale));
+    trace(scaleTo(newscale + 1).modulo(scaleTo(newscale)).multiply(ten.pow(newscale)));
+    var f = scaleTo(newscale + 1).modulo(scaleTo(newscale)).multiply(ten.pow(newscale)).toFloat();
+    if(f < 0.5) {
+      return floorTo(newscale);
+    } else {
+      return ceilTo(newscale);
+    }
+  }
+
   public function scaleTo(newscale : Int) : DecimalImpl {
     if(newscale == scale)
       return this;
