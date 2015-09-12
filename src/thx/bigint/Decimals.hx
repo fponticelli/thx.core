@@ -28,10 +28,11 @@ class Decimals {
       }
       var p = Bigs.parseBase(e, 10),
           m = Small.ten.pow(p);
-      if(isNeg)
-        return fromFloat(Std.parseFloat(f)).divide(thx.Decimal.fromBigInt(m));
-      else
-        return fromFloat(Std.parseFloat(f)).multiply(thx.Decimal.fromBigInt(m));
+      if(isNeg) {
+        return parse(f).divideWithScale(thx.Decimal.fromBigInt(m), Std.parseInt(e));
+      } else {
+        return parse(f).multiply(thx.Decimal.fromBigInt(m));
+      }
     }
     var pdec = value.indexOf(".");
     if(pdec < 0)
