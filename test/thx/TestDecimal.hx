@@ -154,14 +154,14 @@ class TestDecimal {
     assertDecimalEquals(("1234567890.1234567890" : Decimal).roundTo(0), "1234567890");
     assertDecimalEquals(("1234567890.1234567890" : Decimal).roundTo(3), "1234567890.123");
     assertDecimalEquals(("1234567890.1234567890" : Decimal).roundTo(5), "1234567890.12346");
-    assertDecimalEquals(("1234567890.1234567890" : Decimal).roundTo(6), "1234567890.123456");
+    assertDecimalEquals(("1234567890.1234567890" : Decimal).roundTo(6), "1234567890.123457");
 
     assertDecimalEquals(("-1234567890.1234567890" : Decimal).roundTo(0), "-1234567890");
     assertDecimalEquals(("-1234567890.1234567890" : Decimal).roundTo(3), "-1234567890.123");
     assertDecimalEquals(("-1234567890.1234567890" : Decimal).roundTo(5), "-1234567890.12345");
     assertDecimalEquals(("-1234567890.1234567890" : Decimal).roundTo(6), "-1234567890.123456");
 
-    assertDecimalEquals(("1234567890.1234567890" : Decimal).ceilTo(0), "1234567890");
+    assertDecimalEquals(("1234567890.1234567890" : Decimal).ceilTo(0), "1234567891");
     assertDecimalEquals(("1234567890.1234567890" : Decimal).ceilTo(3), "1234567890.124");
     assertDecimalEquals(("1234567890.1234567890" : Decimal).ceilTo(5), "1234567890.12346");
     assertDecimalEquals(("1234567890.1234567890" : Decimal).ceilTo(6), "1234567890.123457");
@@ -177,9 +177,9 @@ class TestDecimal {
     assertDecimalEquals(("1234567890.1234567890" : Decimal).floorTo(6), "1234567890.123456");
 
     assertDecimalEquals(("-1234567890.1234567890" : Decimal).floorTo(0), "-1234567890");
-    assertDecimalEquals(("-1234567890.1234567890" : Decimal).floorTo(3), "-1234567890.124");
-    assertDecimalEquals(("-1234567890.1234567890" : Decimal).floorTo(5), "-1234567890.12346");
-    assertDecimalEquals(("-1234567890.1234567890" : Decimal).floorTo(6), "-1234567890.123457");
+    assertDecimalEquals(("-1234567890.1234567890" : Decimal).floorTo(3), "-1234567890.123");
+    assertDecimalEquals(("-1234567890.1234567890" : Decimal).floorTo(5), "-1234567890.12345");
+    assertDecimalEquals(("-1234567890.1234567890" : Decimal).floorTo(6), "-1234567890.123456");
   }
 
   public function testScaleTo() {

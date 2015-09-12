@@ -91,23 +91,25 @@ class DecimalImpl {
   }
 
   public function ceilTo(newscale : Int) : DecimalImpl {
-    return this;
+    var scaled = scaleTo(newscale),
+        f = modulo(scaled).multiply(ten.pow(newscale)).toFloat();
+    if(f <= 0) {
+      return scaled;
+    } else {
+      return new DecimalImpl(scaled.value.add(Small.one), scaled.scale);
+    }
   }
 
-  public function floorTo(newscale : Int) : DecimalImpl {
-    return this;
-  }
+  public function floorTo(newscale : Int) : DecimalImpl
+    return scaleTo(newscale);
 
   public function roundTo(newscale : Int) : DecimalImpl {
-    trace(this);
-    trace(scaleTo(newscale + 1));
-    trace(scaleTo(newscale));
-    trace(scaleTo(newscale + 1).modulo(scaleTo(newscale)).multiply(ten.pow(newscale)));
-    var f = scaleTo(newscale + 1).modulo(scaleTo(newscale)).multiply(ten.pow(newscale)).toFloat();
+    var scaled = scaleTo(newscale),
+        f = modulo(scaled).multiply(ten.pow(newscale)).toFloat();
     if(f < 0.5) {
-      return floorTo(newscale);
+      return scaled;
     } else {
-      return ceilTo(newscale);
+      return new DecimalImpl(scaled.value.add(Small.one), scaled.scale);
     }
   }
 
