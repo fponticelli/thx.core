@@ -91,8 +91,10 @@ class DecimalImpl {
   }
 
   public function ceilTo(newscale : Int) : DecimalImpl {
+    if(isZero())
+      return this;
     var scaled = scaleTo(newscale),
-        f = modulo(scaled).multiply(ten.pow(newscale)).toFloat();
+        f = (scaled.isZero() ? one : modulo(scaled)).multiply(ten.pow(newscale)).toFloat();
     if(f <= 0) {
       return scaled;
     } else {
@@ -104,8 +106,10 @@ class DecimalImpl {
     return scaleTo(newscale);
 
   public function roundTo(newscale : Int) : DecimalImpl {
+    if(isZero())
+      return this;
     var scaled = scaleTo(newscale),
-        f = modulo(scaled).multiply(ten.pow(newscale)).toFloat();
+        f = (scaled.isZero() ? one : modulo(scaled)).multiply(ten.pow(newscale)).toFloat();
     if(f < 0.5) {
       return scaled;
     } else {
