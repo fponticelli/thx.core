@@ -41,6 +41,7 @@ class TestDecimal {
     Assert.isTrue(("-1.12345e-10" : Decimal) == "-0.000000000112345", 'expected ${("-0.000000000112345" : Decimal)} but got ${("-1.12345e-10" : Decimal)}');
     Assert.isTrue(("-1.12345e+10" : Decimal) == "-11234500000", 'expected ${("-11234500000" : Decimal)} but got ${("-1.12345e+10" : Decimal)}');
     Assert.isTrue(("0E7" : Decimal) == "0", 'expected ${("0" : Decimal)} but got ${("0E7" : Decimal)}');
+    Assert.isTrue((1.234e-50 : Decimal) == '1.234000e-050', 'expected ${(1.234e-50 : Decimal)} == ${("1.234000e-050" : Decimal)}');
   }
 
   public function testModulo() {
@@ -144,6 +145,10 @@ class TestDecimal {
   }
 
   public function testRound() {
+    assertDecimalEquals((0 : Decimal).round(), 0);
+    assertDecimalEquals((0 : Decimal).ceil(), 0);
+    assertDecimalEquals((0 : Decimal).floor(), 0);
+
     assertDecimalEquals((1 : Decimal).round(), 1);
     assertDecimalEquals((-1 : Decimal).round(), -1);
     assertDecimalEquals((1 : Decimal).ceil(), 1);
