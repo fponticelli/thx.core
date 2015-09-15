@@ -1,8 +1,9 @@
 package thx.macro;
 
-#if (neko || macro)
+#if(neko || macro)
 import haxe.macro.TypeTools;
 import haxe.macro.Type.ClassType;
+import haxe.macro.Type;
 /**
 Extension methods to work with types at macro time.
 **/
@@ -10,7 +11,7 @@ class MacroTypes {
 /**
 It returns true if the argument at position `index` is optional for the given function.
 **/
-  public static function argumentIsOptional(fun : haxe.macro.Type, index : Int)
+  public static function argumentIsOptional(fun : Type, index : Int)
     return switch fun {
       case TFun(args, _) if(index < args.length):
         args[index].opt;
@@ -21,7 +22,7 @@ It returns true if the argument at position `index` is optional for the given fu
 /**
 It returns `true` if the passed `type` is a function.
 **/
-  public static function isFunction(type : haxe.macro.Type)
+  public static function isFunction(type : Type)
     return switch type {
       case TFun(_, _):
         return true;
@@ -30,9 +31,9 @@ It returns `true` if the passed `type` is a function.
     };
 
 /**
-It returns the arity (number of arguments) of a given function.
+It returns the arity(number of arguments) of a given function.
 **/
-  public static function getArity(fun : haxe.macro.Type)
+  public static function getArity(fun : Type)
     return switch fun {
       case TFun(args, _):
         return args.length;
@@ -43,13 +44,13 @@ It returns the arity (number of arguments) of a given function.
 /**
 It returns the type of an argument at `index` for a given function.
 **/
-  public static function getArgumentType(fun : haxe.macro.Type, index : Int)
+  public static function getArgumentType(fun : Type, index : Int)
     return getFunctionArgument(fun, index).t;
 
 /**
 It returns an array of argument descriptions for a given function.
 **/
-  public static function getFunctionArguments(fun : haxe.macro.Type)
+  public static function getFunctionArguments(fun : Type)
     return switch fun {
       case TFun(args, _):
         return args;
@@ -60,9 +61,9 @@ It returns an array of argument descriptions for a given function.
 /**
 It returns the argument description for a function at `index`.
 **/
-  public static function getFunctionArgument(fun : haxe.macro.Type, index : Int) {
+  public static function getFunctionArgument(fun : Type, index : Int) {
     var arg = getFunctionArguments(fun)[index];
-    if (null == arg)
+    if(null == arg)
       throw "invalid argument position $index";
     return arg;
   }
@@ -70,7 +71,7 @@ It returns the argument description for a function at `index`.
 /**
 It gets the return type of a function.
 **/
-  public static function getFunctionReturn(type : haxe.macro.Type)
+  public static function getFunctionReturn(type : Type)
     return switch type {
       case TFun(_, ret):
         return ret;
@@ -81,7 +82,7 @@ It gets the return type of a function.
 /**
 It returns an array of type parameters.
 **/
-  public static function getClassTypeParameters(type : haxe.macro.Type)
+  public static function getClassTypeParameters(type : Type)
     return switch type {
       case TInst(_, params):
         return params;
@@ -93,10 +94,10 @@ It returns an array of type parameters.
 It returns an array of types in string format representing the inheritance chain of the
 passed `Type`.
 **/
-  public static function typeInheritance(type : haxe.macro.Type) : Array<String>
+  public static function typeInheritance(type : Type) : Array<String>
 #if macro
     return try {
-      classInheritance(TypeTools.getClass(type));
+      MacroClassTypes.inheritanceAsStrings(TypeTools.getClass(type));
     } catch(e : Dynamic) {
       [TypeTools.toString(type)];
     };

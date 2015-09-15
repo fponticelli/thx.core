@@ -3,7 +3,7 @@ package thx.macro;
 #if (neko || macro)
 using thx.Arrays;
 import haxe.macro.TypeTools;
-import haxe.macro.Type.ClassType;
+import haxe.macro.Type;
 /**
 Extension methods to work with `ClassType`s at macro time.
 **/
@@ -106,6 +106,17 @@ Returns a `MetaEntry` with `name` if it exists or `null` otherwise.
     var meta = cls.meta.get();
     if(null == meta) return null;
     return Arrays.find(meta, function(entry) return entry.name == name);
+  }
+
+  public static function fieldsInHierarchy(cls : ClassType) : Array<ClassField> {
+    var fields = [];
+    while(true) {
+      fields = fields.concat(cls.fields.get());
+      if(null == cls.superClass)
+        break;
+      cls = cls.superClass.t.get();
+    }
+    return fields;
   }
 }
 #end
