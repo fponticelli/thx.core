@@ -456,11 +456,12 @@ It pushes `value` onto the array if `condition` is true. Also returns the array 
 /**
 It applies a function against an accumulator and each value of the array (from left-to-right) has to reduce it to a single value.
 **/
-  inline public static function reduce<TElement, TAcc>(array : Array<TElement>, callback : TAcc -> TElement -> TAcc, initial : TAcc) : TAcc {
+  #if js inline #end public static function reduce<TElement, TAcc>(array : Array<TElement>, callback : TAcc -> TElement -> TAcc, initial : TAcc) : TAcc {
     #if js
       return untyped array.reduce(callback, initial);
     #else
-      array.map(function(v) initial = callback(initial, v));
+      for(v in array)
+        initial = callback(initial, v);
       return initial;
     #end
   }
