@@ -30,6 +30,7 @@ typedef Nulls = thx.Nulls;
 typedef Objects = thx.Objects;
 typedef Path = thx.Path;
 typedef OrderedMap<Key, Value> = thx.OrderedMap<Key, Value>;
+typedef OrderedSet<Value> = thx.OrderedSet<Value>;
 typedef QueryString = thx.QueryString;
 typedef Result<Success, Failure> = thx.Result<Success, Failure>;
 typedef Set<Value> = thx.Set<Value>;

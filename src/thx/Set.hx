@@ -3,136 +3,171 @@ package thx;
 /**
 A set is a list of unique values.
 **/
-@:forward(indexOf, iterator, lastIndexOf, length, map, pop, remove, reverse, shift, sort)
-abstract Set<T>(Array<T>) {
-/**
-`arrayToSet` converts an `Array` into a `Set` removing all duplicated values.
-**/
-  @:from public static function toSet<T>(arr : Array<T>) {
-    var set = new Set([]);
-    for(v in arr)
-      set.push(v);
-    return set;
-  }
-
-  @:deprecated("use Set.toSet instead")
-  public static function arrayToSet<T>(arr : Array<T>)
-    return toSet(arr);
+abstract Set<T>(Map<T, Bool>) {
 
 /**
 Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` otherwise.
 **/
-  public static function create<T>(?arr : Array<T>)
-    return null == arr ? new Set<T>([]) : toSet(arr);
-
-  inline function new(arr : Array<T>)
-    this = arr;
+  public static function createString(?arr : Array<String>) {
+    var map = new Map<String, Bool>();
+    var set = new Set<String>(map);
+    if(null != arr)
+      set.pushMany(arr);
+    return set;
+  }
 
 /**
-`add` pushes a value onto the end of the `Set` if the value was not already present.
+Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` otherwise.
+**/
+  public static function createInt(?arr : Array<Int>) {
+    var map = new Map<Int, Bool>();
+    var set = new Set<Int>(map);
+    if(null != arr)
+      set.pushMany(arr);
+    return set;
+  }
 
-It returns a boolean value indicating if the `Set` was changed by operation or not.
+/**
+Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` otherwise.
+**/
+  public static function createObject(?arr : Array<{}>) {
+    var map = new Map<{}, Bool>();
+    var set = new Set<{}>(map);
+    if(null != arr)
+      set.pushMany(arr);
+    return set;
+  }
+
+/**
+Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` otherwise.
+**/
+  public static function createEnum(?arr : Array<EnumValue>) {
+    var map = new Map<EnumValue, Bool>();
+    var set = new Set<EnumValue>(map);
+    if(null != arr)
+      set.pushMany(arr);
+    return set;
+  }
+
+  public var length(get, never) : Int;
+
+  inline function new(map : Map<T, Bool>)
+    this = map;
+
+/**
+`add` pushes a value into `Set` if the value was not already present.
+
+It returns a boolean value indicating if `Set` was changed by the operation or not.
 **/
   public function add(v : T) : Bool
-    return if(exists(v))
+    return if(this.exists(v))
       false;
     else {
-      this.push(v);
+      this.set(v, true);
       true;
     }
 
 /**
 `copy` creates a new `Set` with copied elements.
 **/
-  inline public function copy()
-    return new Set(this.copy());
+  public function copy() : Set<T> {
+    var inst = empty();
+    for(k in this.keys())
+      inst.push(k);
+    return inst;
+  }
+
+/**
+Creates an empty copy of the current set.
+**/
+  public function empty() : Set<T> {
+    var inst : Map<T, Bool> = Type.createInstance(Type.getClass(this), []);
+    return new Set(inst);
+  }
 
 /**
 `difference` creates a new `Set` with elements from the first set excluding the elements
 from the second.
 **/
   @:op(A-B) inline public function difference(set : Set<T>) : Set<T> {
-    var result = this.copy();
+    var result = copy();
     for(item in set)
       result.remove(item);
-    return new Set(result);
+    return result;
   }
 
 /**
 `exists` returns `true` if it contains an element that is equals to `v`.
 **/
-  public function exists(v : T) : Bool {
-    for (t in this)
-      if (t == v)
-        return true;
-    return false;
-  }
+  inline public function exists(v : T) : Bool
+    return this.exists(v);
 
-/**
-`get` returns the element at the specified position or `null` if the `index` is
-outside the boundaries.
-**/
-  @:arrayAccess
-  inline public function get(index : Int) : Null<T>
-    return this[index];
+  inline public function remove(v : T) : Bool
+    return this.remove(v);
 
 /**
 `intersection` returns a Set with elements that are presents in both sets
 **/
   inline public function intersection(set : Set<T>) : Set<T> {
-    var result = [];
-    for(item in this)
+    var result = empty();
+    for(item in iterator())
       if(set.exists(item))
         result.push(item);
-    return new Set(result);
+    return result;
   }
 
 /**
 Like `add` but doesn't notify if the addition was successful or not.
 **/
-  public function push(v : T) : Void
-    add(v);
+  inline public function push(v : T) : Void
+    this.set(v, true);
 
 /**
-Same operations as `Array.slice()` but it returns a new `Set` instead of an array.
+Pushes many values to the set
 **/
-  inline public function slice(pos : Int, ?end : Int) : Set<T>
-    return new Set(this.slice(pos, end));
+  public function pushMany(values : Iterable<T>) : Void
+    for(value in values)
+      push(value);
 
 /**
-Same operations as `Array.splice()` but it returns a new `Set` instead of an array.
+Iterates the values of the Set.
 **/
-  inline public function splice(pos : Int, len : Int) : Set<T>
-    return new Set(this.splice(pos, len));
+  public function iterator()
+    return this.keys();
 
 /**
-Union creates a new Set with elements from bots sets.
+Union creates a new Set with elements from both sets.
 **/
-  @:op(A+B) inline public function union(set : Set<T>) : Set<T>
-    return toSet(this.concat(set.toArray()));
-
-/**
-Union creates a new Set with elements from bots sets.
-**/
-  @:op(A+B) inline public function unionArray(set : Array<T>) : Set<T>
-    return toSet(this.concat(set));
+  @:op(A+B) inline public function union(set : Set<T>) : Set<T> {
+    var newset = copy();
+    for(k in set.iterator())
+      newset.push(k);
+    return newset;
+  }
 
 /**
 Converts a `Set<T>` into `Array<T>`. The returned array is a copy of the internal
 array used by `Set`. This ensures that the set is not affected by unsafe operations
 that might happen on the returned array.
 **/
-  @:to public function toArray()
-    return this.copy();
-
-  @:deprecated("use Set.toArray instead")
-  public function setToArray()
-    return toArray();
+  @:to public function toArray() : Array<T> {
+    var arr : Array<T> = [];
+    for(k in this.keys())
+      arr.push(k);
+    return arr;
+  }
 
 /**
 Converts `Set` into `String`. To differentiate from normal `Array`s the output string
 uses curly braces `{}` instead of square brackets `[]`.
 **/
   @:to public function toString()
-    return "{" + this.join(", ") + "}";
+    return "{" + toArray().join(", ") + "}";
+
+  function get_length() {
+    var l = 0;
+    for(i in this)
+      ++l;
+    return l;
+  }
 }
