@@ -1,15 +1,15 @@
 package thx;
 
-using thx.MapList;
+using thx.OrderedMap;
 using thx.Iterators;
 import utest.Assert;
 
-class TestMapList {
+class TestOrderedMap {
   public function new() {}
 
-  @:access(thx.core.MapListImpl.new)
+  @:access(thx.core.OrderedMapList.new)
   public function testBasics() {
-    var ml = MapList.stringMap();
+    var ml = OrderedMap.createString();
 
     Assert.equals(0, ml.length);
     Assert.equals("[]", ml.toString());
@@ -49,7 +49,7 @@ class TestMapList {
   }
 
   public function testAbstract() {
-    var ml = MapList.stringMap();
+    var ml = OrderedMap.createString();
     ml["k"] = "value";
     Assert.equals("value", ml["k"]);
     Assert.equals("value", ml.at(0));
@@ -60,8 +60,8 @@ class TestMapList {
 
     acceptMap(ml);
 
-    Assert.notNull(MapList.intMap());
-    Assert.notNull(MapList.enumMap());
-    Assert.notNull(MapList.objectMap());
+    Assert.notNull(OrderedMap.createInt());
+    Assert.notNull(OrderedMap.createEnum());
+    Assert.notNull(OrderedMap.createObject());
   }
 }

@@ -22,7 +22,7 @@ class TestAll {
     runner.addCase(new thx.TestInt64s());
     runner.addCase(new thx.TestInts());
     runner.addCase(new thx.TestIterators());
-    runner.addCase(new thx.TestMapList());
+    runner.addCase(new thx.TestOrderedMap());
     runner.addCase(new thx.TestMaps());
     runner.addCase(new thx.TestNulls());
     runner.addCase(new thx.TestObjects());

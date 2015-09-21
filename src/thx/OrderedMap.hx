@@ -2,26 +2,21 @@ package thx;
 
 import haxe.Constraints.IMap;
 
-@:deprecated("use OrderedMap instead")
 @:forward(length, set, insert, exists, remove, keys, iterator, toArray, toString, keyAt, keyIndex, valueIndex, removeAt)
-abstract MapList<K, V>(MapListImpl<K, V>) to IMap<K, V> {
-  @:deprecated("use OrderedMap instead")
-  inline public static function stringMap<V>() : MapList<String, V>
-    return new MapList(new StringMapList());
+abstract OrderedMap<K, V>(OrderedMapImpl<K, V>) to IMap<K, V> {
+  inline public static function createString<V>() : OrderedMap<String, V>
+    return new OrderedMap(new StringOrderedMap());
 
-  @:deprecated("use OrderedMap instead")
-  inline public static function intMap<V>() : MapList<Int, V>
-    return new MapList(new IntMapList());
+  inline public static function createInt<V>() : OrderedMap<Int, V>
+    return new OrderedMap(new IntOrderedMap());
 
-  @:deprecated("use OrderedMap instead")
-  inline public static function objectMap<K : {}, V>() : MapList<K, V>
-    return new MapList(new ObjectMapList());
+  inline public static function createObject<K : {}, V>() : OrderedMap<K, V>
+    return new OrderedMap(new ObjectOrderedMap());
 
-  @:deprecated("use OrderedMap instead")
-  inline public static function enumMap<K : EnumValue, V>() : MapList<K, V>
-    return new MapList(new EnumValueMapList());
+  inline public static function createEnum<K : EnumValue, V>() : OrderedMap<K, V>
+    return new OrderedMap(new EnumValueOrderedMap());
 
-  inline function new(inst : MapListImpl<K, V>)
+  inline function new(inst : OrderedMapImpl<K, V>)
     this = inst;
 
   @:arrayAccess public inline function get(key : K)
@@ -31,36 +26,31 @@ abstract MapList<K, V>(MapListImpl<K, V>) to IMap<K, V> {
   @:arrayAccess @:noCompletion inline public function arrayWrite(k : K, v : V) : V
     return this.setValue(k, v);
 
-  public inline function self() : MapListImpl<K, V>
+  public inline function self() : OrderedMapImpl<K, V>
     return this;
 }
 
-@:deprecated("use OrderedMap instead")
-class EnumValueMapList<K : EnumValue, V> extends MapListImpl<K, V> {
+class EnumValueOrderedMap<K : EnumValue, V> extends OrderedMapImpl<K, V> {
   public function new()
     super(new haxe.ds.EnumValueMap<K, V>());
 }
 
-@:deprecated("use OrderedMap instead")
-class IntMapList<V> extends MapListImpl<Int, V> {
+class IntOrderedMap<V> extends OrderedMapImpl<Int, V> {
   public function new()
     super(new Map<Int,V>());
 }
 
-@:deprecated("use OrderedMap instead")
-class ObjectMapList<K : {}, V> extends MapListImpl<K, V> {
+class ObjectOrderedMap<K : {}, V> extends OrderedMapImpl<K, V> {
   public function new()
     super(new haxe.ds.ObjectMap<K, V>());
 }
 
-@:deprecated("use OrderedMap instead")
-class StringMapList<V> extends MapListImpl<String, V> {
+class StringOrderedMap<V> extends OrderedMapImpl<String, V> {
   public function new()
     super(new Map<String,V>());
 }
 
-@:deprecated("use OrderedMap instead")
-class MapListImpl<K, V> implements IMap<K, V> {
+class OrderedMapImpl<K, V> implements IMap<K, V> {
   var map : IMap<K, V>;
   var arr : Array<K>;
 
