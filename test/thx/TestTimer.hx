@@ -11,10 +11,14 @@ import thx.Timer;
 class TestTimer {
   public function new() { }
 
-
   function assertTime(expected : Float, test : Float, ?pos : haxe.PosInfos) {
     var tollerance = expected * .5;
     Assert.isTrue(test >= expected - tollerance && test <= expected + tollerance, '$test is not in range of +/-$tollerance from $expected', pos);
+  }
+
+  public function testResolution() {
+    var r = Timer.resolution();
+    Assert.isTrue(r > 0);
   }
 
   public function testRepeat() {

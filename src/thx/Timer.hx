@@ -261,10 +261,18 @@ Note that the initial value might change from platfomr to platform so only delta
 #elseif cpp
     return untyped __global__.__time_stamp() / 1000;
 #elseif sys
-    return Sys.time() * 1000;
+    return Sys.cpuTime() / 1000;
 #else
     return throw 'Timer.time() is not implemented in this target';
 #end
+
+  public static function resolution() : Float {
+    var start = time(),
+        looped = 0,
+        diff = 0.0;
+    do { looped++; } while((diff = time() - start) == 0);
+    return diff;
+  }
 
 #if js
   static function __init__() untyped {
