@@ -8,7 +8,7 @@ abstract Set<T>(Map<T, Bool>) {
 /**
 Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` otherwise.
 **/
-  public static function createString(?arr : Array<String>) {
+  public static function createString(?arr : Iterable<String>) {
     var map = new Map<String, Bool>();
     var set = new Set<String>(map);
     if(null != arr)
@@ -19,7 +19,7 @@ Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` 
 /**
 Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` otherwise.
 **/
-  public static function createInt(?arr : Array<Int>) {
+  public static function createInt(?arr : Iterable<Int>) {
     var map = new Map<Int, Bool>();
     var set = new Set<Int>(map);
     if(null != arr)
@@ -30,7 +30,7 @@ Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` 
 /**
 Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` otherwise.
 **/
-  public static function createObject(?arr : Array<{}>) {
+  public static function createObject(?arr : Iterable<{}>) {
     var map = new Map<{}, Bool>();
     var set = new Set<{}>(map);
     if(null != arr)
@@ -41,7 +41,7 @@ Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` 
 /**
 Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` otherwise.
 **/
-  public static function createEnum(?arr : Array<EnumValue>) {
+  public static function createEnum(?arr : Iterable<EnumValue>) {
     var map = new Map<EnumValue, Bool>();
     var set = new Set<EnumValue>(map);
     if(null != arr)
