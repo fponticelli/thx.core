@@ -242,6 +242,24 @@ If present, it removes all the occurrences of `toremove` from `value`.
     return StringTools.replace(value, toremove, "");
 
 /**
+If present, it removes the `toremove` text from the end of `value`.
+**/
+  public static function removeAfter(value : String, toremove : String) : String
+    return StringTools.endsWith(value, toremove) ? value.substring(0, value.length - toremove.length) : value;
+
+/**
+Removes a slice from `index` to `index + length` from `value`.
+**/
+  public static function removeAt(value : String, index : Int, length : Int) : String
+    return value.substring(0, index) + value.substring(index + length);
+
+/**
+If present, it removes the `toremove` text from the beginning of `value`.
+**/
+  public static function removeBefore(value : String, toremove : String) : String
+    return StringTools.startsWith(value, toremove) ? value.substring(toremove.length) : value;
+
+/**
 If present, it removes the first occurrence of `toremove` from `value`.
 **/
   public static function removeOne(value : String, toremove : String) : String {
@@ -250,18 +268,6 @@ If present, it removes the first occurrence of `toremove` from `value`.
       return value;
     return value.substring(0, pos) + value.substring(pos + toremove.length);
   }
-
-/**
-If present, it removes the `toremove` text from the end of `value`.
-**/
-  public static function removeAfter(value : String, toremove : String) : String
-    return StringTools.endsWith(value, toremove) ? value.substring(0, value.length - toremove.length) : value;
-
-/**
-If present, it removes the `toremove` text from the beginning of `value`.
-**/
-  public static function removeBefore(value : String, toremove : String) : String
-    return StringTools.startsWith(value, toremove) ? value.substring(toremove.length) : value;
 
 /**
 `repeat` builds a new string by repeating the argument `s`, n `times`.
