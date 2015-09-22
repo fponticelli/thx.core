@@ -259,9 +259,15 @@ Note that the initial value might change from platfomr to platform so only delta
 #elseif flash
     return flash.Lib.getTimer();
 #elseif cpp
-    return untyped __global__.__time_stamp() / 1000;
-#elseif sys
-    return Sys.cpuTime() / 1000;
+    return Sys.cpuTime() * 1000.0;
+#elseif cs
+    return (cs.system.Environment.TickCount : Float);
+#elseif java
+    return cast(java.lang.System.nanoTime(), Float) / 1000000.0;
+#elseif php
+    return untyped __php__('microtime(true) * 1000.0');
+#elseif python
+    return python.lib.Time.clock() * 1000;
 #else
     return throw 'Timer.time() is not implemented in this target';
 #end
