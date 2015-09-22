@@ -236,11 +236,20 @@ It maps a string character by character using `callback`.
     return toArray(value).map(callback);
 
 /**
-If present, it removes all the occurrencies of `toremove` from `value`.
+If present, it removes all the occurrences of `toremove` from `value`.
 **/
   inline public static function remove(value : String, toremove : String) : String
     return StringTools.replace(value, toremove, "");
 
+/**
+If present, it removes the first occurrence of `toremove` from `value`.
+**/
+  public static function removeOne(value : String, toremove : String) : String {
+    var pos = value.indexOf(toremove);
+    if(pos < 0)
+      return value;
+    return value.substring(0, pos) + value.substring(pos + toremove.length);
+  }
 
 /**
 If present, it removes the `toremove` text from the end of `value`.
@@ -424,7 +433,6 @@ Words whose length exceeds `columns` are not split.
 
   static function upperMatch(re : EReg)
     return re.matched(0).toUpperCase();
-
 
   static function wrapLine(s : String, columns : Int, indent : String, newline : String) {
     var parts = [],
