@@ -266,12 +266,17 @@ Note that the initial value might change from platfomr to platform so only delta
     return throw 'Timer.time() is not implemented in this target';
 #end
 
+  static var _resolution : Null<Float>;
   public static function resolution() : Float {
+    if(null != _resolution)
+      return _resolution;
     var start = time(),
-        looped = 0,
-        diff = 0.0;
-    do { looped++; } while((diff = time() - start) == 0);
-    return diff;
+        end, loop = 0.0;
+    do {
+      loop++;
+      end = Timer.time();
+    } while(end - start == 0);
+    return _resolution = end - start;
   }
 
 #if js
