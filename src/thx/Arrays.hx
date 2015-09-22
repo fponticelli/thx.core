@@ -789,6 +789,19 @@ Note that the function changes the passed array and doesn't create a copy.
   }
 
 /**
+Returns the sample standard deviation of the sampled values.
+**/
+  public static function standardDeviation(array : Array<Float>) : Float {
+    if(array.length < 2)
+      return 0.0;
+    var mean = average(array),
+        variance = sum(array.map(function(val) {
+            return Math.pow(val - mean, 2);
+          })) / (array.length - 1);
+    return Math.sqrt(variance);
+  }
+
+/**
 Finds the sum of all the elements in the array.
 **/
   public static function sum(arr : Array<Float>) : Null<Float>
