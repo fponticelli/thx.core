@@ -245,21 +245,18 @@ the target platform.
 #end
   }
 
-
 /**
 Returns a time value in milliseconds. Where supported, the decimal value represents microseconds.
 
-Note that the initial value might change from platfomr to platform so only delta measurements make sense.
+Note that the initial value might change from platform to platform so only delta measurements make sense.
 **/
   inline public static function time() : Float
 #if js
     return untyped __js__("performance").now();
-#elseif openfl
-    return openfl.Lib.getTimer();
 #elseif flash
     return flash.Lib.getTimer();
-#elseif cpp
-    return Sys.cpuTime() * 1000.0;
+#elseif (cpp || neko)
+    return haxe.Timer.stamp() * 1000.0;
 #elseif cs
     return (cs.system.Environment.TickCount : Float);
 #elseif java
