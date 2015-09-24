@@ -4,6 +4,9 @@ using StringTools;
 using thx.Arrays;
 import haxe.Utf8;
 
+/** Alias of `StringTools`, included so mixins work with `using thx.Strings;` **/
+typedef HaxeStringTools = StringTools;
+
 /**
 Extension methods for strings.
 **/
@@ -471,6 +474,24 @@ Words whose length exceeds `columns` are not split.
     return indent + parts.join(newline + indent);
   }
 
+  public static function lpad(s : String, char : String, length : Int) {
+    var diff = length - Utf8.length(s);
+    if(diff > 0) {
+      return repeat(char, diff) + s;
+    } else {
+      return s;
+    }
+  }
+
+  public static function rpad(s : String, char : String, length : Int) {
+    var diff = length - Utf8.length(s);
+    if(diff > 0) {
+      return s + repeat(char, diff);
+    } else {
+      return s;
+    }
+  }
+
   static var UCWORDS = ~/[^a-zA-Z]([a-z])/g;
 #if !php
   static var UCWORDSWS = ~/[ \t\r\n][a-z]/g;
@@ -481,6 +502,3 @@ Words whose length exceeds `columns` are not split.
   static var WSG = ~/[ \t\r\n]+/g;
   static var SPLIT_LINES = ~/\r\n|\n\r|\n|\r/g;
 }
-
-/** Alias of `StringTools`, included so mixins work with `using thx.Strings;` **/
-typedef HaxeStringTools = StringTools;
