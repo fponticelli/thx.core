@@ -795,9 +795,9 @@ Returns the sample standard deviation of the sampled values.
     if(array.length < 2)
       return 0.0;
     var mean = average(array),
-        variance = sum(array.map(function(val) {
-            return Math.pow(val - mean, 2);
-          })) / (array.length - 1);
+        variance = Arrays.reduce(array, function(acc, val) {
+            return acc + Math.pow(val - mean, 2);
+          }, 0) / (array.length - 1);
     return Math.sqrt(variance);
   }
 
