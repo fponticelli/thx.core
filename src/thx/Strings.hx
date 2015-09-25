@@ -65,6 +65,37 @@ Replaces occurrances of `\r\n`, `\n\r`, `\r` with `\n`;
   public static function canonicalizeNewlines(value : String) : String
     return CANONICALIZE_LINES.replace(value, "\n");
 
+/**
+Compares two strings ignoring their case.
+**/
+  inline public static function caseInsensitiveCompare(a : String, b : String) : Int
+    return compare(a.toLowerCase(), b.toLowerCase());
+
+/**
+Returns true if `s` ends with `end` ignoring their case.
+**/
+  inline public static function caseInsensitiveEndsWith(s : String, end : String) : Bool
+    return StringTools.endsWith(s.toLowerCase(), end.toLowerCase());
+
+/**
+Compares a string `s` with many `values` and see if one of them matches its end ignoring their case.
+**/
+  inline public static function caseInsensitiveEndsWithAny(s : String, values : Array<String>) : Bool
+    return endsWithAny(s.toLowerCase(), values.map(function(v) return v.toLowerCase()));
+
+/**
+Compares two strings ignoring their case.
+**/
+  inline public static function caseInsensitiveStartsWith(s : String, start : String) : Bool
+    return StringTools.startsWith(s.toLowerCase(), start.toLowerCase());
+
+/**
+Compares a string `s` with many `values` and see if one of them matches its beginning ignoring their case.
+**/
+  inline public static function caseInsensitiveStartsWithAny(s : String, values : Array<String>) : Bool
+    return startsWithAny(s.toLowerCase(), values.map(function(v) return v.toLowerCase()));
+
+/**
 It cleans up all the whitespaces in the passed `value`. `collapse` does the following:
 
   - remove trailing/leading whitespaces
