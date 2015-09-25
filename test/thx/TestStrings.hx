@@ -53,6 +53,13 @@ class TestStrings {
     Assert.isTrue("one two three".containsAny(["one two", "x", "three"]));
   }
 
+  public function testHashCode() {
+    Assert.equals(97, "a".hashCode());
+    Assert.equals(96354, "abc".hashCode());
+    Assert.equals(898829415, "abcdefghijklm".hashCode());
+    Assert.equals(410520826, "abcdefghijklmabcdefghijklmabcdefghijklmabcdefghijklmabcdefghijklm!!!".hashCode());
+  }
+
   public function testUcwordsws() {
     var tests = [
       { expected : "Test", test : "test" },

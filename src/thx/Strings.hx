@@ -162,6 +162,17 @@ If `searchFor` is not found, an empty string is returned.
       return value.substring(pos);
   }
 
+  static var HASCODE_MAX : haxe.Int32 = 2147483647;
+  static var HASCODE_MUL : haxe.Int32 = 31;
+  public static function hashCode(value : String) {
+    var code : haxe.Int32 = 0;
+    for(i in 0...value.length) {
+      var c : haxe.Int32 = value.charCodeAt(i);
+      code = (HASCODE_MUL * code + c) % HASCODE_MAX;
+    }
+    return (code : Int);
+  }
+
 /**
 Returns `true` if `value` is not `null` and contains at least one character.
 **/
