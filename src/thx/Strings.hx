@@ -195,6 +195,9 @@ Works the same as `underscore` but also replaces underscores with whitespaces.
     return ALPHANUM.match(value);
 #end
 
+  public static function isBreakingWhitespace(value : String) : Bool
+    return !IS_BREAKINGWHITESPACE.match(value);
+
 /**
 Returns `true` if the value string is composed of only lower cased characters
 or case neutral characters.
@@ -504,6 +507,7 @@ Words whose length exceeds `columns` are not split.
   }
 
   static var UCWORDS = ~/[^a-zA-Z]([a-z])/g;
+  static var IS_BREAKINGWHITESPACE = ~/[^\t\n\r ]/;
 #if !php
   static var UCWORDSWS = ~/[ \t\r\n][a-z]/g;
   static var ALPHANUM = ~/^[a-z0-9]+$/i;
