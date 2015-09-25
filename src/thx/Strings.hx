@@ -142,7 +142,7 @@ of `symbol`.
     var sl = Utf8.length(s),
         symboll = Utf8.length(symbol);
     if (sl > maxlen) {
-      if(maxlen < symboll ) {
+      if(maxlen < symboll) {
         return Utf8.sub(symbol, symboll - maxlen, maxlen);
       } else {
         return Utf8.sub(s, 0, maxlen - symboll) + symbol;
@@ -172,6 +172,13 @@ Same as `ellipsis` but puts the symbol in the middle of the string and not to th
       return s;
   }
 
+/**
+Returns `true` if `s` ends with any of the values in `values`.
+**/
+  public static function endsWithAny(s : String, values : Iterable<String>) : Bool
+    return Iterables.any(values, function(end) return s.endsWith(end));
+
+/**
 `filter` applies `predicate` character by character to `s` and it returns a filtered
 version of the string.
 **/
@@ -356,6 +363,12 @@ Converts a string in a quoted string.
     else
       return '"' + StringTools.replace(s, '"', '\\"') + '"';
   }
+
+/**
+Returns `true` if `s` starts with any of the values in `values`.
+**/
+  public static function startsWithAny(s : String, values : Iterable<String>) : Bool
+    return Iterables.any(values, function(start) return s.startsWith(start));
 
 /**
 `stripTags` removes any HTML/XML markup from the string leaving only the concatenation
@@ -556,4 +569,5 @@ Words whose length exceeds `columns` are not split.
 #end
   static var WSG = ~/[ \t\r\n]+/g;
   static var SPLIT_LINES = ~/\r\n|\n\r|\n|\r/g;
+  static var CANONICALIZE_LINES = ~/\r\n|\n\r|\r/g;
 }
