@@ -147,6 +147,26 @@ of `symbol`.
   }
 
 /**
+Same as `ellipsis` but puts the symbol in the middle of the string and not to the end.
+
+```haxe
+'thx is a nice library'.ellipsisMiddle(16); // returns 'thx is … library'
+```
+**/
+  public static function ellipsisMiddle(s : String, ?maxlen = 20, ?symbol = "…") {
+    var sl = Utf8.length(s),
+        symboll = Utf8.length(symbol);
+    if (sl > maxlen) {
+      if(maxlen <= symboll) {
+        return ellipsis(s, maxlen, symbol);
+      }
+      var hll = Math.ceil((maxlen - symboll) / 2),
+          hlr = Math.floor((maxlen - symboll) / 2);
+      return Utf8.sub(s, 0, hll) + symbol + Utf8.sub(s, sl - hlr, hlr);
+    } else
+      return s;
+  }
+
 `filter` applies `predicate` character by character to `s` and it returns a filtered
 version of the string.
 **/
