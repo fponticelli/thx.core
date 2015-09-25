@@ -40,10 +40,22 @@ Compares two chars returning -1, 0 or 1.
     return Utf8.compare(toString(), other);
 
 /**
+Returns true if a string is all breaking whitespace.
+**/
+  public function isBreakingWhitespace() : Bool
+    return this == ' '.code || this == '\t'.code || this == '\n'.code || this == '\r'.code;
+
+/**
 Returns true if the character is a control character.
 */
-  public function isControl()
+  public function isControl() : Bool
     return (this >= 0x0000 && this <= 0x001F) || this == 0x007F || (this >= 0x0080 && this <= 0x009F);
+
+/**
+Checks if character is a valid unicode character.
+**/
+  public function isUnicode() : Bool
+    return this <= 0xFFFD;
 
 /**
 Returns the next character incrementing its code by one.
