@@ -60,6 +60,11 @@ the process is limited to whitespace separated words.
   }
 
 /**
+Replaces occurrances of `\r\n`, `\n\r`, `\r` with `\n`;
+**/
+  public static function canonicalizeNewlines(value : String) : String
+    return CANONICALIZE_LINES.replace(value, "\n");
+
 It cleans up all the whitespaces in the passed `value`. `collapse` does the following:
 
   - remove trailing/leading whitespaces
