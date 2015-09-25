@@ -233,6 +233,12 @@ Works the same as `underscore` but also replaces underscores with whitespaces.
     return underscore(s).replace('_', ' ');
 
 /**
+Checks if `s` contains only (and at least one) alphabetical characters.
+**/
+  public static function isAlpha(s : String)
+    return s.length > 0 && !IS_ALPHA.match(s);
+
+/**
 `isAlphaNum` returns `true` if the string only contains alpha-numeric characters.
 **/
   public static inline function isAlphaNum(value : String) : Bool
@@ -561,6 +567,7 @@ Words whose length exceeds `columns` are not split.
 
   static var UCWORDS = ~/[^a-zA-Z]([a-z])/g;
   static var IS_BREAKINGWHITESPACE = ~/[^\t\n\r ]/;
+  static var IS_ALPHA = ~/[^a-zA-Z]/;
 #if !php
   static var UCWORDSWS = ~/[ \t\r\n][a-z]/g;
   static var ALPHANUM = ~/^[a-z0-9]+$/i;
