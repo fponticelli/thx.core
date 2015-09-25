@@ -145,16 +145,16 @@ class DecimalImpl {
   public function isZero() : Bool
     return value.isZero();
 
-  public function compare(that : DecimalImpl) : Int {
+  public function compareTo(that : DecimalImpl) : Int {
     var lhs = this.matchScale(that),
         rhs = that.matchScale(this);
-    return lhs.value.compare(rhs.value);
+    return lhs.value.compareTo(rhs.value);
   }
 
-  public function compareAbs(that : DecimalImpl) : Int {
+  public function compareToAbs(that : DecimalImpl) : Int {
     var lhs = this.matchScale(that),
         rhs = that.matchScale(this);
-    return lhs.value.compareAbs(rhs.value);
+    return lhs.value.compareToAbs(rhs.value);
   }
 
   // TODO needs better implementation

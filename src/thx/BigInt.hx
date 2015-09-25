@@ -35,17 +35,20 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
     return low.add(range.random());
   }
 
+  inline public static function compare(a : BigInt, b : BigInt)
+    return a.compareTo(b);
+
   inline public function isZero() : Bool
     return this.isZero();
 
   inline public function abs() : BigInt
     return this.abs();
 
-  inline public function compare(that : BigInt) : Int
-    return this.compare(that);
+  inline public function compareTo(that : BigInt) : Int
+    return this.compareTo(that);
 
-  inline public function compareAbs(that : BigInt) : Int
-    return this.compareAbs(that);
+  inline public function compareToAbs(that : BigInt) : Int
+    return this.compareToAbs(that);
 
   inline public function next() : BigInt
     return this.next();
@@ -69,7 +72,7 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
     return this.sign;
 
   inline public function isPositive() : Bool
-    return this.compare(zero) > 0;
+    return this.compareTo(zero) > 0;
 
   inline public function isUnit() : Bool
     return this.isUnit();
@@ -177,24 +180,24 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   }
 
   @:op(A>B) public function greater(that : BigInt) : Bool
-    return this.compare(that) > 0;
+    return this.compareTo(that) > 0;
 
   @:op(A>=B) public function greaterEqual(that : BigInt) : Bool
-    return this.compare(that) >= 0;
+    return this.compareTo(that) >= 0;
 
   @:op(A<B) public function less(that : BigInt) : Bool
-    return this.compare(that) < 0;
+    return this.compareTo(that) < 0;
 
   @:op(A<=B) public function lessEqual(that : BigInt) : Bool
-    return this.compare(that) <= 0;
+    return this.compareTo(that) <= 0;
 
   @:op(A==B) @:commutative
   public function equals(that : BigInt) : Bool
-    return this.compare(that) == 0;
+    return this.compareTo(that) == 0;
 
   @:op(A!=B) @:commutative
   public function notEquals(that : BigInt) : Bool
-    return this.compare(that) != 0;
+    return this.compareTo(that) != 0;
 
   @:op(A+B) @:commutative
   inline public function add(that : BigInt) : BigInt

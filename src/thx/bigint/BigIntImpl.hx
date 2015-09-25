@@ -21,8 +21,8 @@ interface BigIntImpl {
   function isOdd() : Bool;
   function isUnit() : Bool;
   function isZero() : Bool;
-  function compare(that : BigIntImpl) : Int;
-  function compareAbs(that : BigIntImpl) : Int;
+  function compareTo(that : BigIntImpl) : Int;
+  function compareToAbs(that : BigIntImpl) : Int;
   function not() : BigIntImpl;
   function and(that : BigIntImpl) : BigIntImpl;
   function or(that : BigIntImpl) : BigIntImpl;

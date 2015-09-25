@@ -61,6 +61,9 @@ abstract Time(Int64) {
     }
   }
 
+  inline public static function compare(a : Time, b : Time)
+    return a.compareTo(b);
+
   public static function create(hours : Int, ?minutes : Int = 0, ?seconds : Int = 0, ?milliseconds : Int = 0)
     return new Time(timeToTicks(hours, minutes, seconds) + (milliseconds * ticksPerMillisecondI64));
 
@@ -114,7 +117,7 @@ abstract Time(Int64) {
   @:op(A-B) inline public function subtract(other : Time)
     return new Time(ticks - other.ticks);
 
-  inline public function compare(other : Time)
+  inline public function compareTo(other : Time)
     return Int64s.compare(ticks, other.ticks);
 
   @:op(A==B) inline public function equals(other : Time)

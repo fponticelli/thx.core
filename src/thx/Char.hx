@@ -27,13 +27,16 @@ is used in the conversion.
   @:from inline public static function fromString(s : String) : Char
     return Utf8.charCodeAt(s, 0);
 
+  inline public static function compare(a : Char, b : Char)
+    return a.compareTo(b);
+
   inline function new(i : Int)
     this = i;
 
 /**
 Compares two chars returning -1, 0 or 1.
 */
-  inline public function compare(other : Char) : Int
+  inline public function compareTo(other : Char) : Int
     return Utf8.compare(toString(), other);
 
 /**
@@ -70,19 +73,19 @@ Returns the lower case version if any of the character.
 Equality method.
 */
   @:op(A==B) inline public function equals(other : Char)
-    return compare(other) == 0;
+    return compareTo(other) == 0;
 
   @:op(A>B) inline public function greater(other : Char)
-    return compare(other) > 0;
+    return compareTo(other) > 0;
 
   @:op(A>=B) inline public function greaterEquals(other : Char)
-    return compare(other) >= 0;
+    return compareTo(other) >= 0;
 
   @:op(A<=B) inline public function lessEquals(other : Char)
-    return compare(other) <= 0;
+    return compareTo(other) <= 0;
 
   @:op(A<B) inline public function less(other : Char)
-    return compare(other) < 0;
+    return compareTo(other) < 0;
 
 /**
 Returns the character `Int` code that is also the internal

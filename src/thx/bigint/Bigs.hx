@@ -65,7 +65,7 @@ class Bigs {
   public static function arrayToSmall(arr : Array<Int>) : Null<Int> {
     trim(arr);
     var length = arr.length;
-    if(length < 4 && compareAbs(arr, MAX_INT_ARR) < 0) {
+    if(length < 4 && compareToAbs(arr, MAX_INT_ARR) < 0) {
       switch (length) {
         case 0: return 0;
         case 1: return arr[0];
@@ -140,7 +140,7 @@ class Bigs {
     return r;
   }
 
-  public static function compareAbs(a : Array<Int>, b : Array<Int>) : Int {
+  public static function compareToAbs(a : Array<Int>, b : Array<Int>) : Int {
     if(a.length != b.length)
       return a.length > b.length ? 1 : -1;
     var i = a.length;
@@ -182,7 +182,7 @@ class Bigs {
 
   public static function subtractAny(a : Array<Int>, b : Array<Int>, sign : Bool) : BigIntImpl {
     var value;
-    if(compareAbs(a, b) >= 0) {
+    if(compareToAbs(a, b) >= 0) {
       value = subtract(a, b);
     } else {
       value = subtract(b, a);
@@ -422,7 +422,7 @@ class Bigs {
         guess, xlen, highx, highy, check;
     while(a_l != 0) {
       part.unshift(a[--a_l]);
-      if(compareAbs(part, b) < 0) {
+      if(compareToAbs(part, b) < 0) {
         result.push(0);
         continue;
       }
@@ -435,7 +435,7 @@ class Bigs {
       guess = Math.ceil(highx / highy);
       do {
         check = multiplySmall(b, guess);
-        if(compareAbs(check, part) <= 0) break;
+        if(compareToAbs(check, part) <= 0) break;
         guess--;
       } while(guess != 0);
       result.push(guess);

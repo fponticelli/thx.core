@@ -538,9 +538,9 @@ class TestBigInt {
     Assert.isTrue(b >= b);
     Assert.isTrue(b <= b);
 
-    Assert.equals(-1, a.compare(b));
-    Assert.equals( 1, b.compare(a));
-    Assert.equals( 0, b.compare(b));
+    Assert.equals(-1, a.compareTo(b));
+    Assert.equals( 1, b.compareTo(a));
+    Assert.equals( 0, b.compareTo(b));
 
     a = "-333333333333333333333";
     b = "111111111111111111111111111111111111111";
@@ -554,9 +554,9 @@ class TestBigInt {
     Assert.isTrue(b >= b);
     Assert.isTrue(b <= b);
 
-    Assert.equals(-1, a.compare(b), 'expected $a.compare($b) t0 be -1 but it is ${a.compare(b)}');
-    Assert.equals( 1, b.compare(a));
-    Assert.equals( 0, b.compare(b));
+    Assert.equals(-1, a.compareTo(b), 'expected $a.compareTo($b) t0 be -1 but it is ${a.compareTo(b)}');
+    Assert.equals( 1, b.compareTo(a));
+    Assert.equals( 0, b.compareTo(b));
 
     a = "-37037037037037037036999999999999999999962962962962962962963";
     b = "-333333333333333333333";
@@ -570,10 +570,10 @@ class TestBigInt {
     Assert.isTrue(b >= b);
     Assert.isTrue(b <= b);
 
-    Assert.equals(-1, a.compare(b));
-    Assert.equals( 1, b.compare(a));
-    Assert.equals( 0, a.compare(a));
-    Assert.equals( 0, b.compare(b));
+    Assert.equals(-1, a.compareTo(b));
+    Assert.equals( 1, b.compareTo(a));
+    Assert.equals( 0, a.compareTo(a));
+    Assert.equals( 0, b.compareTo(b));
   }
 
   public function testNegation() {

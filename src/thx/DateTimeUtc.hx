@@ -112,6 +112,9 @@ exception is thrown.
     return date;
   }
 
+  inline public static function compare(a : DateTimeUtc, b : DateTimeUtc)
+    return a.compareTo(b);
+
 /**
 Creates a DateTime instance from its components (year, mont, day, hour, minute
 second and millisecond).
@@ -621,7 +624,7 @@ Returns true if this date and the `other` date share the same year, month, day, 
   inline public function addYears(years : Int)
     return addMonths(years * 12);
 
-  inline public function compare(other : DateTimeUtc) : Int
+  inline public function compareTo(other : DateTimeUtc) : Int
     return Int64s.compare(ticks, other.ticks);
 
   @:op(A==B) inline public function equals(other : DateTimeUtc)

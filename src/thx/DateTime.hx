@@ -145,6 +145,9 @@ match `end`. No interpolation is made.
     return days;
   }
 
+  inline public static function compare(a : DateTime, b : DateTime)
+    return a.compareTo(b);
+
 /**
 Creates a DateTime instance from its components (year, mont, day, hour, minute,
 second, millisecond and time offset).
@@ -530,7 +533,7 @@ Returns true if this date and the `other` date share the same year, month, day, 
     return new DateTime(utc.addYears(years), offset);
 
   // TODO should it consider offset?
-  inline public function compare(other : DateTime) : Int
+  inline public function compareTo(other : DateTime) : Int
     return Int64s.compare(utc.ticks, other.utc.ticks);
 
   // TODO should it consider offset?
@@ -548,16 +551,16 @@ Returns true if this date and the `other` date share the same year, month, day, 
   }
 
   @:op(A>B) inline public function greater(other : DateTime) : Bool
-    return compare(other) > 0;
+    return compareTo(other) > 0;
 
   @:op(A>=B) inline public function greaterEquals(other : DateTime) : Bool
-    return compare(other) >= 0;
+    return compareTo(other) >= 0;
 
   @:op(A<B) inline public function less(other : DateTime) : Bool
-    return compare(other) < 0;
+    return compareTo(other) < 0;
 
   @:op(A<=B) inline public function lessEquals(other : DateTime) : Bool
-    return compare(other) <= 0;
+    return compareTo(other) <= 0;
 
   inline public function changeOffset(newoffset : Time)
     return new DateTime(clockDateTime() - newoffset, newoffset);

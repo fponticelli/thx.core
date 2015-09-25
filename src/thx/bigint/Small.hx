@@ -198,30 +198,30 @@ class Small implements BigIntImpl {
   public function isUnit() : Bool
     return Ints.abs(value) == 1;
 
-  public function compare(that : BigIntImpl) : Int {
+  public function compareTo(that : BigIntImpl) : Int {
     if(sign != that.sign)
       return sign ? -1 : 1;
-    return that.isSmall ? compareSmall(cast that) : compareBig(cast that);
+    return that.isSmall ? compareToSmall(cast that) : compareToBig(cast that);
   }
 
-  public function compareSmall(small : Small) : Int
+  public function compareToSmall(small : Small) : Int
     return Ints.compare(value, small.value);
 
-  public function compareBig(big : Big) : Int
-    return Bigs.compareAbs(Bigs.smallToArray(Ints.abs(value)), big.value) * (sign ? -1 : 1);
+  public function compareToBig(big : Big) : Int
+    return Bigs.compareToAbs(Bigs.smallToArray(Ints.abs(value)), big.value) * (sign ? -1 : 1);
 
-  public function compareAbs(that : BigIntImpl) : Int {
+  public function compareToAbs(that : BigIntImpl) : Int {
     if(that.isSmall)
-      return compareAbsSmall(cast that);
+      return compareToAbsSmall(cast that);
     else
-      return compareAbsBig(cast that);
+      return compareToAbsBig(cast that);
   }
 
-  public function compareAbsSmall(small : Small) : Int
+  public function compareToAbsSmall(small : Small) : Int
     return Ints.compare(Ints.abs(value), Ints.abs(small.value));
 
-  public function compareAbsBig(big : Big) : Int
-    return Bigs.compareAbs(Bigs.smallToArray(Ints.abs(value)), big.value);
+  public function compareToAbsBig(big : Big) : Int
+    return Bigs.compareToAbs(Bigs.smallToArray(Ints.abs(value)), big.value);
 
   public function not() : BigIntImpl
     return negate().prev();
