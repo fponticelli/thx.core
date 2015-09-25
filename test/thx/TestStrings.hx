@@ -72,6 +72,14 @@ class TestStrings {
       Assert.equals(item.expected, item.test.capitalizeWords(true));
   }
 
+  public function testDifferAt() {
+    Assert.equals(3, Strings.diffAt("abcdef", "abc123"));
+    Assert.equals(0, Strings.diffAt("", "abc123"));
+    Assert.equals(1, Strings.diffAt("a", "abc123"));
+    Assert.equals(0, Strings.diffAt("abc123", ""));
+    Assert.equals(1, Strings.diffAt("abc123", "a"));
+  }
+
   public function testEllipsis() {
     var test = 'abcdefghijkl',
         tests : Array<{ expected : String, len : Null<Int>, symbol : String }> = [

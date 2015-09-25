@@ -111,6 +111,21 @@ Return the number of occurances of `test` in `s`.
     return s.replace('_', '-');
 
 /**
+Compares strings `a` and `b` and returns the position where they differ.
+
+```haxe
+Strings.diffAt("abcdef", "abc123"); // returns 3
+```
+**/
+  public static function diffAt(a : String, b : String) {
+    var min = Ints.min(a.length, b.length);
+    for(i in 0...min)
+      if(a.substring(i, i+1) != b.substring(i, i+1))
+        return i;
+    return min;
+  }
+
+/**
 `ellipsis` truncates `s` at len `maxlen` replaces the last characters with the content
 of `symbol`.
 
