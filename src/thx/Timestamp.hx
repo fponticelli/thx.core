@@ -23,6 +23,9 @@ and the method will normalize that value by offsetting the other arguments by th
   inline public static function create(year : Int, ?month : Int, ?day : Int, ?hour : Int, ?minute : Int, ?second : Int) : Timestamp
     return Dates.create(year, month, day, hour, minute, second).getTime();
 
+  inline public static function now()
+    return fromDate(Date.now());
+
   @:from inline public static function fromDate(d : Date) : Timestamp
     return d.getTime();
 
