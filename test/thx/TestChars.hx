@@ -14,4 +14,10 @@ class TestChars {
     Assert.same(e, t);
     Assert.equals(s, t.toString());
   }
+
+  public function testArrayAccess() {
+    var chars : Chars = "a☺b☺☺c☺☺☺";
+    Assert.equals(9786, chars[1]);
+    Assert.equals(99, chars[5]);
+  }
 }
