@@ -402,6 +402,16 @@ Converts a string in a quoted string.
   }
 
 /**
+Like `StringTools.split` but it only splits on the first occurrance of separator.
+**/
+  public static function splitOnce(s : String, separator : String) {
+    var pos = s.indexOf(separator);
+    if(pos < 0)
+      return [s];
+    return [s.substring(0, pos), s.substring(pos + separator.length)];
+  }
+
+/**
 Returns `true` if `s` starts with any of the values in `values`.
 **/
   public static function startsWithAny(s : String, values : Iterable<String>) : Bool
