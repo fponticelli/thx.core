@@ -134,7 +134,7 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
       var t = tuples.find(function(item) return item.left == key);
       if(null == t)
         return false;
-      if(!this.get(key).equals(t.right))
+      if(!Arrays.equals((this.get(key) : Array<String>), (t.right : Array<String>)))
         return false;
       tuples.remove(t);
     }
