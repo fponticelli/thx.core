@@ -8,7 +8,7 @@ using StringTools;
 Extension methods for integer values.
 **/
 class Ints {
-  static var pattern_parse = ~/^\s*[+-]?(\d+|0x[0-9A-F]+)/i;
+  static var pattern_parse = ~/^[ \t\r\n]*[+-]?(\d+|0x[0-9A-F]+)/i;
 /**
 `abs` returns the absolute integer value of the passed argument.
 **/

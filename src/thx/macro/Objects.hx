@@ -38,7 +38,7 @@ class Objects {
     var arr = [];
 
     switch typeTo {
-    case TAnonymous(fields):
+      case TAnonymous(fields):
         arr = arr.concat(fields);
       case TPath({name : name, pack : pack, sub : sub, params : params}):
         var type = getTypeFromPath(name, pack, sub, params);
@@ -47,11 +47,11 @@ class Objects {
           case TAnonymous(fields):
             arr = arr.concat(fields);
           case _:
-            Context.error('Field `to` cannot be parsed for merge', to.pos);
+            Context.error('Field `to` does not refer to an anonymous object', to.pos);
         }
 
       case _:
-        Context.error('Field `to` cannot use this expression for merge', to.pos);
+        Context.error('Field `to` needs to be an anonymous object', to.pos);
     }
 
     switch typeFrom {
@@ -63,10 +63,10 @@ class Objects {
           case TAnonymous(fields):
             overwriteFieldsInType(fields, arr);
           case _:
-            Context.error('Field `from` cannot be parsed for merge', from.pos);
+            Context.error('Field `from` does not refer to an anonymous object', from.pos);
         }
       case _:
-        Context.error('Field `from` cannot use this expression for merge', from.pos);
+        Context.error('Field `from` needs to be an anonymous object', from.pos);
     }
 
     var t : ComplexType = TAnonymous(arr);
