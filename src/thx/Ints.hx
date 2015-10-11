@@ -209,6 +209,12 @@ Converts and integer value into a boolean. Any value different from `0` will eva
     return v != 0;
 
 /**
+Alias for parse, mainly for disambiguation with other parses using mega Thx.
+**/
+  inline public static function toInt(s : String, ?base : Int) : Int
+    return Ints.parse(s, base);
+
+/**
 `sign` returns `-1` if `value` is a negative number, `1` otherwise.
 */
   inline public static function sign(value : Int) : Int
