@@ -201,6 +201,7 @@ class TestArrays {
     ], results);
   }
 #end
+
   public function testMapRight() {
     Assert.same([6,4,2], [1,2,3].mapRight(function(v) return v * 2));
   }
@@ -252,6 +253,16 @@ class TestArrays {
     Assert.same([[1,2,3,4],[5,6,7,8],[9,0]], arr.splitBy(4));
     Assert.same([[1,2,3,4,5,6,7,8,9,0]], arr.splitBy(10));
     Assert.same([[1,2,3,4,5,6,7,8,9,0]], arr.splitBy(20));
+  }
+  
+  public function testSplitByPad() {
+    var arr = [1,2,3,4,5,6,7,8,9,0];
+    Assert.same([[1],[2],[3],[4],[5],[6],[7],[8],[9],[0]], arr.splitByPad(1, 0));
+    Assert.same([[1,2],[3,4],[5,6],[7,8],[9,0]], arr.splitByPad(2, 0));
+    Assert.same([[1,2,3],[4,5,6],[7,8,9],[0,0,0]], arr.splitByPad(3, 0));
+    Assert.same([[1,2,3,4],[5,6,7,8],[9,0,0,0]], arr.splitByPad(4, 0));
+    Assert.same([[1,2,3,4,5,6,7,8,9,0]], arr.splitByPad(10, 0));
+    Assert.same([[1,2,3,4,5,6,7,8,9,0,0,0,0,0,0,0,0,0,0,0]], arr.splitByPad(20, 0));
   }
 }
 

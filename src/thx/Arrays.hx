@@ -580,6 +580,16 @@ Splits an array into smaller arrays at most of length equal to `len`.
   }
 
 /**
+Splits an array by the given number and pads last group with the given element if necessary.
+**/
+  public static function splitByPad<T>(arr : Array<T>, len : Int, pad : T) {
+    var res = Arrays.splitBy(arr, len);
+    while (Arrays.last(res).length < len)
+      Arrays.last(res).push(pad);
+    return res;
+  }
+
+/**
 Returns the first `n` elements from the array.
 **/
   inline public static function take<T>(arr : Array<T>, n : Int) : Array<T>
