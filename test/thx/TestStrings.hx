@@ -247,6 +247,13 @@ aaa aa", text.wrapColumns(6));
         e = ["a","☺","b","☺","☺","c","☺","☺","☺"];
     Assert.same(e, t.toArray());
   }
+  
+  public function testToLines() {
+    var text = "Split
+to
+lines";
+    Assert.same(["Split", "to", "lines"], text.toLines());
+  }
 
   public function testReverse() {
     var t = "a☺b☺☺c☺☺☺",
