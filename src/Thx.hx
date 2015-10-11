@@ -58,7 +58,6 @@ typedef Types = thx.Types;
 typedef Url = thx.Url;
 typedef Uuid = thx.Uuid;
 typedef Weekday = thx.Weekday;
-
 typedef AbstractMethod = thx.error.AbstractMethod;
 typedef NotImplemented = thx.error.NotImplemented;
 typedef NullArgument = thx.error.NullArgument;
