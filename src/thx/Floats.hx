@@ -202,6 +202,12 @@ Rounds a number to the specified number of decimals.
   inline public static function sign<T : Float>(value : T) : Int
     return value < 0 ? -1 : 1;
 
+/**
+Alias for parse, mainly for disambiguation with other parses using mega Thx.
+**/
+  inline public static function toFloat(s : String) : Float
+    return Floats.parse(s);
+
   inline public static function trunc(value : Float) : Int
     return value < 0.0 ? Math.ceil(value) : Math.floor(value);
 
