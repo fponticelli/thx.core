@@ -578,7 +578,7 @@ Returns true if this date and the `other` date share the same year, month, day, 
   inline static public function less(self : DateTime, that : DateTime) : Bool
     return self.compareTo(that) < 0;
 
-  inline public function lessEqualsThan(that : DateTime) : Bool
+  inline public function lessEqualsTo(that : DateTime) : Bool
     return compareTo(that) <= 0;
 
   @:op(A<=B)

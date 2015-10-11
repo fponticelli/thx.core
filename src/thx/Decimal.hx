@@ -102,11 +102,11 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
   static public function greater(self : Decimal, that : Decimal) : Bool
     return self.compareTo(that) > 0;
 
-  public function greaterEqualTo(that : Decimal) : Bool
+  public function greaterEqualsTo(that : Decimal) : Bool
     return compareTo(that) >= 0;
 
   @:op(A>=B)
-  static public function greaterEqual(self : Decimal, that : Decimal) : Bool
+  static public function greaterEquals(self : Decimal, that : Decimal) : Bool
     return self.compareTo(that) >= 0;
 
   public function lessThan(that : Decimal) : Bool
@@ -116,11 +116,11 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
   static public function less(self : Decimal, that : Decimal) : Bool
     return self.compareTo(that) < 0;
 
-  public function lessEqualTo(that : Decimal) : Bool
+  public function lessEqualsTo(that : Decimal) : Bool
     return compareTo(that) <= 0;
 
   @:op(A<=B)
-  static public function lessEqual(self : Decimal, that : Decimal) : Bool
+  static public function lessEquals(self : Decimal, that : Decimal) : Bool
     return self.compareTo(that) <= 0;
 
   public function equalsTo(that : Decimal) : Bool

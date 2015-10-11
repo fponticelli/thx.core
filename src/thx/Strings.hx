@@ -470,6 +470,12 @@ is not exactly divisible by `len` the last element of the array will be shorter.
   }
 
 /**
+Returns an array of `String` split by line breaks.
+**/
+  inline public static function toLines(s : String)
+    return SPLIT_LINES.split(s);
+
+/**
 `trimChars` removes from the beginning and the end of the string any character that is present in `charlist`.
 **/
   public static inline function trimChars(value : String, charlist : String) : String
