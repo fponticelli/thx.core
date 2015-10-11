@@ -54,34 +54,39 @@ The URL can be either relative or absolute.
   public var slashes(get, set) : Bool;
 
 /**
-Matches all the URL parts with another URL and returns true if they are all
+Matches all the URL parts with anthat URL and returns true if they are all
 equals.
 */
-  @:op(A == B) public function equals(other : Url) : Bool
-    return
-      this.protocol == other.protocol &&
-      this.slashes == other.slashes &&
-      this.auth == other.auth &&
-      this.hostName == other.hostName &&
-      this.port == other.port &&
-      this.pathName == other.pathName &&
-      this.queryString.equals(other.queryString) &&
-      this.search == other.search &&
-      this.hash == other.hash;
+  @:op(A==B)
+  public static function equals(self : Url, that : Url) : Bool
+    return self.equalsTo(that);
 
-  @:op(A / B) public function concatString(other : String) : Url {
+  public function equalsTo(that : Url) : Bool
+    return
+      this.protocol == that.protocol &&
+      this.slashes == that.slashes &&
+      this.auth == that.auth &&
+      this.hostName == that.hostName &&
+      this.port == that.port &&
+      this.pathName == that.pathName &&
+      this.queryString.equals(that.queryString) &&
+      this.search == that.search &&
+      this.hash == that.hash;
+
+  @:op(A/B)
+  public function concatString(that : String) : Url {
     var copy = clone();
     if(pathName.isEmpty()) {
-      if(!other.startsWith("/"))
-        other = "/" + other;
-      copy.pathName = other;
+      if(!that.startsWith("/"))
+        that = "/" + that;
+      copy.pathName = that;
     } else {
-      if(other.startsWith("/"))
-        other = other.substring(1);
+      if(that.startsWith("/"))
+        that = that.substring(1);
       if(pathName.endsWith("/"))
-        copy.pathName = copy.pathName + other;
+        copy.pathName = copy.pathName + that;
       else
-        copy.pathName = copy.pathName + "/" + other;
+        copy.pathName = copy.pathName + "/" + that;
     }
     return copy;
   }
