@@ -179,25 +179,43 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
     return a.multiply(b).divide(a.gcd(b));
   }
 
+  public function greaterThan(that : BigInt) : Bool
+    return compareTo(that) > 0;
+
   @:op(A>B)
   static public function greater(self : BigInt, that : BigInt) : Bool
     return self.compareTo(that) > 0;
+
+  public function greaterEqualTo(that : BigInt) : Bool
+    return compareTo(that) >= 0;
 
   @:op(A>=B)
   static public function greaterEqual(self : BigInt, that : BigInt) : Bool
     return self.compareTo(that) >= 0;
 
+  public function lessThan(that : BigInt) : Bool
+    return compareTo(that) < 0;
+
   @:op(A<B)
   static public function less(self : BigInt, that : BigInt) : Bool
     return self.compareTo(that) < 0;
+
+  public function lessEqualTo(that : BigInt) : Bool
+    return compareTo(that) <= 0;
 
   @:op(A<=B)
   static public function lessEqual(self : BigInt, that : BigInt) : Bool
     return self.compareTo(that) <= 0;
 
+  public function equalsTo(that : BigInt) : Bool
+    return compareTo(that) == 0;
+
   @:op(A==B)
   static public function equals(self : BigInt, that : BigInt) : Bool
     return self.compareTo(that) == 0;
+
+  public function notEqualsTo(that : BigInt) : Bool
+    return compareTo(that) != 0;
 
   @:op(A!=B)
   public static function notEquals(self : BigInt, that : BigInt) : Bool
