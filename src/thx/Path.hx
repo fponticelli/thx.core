@@ -153,6 +153,18 @@ Creates an instance of `Path` from a string.
       sep
     );
 
+  public function hierarchy() : Array<Path> {
+    var base = [];
+    return path.reduce(function(acc : Array<Path>, cur : String) {
+      base.push(cur);
+      acc.push(create(root, base.copy(), sep));
+      return acc;
+    }, []);
+  }
+
+  public function iterator() : Iterator<Path>
+    return hierarchy().iterator();
+
   public function pathTo(destination : Path) : Path {
     return switch [isAbsolute(), destination.isAbsolute()] {
       case [true, true] if(root == destination.root):
