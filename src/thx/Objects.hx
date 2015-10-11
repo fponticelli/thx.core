@@ -94,7 +94,7 @@ Anonymous objects are entered into and copied recursively.
 **/
   public static function copyTo(src : { }, dst : { }, cloneInstances = false) : {} {
     for (field in Reflect.fields(src)) {
-      var sv = Dynamics.clone(Reflect.field(src, field),cloneInstances);
+      var sv = Dynamics.clone(Reflect.field(src, field), cloneInstances);
       var dv = Reflect.field(dst, field);
       if (Types.isAnonymousObject(sv) && Types.isAnonymousObject(dv)) {
         copyTo(sv, dv);
