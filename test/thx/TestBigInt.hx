@@ -8,6 +8,19 @@ using haxe.Int64;
 class TestBigInt {
   public function new() {}
 
+  public function testIssue82() {
+    var s : BigInt = 101;
+    var b : BigInt = new thx.bigint.Big(thx.bigint.Bigs.smallToArray(BigInt.fromString("100")), false);
+    var r = s - b;
+    Assert.isTrue(1 == s - b, 'expected $s - $b to be equal 1 but it is $r');
+
+    var s : BigInt = 101;
+    var b : BigInt = 10;
+    b = b.pow(2);
+    var r = s - b;
+    Assert.isTrue(1 == s - b, 'expected $s - $b to be equal 1 but it is $r');
+  }
+
   public function testFromInt64() {
     var values = [Int64s.minValue, Int64.ofInt(-1), Int64.ofInt(0), Int64.ofInt(1), Int64s.maxValue];
     for(value in values) {

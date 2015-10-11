@@ -63,8 +63,11 @@ class Small implements BigIntImpl {
   public function subtractSmall(small : Small) : BigIntImpl
     return new Small(value - small.value);
 
-  public function subtractBig(big : Big) : BigIntImpl
+  public function subtractBig(big : Big) : BigIntImpl {
+    if(big.compareToAbsSmall(this) < 0)
+      return new Small(value - big.toInt());
     return Bigs.subtractSmall(big.value, Ints.abs(value), value >= 0);
+  }
 
   public function divide(that : BigIntImpl) : BigIntImpl
     return divMod(that).quotient;
