@@ -366,30 +366,6 @@ In case you have to use a type that is not supported by `@:generic`, please use 
 #end
 
 /**
-Creates an array of arrays in groups of the given number. Example:
-[1, 2, 3, 4, 5, 6, 7, 8, 9].groupsOf(3) = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-**/
-  public static function groupsOf<T>(arr : Array<T>, num : Int) {
-    var arrGrouped:Array<Array<T>> = [], count = 1;
-    for (item in arr) {
-      if (count == 1) arrGrouped.push([]);
-      Arrays.last(arrGrouped).push(item);
-      count = count == num ? 1 : count + 1;
-    }
-    return arrGrouped;
-  }
-
-/**
-Creates an array in groups of the given number and pads last group with the given element if necessary.
-**/
-  public static function groupsOfPad<T>(arr : Array<T>, num : Int, pad : T) {
-    var arrGrouped = Arrays.groupsOf(arr, num);
-    while (Arrays.last(arrGrouped).length < num)
-      Arrays.last(arrGrouped).push(pad);
-    return arrGrouped;
-  }
-
-/**
 Returns `true` if the array contains at least one element.
 **/
   inline public static function hasElements<T>(array : Array<T>) : Bool
@@ -600,6 +576,16 @@ Splits an array into smaller arrays at most of length equal to `len`.
     for(p in 0...Math.ceil(array.length / len)) {
       res.push(array.slice(p * len, (p+1) * len));
     }
+    return res;
+  }
+
+/**
+Splits an array by the given number and pads last group with the given element if necessary.
+**/
+  public static function splitByPad<T>(arr : Array<T>, len : Int, pad : T) {
+    var res = Arrays.splitBy(arr, len);
+    while (Arrays.last(res).length < len)
+      Arrays.last(res).push(pad);
     return res;
   }
 

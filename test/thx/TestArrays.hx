@@ -202,20 +202,6 @@ class TestArrays {
   }
 #end
 
-  public function testGroupsOf() {
-    var arr1 = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    var arr2 = [1, 2, 3, 4, 5, 6, 7, 8];
-    Assert.same([[1, 2, 3], [4, 5, 6], [7, 8, 9]], arr1.groupsOf(3));
-    Assert.same([[1, 2, 3], [4, 5, 6], [7, 8]], arr2.groupsOf(3));
-  }
-  
-  public function testGroupsOfPad() {
-    var arr1 = [1, 2, 3, 4, 5, 6, 7, 8];
-    var arr2 = [1, 2, 3, 4, 5, 6, 7];
-    Assert.same([[1, 2, 3], [4, 5, 6], [7, 8, 0]], arr1.groupsOfPad(3, 0));
-    Assert.same([[1, 2, 3], [4, 5, 6], [7, 0, 0]], arr2.groupsOfPad(3, 0));
-  }
-
   public function testMapRight() {
     Assert.same([6,4,2], [1,2,3].mapRight(function(v) return v * 2));
   }
@@ -267,6 +253,16 @@ class TestArrays {
     Assert.same([[1,2,3,4],[5,6,7,8],[9,0]], arr.splitBy(4));
     Assert.same([[1,2,3,4,5,6,7,8,9,0]], arr.splitBy(10));
     Assert.same([[1,2,3,4,5,6,7,8,9,0]], arr.splitBy(20));
+  }
+  
+  public function testSplitByPad() {
+    var arr = [1,2,3,4,5,6,7,8,9,0];
+    Assert.same([[1],[2],[3],[4],[5],[6],[7],[8],[9],[0]], arr.splitByPad(1, 0));
+    Assert.same([[1,2],[3,4],[5,6],[7,8],[9,0]], arr.splitByPad(2, 0));
+    Assert.same([[1,2,3],[4,5,6],[7,8,9],[0,0,0]], arr.splitByPad(3, 0));
+    Assert.same([[1,2,3,4],[5,6,7,8],[9,0,0,0]], arr.splitByPad(4, 0));
+    Assert.same([[1,2,3,4,5,6,7,8,9,0]], arr.splitByPad(10, 0));
+    Assert.same([[1,2,3,4,5,6,7,8,9,0,0,0,0,0,0,0,0,0,0,0]], arr.splitByPad(20, 0));
   }
 }
 
