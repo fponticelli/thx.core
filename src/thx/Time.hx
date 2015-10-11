@@ -108,35 +108,59 @@ abstract Time(Int64) {
   @:op(-A) inline public function negate()
       return new Time(-ticks);
 
-  @:op(A+B) inline public function add(other : Time)
-    return new Time(ticks + other.ticks);
+  @:op(A+B) inline public function add(that : Time)
+    return new Time(ticks + that.ticks);
 
-  @:op(A+B) inline public function addTicks(other : Int64)
-    return new Time(ticks + other);
+  @:op(A+B) inline public function addTicks(that : Int64)
+    return new Time(ticks + that);
 
-  @:op(A-B) inline public function subtract(other : Time)
-    return new Time(ticks - other.ticks);
+  @:op(A-B) inline public function subtract(that : Time)
+    return new Time(ticks - that.ticks);
 
-  inline public function compareTo(other : Time)
-    return Int64s.compare(ticks, other.ticks);
+  inline public function compareTo(that : Time)
+    return Int64s.compare(ticks, that.ticks);
 
-  @:op(A==B) inline public function equals(other : Time)
-    return ticks == other.ticks;
+  inline public function equalsTo(that : Time)
+    return ticks == that.ticks;
 
-  @:op(A!=B) inline public function notEquals(other : Time)
-    return ticks != other.ticks;
+  @:op(A==B)
+  inline static public function equals(self : Time, that : Time)
+    return self.ticks == that.ticks;
 
-  @:op(A>B) inline public function greater(other : Time) : Bool
-    return compare(other.ticks) > 0;
+  @:op(A!=B)
+  inline static public function notEqualsTo(self : Time, that : Time)
+    return self.ticks != that.ticks;
 
-  @:op(A>=B) inline public function greaterEquals(other : Time) : Bool
-    return compare(other.ticks) >= 0;
+  inline public function notEquals(that : Time)
+    return ticks != that.ticks;
 
-  @:op(A<B) inline public function less(other : Time) : Bool
-    return compare(other.ticks) < 0;
+  @:op(A>B)
+  inline static public function greaterThan(self : Time, that : Time) : Bool
+    return self.ticks.compare(that.ticks) > 0;
 
-  @:op(A<=B) inline public function lessEquals(other : Time) : Bool
-    return compare(other.ticks) <= 0;
+  inline public function greater(that : Time) : Bool
+    return compare(that.ticks) > 0;
+
+  @:op(A>=B)
+  inline static public function greaterEqualsTo(self : Time, that : Time) : Bool
+    return self.ticks.compare(that.ticks) >= 0;
+
+  inline public function greaterEquals(that : Time) : Bool
+    return compare(that.ticks) >= 0;
+
+  @:op(A<B)
+  inline static public function lessThan(self : Time, that : Time) : Bool
+    return self.ticks.compare(that.ticks) < 0;
+
+  inline public function less(that : Time) : Bool
+    return compare(that.ticks) < 0;
+
+  @:op(A<=B)
+  inline static public function lessEqualsTo(self : Time, that : Time) : Bool
+    return self.ticks.compare(that.ticks) <= 0;
+
+  inline public function lessEquals(that : Time) : Bool
+    return compare(that.ticks) <= 0;
 
   public function toDateTimeUtc()
     return new DateTimeUtc(ticks);
