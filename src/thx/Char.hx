@@ -84,20 +84,40 @@ Returns the lower case version if any of the character.
 /**
 Equality method.
 */
-  @:op(A==B) inline public function equals(other : Char)
+  inline public function equalsTo(other : Char)
     return compareTo(other) == 0;
 
-  @:op(A>B) inline public function greater(other : Char)
+  @:op(A==B)
+  inline static public function equals(self : Char, other : Char)
+    return self.compareTo(other) == 0;
+
+  inline public function greaterThan(other : Char)
     return compareTo(other) > 0;
 
-  @:op(A>=B) inline public function greaterEquals(other : Char)
+  @:op(A>B)
+  inline static public function greater(self : Char, other : Char)
+    return self.compareTo(other) > 0;
+
+  inline public function greaterEqualsThan(other : Char)
     return compareTo(other) >= 0;
 
-  @:op(A<=B) inline public function lessEquals(other : Char)
+  @:op(A>=B)
+  inline static public function greaterEquals(self : Char, other : Char)
+    return self.compareTo(other) >= 0;
+
+  inline public function lessEqualsTo(other : Char)
     return compareTo(other) <= 0;
 
-  @:op(A<B) inline public function less(other : Char)
+  @:op(A<=B)
+  inline static public function lessEquals(self : Char, other : Char)
+    return self.compareTo(other) <= 0;
+
+  inline public function lessThan(other : Char)
     return compareTo(other) < 0;
+
+  @:op(A<B)
+  inline static public function less(self : Char, other : Char)
+    return self.compareTo(other) < 0;
 
 /**
 Returns the character `Int` code that is also the internal
