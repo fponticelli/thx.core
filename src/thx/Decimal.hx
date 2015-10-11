@@ -66,10 +66,10 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
     return this.compareTo(zero) > 0;
 
   inline public function max(that : Decimal) : Decimal
-    return greater(that) ? this : that;
+    return greater(this, that) ? this : that;
 
   inline public function min(that : Decimal) : Decimal
-    return less(that) ? this : that;
+    return less(this, that) ? this : that;
 
   inline public function ceil() : Decimal
     return this.ceilTo(0);
@@ -95,25 +95,47 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
   inline public function trim(?mindecimals : Int) : Decimal
     return this.trim(mindecimals);
 
-  @:op(A>B) public function greater(that : Decimal) : Bool
-    return this.compareTo(that) > 0;
+  public function greaterThan(that : Decimal) : Bool
+    return compareTo(that) > 0;
 
-  @:op(A>=B) public function greaterEqual(that : Decimal) : Bool
-    return this.compareTo(that) >= 0;
+  @:op(A>B)
+  static public function greater(self : Decimal, that : Decimal) : Bool
+    return self.compareTo(that) > 0;
 
-  @:op(A<B) public function less(that : Decimal) : Bool
-    return this.compareTo(that) < 0;
+  public function greaterEqualTo(that : Decimal) : Bool
+    return compareTo(that) >= 0;
 
-  @:op(A<=B) public function lessEqual(that : Decimal) : Bool
-    return this.compareTo(that) <= 0;
+  @:op(A>=B)
+  static public function greaterEqual(self : Decimal, that : Decimal) : Bool
+    return self.compareTo(that) >= 0;
 
-  @:op(A==B) @:commutative
-  public function equals(that : Decimal) : Bool
-    return this.compareTo(that) == 0;
+  public function lessThan(that : Decimal) : Bool
+    return compareTo(that) < 0;
 
-  @:op(A!=B) @:commutative
-  public function notEquals(that : Decimal) : Bool
-    return this.compareTo(that) != 0;
+  @:op(A<B)
+  static public function less(self : Decimal, that : Decimal) : Bool
+    return self.compareTo(that) < 0;
+
+  public function lessEqualTo(that : Decimal) : Bool
+    return compareTo(that) <= 0;
+
+  @:op(A<=B)
+  static public function lessEqual(self : Decimal, that : Decimal) : Bool
+    return self.compareTo(that) <= 0;
+
+  public function equalsTo(that : Decimal) : Bool
+    return compareTo(that) == 0;
+
+  @:op(A==B)
+  static public function equals(self : Decimal, that : Decimal) : Bool
+    return self.compareTo(that) == 0;
+
+  public function notEqualsTo(that : Decimal) : Bool
+    return compareTo(that) != 0;
+
+  @:op(A!=B)
+  static public function notEquals(self : Decimal, that : Decimal) : Bool
+    return self.compareTo(that) != 0;
 
   @:op(A+B) @:commutative
   inline public function add(that : Decimal) : Decimal
