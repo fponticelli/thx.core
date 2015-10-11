@@ -82,9 +82,9 @@ class TestDateTime {
 
   public function testFromString() {
     var d : DateTime = "2015-07-26T21:40:30-06:00";
-    Assert.isTrue(date.equals(d));
+    Assert.isTrue(date == d);
     var d : DateTime = "2014-01-01";
-    Assert.isTrue(DateTime.create(2014, 1, 1, Time.zero).equals(d));
+    Assert.isTrue(DateTime.create(2014, 1, 1, Time.zero) == d);
 
     Assert.equals("-1-07-27T00:00:00+00:00",    ("0-06-07" : DateTime).toString());
     Assert.equals("-1-06-07T00:00:00+00:00",    ("-1-06-07" : DateTime).toString());
@@ -103,7 +103,7 @@ class TestDateTime {
   public function testNow() {
     var ref = DateHelper.now(),
         date = DateTime.now();
-    Assert.isTrue(date.nearEquals(ref, Time.fromMinutes(10)), 'expected $ref but got $date');
+    Assert.isTrue(date.nearEqualsTo(ref, Time.fromMinutes(10)), 'expected $ref but got $date');
   }
 
   public function testSnapNext() {
