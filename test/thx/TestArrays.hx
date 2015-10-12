@@ -155,6 +155,21 @@ class TestArrays {
   }
 #end
 
+  public function testContains() {
+    Assert.isTrue([1, 2, 3].contains(2));
+    Assert.isFalse([1, 2, 3].contains(4));
+  }
+  
+  public function testContainsAll() {
+    Assert.isTrue([1, 2, 3].containsAll([3, 1, 2]));
+    Assert.isFalse([1, 2, 3].containsAll([3, 1, 2, 4]));
+  }
+  
+  public function testContainsAny() {
+    Assert.isTrue([1, 2, 3].containsAny([2, 3, 4]));
+    Assert.isFalse([1, 2, 3].containsAny([4, 5, 6]));
+  }
+
   public function testCount() {
     var arr = [2,3,2,1,4,2,3],
         map = arr.count();
