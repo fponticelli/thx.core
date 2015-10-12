@@ -14,6 +14,16 @@ Extension methods for Maps
 **/
 class Maps {
 /**
+Copies all the key/values pairs from `src` to `dst`. It overwrites already existing
+keys in `dst` if needed.
+**/
+  public static function copyTo<TKey, TValue>(src: IMap<TKey, TValue>, dst: IMap<TKey, TValue>) {
+    for(key in src.keys())
+      dst.set(key, src.get(key));
+    return dst;
+  }
+
+/**
 Converts a Map<TKey, TValue> into an Array<Tuple2<TKey, TValue>>
 **/
   public static function tuples<TKey, TValue>(map: IMap<TKey, TValue>): Array<Tuple2<TKey, TValue>>
