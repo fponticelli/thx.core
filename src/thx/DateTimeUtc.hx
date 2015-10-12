@@ -200,7 +200,7 @@ Time values are pick from the `start` value except for the last value that will
 match `end`. No interpolation is made.
 **/
   public static function daysRange(start : DateTimeUtc, end : DateTimeUtc) {
-    if(end.less(start)) return [];
+    if(less(end, start)) return [];
     var days = [];
     while(!start.sameDay(end)) {
       days.push(start);
@@ -627,28 +627,52 @@ Returns true if this date and the `other` date share the same year, month, day, 
   inline public function compareTo(other : DateTimeUtc) : Int
     return Int64s.compare(ticks, other.ticks);
 
-  @:op(A==B) inline public function equals(other : DateTimeUtc)
-    return ticks == other.ticks;
+  inline public function equalsTo(that : DateTimeUtc)
+    return ticks == that.ticks;
 
-  @:op(A!=B) inline public function notEquals(other : DateTimeUtc)
-    return ticks != other.ticks;
+  @:op(A==B)
+  inline static public function equals(self : DateTimeUtc, that : DateTimeUtc)
+    return self.ticks == that.ticks;
 
-  public function nearEquals(other : DateTimeUtc, span : Time) {
+  inline public function notEqualsTo(that : DateTimeUtc)
+    return ticks != that.ticks;
+
+  @:op(A!=B)
+  inline static public function notEquals(self : DateTimeUtc, that : DateTimeUtc)
+    return self.ticks != that.ticks;
+
+  public function nearEqualsTo(other : DateTimeUtc, span : Time) {
     var ticks = Int64s.abs(other.ticks - ticks);
     return ticks <= span.abs().ticks;
   }
 
-  @:op(A>B) inline public function greater(other : DateTimeUtc) : Bool
-    return compare(other.ticks) > 0;
+  inline public function greaterThan(that : DateTimeUtc) : Bool
+    return ticks.compare(that.ticks) > 0;
 
-  @:op(A>=B) inline public function greaterEquals(other : DateTimeUtc) : Bool
-    return compare(other.ticks) >= 0;
+  @:op(A>B)
+  inline static public function greater(self : DateTimeUtc, that : DateTimeUtc) : Bool
+    return self.ticks.compare(that.ticks) > 0;
 
-  @:op(A<B) inline public function less(other : DateTimeUtc) : Bool
-    return compare(other.ticks) < 0;
+  inline public function greaterEqualsTo(that : DateTimeUtc) : Bool
+    return ticks.compare(that.ticks) >= 0;
 
-  @:op(A<=B) inline public function lessEquals(other : DateTimeUtc) : Bool
-    return compare(other.ticks) <= 0;
+  @:op(A>=B)
+  inline static public function greaterEquals(self : DateTimeUtc, that : DateTimeUtc) : Bool
+    return self.ticks.compare(that.ticks) >= 0
+    ;
+  inline public function lessThan(that : DateTimeUtc) : Bool
+    return ticks.compare(that.ticks) < 0;
+
+  @:op(A<B)
+  inline static public function less(self : DateTimeUtc, that : DateTimeUtc) : Bool
+    return self.ticks.compare(that.ticks) < 0;
+
+  inline public function lessEqualsTo(that : DateTimeUtc) : Bool
+    return ticks.compare(that.ticks) <= 0;
+
+  @:op(A<=B)
+  inline static public function lessEquals(self : DateTimeUtc, that : DateTimeUtc) : Bool
+    return self.ticks.compare(that.ticks) <= 0;
 
   @:to inline public function toTime() : Float
     return ticks.sub(unixEpochTicks).div(ticksPerMillisecondI64).toFloat();

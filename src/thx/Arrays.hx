@@ -130,16 +130,28 @@ An optional equality function can be passed as the last argument. If not provide
   }
 
 /**
+Returns `true` if all elements in `elements` are found in the array.
+
+An optional equality function can be passed as the last argument. If not provided, strict equality is adopted.
+**/
+  public static function containsAll<T>(array : Array<T>, elements : Iterable<T>, ?eq : T -> T -> Bool) : Bool {
+    for (el in elements) {
+      if (!contains(array, el, eq)) return false;
+    }
+    return true;
+  }
+
+/**
 Returns `true` if any element in `elements` is found in the array.
 
 An optional equality function can be passed as the last argument. If not provided, strict equality is adopted.
 **/
- public static function containsAny<T>(array : ReadonlyArray<T>, elements : Iterable<T>, ?eq : T -> T -> Bool) : Bool {
-  for (el in elements) {
-    if (contains(array, el, eq)) return true;
+  public static function containsAny<T>(array : ReadonlyArray<T>, elements : Iterable<T>, ?eq : T -> T -> Bool) : Bool {
+    for (el in elements) {
+      if (contains(array, el, eq)) return true;
+    }
+    return false;
   }
-  return false;
- }
 
 /**
 It returns the cross product between two arrays.
@@ -576,6 +588,16 @@ Splits an array into smaller arrays at most of length equal to `len`.
     for(p in 0...Math.ceil(array.length / len)) {
       res.push(array.slice(p * len, (p+1) * len));
     }
+    return res;
+  }
+
+/**
+Splits an array by the given number and pads last group with the given element if necessary.
+**/
+  public static function splitByPad<T>(arr : Array<T>, len : Int, pad : T) {
+    var res = Arrays.splitBy(arr, len);
+    while (Arrays.last(res).length < len)
+      Arrays.last(res).push(pad);
     return res;
   }
 

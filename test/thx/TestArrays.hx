@@ -155,6 +155,21 @@ class TestArrays {
   }
 #end
 
+  public function testContains() {
+    Assert.isTrue([1, 2, 3].contains(2));
+    Assert.isFalse([1, 2, 3].contains(4));
+  }
+  
+  public function testContainsAll() {
+    Assert.isTrue([1, 2, 3].containsAll([3, 1, 2]));
+    Assert.isFalse([1, 2, 3].containsAll([3, 1, 2, 4]));
+  }
+  
+  public function testContainsAny() {
+    Assert.isTrue([1, 2, 3].containsAny([2, 3, 4]));
+    Assert.isFalse([1, 2, 3].containsAny([4, 5, 6]));
+  }
+
   public function testCount() {
     var arr = [2,3,2,1,4,2,3],
         map = arr.count();
@@ -201,6 +216,7 @@ class TestArrays {
     ], results);
   }
 #end
+
   public function testMapRight() {
     Assert.same([6,4,2], [1,2,3].mapRight(function(v) return v * 2));
   }
@@ -252,6 +268,16 @@ class TestArrays {
     Assert.same([[1,2,3,4],[5,6,7,8],[9,0]], arr.splitBy(4));
     Assert.same([[1,2,3,4,5,6,7,8,9,0]], arr.splitBy(10));
     Assert.same([[1,2,3,4,5,6,7,8,9,0]], arr.splitBy(20));
+  }
+  
+  public function testSplitByPad() {
+    var arr = [1,2,3,4,5,6,7,8,9,0];
+    Assert.same([[1],[2],[3],[4],[5],[6],[7],[8],[9],[0]], arr.splitByPad(1, 0));
+    Assert.same([[1,2],[3,4],[5,6],[7,8],[9,0]], arr.splitByPad(2, 0));
+    Assert.same([[1,2,3],[4,5,6],[7,8,9],[0,0,0]], arr.splitByPad(3, 0));
+    Assert.same([[1,2,3,4],[5,6,7,8],[9,0,0,0]], arr.splitByPad(4, 0));
+    Assert.same([[1,2,3,4,5,6,7,8,9,0]], arr.splitByPad(10, 0));
+    Assert.same([[1,2,3,4,5,6,7,8,9,0,0,0,0,0,0,0,0,0,0,0]], arr.splitByPad(20, 0));
   }
 }
 

@@ -203,10 +203,24 @@ Transform an `Int` value to a `String` using the specified `base`
   }
 
 /**
-Converts and integer value into a boolean. Any value different from `0` will evaluate to `true`.
+Alias for toString, mainly for disambig. with standard toString using mega Thx.
+Should toString just be renamed to this? At least with this, existing code
+doesn't break.
+**/
+  inline public static function toBase(value : Int, base : Int) : String
+    return Ints.toString(value, base);
+
+/**
+Converts an integer value into a boolean. Any value different from `0` will evaluate to `true`.
 **/
   public static inline function toBool(v : Int)
     return v != 0;
+
+/**
+Alias for parse, mainly for disambiguation with other parses using mega Thx.
+**/
+  inline public static function toInt(s : String, ?base : Int) : Int
+    return Ints.parse(s, base);
 
 /**
 `sign` returns `-1` if `value` is a negative number, `1` otherwise.

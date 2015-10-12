@@ -82,7 +82,7 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
       return false;
     if(that.isUnit())
       return true;
-    if(that.equals(two))
+    if(equals(that, two))
       return isEven();
     return modulo(that).isZero();
   }
@@ -92,11 +92,11 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
         nPrev = n.prev();
     if(n.isUnit())
       return false;
-    if(n.equals(2) || n.equals(3) || n.equals(5))
+    if(equals(n, 2) || equals(n, 3) || equals(n, 5))
       return true;
     if(n.isEven() || n.isDivisibleBy(3) || n.isDivisibleBy(5))
       return false;
-    if(n.less(25))
+    if(less(n, 25))
       return true;
     var a = [2, 3, 5, 7, 11, 13, 17, 19],
         b = nPrev,
@@ -105,13 +105,13 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
       b = b.divide(2);
     for(i in 0...a.length) {
       x = (a[i] : BigInt).modPow(b, n);
-      if(x.equals(one) || x.equals(nPrev))
+      if(equals(x, one) || equals(x, nPrev))
         continue;
       t = true;
       d = b;
-      while(t && d.less(nPrev)) {
+      while(t && less(d, nPrev)) {
         x = x.square().modulo(n);
-        if(x.equals(nPrev))
+        if(equals(x, nPrev))
           t = false;
         d = d.multiply(2);
       }
@@ -146,15 +146,15 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   }
 
   inline public function max(that : BigInt) : BigInt
-    return greater(that) ? this : that;
+    return greater(this, that) ? this : that;
 
   inline public function min(that : BigInt) : BigInt
-    return less(that) ? this : that;
+    return less(this, that) ? this : that;
 
   public function gcd(that : BigInt) : BigInt {
     var a = abs(),
         b = that.abs();
-    if(a.equals(b) || a.isZero())
+    if(equals(a, b) || a.isZero())
       return b;
     if(b.isZero())
       return a;
@@ -167,7 +167,7 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
     if(b.isEven()) {
       return a.gcd(b.divide(Small.two));
     }
-    if(a.greater(b)) {
+    if(greater(a, b)) {
       return a.subtract(b).divide(Small.two).gcd(b);
     }
     return b.subtract(a).divide(Small.two).gcd(a);
@@ -179,25 +179,47 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
     return a.multiply(b).divide(a.gcd(b));
   }
 
-  @:op(A>B) public function greater(that : BigInt) : Bool
-    return this.compareTo(that) > 0;
+  public function greaterThan(that : BigInt) : Bool
+    return compareTo(that) > 0;
 
-  @:op(A>=B) public function greaterEqual(that : BigInt) : Bool
-    return this.compareTo(that) >= 0;
+  @:op(A>B)
+  static public function greater(self : BigInt, that : BigInt) : Bool
+    return self.compareTo(that) > 0;
 
-  @:op(A<B) public function less(that : BigInt) : Bool
-    return this.compareTo(that) < 0;
+  public function greaterEqualsTo(that : BigInt) : Bool
+    return compareTo(that) >= 0;
 
-  @:op(A<=B) public function lessEqual(that : BigInt) : Bool
-    return this.compareTo(that) <= 0;
+  @:op(A>=B)
+  static public function greaterEquals(self : BigInt, that : BigInt) : Bool
+    return self.compareTo(that) >= 0;
 
-  @:op(A==B) @:commutative
-  public function equals(that : BigInt) : Bool
-    return this.compareTo(that) == 0;
+  public function lessThan(that : BigInt) : Bool
+    return compareTo(that) < 0;
 
-  @:op(A!=B) @:commutative
-  public function notEquals(that : BigInt) : Bool
-    return this.compareTo(that) != 0;
+  @:op(A<B)
+  static public function less(self : BigInt, that : BigInt) : Bool
+    return self.compareTo(that) < 0;
+
+  public function lessEqualsTo(that : BigInt) : Bool
+    return compareTo(that) <= 0;
+
+  @:op(A<=B)
+  static public function lessEquals(self : BigInt, that : BigInt) : Bool
+    return self.compareTo(that) <= 0;
+
+  public function equalsTo(that : BigInt) : Bool
+    return compareTo(that) == 0;
+
+  @:op(A==B)
+  static public function equals(self : BigInt, that : BigInt) : Bool
+    return self.compareTo(that) == 0;
+
+  public function notEqualsTo(that : BigInt) : Bool
+    return compareTo(that) != 0;
+
+  @:op(A!=B)
+  public static function notEquals(self : BigInt, that : BigInt) : Bool
+    return self.compareTo(that) != 0;
 
   @:op(A+B) @:commutative
   inline public function add(that : BigInt) : BigInt
