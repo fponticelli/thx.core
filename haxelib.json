@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
-  "releasenote": "added Thx to get all the powers of thx in one step. Refactored Set into OrderedSet and MapList into OrderedMap. Improvements to Strings and fixes.",
-  "version": "0.35.0",
+  "releasenote": "Many additions, improvements and fixes all around. Some small breaking changes too.",
+  "version": "0.36.0",
   "contributors": ["fponticelli"]
 }
