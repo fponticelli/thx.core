@@ -315,8 +315,14 @@ or case neutral characters.
 /**
 `isEmpty` returns true if either `value` is null or is an empty string.
 **/
-  public static function isEmpty(value : String)
+  public static function isEmpty(value : String) : Bool
     return value == null || value == '';
+
+/**
+Convert first letter in `value` to lower case.
+**/
+  public static function lowerCaseFirst(value : String) : String
+    return value.substring(0, 1).toLowerCase() + value.substring(1);
 
 /**
 Returns a random substring from the `value` argument. The length of such value is by default `1`.
@@ -534,6 +540,12 @@ Sequences of more than one UpperCase character are left untouched.
     s = (~/-/g).replace(s, '_');
     return s.toLowerCase();
   }
+
+/**
+Convert first letter in `value` to upper case.
+**/
+  public static function upperCaseFirst(value : String) : String
+    return value.substring(0, 1).toUpperCase() + value.substring(1);
 
 /**
 `upTo` searches for the first occurrance of `searchFor` and returns the text up to that point.
