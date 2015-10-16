@@ -20,4 +20,14 @@ class TestMaps {
     Assert.equals(tuples[1]._0, "key2");
     Assert.equals(tuples[1]._1, 2);
   }
+
+  public function testValues() {
+    var map = [
+      "key1" => 1,
+      "key2" => 2,
+      "key3" => 3
+    ];
+    var values = Maps.values(map);
+    Assert.same([1, 2, 3], values);
+  }
 }
