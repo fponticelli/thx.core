@@ -35,7 +35,7 @@ Converts a Map<TKey, TValue> into an Array<Tuple2<TKey, TValue>>
 Extracts the values of a Map<TKey, TValue> into Array<TValue>
 **/
   public static function values<TKey, TValue>(map: IMap<TKey, TValue>): Array<TValue>
-    return map.keys().map(function(key)
+    return map.keys().map(function(key : TKey) : TValue
       return map.get(key)
     );
 
