@@ -1,6 +1,8 @@
 package thx;
 
 import utest.Assert;
+using thx.Arrays;
+using thx.Maps;
 
 class TestMaps {
   public function new() { }
@@ -11,7 +13,7 @@ class TestMaps {
       "key2" => 2
     ];
 
-    var tuples = Maps.tuples(map);
+    var tuples = map.tuples();
     tuples.sort(function(a, b) return Strings.compare(a._0, b._0));
 
     Assert.equals(2, tuples.length);
@@ -27,7 +29,7 @@ class TestMaps {
       "key2" => 2,
       "key3" => 3
     ];
-    var values = Maps.values(map);
+    var values = map.values().order(Ints.compare);
     Assert.same([1, 2, 3], values);
   }
 }
