@@ -186,7 +186,10 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
   @:to inline public function toInt() : Int
     return this.toInt();
 
-  public function toBigInt() : BigInt
+  @:to inline public function toInt64() : haxe.Int64
+    return toBigInt().toInt64();
+
+  @:to public function toBigInt() : BigInt
     return this.value.divide(Small.ten.pow(Bigs.fromInt(this.scale)));
 
   @:to inline public function toFloat() : Float
