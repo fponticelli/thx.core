@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
-  "releasenote": "Many additions, improvements and fixes all around. Some small breaking changes too.",
-  "version": "0.36.0",
+  "releasenote": "Minor additions to thx.Decimal.",
+  "version": "0.36.1",
   "contributors": ["fponticelli"]
 }
