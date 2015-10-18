@@ -1,5 +1,7 @@
 package thx;
 
+typedef Tuple<T0, T1> = Tuple2<T0, T1>;
+
 /**
 `Tuple0` is a tuple with no values. It maps directly to `Nil.nil`.
 **/

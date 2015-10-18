@@ -11,6 +11,11 @@ using thx.Strings;
 class TestStrings {
   public function new(){}
 
+  public function testLowerUpperCaseFirst() {
+    Assert.equals("aBC", "ABC".lowerCaseFirst());
+    Assert.equals("Abc", "abc".upperCaseFirst());
+  }
+
   public function testContains() {
     Assert.isTrue("test".contains(""));
     Assert.isTrue("test".contains("t"));
@@ -247,7 +252,7 @@ aaa aa", text.wrapColumns(6));
         e = ["a","☺","b","☺","☺","c","☺","☺","☺"];
     Assert.same(e, t.toArray());
   }
-  
+
   public function testToLines() {
     var text = "Split
 to
