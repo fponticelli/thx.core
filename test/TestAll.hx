@@ -41,6 +41,8 @@ class TestAll {
 #end
     runner.addCase(new thx.TestTuple());
     runner.addCase(new thx.TestUrl());
+
+    runner.addCase(new thx.rational.TestRationalInt());
   }
 
   public static function main() {
