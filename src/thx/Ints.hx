@@ -44,6 +44,16 @@ equals.
     return a - b;
 
 /**
+Returns the greater common denominator
+**/
+  public static function gcd(m : Int, n : Int) : Int {
+    m = abs(m);
+    n = abs(n);
+    if(n == 0) return m;
+    return gcd(n, m % n);
+  }
+
+/**
 Given a value `t` between 0 and 1, it interpolates that value in the range between `a` and `b`.
 
 The returned value is a rounded integer.
@@ -70,6 +80,16 @@ The returned value is a rounded integer.
       v = -v;
     }
     return (neg ? "-" : "") + StringTools.lpad('$v', pad, len);
+  }
+
+/**
+Returns the least common multiple
+**/
+  public static function lcm(m : Int, n : Int) : Int {
+    m = abs(m);
+    n = abs(n);
+    if(n == 0) return m;
+    return m * Std.int(n / gcd(m, n));
   }
 
   inline public static function rpad(v : Int, ?pad = "0", len : Int) : String
