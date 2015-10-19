@@ -1,5 +1,6 @@
 package thx;
 
+import thx.Functions.*;
 import haxe.ds.Option;
 
 /**
@@ -30,16 +31,6 @@ values is the same as in `Options.equals()`.
     return equals(a, toOption(b), eq);
 
 /**
-`flatMap` reduces an `Option<T>` value into an `Array<T>` value applying the `callback`
-function if `Option` contains a value. If `Option` is `None` an empty array is returned.
-**/
-  public static function flatMap<T, TOut>(option : Option<T>, callback : T -> Array<TOut>) : Array<TOut>
-    return switch option {
-      case None: [];
-      case Some(v): callback(v);
-    };
-
-/**
 `map` transforms a value contained in `Option<T>` to `Option<TOut>` using a `callback`.
 `callback` is used only if `Option` is `Some(value)`.
 **/
@@ -48,6 +39,32 @@ function if `Option` contains a value. If `Option` is `None` an empty array is r
       case None: None;
       case Some(v): Some(callback(v));
     };
+
+/**
+`flatMap` reduces an `Option<T>` value into an `Array<T>` value applying the `callback`
+function if `Option` contains a value. If `Option` is `None` an empty array is returned.
+**/
+  public static function flatMap<T, TOut>(option : Option<T>, callback : T -> Option<TOut>) : Option<TOut>
+    return switch option {
+      case None: None;
+      case Some(v): callback(v);
+    };
+
+/**
+`join` collapses a nested option into a single optional value.
+**/
+  public static function join<T>(option: Option<Option<T>>): Option<T> {
+    return flatMap(option, identity);
+  }
+
+/**
+`foldLeft` reduce using an accumulating function and an initial value.
+**/
+  public static function foldLeft<T, B>(option: Option<T>, b: B, f: B -> T -> B): B 
+    return switch option {
+      case None: b;
+      case Some(v): f(b, v);
+    }
 
 /**
 `toArray` transforms an `Option<T>` value into an `Array<T>` value. The result array
