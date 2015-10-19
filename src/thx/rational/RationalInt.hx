@@ -20,6 +20,8 @@ class RationalInt implements RationalImpl<Int> {
       num = -num;
       den = -den;
     }
+    if(num == 0)
+      den = 1;
     return new RationalInt(num, den);
   }
 
