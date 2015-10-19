@@ -12,7 +12,7 @@ interface RationalImpl<T> {
   function subtract(that : Rational) : Rational;
   function multiply(that : Rational) : Rational;
   function divide(that : Rational) : Rational;
-  function modulo(that : Rational) : Rational;
+  function reciprocal() : Rational;
 
   function isZero() : Bool;
   function isNegative() : Bool;
@@ -33,4 +33,5 @@ interface RationalImpl<T> {
   // public static Rational mediant(Rational r, Rational s) {
   //   return new Rational(r.num + s.num, r.den + s.den);
   // }
+  // reciprocal(den, num)
 }

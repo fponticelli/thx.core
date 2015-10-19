@@ -6,6 +6,7 @@ using thx.Decimal;
 using haxe.Int64;
 
 class RationalInt implements RationalImpl<Int> {
+  public static var(default, never) : RationalInt = new RationalInt(0, 1);
   public var num(default, never) : Int;
   public var den(default, never) : Int;
 
@@ -31,12 +32,34 @@ class RationalInt implements RationalImpl<Int> {
   public function negate() : Rational
     return new RationalInt(-num, den);
 
-  public function add(that : Rational) : Rational;
-  public function subtract(that : Rational) : Rational;
-  public function multiply(that : Rational) : Rational
-    return new RationalInt(num * that.num, den * that.den);
-  public function divide(that : Rational) : Rational;
-  public function modulo(that : Rational) : Rational;
+  public function add(that : Rational) : Rational {
+    if(compareTo(zero) == 0) return that;
+    if(that.compareTo(zero) == 0) return this;
+    var f = Ints.gcd(num, that.num),
+        g = Ints.gcd(den, that.den),
+        s = create(
+              Std.int(num / f) * Std.int(that.den / g) +
+              Std.int(that.num / f) * Std.int(den / g),
+              Ints.lcm(a.den, b.den)
+            );
+
+    // multiply back in
+    s.num *= f;
+    return s;
+  }
+  public function subtract(that : Rational) : Rational
+    return add(that.negate());
+  // minimize overflow by cross-cancellation
+  public function multiply(that : Rational) : Rational {
+    var c = create(num, that.den),
+        d = create(that.num, den);
+    return create(c.num * d.num, c.den * d.num);
+  }
+  public function divide(that : Rational) : Rational
+    return multiply(that.reciprocal());
+
+  function reciprocal() : Rational
+    return create(den, num);
 
   public function isZero() : Bool
     return num == 0;
