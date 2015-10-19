@@ -94,6 +94,6 @@ class RationalInt implements RationalImpl<Int> {
     if(den == 1)
       return '$num';
     else
-      return '$num⁄$den'; // ⁄ or /
+      return '$num/$den'; // ⁄ or /
   }
 }
