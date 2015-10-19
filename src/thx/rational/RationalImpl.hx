@@ -1,23 +1,25 @@
-package thx.core.rational;
+package thx.rational;
+
+import haxe.Int64;
+import thx.Decimal;
+import thx.BigInt;
 
 interface RationalImpl<T> {
-  var num(default, never) : T;
-  var den(default, never) : T;
+  var num(default, null) : T;
+  var den(default, null) : T;
 
-  function new(num : T, den : T) : Void;
-
-  function abs() : Rational;
-  function negate() : Rational;
-  function add(that : Rational) : Rational;
-  function subtract(that : Rational) : Rational;
-  function multiply(that : Rational) : Rational;
-  function divide(that : Rational) : Rational;
-  function reciprocal() : Rational;
+  function abs() : RationalImpl<T>;
+  function negate() : RationalImpl<T>;
+  function add(that : RationalImpl<T>) : RationalImpl<T>;
+  function subtract(that : RationalImpl<T>) : RationalImpl<T>;
+  function multiply(that : RationalImpl<T>) : RationalImpl<T>;
+  function divide(that : RationalImpl<T>) : RationalImpl<T>;
+  function reciprocal() : RationalImpl<T>;
 
   function isZero() : Bool;
   function isNegative() : Bool;
 
-  function compareTo(that : Rational) : Int;
+  function compareTo(that : RationalImpl<T>) : Int;
   function toFloat() : Float;
   function toInt() : Int;
   function toInt64() : Int64;
@@ -26,12 +28,12 @@ interface RationalImpl<T> {
 
   function toString() : String;
 
-  // function gcd(that : Rational) : T;
-  // function lcm(that : Rational) : T;
+  // function gcd(that : RationalImpl<T>) : T;
+  // function lcm(that : RationalImpl<T>) : T;
   // function shift
-  // create and return a new rational (r.num + s.num) / (r.den + s.den)
-  // public static Rational mediant(Rational r, Rational s) {
-  //   return new Rational(r.num + s.num, r.den + s.den);
+  // create and return a new RationalImpl (r.num + s.num) / (r.den + s.den)
+  // public static RationalImpl mediant(RationalImpl r, RationalImpl s) {
+  //   return new RationalImpl(r.num + s.num, r.den + s.den);
   // }
   // reciprocal(den, num)
 }

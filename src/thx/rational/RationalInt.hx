@@ -6,14 +6,14 @@ using thx.Decimal;
 using haxe.Int64;
 
 class RationalInt implements RationalImpl<Int> {
-  public static var(default, never) : RationalInt = new RationalInt(0, 1);
-  public var num(default, never) : Int;
-  public var den(default, never) : Int;
+  public static var zero(default, never) : RationalImpl<Int> = new RationalInt(0, 1);
+  public var num(default, null) : Int;
+  public var den(default, null) : Int;
 
   public static function create(num : Int, den : Int) {
     if(den == 0)
       throw new thx.Error('division by zero');
-    var g = thx.Ints.gcd(num, den);
+    var g = Ints.gcd(num, den);
     num = Std.int(num / g);
     den = Std.int(den / g);
     if(den < 0)
@@ -26,13 +26,13 @@ class RationalInt implements RationalImpl<Int> {
     this.den = den;
   }
 
-  public function abs() : Rational
+  public function abs() : RationalImpl<Int>
     return new RationalInt(num.abs(), den);
 
-  public function negate() : Rational
+  public function negate() : RationalImpl<Int>
     return new RationalInt(-num, den);
 
-  public function add(that : Rational) : Rational {
+  public function add(that : RationalImpl<Int>) : RationalImpl<Int> {
     if(compareTo(zero) == 0) return that;
     if(that.compareTo(zero) == 0) return this;
     var f = Ints.gcd(num, that.num),
@@ -40,25 +40,25 @@ class RationalInt implements RationalImpl<Int> {
         s = create(
               Std.int(num / f) * Std.int(that.den / g) +
               Std.int(that.num / f) * Std.int(den / g),
-              Ints.lcm(a.den, b.den)
+              Ints.lcm(den, that.den)
             );
 
     // multiply back in
     s.num *= f;
     return s;
   }
-  public function subtract(that : Rational) : Rational
+  public function subtract(that : RationalImpl<Int>) : RationalImpl<Int>
     return add(that.negate());
   // minimize overflow by cross-cancellation
-  public function multiply(that : Rational) : Rational {
+  public function multiply(that : RationalImpl<Int>) : RationalImpl<Int> {
     var c = create(num, that.den),
         d = create(that.num, den);
     return create(c.num * d.num, c.den * d.num);
   }
-  public function divide(that : Rational) : Rational
+  public function divide(that : RationalImpl<Int>) : RationalImpl<Int>
     return multiply(that.reciprocal());
 
-  function reciprocal() : Rational
+  public function reciprocal() : RationalImpl<Int>
     return create(den, num);
 
   public function isZero() : Bool
@@ -67,7 +67,7 @@ class RationalInt implements RationalImpl<Int> {
   public function isNegative() : Bool
     return num < 0;
 
-  public function compareTo(that : Rational) : Int {
+  public function compareTo(that : RationalImpl<Int>) : Int {
     var lhs = num * that.den,
         rhs = den * that.num;
     if(lhs < rhs) return -1;
