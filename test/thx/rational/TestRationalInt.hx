@@ -43,7 +43,9 @@ class TestRationalInt {
 
     // 3037141/3247033 * 3037547/3246599 = 841/961
     x = RationalInt.create(3037141, 3247033);
+    trace(x);
     y = RationalInt.create(3037547, 3246599);
+    trace(y);
     z = x.multiply(y);
     Assert.equals("841/961", z.toString());
     Assert.floatEquals(0.87513007284079, z.toFloat());

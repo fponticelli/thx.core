@@ -16,8 +16,10 @@ class RationalInt implements RationalImpl<Int> {
     var g = Ints.gcd(num, den);
     num = Std.int(num / g);
     den = Std.int(den / g);
-    if(den < 0)
+    if(den < 0) {
       num = -num;
+      den = -den;
+    }
     return new RationalInt(num, den);
   }
 
@@ -53,7 +55,7 @@ class RationalInt implements RationalImpl<Int> {
   public function multiply(that : RationalImpl<Int>) : RationalImpl<Int> {
     var c = create(num, that.den),
         d = create(that.num, den);
-    return create(c.num * d.num, c.den * d.num);
+    return create(c.num * d.num, c.den * d.den);
   }
   public function divide(that : RationalImpl<Int>) : RationalImpl<Int>
     return multiply(that.reciprocal());
@@ -71,7 +73,7 @@ class RationalInt implements RationalImpl<Int> {
     var lhs = num * that.den,
         rhs = den * that.num;
     if(lhs < rhs) return -1;
-    if(lhs > rhs) return 1;
+    if(lhs > rhs) return  1;
     return 0;
   }
 
