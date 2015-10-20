@@ -4,6 +4,9 @@ import thx.Either;
 import thx.Disjunction;
 import thx.Validation;
 import thx.Validation.*;
+import thx.Nel;
+import thx.Nel.*;
+using Thx;
 using thx.Functions;
 
 import utest.Assert;
@@ -36,6 +39,13 @@ class TestValidation {
 
     Assert.same(t, val4(or4, t, f, f, f, add));
     Assert.same((Left(2): Validation<Int, Bool>), val4(or4, t, f, err, err, add));
+  }
+
+  public function testVal4Nel() {
+    var t: VNel<Int, Bool> = Right(true);
+    var err: VNel<Int, Bool> = Left(Nel.pure(1));
+
+    Assert.same(Left(Nel.cons(1, Nel.pure(1))), val4(or4, t, t, err, err, mappend));
   }
 }
 
