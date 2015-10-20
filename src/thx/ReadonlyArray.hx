@@ -6,4 +6,7 @@ abstract ReadonlyArray<T>(Array<T>) from Array<T> {
   @:arrayAccess
   inline function get(index : Int)
     return this[index];
+
+  public function toArray() : Array<T>
+    return this.copy();
 }
