@@ -145,7 +145,6 @@ class TestHashSet {
 
   public function testToString() {
     var s = HashSet.create([new TestItem(1), new TestItem(2)]);
-    trace(s.toString());
     Assert.isTrue(~/TestItem \d, TestItem \d}/.match(s.toString()));
   }
 }
