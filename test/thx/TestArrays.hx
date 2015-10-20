@@ -238,6 +238,12 @@ class TestArrays {
   }
 
   public function testDistinct() {
+    Assert.same([], [].distinct());
+    Assert.same([1], [1].distinct());
+    Assert.same(["one"], ["one"].distinct());
+    Assert.same([1], [1, 1].distinct());
+    Assert.same([1, 2], [1, 2].distinct());
+    Assert.same(["one", "two"], ["one", "two"].distinct());
     Assert.same([1, 2, 3, 4, 5, 6, 7, 8], [1, 2, 2, 3, 4, 5, 5, 6, 7, 8, 8].distinct());
     Assert.same([8, 1, 2, 7, 3, 4, 5, 6], [8, 8, 1, 2, 7, 2, 3, 4, 5, 1, 5, 6, 7, 8, 2, 8].distinct());
     Assert.same(["one", "two", "three"], ["one", "two", "one", "two", "three", "one", "two"].distinct());
