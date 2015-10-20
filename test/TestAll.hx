@@ -13,6 +13,7 @@ class TestAll {
     runner.addCase(new thx.TestDateTime());
     runner.addCase(new thx.TestDateTimeUtc());
     runner.addCase(new thx.TestDecimal());
+    runner.addCase(new thx.TestDisjunction());
     runner.addCase(new thx.TestDynamics());
     runner.addCase(new thx.TestEnums());
     runner.addCase(new thx.TestERegs());
@@ -43,6 +44,7 @@ class TestAll {
 #end
     runner.addCase(new thx.TestTuple());
     runner.addCase(new thx.TestUrl());
+    runner.addCase(new thx.TestValidation());
   }
 
   public static function main() {

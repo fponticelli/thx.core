@@ -168,6 +168,9 @@ the resolver function that by default directly converts the arguments into a str
     }
   }
 
+  public static function curry<A, B, C>(f: A -> B -> C): A -> (B -> C)
+    return function(a: A) { return function(b) { return f(a, b); } };
+
 /**
 Wraps `callback` in a function that negates its results.
 **/
@@ -213,11 +216,19 @@ Wraps `callback` in a function that negates its results.
     return function(v1 : T1, v2 : T2, v3 : T3)
       return !callback(v1, v2, v3);
 
+  public inline static function curry<A, B, C, D>(f: A -> B -> C -> D): A -> B -> (C -> D)
+    return function(a: A, b: B) { return function(c) { return f(a, b, c); } };
+
 /**
 Lambda expressions
 **/
   public macro static function fn<T, T2, T3, T4>(fn : ExprOf<T -> T2 -> T3 -> T4>, restArgs : Array<Expr>)
     return SlambdaMacro.f(fn, restArgs);
+}
+
+class Functions4 {
+  public inline static function curry<A, B, C, D, E>(f: A -> B -> C -> D ->E): A -> B -> C -> (D -> E)
+    return function(a: A, b: B, c: C) { return function(d) { return f(a, b, c, d); } };
 }
 
 /**
