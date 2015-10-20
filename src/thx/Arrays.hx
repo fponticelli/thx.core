@@ -205,7 +205,7 @@ comparison is ==.
     var result = [];
 
     if (array.length <= 1)
-      return result;
+      return array.map(Functions.identity);
 
     if (null == predicate)
       predicate = Functions.equality;
