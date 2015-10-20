@@ -146,7 +146,7 @@ class TestHashSet {
   public function testToString() {
     var s = HashSet.create([new TestItem(1), new TestItem(2)]);
     trace(s.toString());
-    Assert.isTrue(~/{TestItem\[code=\d\], TestItem\[code=\d\]}/.match(s.toString()));
+    Assert.isTrue(~/TestItem \d, TestItem \d}/.match(s.toString()));
   }
 }
 
@@ -162,6 +162,6 @@ class TestItem {
   }
 
   public function toString() {
-    return 'TestItem[code=$code]';
+    return 'TestItem $code';
   }
 }
