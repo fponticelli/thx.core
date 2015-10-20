@@ -19,6 +19,7 @@ typedef Enums = thx.Enums;
 typedef ERegs = thx.ERegs;
 typedef Error = thx.Error;
 typedef Floats = thx.Floats;
+typedef HashSet = thx.HashSet;
 typedef HaxeMath = Math;
 typedef Functions0 = thx.Functions.Functions0;
 typedef Functions1 = thx.Functions.Functions1;
