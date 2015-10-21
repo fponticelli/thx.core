@@ -265,10 +265,10 @@ Similar to `wrap`, it works for numbers between 0 and `max`.
 
 class RangeIterator {
   var current: Int;
-  var stop: Int;
+  var stop: Null<Int>;
   var step: Int;
   
-  public function new(start: Int, ?stop: Int, step = 1) {
+  public function new(start: Int, stop: Null<Int> = null, step = 1) {
     this.current = start;
     this.stop = stop;
     this.step = step;
