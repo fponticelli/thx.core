@@ -1,189 +1,101 @@
 package thx;
 
-import thx.rational.*;
+abstract Rational(RationalImpl) from RationalImpl to RationalImpl {
+  public static var zero(default, never) : Rational = { num : BigInt.one, den : BigInt.zero };
 
-abstract Rational<T>(RationalImpl<T>) from RationalImpl<T> to RationalImpl<T> {
-  public static function fromInts(num : Int, den : Int) : Rational<Int>
-    return thx.rational.RationalInt.create(num, den);
+  public var num(get, never) : BigInt;
+  public var den(get, never) : BigInt;
 
-/*
-inline public static function compare(a : Rational<T>, b : Rational<T>)
-  return a.compareTo(b);
+  public static function create(num : BigInt, den : BigInt) {
+    if(den == 0)
+      throw new thx.Error('division by zero');
+    var g = Ints.gcd(num, den);
+    num = Std.int(num / g);
+    den = Std.int(den / g);
+    if(den < 0) {
+      num = -num;
+      den = -den;
+    }
+    if(num == 0)
+      den = 1;
+    return new Rational(num, den);
+  }
 
-inline public function isZero() : Bool
-  return this.isZero();
+  inline public function new(num : Int, den : Int)
+    this = { num : num, den : den };
 
-inline public function abs() : Rational<T>
-  return this.abs();
+  public function abs() : Rational
+    return new Rational(num.abs(), den);
 
-inline public function compareTo(that : Rational<T>) : Int
-  return this.compareTo(that);
+  @:op(-A)
+  public function negate() : Rational
+    return new Rational(-num, den);
 
-inline public function compareAbs(that : Rational<T>) : Int
-  return this.compareToAbs(that);
+  @:op(A+B)
+  public function add(that : Rational) : Rational {
+    if(compareTo(zero) == 0) return that;
+    if(that.compareTo(zero) == 0) return this;
+    var f = Ints.gcd(num, that.num),
+        g = Ints.gcd(den, that.den),
+        s : { num : BigInt, den : BigInt } = create(
+              Std.int(num / f) * Std.int(that.den / g) +
+              Std.int(that.num / f) * Std.int(den / g),
+              Ints.lcm(den, that.den)
+            );
 
-inline public function next() : Rational<T>
-  return this.next();
+    s.num = s.num * f;
+    return s;
+  }
 
-inline public function prev() : Rational<T>
-  return this.prev();
+  @:op(A-B)
+  public function subtract(that : Rational) : Rational
+    return add(that.negate());
 
-inline public function square() : Rational<T>
-  return this.square();
+  // minimize overflow by cross-cancellation
+  @:op(A*B)
+  public function multiply(that : Rational) : Rational {
+    var c = create(num, that.den),
+        d = create(that.num, den);
+    return create(c.num * d.num, c.den * d.den);
+  }
 
-inline public function pow(exp : Int) : Rational<T>
-  return this.pow(exp);
+  @:op(A/B)
+  public function divide(that : Rational) : Rational
+    return multiply(that.reciprocal());
 
-inline public function isEven() : Bool
-  return this.isEven();
+  public function reciprocal() : Rational
+    return create(den, num);
 
-inline public function isOdd() : Bool
-  return this.isOdd();
+  inline public function isZero() : Bool
+    return num.isZero();
 
-inline public function isNegative() : Bool
-  return this.isNegative();
+  inline public function isNegative() : Bool
+    return num.isNegative();
 
-inline public function isPositive() : Bool
-  return this.compareTo(zero) > 0;
+  public function compareTo(that : Rational) : Int {
+    var lhs = num * that.den,
+        rhs = den * that.num;
+    return lhs.compareTo(rhs);
+  }
 
-inline public function max(that : Rational<T>) : Rational<T>
-  return greater(this, that) ? this : that;
+  public function toFloat() : Float
+    return num.toFloat() / den.toFloat();
 
-inline public function min(that : Rational<T>) : Rational<T>
-  return less(this, that) ? this : that;
+  public function toDecimal(?extraScale : Int = 0) : thx.Decimal
+    return (Decimal.fromBigInt(num)) / (Decimal.fromBigInt(den));
 
-inline public function ceil() : Rational<T>
-  return this.ceilTo(0);
+  public function toString() : String {
+    if(den == 1)
+      return '${num.toString()}';
+    else
+      return '${num.toString()}/${den.toString()}'; // ⁄ or /
+  }
 
-inline public function ceilTo(decimals : Int) : Rational<T>
-  return this.ceilTo(decimals);
-
-inline public function floor() : Rational<T>
-  return this.floorTo(0);
-
-inline public function floorTo(decimals : Int) : Rational<T>
-  return this.floorTo(decimals);
-
-inline public function round() : Rational<T>
-  return this.roundTo(0);
-
-inline public function roundTo(decimals : Int) : Rational<T>
-  return this.roundTo(decimals);
-
-inline public function scaleTo(decimals : Int) : Rational<T>
-  return this.scaleTo(decimals);
-
-inline public function trim(?mindecimals : Int) : Rational<T>
-  return this.trim(mindecimals);
-
-public function greaterThan(that : Rational<T>) : Bool
-  return compareTo(that) > 0;
-
-@:op(A>B)
-static public function greater(self : Rational<T>, that : Rational<T>) : Bool
-  return self.compareTo(that) > 0;
-
-public function greaterEqualsTo(that : Rational<T>) : Bool
-  return compareTo(that) >= 0;
-
-@:op(A>=B)
-static public function greaterEquals(self : Rational<T>, that : Rational<T>) : Bool
-  return self.compareTo(that) >= 0;
-
-public function lessThan(that : Rational<T>) : Bool
-  return compareTo(that) < 0;
-
-@:op(A<B)
-static public function less(self : Rational<T>, that : Rational<T>) : Bool
-  return self.compareTo(that) < 0;
-
-public function lessEqualsTo(that : Rational<T>) : Bool
-  return compareTo(that) <= 0;
-
-@:op(A<=B)
-static public function lessEquals(self : Rational<T>, that : Rational<T>) : Bool
-  return self.compareTo(that) <= 0;
-
-public function equalsTo(that : Rational<T>) : Bool
-  return compareTo(that) == 0;
-
-@:op(A==B)
-static public function equals(self : Rational<T>, that : Rational<T>) : Bool
-  return self.compareTo(that) == 0;
-
-public function notEqualsTo(that : Rational<T>) : Bool
-  return compareTo(that) != 0;
-
-@:op(A!=B)
-static public function notEquals(self : Rational<T>, that : Rational<T>) : Bool
-  return self.compareTo(that) != 0;
-*/
-@:op(A+B) @:commutative
-inline public function add(that : Rational<T>) : Rational<T>
-  return this.add(that);
-
-@:op(A-B)
-inline public function subtract(that : Rational<T>) : Rational<T>
-  return this.subtract(that);
-
-@:op(-A)
-inline public function negate() : Rational<T>
-  return this.negate();
-/*
-@:op(++A)
-inline public function preIncrement() : Rational<T>
-  return this = add(Rational<T>.one);
-
-@:op(A++)
-inline public function postIncrement() : Rational<T> {
-  var v = this;
-  this = add(Rational<T>.one);
-  return v;
+  inline function get_num() return this.num;
+  inline function get_den() return this.den;
 }
 
-@:op(--A)
-inline public function preDecrement() : Rational<T>
-  return this = subtract(Rational<T>.one);
-
-@:op(A--)
-inline public function postDecrement() : Rational<T> {
-  var v = this;
-  this = subtract(Rational<T>.one);
-  return v;
-}
-*/
-@:op(A*B) @:commutative
-inline public function multiply(that : Rational<T>) : Rational<T>
-  return this.multiply(that);
-
-@:op(A/B)
-inline public function divide(that : Rational<T>) : Rational<T>
-  return this.divide(that);
-/*
-@:op(A%B)
-inline public function modulo(that : Rational<T>) : Rational<T>
-  return this.modulo(that);
-*/
-
-// @:to inline public function toInt() : Int
-//   return Std.int(this.num.toInt() / this.den.toInt());
-/*
-@:to inline public function toInt64() : haxe.Int64
-  return toBigInt().toInt64();
-
-@:to public function toBigInt() : BigInt
-  return this.value.divide(Small.ten.pow(Bigs.fromInt(this.scale)));
-*/
-@:to inline public function toFloat() : Float
-  return this.toFloat();
-
-@:to inline public function toString() : String
-  return this.toString();
-/*
-inline static function get_divisionScale()
-  return Decimals.divisionExtraScale;
-
-inline static function set_divisionScale(v : Int)
-  return Decimals.divisionExtraScale = v;
-*/
+typedef RationalImpl = {
+  num : BigInt,
+  den : BigInt
 }
