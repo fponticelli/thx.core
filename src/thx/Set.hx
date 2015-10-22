@@ -1,12 +1,13 @@
 package thx;
 
 /**
-A set is a list of unique values.
+A set is a list of unique values.  Value equality is determined using `==`.
+
+See thx.HashSet for an alternative set implementation that uses a hash code to determine item equality.
 **/
 abstract Set<T>(Map<T, Bool>) {
-
 /**
-Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` otherwise.
+Creates a Set of Strings with optional initial values.
 **/
   public static function createString(?arr : Iterable<String>) {
     var map = new Map<String, Bool>();
@@ -17,7 +18,7 @@ Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` 
   }
 
 /**
-Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` otherwise.
+Creates a Set of Ints with optional initial values.
 **/
   public static function createInt(?arr : Iterable<Int>) {
     var map = new Map<Int, Bool>();
@@ -28,7 +29,7 @@ Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` 
   }
 
 /**
-Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` otherwise.
+Creates a Set of anonymous objects with optional initial values.
 **/
   public static function createObject(?arr : Iterable<{}>) {
     var map = new Map<{}, Bool>();
@@ -39,7 +40,7 @@ Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` 
   }
 
 /**
-Creates an empty Set if no argument is provided or it fallsback to `arrayToSet` otherwise.
+Creates a Set of EnumValue, with optional initial values.
 **/
   public static function createEnum(?arr : Iterable<EnumValue>) {
     var map = new Map<EnumValue, Bool>();
