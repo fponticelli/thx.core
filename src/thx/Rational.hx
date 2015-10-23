@@ -78,6 +78,48 @@ abstract Rational(RationalImpl) from RationalImpl to RationalImpl {
     return lhs.compareTo(rhs);
   }
 
+  public function greaterThan(that : Rational) : Bool
+    return compareTo(that) > 0;
+
+  @:op(A>B)
+  static public function greater(self : Rational, that : Rational) : Bool
+    return self.compareTo(that) > 0;
+
+  public function greaterEqualsTo(that : Rational) : Bool
+    return compareTo(that) >= 0;
+
+  @:op(A>=B)
+  static public function greaterEquals(self : Rational, that : Rational) : Bool
+    return self.compareTo(that) >= 0;
+
+  public function lessThan(that : Rational) : Bool
+    return compareTo(that) < 0;
+
+  @:op(A<B)
+  static public function less(self : Rational, that : Rational) : Bool
+    return self.compareTo(that) < 0;
+
+  public function lessEqualsTo(that : Rational) : Bool
+    return compareTo(that) <= 0;
+
+  @:op(A<=B)
+  static public function lessEquals(self : Rational, that : Rational) : Bool
+    return self.compareTo(that) <= 0;
+
+  public function equalsTo(that : Rational) : Bool
+    return compareTo(that) == 0;
+
+  @:op(A==B)
+  static public function equals(self : Rational, that : Rational) : Bool
+    return self.compareTo(that) == 0;
+
+  public function notEqualsTo(that : Rational) : Bool
+    return compareTo(that) != 0;
+
+  @:op(A!=B)
+  public static function notEquals(self : Rational, that : Rational) : Bool
+    return self.compareTo(that) != 0;
+
   public function toFloat() : Float
     return num.toFloat() / den.toFloat();
 
