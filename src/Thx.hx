@@ -40,6 +40,7 @@ typedef OrderedMap<Key, Value> = thx.OrderedMap<Key, Value>;
 typedef OrderedSet<Value> = thx.OrderedSet<Value>;
 typedef QueryString = thx.QueryString;
 typedef ReadonlyArray<T> = thx.ReadonlyArray<T>;
+typedef Rational = thx.Rational;
 typedef Result<Success, Failure> = thx.Result<Success, Failure>;
 typedef Set<Value> = thx.Set<Value>;
 //typedef StaticResource = thx.StaticResource;
