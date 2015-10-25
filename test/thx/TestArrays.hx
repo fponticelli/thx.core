@@ -12,6 +12,11 @@ using thx.Floats;
 class TestArrays {
   public function new() { }
 
+  public function testCreate() {
+    var arr = Arrays.create(3, 2);
+    Assert.same([2,2,2], arr);
+  }
+
   public function testCrossMulti() {
     var r = [[1,2],[3,4],[5,6]].crossMulti();
     Assert.same([[1,3,5],[2,3,5],[1,4,5],[2,4,5],[1,3,6],[2,3,6],[1,4,6],[2,4,6]], r);
@@ -159,12 +164,12 @@ class TestArrays {
     Assert.isTrue([1, 2, 3].contains(2));
     Assert.isFalse([1, 2, 3].contains(4));
   }
-  
+
   public function testContainsAll() {
     Assert.isTrue([1, 2, 3].containsAll([3, 1, 2]));
     Assert.isFalse([1, 2, 3].containsAll([3, 1, 2, 4]));
   }
-  
+
   public function testContainsAny() {
     Assert.isTrue([1, 2, 3].containsAny([2, 3, 4]));
     Assert.isFalse([1, 2, 3].containsAny([4, 5, 6]));
@@ -275,7 +280,7 @@ class TestArrays {
     Assert.same([[1,2,3,4,5,6,7,8,9,0]], arr.splitBy(10));
     Assert.same([[1,2,3,4,5,6,7,8,9,0]], arr.splitBy(20));
   }
-  
+
   public function testSplitByPad() {
     var arr = [1,2,3,4,5,6,7,8,9,0];
     Assert.same([[1],[2],[3],[4],[5],[6],[7],[8],[9],[0]], arr.splitByPad(1, 0));

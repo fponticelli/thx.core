@@ -154,6 +154,16 @@ An optional equality function can be passed as the last argument. If not provide
   }
 
 /**
+Creates a new `Array` with `length` elements all set to `fillWith`.
+**/
+  public static function create<T>(length : Int, fillWith : T) {
+    var arr = #if js untyped __js__("new Array")(length) #else [] #end;
+    for(i in 0...length)
+      arr[i] = fillWith;
+    return arr;
+  }
+
+/**
 It returns the cross product between two arrays.
 
 ```haxe
