@@ -6,6 +6,15 @@ abstract Rational(RationalImpl) from RationalImpl to RationalImpl {
   public var num(get, never) : BigInt;
   public var den(get, never) : BigInt;
 
+  @:from public static function fromString(s : String) {
+    var parts = s.split("/").map(StringTools.trim);
+    if(parts.length > 2)
+      throw new thx.Error('string "$s" cannot be parsed to a Rational');
+    if(parts.length == 1)
+      return create(BigInt.fromString(parts[0]), BigInt.one);
+    return create(BigInt.fromString(parts[0]), BigInt.fromString(parts[1]));
+  }
+
   public static function create(num : BigInt, den : BigInt) {
     if(den == 0)
       throw new thx.Error('division by zero');
