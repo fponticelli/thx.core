@@ -46,4 +46,11 @@ class TestRational {
     y = Rational.create(-4, -8);
     Assert.equals("-1/3", (x - y).toString());
   }
+
+  public function testFromInt() {
+    var r : Rational = 3;
+    Assert.equals("3", r.toString());
+    r = r / 2;
+    Assert.equals("3/2", r.toString());
+  }
 }

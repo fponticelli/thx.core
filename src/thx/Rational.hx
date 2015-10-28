@@ -15,6 +15,12 @@ abstract Rational(RationalImpl) from RationalImpl to RationalImpl {
     return create(BigInt.fromString(parts[0]), BigInt.fromString(parts[1]));
   }
 
+  @:from public static function fromBigInt(i : BigInt)
+    return create(i, BigInt.one);
+
+  @:from public static function fromInt(i : Int)
+    return create(i, BigInt.one);
+
   public static function create(num : BigInt, den : BigInt) {
     if(den == 0)
       throw new thx.Error('division by zero');
