@@ -42,6 +42,8 @@ Creates `Tuple0` from `Nil`.
 `Tuple1` is a tuple with one value. It maps directly to its own T0 types.
 **/
 abstract Tuple1<T0>(T0) from T0 to T0 {
+  inline public static function of<A>(_0: A): Tuple1<A> return _0;
+
 /**
 Constructs an instance of `Tuple1` passing a value T as an argument.
 **/
@@ -72,6 +74,9 @@ Provides a string representation of the Tuple
 **/
 @:forward(_0, _1)
 abstract Tuple2<T0, T1>({ _0 : T0, _1 : T1 }) from { _0 : T0, _1 : T1 } to { _0 : T0, _1 : T1 } {
+  inline public static function of<A, B>(_0: A, _1: B): Tuple2<A, B> 
+    return new Tuple2(_0, _1);
+
 /**
 Constructs an instance of `Tuple2` the 2 required value.
 **/
