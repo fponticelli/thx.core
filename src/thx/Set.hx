@@ -9,33 +9,33 @@ abstract Set<T>(Map<T, Bool>) {
 /**
 Creates a Set of Strings with optional initial values.
 **/
-  public static function createString(?arr : Iterable<String>) {
+  public static function createString(?it : Iterable<String>) {
     var map = new Map<String, Bool>();
     var set = new Set<String>(map);
-    if(null != arr)
-      set.pushMany(arr);
+    if(null != it)
+      set.pushMany(it);
     return set;
   }
 
 /**
 Creates a Set of Ints with optional initial values.
 **/
-  public static function createInt(?arr : Iterable<Int>) {
+  public static function createInt(?it : Iterable<Int>) {
     var map = new Map<Int, Bool>();
     var set = new Set<Int>(map);
-    if(null != arr)
-      set.pushMany(arr);
+    if(null != it)
+      set.pushMany(it);
     return set;
   }
 
 /**
 Creates a Set of anonymous objects with optional initial values.
 **/
-  public static function createObject(?arr : Iterable<{}>) {
+  public static function createObject(?it : Iterable<{}>) {
     var map = new Map<{}, Bool>();
     var set = new Set<{}>(map);
-    if(null != arr)
-      set.pushMany(arr);
+    if(null != it)
+      set.pushMany(it);
     return set;
   }
 
@@ -161,8 +161,7 @@ Union creates a new Set with elements from both sets.
 **/
   @:op(A+B) inline public function union(set : Set<T>) : Set<T> {
     var newset = copy();
-    for(k in set.iterator())
-      newset.push(k);
+    newset.pushMany(set);
     return newset;
   }
 
