@@ -45,7 +45,7 @@ class TestValidation {
     var t: VNel<Int, Bool> = Right(true);
     var err: VNel<Int, Bool> = Left(Nel.pure(1));
 
-    Assert.same(Left(Nel.cons(1, Nel.pure(1))), val4(or4, t, t, err, err, mappend));
+    Assert.same(Left(Nel.cons(1, Nel.pure(1))), val4(or4, t, t, err, err, semigroup()));
   }
 }
 
