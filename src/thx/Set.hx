@@ -97,6 +97,19 @@ from the second.
     return result;
   }
 
+  public function filter(predicate : T -> Bool) : Set<T>
+    return reduce(function(acc : Set<T>, v : T) {
+      if(predicate(v))
+        acc.add(v);
+      return acc;
+    }, empty());
+
+  public function map<TOut>(f : T -> TOut) : Array<TOut>
+    return reduce(function(acc : Array<TOut>, v : T) {
+      acc.push(f(v));
+      return acc;
+    }, []);
+
 /**
 `exists` returns `true` if it contains an element that is equals to `v`.
 **/
@@ -129,6 +142,13 @@ Pushes many values to the set
   public function pushMany(values : Iterable<T>) : Void
     for(value in values)
       push(value);
+
+  public function reduce<TOut>(handler :  TOut -> T -> TOut, acc : TOut) : TOut {
+    for(v in iterator()) {
+      acc = handler(acc, v);
+    }
+    return acc;
+  }
 
 /**
 Iterates the values of the Set.
