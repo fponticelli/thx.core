@@ -48,7 +48,7 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
     };
 
   inline public function zip<B>(v: Validation<E, B>, s: Semigroup<E>): Validation<E, Tuple2<A, B>> 
-    return ap((v.disjunction.map(function(b: B){ return function(a: A){ return new Tuple2(a, b); }; }): Either<E, A -> Tuple2<A, B>>), s);
+    return ap((v.disjunction.map(function(b: B){ return Tuple2.of.bind(_, b); }): Either<E, A -> Tuple2<A, B>>), s);
 
   inline public function leftMap<E0>(f: E -> E0): Validation<E0, A> 
     return (disjunction.leftMap(f) : Either<E0, A>);
