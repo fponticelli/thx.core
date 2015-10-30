@@ -20,9 +20,11 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
   inline public static function failure<E, A>(e: E): Validation<E, A>
     return Left(e);
 
+  inline public static function successNel<E, A>(a: A): VNel<E, A>
+    return pure(a);
+
   inline public static function failureNel<E, A>(e: E): VNel<E, A>
     return Left(Nel.pure(e));
-
 
   var disjunction(get, never): Disjunction<E, A>;
   public function get_disjunction(): Disjunction<E, A>
