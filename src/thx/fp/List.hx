@@ -2,6 +2,7 @@ package thx.fp;
 
 using thx.Arrays;
 using thx.Functions;
+import thx.Functions.*;
 
 abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
   inline static public function empty<A>() : List<A>
@@ -33,7 +34,7 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
       return acc;
     });
 
-  public function intercalate(a: A): List<A> {
+  public function intersperse(a: A): List<A> {
     function go(ls) return switch ls {
       case Cons(x, xs):
         Cons(a, Cons(x, go(xs)));
@@ -43,18 +44,24 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
 
     return switch this {
       case Empty: Empty;
-      case Cons(x, xs): Cons(x, Cons(a, go(xs)));
+      case Cons(x, xs): Cons(x, go(xs));
     };
   }
 
-  // public function toString()
-  //   return "[" + intercalate(",") + "]"
+  public function map<B>(f : A -> B) : List<B>
+    return foldLeft(Empty, fn(Cons(f(_1), _0)));
+
+  public static function toStringWithShow<T>(l : List<T>, show : T -> String)
+    return List.toStringForString(l.map(show));
+
+  public static function toStringForString(l : List<String>)
+    return "[" + l.intersperse(",").foldLeft("", fn(_1 + _0)) + "]";
+
+  @:to
+  public function toString()
+    return toStringWithShow(this, thx.Dynamics.string);
 
 /*
-  inline public function prepend(x : A) : TreeBag<A> {
-    return Cons(x, this);
-  }
-
   @:op(A+B) inline public function append(other: TreeBag<A>): TreeBag<A> {
     return Branch(this, other);
   }
@@ -63,32 +70,12 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
     return xs.reduce(function(acc, x) { return cons(x, acc); }, this);
   }
 
-  public function map<A, B>(f : A -> B) : TreeBag<B> {
-    return switch this {
-      case Empty: Empty;
-      case Cons(x, xs): Cons(f(x), xs.map(f));
-      case Branch(l, r): Branch(l.map(f), r.map(f));
-    }
-  }
-
   public function flatMap<A, B>(f : A -> TreeBag<B>) : TreeBag<B> {
     return switch this {
       case Empty: Empty;
       case Cons(x, xs): Branch(f(x), xs.flatMap(f));
       case Branch(l, r): Branch(l.flatMap(f), r.flatMap(f));
     }
-  }
-
-  public function foldLeft<A, B>(b: B, f : B -> A -> B) : B {
-    return switch this {
-      case Empty: b;
-      case Cons(x, xs): xs.foldLeft(f(b, x), f);
-      case Branch(l, r): r.foldLeft(l.foldLeft(b, f), f);
-    }
-  }
-
-  public function toArray(): Array<A> {
-    return foldLeft([], function(b: Array<A>, a: A) { b.push(a); return b; });
   }
 */
 }
