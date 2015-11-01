@@ -6,13 +6,13 @@ import thx.Functions.*;
 
 abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
   inline static public function empty<A>() : List<A>
-    return Empty;
+    return Nil;
 
   inline static public function cons<A>(x : A, xs : List<A>) : List<A>
     return Cons(x, xs);
 
   inline static public function create<A>(x : A) : List<A>
-    return Cons(x, Empty);
+    return Cons(x, Nil);
 
   @:from
   inline static public function fromArray<A>(arr : Array<A>) : List<A>
@@ -20,7 +20,7 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
 
   public function foldLeft<B>(b : B, f : B -> A -> B) : B
     return switch this {
-      case Empty: b;
+    case Nil: b;
       case Cons(x, xs): xs.foldLeft(f(b, x), f);
     }
 
@@ -38,18 +38,18 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
     function go(ls) return switch ls {
       case Cons(x, xs):
         Cons(a, Cons(x, go(xs)));
-      case Empty:
-        Empty;
+      case Nil:
+        Nil;
     };
 
     return switch this {
-      case Empty: Empty;
+    case Nil: Nil;
       case Cons(x, xs): Cons(x, go(xs));
     };
   }
 
   public function map<B>(f : A -> B) : List<B>
-    return foldLeft(Empty, fn(Cons(f(_1), _0)));
+    return foldLeft(Nil, fn(Cons(f(_1), _0)));
 
   public static function toStringWithShow<T>(l : List<T>, show : T -> String)
     return List.toStringForString(l.map(show));
@@ -63,6 +63,6 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
 }
 
 enum ListImpl<A> {
-  Empty;
+  Nil;
   Cons(x : A, xs : List<A>);
 }
