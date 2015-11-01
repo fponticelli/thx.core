@@ -1,4 +1,4 @@
-package thx;
+package thx.fp;
 
 using thx.Arrays;
 
@@ -9,12 +9,12 @@ using thx.Arrays;
 abstract TreeBag<A> (TreeBagImpl<A>) from TreeBagImpl<A> to TreeBagImpl<A> {
   inline public static function empty<A>() : TreeBag<A> {
     return Empty;
-  } 
+  }
 
   inline public static function cons<A>(x : A, xs: TreeBag<A>) : TreeBag<A> {
     return Cons(x, xs);
   }
-  
+
   inline public static function fromArray<A>(xs: Array<A>): TreeBag<A> {
     return xs.reduce(function(acc, x) { return cons(x, acc); }, Empty);
   }
@@ -65,4 +65,3 @@ enum TreeBagImpl<A> {
   Cons(x : A, xs : TreeBag<A>);
   Branch(left : TreeBag<A>, right : TreeBag<A>);
 }
-
