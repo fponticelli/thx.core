@@ -11,6 +11,9 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
   inline static public function cons<A>(x : A, xs : List<A>) : List<A>
     return Cons(x, xs);
 
+  inline static public function create<A>(x : A) : List<A>
+    return Cons(x, Empty);
+
   @:from
   inline static public function fromArray<A>(arr : Array<A>) : List<A>
     return arr.reduceRight.fn(cons(_1, _0), empty());
@@ -23,9 +26,6 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
 
   inline public function prepend(x : A) : List<A>
     return Cons(x, this);
-
-  // @:op(A+B) inline public function append(other: List<A>): List<A>
-  //   return Branch(this, other);
 
   @:to
   inline public function toArray() : Array<A>
@@ -60,24 +60,6 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
   @:to
   public function toString()
     return toStringWithShow(this, thx.Dynamics.string);
-
-/*
-  @:op(A+B) inline public function append(other: TreeBag<A>): TreeBag<A> {
-    return Branch(this, other);
-  }
-
-  public function prependAll(xs: Array<A>): TreeBag<A> {
-    return xs.reduce(function(acc, x) { return cons(x, acc); }, this);
-  }
-
-  public function flatMap<A, B>(f : A -> TreeBag<B>) : TreeBag<B> {
-    return switch this {
-      case Empty: Empty;
-      case Cons(x, xs): Branch(f(x), xs.flatMap(f));
-      case Branch(l, r): Branch(l.flatMap(f), r.flatMap(f));
-    }
-  }
-*/
 }
 
 enum ListImpl<A> {
