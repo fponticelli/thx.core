@@ -54,6 +54,18 @@ An optional equality function can be passed as the last argument. If not provide
   }
 
 /**
+Get the element at the `index` position.
+**/
+  public static function get<T>(it : Iterator<T>, index : Int) : Null<T> {
+    var pos = 0;
+    for(i in it) {
+      if(pos++ == index)
+        return i;
+    }
+    return null;
+  }
+
+/**
 Refer to `thx.Arrays.eachPair`.
 **/
   public static function eachPair<TIn, TOut>(it : Iterator<TIn>, handler : TIn -> TIn -> Bool)

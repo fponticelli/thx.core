@@ -26,7 +26,7 @@ Checks if `predicate` returns true for at least one element in the iterable.
 /**
 Refer to `thx.Arrays.eachPair`.
 **/
-  public inline static function eachPair<TIn, TOut>(it : Iterable<TIn>, handler : TIn -> TIn -> Bool)
+  inline public static function eachPair<TIn, TOut>(it : Iterable<TIn>, handler : TIn -> TIn -> Bool)
     return Iterators.eachPair(it.iterator(), handler);
 
 /**
@@ -34,31 +34,37 @@ It compares the lengths and elements of two given iterables and returns `true` i
 
 An optional equality function can be passed as the last argument. If not provided, strict equality is adopted.
 **/
-  public inline static function equals<T>(a : Iterable<T>, b : Iterable<T>, ?equality : T -> T -> Bool)
+  inline public static function equals<T>(a : Iterable<T>, b : Iterable<T>, ?equality : T -> T -> Bool)
     return Iterators.equals(a.iterator(), b.iterator(), equality);
 
 /**
 Refer to `Array.filter`.
 **/
-  public inline static function filter<T>(it : Iterable<T>, predicate : T -> Bool) : Array<T>
+  inline public static function filter<T>(it : Iterable<T>, predicate : T -> Bool) : Array<T>
     return Iterators.filter(it.iterator(), predicate);
 
 /**
 Refer to `thx.Arrays.find`.
 **/
-  public inline static function find<T, TFind>(it : Iterable<T>, predicate : T -> Bool) : Null<T>
+  inline public static function find<T, TFind>(it : Iterable<T>, predicate : T -> Bool) : Null<T>
     return Iterators.find(it.iterator(), predicate);
 
 /**
 Refer to `thx.Arrays.first`.
 **/
-  public inline static function first<T, TFind>(it : Iterable<T>) : Null<T>
+  inline public static function first<T, TFind>(it : Iterable<T>) : Null<T>
     return Iterators.first(it.iterator());
+
+/**
+Get the element at the `index` position.
+**/
+  inline public static function get<T>(it : Iterable<T>, index : Int) : Null<T>
+    return Iterators.get(it.iterator(), index);
 
 /**
 Refer to `thx.Arrays.last`.
 **/
-  public inline static function last<T, TFind>(it : Iterable<T>) : Null<T>
+  inline public static function last<T, TFind>(it : Iterable<T>) : Null<T>
     return Iterators.last(it.iterator());
 
 /**
@@ -70,7 +76,7 @@ Returns `true` if the iterable contains at least one element.
 /**
 Refer to `thx.Arrays.isEmpty`.
 **/
-  public inline static function isEmpty<T>(it : Iterable<T>) : Bool
+  inline public static function isEmpty<T>(it : Iterable<T>) : Bool
     return Iterators.isEmpty(it.iterator());
 
 /**
@@ -88,37 +94,37 @@ of its signature.
 /**
 Refer to `Array.map`.
 **/
-  public inline static function map<T, S>(it : Iterable<T>, f : T -> S) : Array<S>
+  inline public static function map<T, S>(it : Iterable<T>, f : T -> S) : Array<S>
     return Iterators.map(it.iterator(), f);
 
 /**
 Refer to `thx.Arrays.mapi`.
 **/
-  public inline static function mapi<T, S>(it : Iterable<T>, f : T -> Int -> S) : Array<S>
+  inline public static function mapi<T, S>(it : Iterable<T>, f : T -> Int -> S) : Array<S>
     return Iterators.mapi(it.iterator(), f);
 
 /**
 Refer to `thx.Arrays.order`.
 **/
-  public inline static function order<T>(it : Iterable<T>, sort : T -> T -> Int) : Array<T>
+  inline public static function order<T>(it : Iterable<T>, sort : T -> T -> Int) : Array<T>
     return Iterators.order(it.iterator(), sort);
 
 /**
 Refer to `thx.Arrays.reduce`.
 **/
-  public inline static function reduce<TElement, TAcc>(it : Iterable<TElement>, callback : TAcc -> TElement -> TAcc, initial : TAcc) : TAcc
+  inline public static function reduce<TElement, TAcc>(it : Iterable<TElement>, callback : TAcc -> TElement -> TAcc, initial : TAcc) : TAcc
     return Iterators.reduce(it.iterator(), callback, initial);
 
 /**
 Refer to `thx.Arrays.reducei`.
 **/
-  public inline static function reducei<TElement, TAcc>(it : Iterable<TElement>, callback : TAcc -> TElement -> Int -> TAcc, initial : TAcc) : TAcc
+  inline public static function reducei<TElement, TAcc>(it : Iterable<TElement>, callback : TAcc -> TElement -> Int -> TAcc, initial : TAcc) : TAcc
     return Iterators.reducei(it.iterator(), callback, initial);
 
 /**
 `toArray` transforms an `Iterable<T>` into an `Array<T>`.
 **/
-  public inline static function toArray<T>(it : Iterable<T>) : Array<T>
+  inline public static function toArray<T>(it : Iterable<T>) : Array<T>
     return Iterators.toArray(it.iterator());
 
 /**
