@@ -104,6 +104,19 @@ Returns `true` if the iterator contains at least one element.
     return it.hasNext();
 
 /**
+Returns the position of element in the iterator. It returns -1 if not found.
+**/
+  public static function indexOf<T>(it : Iterator<T>, element : T) : Int {
+    var pos = 0;
+    for(v in it) {
+      if(element == v)
+        return pos;
+      pos++;
+    }
+    return -1;
+  }
+
+/**
 Refer to `thx.Arrays.isEmpty`.
 **/
   inline public static function isEmpty<T>(it : Iterator<T>) : Bool

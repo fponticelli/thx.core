@@ -74,6 +74,12 @@ Returns `true` if the iterable contains at least one element.
     return Iterators.hasElements(it.iterator());
 
 /**
+Returns the position of element in the iterable. It returns -1 if not found.
+**/
+  inline public static function indexOf<T>(it : Iterable<T>, element : T) : Int
+    return Iterators.indexOf(it.iterator(), element);
+
+/**
 Refer to `thx.Arrays.isEmpty`.
 **/
   inline public static function isEmpty<T>(it : Iterable<T>) : Bool
