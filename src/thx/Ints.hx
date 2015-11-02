@@ -2,6 +2,7 @@ package thx;
 
 using thx.Arrays;
 using thx.Strings;
+import thx.Ord;
 using StringTools;
 
 /**
@@ -261,6 +262,9 @@ Similar to `wrap`, it works for numbers between 0 and `max`.
       v += max;
     return v;
   }
+
+  public static var order(default, never): Ord<Int> = 
+    function(i0, i1) { return if (i0 > i1) GT else if (i0 == i1) EQ else LT; };
 }
 
 class RangeIterator {
