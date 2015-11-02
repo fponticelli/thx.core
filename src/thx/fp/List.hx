@@ -51,14 +51,18 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
   public function map<B>(f : A -> B) : List<B>
     return foldLeft(Nil, fn(Cons(f(_1), _0)));
 
-  public static function toStringWithShow<T>(l : List<T>, show : T -> String)
-    return List.toStringForString(l.map(show));
-
-  public static function toStringForString(l : List<String>)
+  @:to
+  public static function toStringForString(l : List<String>) : String
     return "[" + l.intersperse(",").foldLeft("", fn(_1 + _0)) + "]";
 
+  public function toStringWithShow(show : A -> String) : String {
+    var l = map(show);
+    $type(l);
+    return List.toStringForString(l);
+  }
+
   @:to
-  public function toString()
+  public function toString() : String
     return toStringWithShow(this, thx.Dynamics.string);
 }
 

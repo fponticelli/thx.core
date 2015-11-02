@@ -60,7 +60,7 @@ function if `Option` contains a value. If `Option` is `None` an empty array is r
 /**
 `foldLeft` reduce using an accumulating function and an initial value.
 **/
-  public static function foldLeft<T, B>(option: Option<T>, b: B, f: B -> T -> B): B 
+  public static function foldLeft<T, B>(option: Option<T>, b: B, f: B -> T -> B): B
     return switch option {
       case None: b;
       case Some(v): f(b, v);
@@ -100,6 +100,15 @@ is be `None`.
   public static function toValue<T>(option : Option<T>) : Null<T>
     return switch option {
       case None: null;
+      case Some(v) : v;
+    };
+
+/**
+`toValueWithAlt` extracts the value from `Option`. If the `Option` is `None`, `alt` value is returned.
+**/
+  public static function toValueWithAlt<T>(option : Option<T>, alt : T) : T
+    return switch option {
+      case None: alt;
       case Some(v) : v;
     };
 }
