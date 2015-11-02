@@ -23,6 +23,13 @@ Finds the first occurrance of `element` and returns all the elements after it.
 /**
 Checks if `predicate` returns true for all elements in the array.
 **/
+  public static function each<T>(arr : ReadonlyArray<T>, effect : T -> Void): Void {
+    for(element in arr) effect(element);
+  }
+
+/**
+Checks if `predicate` returns true for all elements in the array.
+**/
   public static function all<T>(arr : ReadonlyArray<T>, predicate : T -> Bool) {
     for(element in arr)
       if(!predicate(element))
