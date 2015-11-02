@@ -227,8 +227,13 @@ Lambda expressions
 }
 
 class Functions4 {
-  public inline static function curry<A, B, C, D, E>(f: A -> B -> C -> D ->E): A -> B -> C -> (D -> E)
+  public inline static function curry<A, B, C, D, E>(f: A -> B -> C -> D -> E): A -> B -> C -> (D -> E)
     return function(a: A, b: B, c: C) { return function(d) { return f(a, b, c, d); } };
+}
+
+class Functions5 {
+  public inline static function curry<A, B, C, D, E, F>(f: A -> B -> C -> D -> E -> F): A -> B -> C -> D -> (E -> F)
+    return function(a: A, b: B, c: C, d: D) { return function(e) { return f(a, b, c, d, e); } };
 }
 
 /**
