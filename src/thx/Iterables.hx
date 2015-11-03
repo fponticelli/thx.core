@@ -2,6 +2,7 @@ package thx;
 
 import haxe.ds.Option;
 
+import thx.Ord;
 import thx.Tuple;
 using thx.Options;
 
@@ -150,7 +151,7 @@ to the specified ordering.
   }
 
 /**
-`minBy` finds the minimum value included in the iterable, as compared by some 
+`minBy` finds the minimum value included in the iterable, as compared by some
 function of the values contained within the iterable.
 **/
   public static function minBy<A, B>(it: Iterable<A>, f: A -> B, ord: Ord<B>): Option<A> {
