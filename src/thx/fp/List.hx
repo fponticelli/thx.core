@@ -57,19 +57,19 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
   public function toStringWithShow(show : A -> String) : String
     return List.stringToStringImpl(map(show));
 
-  @:impl
+  @:to @:impl
   public static function stringToString(l : List<String>) : String
     return stringToStringImpl(l);
 
-  @:impl
+  @:to @:impl
   public static function intToString(l : List<Int>) : String
     return l.toStringWithShow(Ints.toString.bind(_, 10));
 
-  @:impl
+  @:to @:impl
   public static function floatToString(l : List<Int>) : String
     return l.toStringWithShow(Floats.toString);
 
-  @:impl
+  @:to @:impl
   public static function objToString(l : List<{ toString : Void -> String }>) : String
     return l.toStringWithShow(function(o) return o.toString());
 }
