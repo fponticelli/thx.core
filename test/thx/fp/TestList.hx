@@ -32,6 +32,6 @@ class TestList {
 
   public function testToString() {
     var list : List<Int> = Cons(1, Cons(2, Cons(3, Nil)));
-    Assert.same("[1,2,3]", list.toString());
+    Assert.same("[1,2,3]", list.intToString());
   }
 }
