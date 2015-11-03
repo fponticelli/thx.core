@@ -14,7 +14,7 @@ abstract Map<K, V>(MapImpl<K, V>) from MapImpl<K, V> to MapImpl<K, V> {
   inline public static function singleton<K, V>(k : K, v : V) : Map<K, V>
     return Bin(1, k, v, Tip, Tip);
   inline public static function bin<K, V>(k : K, v : V, lhs : Map<K, V>, rhs : Map<K, V>) : Map<K, V>
-    return Bin(lhs.size() + 1 + rhs.size() + 1, k, v, lhs, rhs);
+    return Bin(lhs.size() + rhs.size() + 1, k, v, lhs, rhs);
 
   public function lookup(key : K, comparator : Ord<K>) : Option<V> {
     switch this {
@@ -53,11 +53,11 @@ abstract Map<K, V>(MapImpl<K, V>) from MapImpl<K, V> to MapImpl<K, V> {
   public function insert(kx : K, x : V, comparator : Ord<K>) : Map<K, V> return switch this {
     case Tip:
       singleton(kx, x);
-    case Bin(size, ky, y, lhs, rhs):
+    case Bin(sz, ky, y, lhs, rhs):
       switch comparator(kx, ky) {
         case LT: balance(ky, y, lhs.insert(kx, x, comparator), rhs);
         case GT: balance(ky, y, lhs, rhs.insert(kx, x, comparator));
-        case EQ: Bin(size, kx, x, lhs, rhs);
+        case EQ: Bin(sz, kx, x, lhs, rhs);
       };
   };
 
@@ -70,33 +70,34 @@ abstract Map<K, V>(MapImpl<K, V>) from MapImpl<K, V> to MapImpl<K, V> {
   // utility methods
   inline static var delta = 5;
   inline static var ratio = 2;
-  function balance(key : K, value : V, lhs : Map<K, V>, rhs : Map<K, V>) : Map<K, V> {
+  function balance(k : K, x : V, lhs : Map<K, V>, rhs : Map<K, V>) : Map<K, V> {
     var ls = lhs.size(),
-        rs = rhs.size();
+        rs = rhs.size(),
+        xs = ls + rs + 1;
     if(ls + rs <= 1)
-      return Bin(ls + rs + 1, key, value, lhs, rhs);
+      return Bin(xs, k, x, lhs, rhs);
     else if(rs >= delta * ls)
-      return rotateLeft(key, value, lhs, rhs);
+      return rotateLeft(k, x, lhs, rhs);
     else if(ls >= delta * rs)
-      return rotateRight(key, value, lhs, rhs);
+      return rotateRight(k, x, lhs, rhs);
     else
-      return Bin(ls + rs + 1, key, value, lhs, rhs);
+      return Bin(xs, k, x, lhs, rhs);
   }
 
-  static function rotateLeft<K, V>(key : K, value : V, lhs : Map<K, V>, rhs : Map<K, V>) : Map<K, V>
+  static function rotateLeft<K, V>(k : K, x : V, lhs : Map<K, V>, rhs : Map<K, V>) : Map<K, V>
     return switch rhs {
       case Bin(_, _, _, ly, ry) if(ly.size() < ratio * ry.size()):
-        singleLeft(key, value, lhs, rhs);
+        singleLeft(k, x, lhs, rhs);
       case _:
-        doubleLeft(key, value, lhs, rhs);
+        doubleLeft(k, x, lhs, rhs);
     };
 
-  static function rotateRight<K, V>(key : K, value : V, lhs : Map<K, V>, rhs : Map<K, V>) : Map<K, V>
+  static function rotateRight<K, V>(k : K, x : V, lhs : Map<K, V>, rhs : Map<K, V>) : Map<K, V>
     return switch lhs {
       case Bin(_, _, _, ly, ry) if(ry.size() < ratio * ly.size()):
-        singleRight(key, value, lhs, rhs);
+        singleRight(k, x, lhs, rhs);
       case _:
-        doubleRight(key, value, lhs, rhs);
+        doubleRight(k, x, lhs, rhs);
     };
 
   static function singleLeft<K, V>(k1 : K, x1 : V, t1 : Map<K, V>, rhs : Map<K, V>) : Map<K, V>
