@@ -1,7 +1,7 @@
 package thx.fp;
 
 import utest.Assert;
-import thx.fp.List;
+using thx.fp.List;
 import thx.Functions.*;
 
 class TestList {
@@ -32,6 +32,6 @@ class TestList {
 
   public function testToString() {
     var list : List<Int> = Cons(1, Cons(2, Cons(3, Nil)));
-    Assert.same("[1,2,3]", list.intToString());
+    Assert.same("[1,2,3]", list.toString());
   }
 }

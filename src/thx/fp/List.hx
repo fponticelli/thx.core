@@ -51,26 +51,27 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
   public function map<B>(f : A -> B) : List<B>
     return foldLeft(Nil, fn(Cons(f(_1), _0)));
 
-  inline public static function stringToStringImpl(l : List<String>) : String
-    return "[" + l.intersperse(",").foldLeft("", fn(_1 + _0)) + "]";
-
   public function toStringWithShow(show : A -> String) : String
-    return List.stringToStringImpl(map(show));
+    return StringList.toString(map(show));
+}
 
-  @:to @:impl
-  public static function stringToString(l : List<String>) : String
-    return stringToStringImpl(l);
+class StringList {
+  inline public static function toString(l : List<String>) : String
+    return "[" + l.intersperse(",").foldLeft("", fn(_1 + _0)) + "]";
+}
 
-  @:to @:impl
-  public static function intToString(l : List<Int>) : String
-    return l.toStringWithShow(Ints.toString.bind(_, 10));
-
-  @:to @:impl
-  public static function floatToString(l : List<Int>) : String
+class FloatList {
+  inline public static function toString(l : List<Float>) : String
     return l.toStringWithShow(Floats.toString);
+}
 
-  @:to @:impl
-  public static function objToString(l : List<{ toString : Void -> String }>) : String
+class IntList {
+  inline public static function toString(l : List<Int>) : String
+    return l.toStringWithShow(Ints.toString.bind(_, 10));
+}
+
+class ObjectList {
+  inline public static function toString(l : List<{ toString : Void -> String }>) : String
     return l.toStringWithShow(function(o) return o.toString());
 }
 
