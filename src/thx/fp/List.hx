@@ -51,19 +51,17 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
   public function map<B>(f : A -> B) : List<B>
     return foldLeft(Nil, fn(Cons(f(_1), _0)));
 
-  @:to
   public static function toStringForString(l : List<String>) : String
     return "[" + l.intersperse(",").foldLeft("", fn(_1 + _0)) + "]";
 
   public function toStringWithShow(show : A -> String) : String {
     var l = map(show);
-    $type(l);
     return List.toStringForString(l);
   }
 
   @:to
   public function toString() : String
-    return toStringWithShow(this, thx.Dynamics.string);
+    return toStringWithShow(thx.Dynamics.string);
 }
 
 enum ListImpl<A> {
