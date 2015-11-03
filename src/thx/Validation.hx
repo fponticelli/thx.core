@@ -5,6 +5,7 @@ import Thx;
 using thx.Functions.Functions2;
 using thx.Functions.Functions3;
 using thx.Functions.Functions4;
+using thx.Functions.Functions5;
 
 /**
  * A right-biased disjunctive type with applicative functor requiring a semigroup 
@@ -88,4 +89,10 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
       v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>,
       s: Semigroup<X>): Validation<X, E> 
     return v4.ap(val3(f.curry(), v1, v2, v3, s), s);
+
+  inline static public function val5<X, A, B, C, D, E, F>(
+      f: A -> B -> C -> D -> E -> F, 
+      v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>, v5: Validation<X, E>,
+      s: Semigroup<X>): Validation<X, F> 
+    return v5.ap(val4(f.curry(), v1, v2, v3, v4, s), s);
 }
