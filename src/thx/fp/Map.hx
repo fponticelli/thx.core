@@ -2,6 +2,7 @@ package thx.fp;
 
 import haxe.ds.Option;
 import thx.Tuple;
+import thx.Ord;
 using thx.Options;
 
 abstract Map<K, V>(MapImpl<K, V>) from MapImpl<K, V> to MapImpl<K, V> {
@@ -12,40 +13,48 @@ abstract Map<K, V>(MapImpl<K, V>) from MapImpl<K, V> to MapImpl<K, V> {
   inline public static function bin<K, V>(k : K, v : V, lhs : Map<K, V>, rhs : Map<K, V>) : Map<K, V>
     return Bin(lhs.size() + 1 + rhs.size() + 1, k, v, lhs, rhs);
 
-  public function get(key : K, comparator : K -> K -> Int) : Option<V> {
+  public function get(key : K, comparator : Ord<K>) : Option<V> {
     switch this {
       case Tip:
         return None;
       case Bin(size, xkey, xvalue, lhs, rhs):
         var c = comparator(key, xkey);
-        if(c < 0)
-          return lhs.get(key, comparator);
-        else if(c > 0)
-          return rhs.get(key, comparator);
-        else
-          return Some(xvalue);
+        switch c {
+          case LT:
+            return lhs.get(key, comparator);
+          case GT:
+            return rhs.get(key, comparator);
+          case EQ:
+            return Some(xvalue);
+        };
     }
   }
 
-  public function getAlt(key : K, alt : V, comparator : K -> K -> Int) : V
+  public function getAlt(key : K, alt : V, comparator : Ord<K>) : V
     return get(key, comparator).toValueWithAlt(alt);
 
-  public function getTuple(key : K, comparator : K -> K -> Int) : Option<Tuple<K, V>> {
+  public function getTuple(key : K, comparator : Ord<K>) : Option<Tuple<K, V>> {
     switch this {
       case Tip:
         return None;
       case Bin(size, xkey, xvalue, lhs, rhs):
         var c = comparator(key, xkey);
-        if(c < 0)
-          return lhs.getTuple(key, comparator);
-        else if(c > 0)
-          return rhs.getTuple(key, comparator);
-        else
-          return Some(new Tuple(xkey, xvalue));
+        switch c {
+          case LT:
+            return lhs.getTuple(key, comparator);
+          case GT:
+            return rhs.getTuple(key, comparator);
+          case EQ:
+            return Some(new Tuple(xkey, xvalue));
+        }
     }
   }
+/*
+  public function set(key : K, value : V, comparator : Ord<K>) : Map<K, V> {
 
-  public function exists(key : K, ?comparator : K -> K -> Int) : Bool
+  }
+*/
+  public function exists(key : K, comparator : Ord<K>) : Bool
     return get(key, comparator).toBool();
 
   public function size()
@@ -53,7 +62,12 @@ abstract Map<K, V>(MapImpl<K, V>) from MapImpl<K, V> to MapImpl<K, V> {
       case Tip: 0;
       case Bin(size, _, _, _, _): size;
     };
+/*
+  public function toStringWithShow(showKey : K -> String, showValue : V -> String) : String {
 
+  }
+*/
+  // utility methods
   inline static var delta = 5;
   inline static var ratio = 2;
   function balance(key : K, value : V, lhs : Map<K, V>, rhs : Map<K, V>) : Map<K, V> {
