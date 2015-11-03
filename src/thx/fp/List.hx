@@ -43,7 +43,7 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
     };
 
     return switch this {
-    case Nil: Nil;
+      case Nil: Nil;
       case Cons(x, xs): Cons(x, go(xs));
     };
   }
