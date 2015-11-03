@@ -111,4 +111,16 @@ is be `None`.
       case None: alt;
       case Some(v) : v;
     };
+
+  public static function all<T>(option: Option<T>, f: T -> Bool): Bool
+    return switch option {
+      case None: true;
+      case Some(v): f(v);
+    };
+
+  public static function any<T>(option: Option<T>, f: T -> Bool): Bool
+    return switch option {
+      case None: false;
+      case Some(v): f(v);
+    };
 }

@@ -5,12 +5,19 @@ import Thx;
 using thx.Functions.Functions2;
 using thx.Functions.Functions3;
 using thx.Functions.Functions4;
+using thx.Functions.Functions5;
 
 /**
  * A right-biased disjunctive type with applicative functor requiring a semigroup 
  * on the left type. This is useful for composing validation functions.
  */
 abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
+  inline public static function validation<E, A>(e: Either<E, A>): Validation<E, A>
+    return e;
+
+  inline public static function vnel<E, A>(e: Either<Nel<E>, A>): VNel<E, A>
+    return e;
+
   inline public static function pure<E, A>(a: A): Validation<E, A>
     return Right(a);
 
@@ -20,13 +27,21 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
   inline public static function failure<E, A>(e: E): Validation<E, A>
     return Left(e);
 
+  // nonNull
+  inline public static function nn<E, A>(a: Null<A>, e: E): Validation<E, A>
+    return (a == null) ? failure(e) : success(a);
+
   inline public static function successNel<E, A>(a: A): VNel<E, A>
     return pure(a);
 
   inline public static function failureNel<E, A>(e: E): VNel<E, A>
     return Left(Nel.pure(e));
 
-  var disjunction(get, never): Disjunction<E, A>;
+  // nonNullNel
+  inline public static function nnNel<E, A>(a: Null<A>, e: E): VNel<E, A>
+    return (a == null) ? failureNel(e) : successNel(a);
+
+  public var disjunction(get, never): Disjunction<E, A>;
   public function get_disjunction(): Disjunction<E, A>
     return this;
 
@@ -53,6 +68,15 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
   inline public function leftMap<E0>(f: E -> E0): Validation<E0, A> 
     return (disjunction.leftMap(f) : Either<E0, A>);
 
+  // This is not simply flatMap because it is not consistent with ap,
+  // as should be the case in other monads. It is equivalent to
+  // `this.disjunction.flatMap(f).validation`
+  inline public function flatMapV<B>(f: A -> Validation<E, B>): Validation<E, B>
+    return switch this {
+      case Left(a) : Left(a);
+      case Right(b): f(b);
+    };
+
   //// UTILITY FUNCTIONS ////
   inline static public function val2<X, A, B, C>(f: A -> B -> C, v1: Validation<X, A>, v2: Validation<X, B>, s: Semigroup<X>): Validation<X, C> 
     return v2.ap(v1.map(f.curry()), s);
@@ -65,4 +89,10 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
       v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>,
       s: Semigroup<X>): Validation<X, E> 
     return v4.ap(val3(f.curry(), v1, v2, v3, s), s);
+
+  inline static public function val5<X, A, B, C, D, E, F>(
+      f: A -> B -> C -> D -> E -> F, 
+      v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>, v5: Validation<X, E>,
+      s: Semigroup<X>): Validation<X, F> 
+    return v5.ap(val4(f.curry(), v1, v2, v3, v4, s), s);
 }
