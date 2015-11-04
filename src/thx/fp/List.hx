@@ -11,7 +11,7 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
   inline static public function cons<A>(x : A, xs : List<A>) : List<A>
     return Cons(x, xs);
 
-  inline static public function create<A>(x : A) : List<A>
+  inline static public function singleton<A>(x : A) : List<A>
     return Cons(x, Nil);
 
   @:from
