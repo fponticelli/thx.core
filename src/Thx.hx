@@ -16,6 +16,7 @@ typedef Decimal = thx.Decimal;
 typedef Disjunction<E, A> = thx.Disjunction<E, A>;
 typedef Dynamics = thx.Dynamics;
 typedef Either<Left, Right> = thx.Either<Left, Right>;
+typedef Eithers = thx.Eithers;
 typedef Enums = thx.Enums;
 typedef ERegs = thx.ERegs;
 typedef Error = thx.Error;
