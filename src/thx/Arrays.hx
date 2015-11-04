@@ -21,10 +21,17 @@ Finds the first occurrance of `element` and returns all the elements after it.
     return array.slice(array.indexOf(element)+1);
 
 /**
-Checks if `predicate` returns true for all elements in the array.
+Applies a side-effect function to all elements in the array.
 **/
   public static function each<T>(arr : ReadonlyArray<T>, effect : T -> Void): Void {
     for(element in arr) effect(element);
+  }
+
+/**
+Applies a side-effect function to all elements in the array.
+**/
+  public static function eachi<T>(arr : ReadonlyArray<T>, effect : T -> Int -> Void): Void {
+    for (i in 0...arr.length) effect(arr[i], i);
   }
 
 /**
