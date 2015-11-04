@@ -49,7 +49,7 @@ class Eithers {
   /**
     Extracts the left value if Left, or null if Right.
   **/
-  public static function toLeftUnsafe<L, R>(either : Either<L, R>) : L {
+  public static function toLeftUnsafe<L, R>(either : Either<L, R>) : Null<L> {
     return switch either {
       case Left(v) : v;
       case Right(_) : null;
@@ -59,7 +59,7 @@ class Eithers {
   /**
     Extracts the right value if Right, or null if Left.
   **/
-  public static function toRightUnsafe<L, R>(either : Either<L, R>) : R {
+  public static function toRightUnsafe<L, R>(either : Either<L, R>) : Null<R> {
     return switch either {
       case Left(_) : null;
       case Right(v) : v;
