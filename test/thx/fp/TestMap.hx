@@ -34,4 +34,46 @@ class TestMap {
     Assert.same(Some(3), m.get("Z"));
     Assert.equals(3, m.size());
   }
+
+  public function testObjectSet() {
+    var a = new CO("a"),
+        b = new CO("b"),
+        c = new CO("c"),
+        m = Map
+              .singleton(a, 1)
+              .set(b, 2)
+              .set(c, 3);
+    Assert.same(Some(1), m.get(a));
+    Assert.same(Some(2), m.get(b));
+    Assert.same(Some(3), m.get(c));
+    Assert.equals(3, m.size());
+  }
+
+  public function testObjectSet2() {
+    var a = new CO2("a"),
+        b = new CO2("b"),
+        c = new CO2("c"),
+        m = Map
+              .singleton(a, 1)
+              .set(b, 2)
+              .set(c, 3);
+    Assert.same(Some(1), m.get(a));
+    Assert.same(Some(2), m.get(b));
+    Assert.same(Some(3), m.get(c));
+    Assert.equals(3, m.size());
+  }
+}
+
+class CO {
+  var v : String;
+  public function new(v : String) this.v = v;
+  public function compareTo(that : CO) : thx.Ord.Ordering
+    return Strings.compare(v, that.v);
+}
+
+class CO2 {
+  var v : String;
+  public function new(v : String) this.v = v;
+  public function compareTo(that : CO2) : Int
+    return Strings.compare(v, that.v);
 }
