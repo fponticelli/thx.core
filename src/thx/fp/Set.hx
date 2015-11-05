@@ -2,12 +2,12 @@ package thx.fp;
 
 import thx.Ord;
 
-abstract Set<T>(SetImpl<T>) from SetImpl<T> to SetImpl<T> {
-  inline public static function empty<T>() : Set<T>
+abstract Set<X>(SetImpl<X>) from SetImpl<X> to SetImpl<X> {
+  inline public static function empty<X>() : Set<X>
     return Tip;
-  inline public static function singleton<T>(x : T) : Set<T>
+  inline public static function singleton<X>(x : X) : Set<X>
     return Bin(1, x, Tip, Tip);
-  inline public static function bin<T>(x : T, l : Set<T>, r : Set<T>) : Set<T>
+  inline public static function bin<X>(x : X, l : Set<X>, r : Set<X>) : Set<X>
     return Bin(l.size() + r.size() + 1, x, l, r);
 
   public function isEmpty() : Bool return switch this {
@@ -20,7 +20,7 @@ abstract Set<T>(SetImpl<T>) from SetImpl<T> to SetImpl<T> {
     case Bin(sz, _): sz;
   };
 
-  public function member(x : T, comparator : Ord<T>) : Bool return switch this {
+  public function member(x : X, comparator : Ord<X>) : Bool return switch this {
     case Tip: false;
     case Bin(sz, y, l, r): switch comparator(x, y) {
       case LT: l.member(x, comparator);
@@ -29,7 +29,7 @@ abstract Set<T>(SetImpl<T>) from SetImpl<T> to SetImpl<T> {
     };
   };
 
-  public function insert(x : T, comparator : Ord<T>) : Set<T> return switch this {
+  public function insert(x : X, comparator : Ord<X>) : Set<X> return switch this {
     case Tip: singleton(x);
     case Bin(sz, y, l, r): switch comparator(x, y) {
       case LT: l.balance(y, l.insert(x, comparator), r);
@@ -41,7 +41,7 @@ abstract Set<T>(SetImpl<T>) from SetImpl<T> to SetImpl<T> {
   // helper functions
   inline static var delta = 4;
   inline static var ratio = 4;
-  function balance(x : T, l : Set<T>, r : Set<T>) : Set<T> {
+  function balance(x : X, l : Set<X>, r : Set<X>) : Set<X> {
     var sl = l.size(),
         sr = r.size(),
         sx = sl + sr + 1;
@@ -56,7 +56,7 @@ abstract Set<T>(SetImpl<T>) from SetImpl<T> to SetImpl<T> {
     }
   }
 
-  static function rotateLeft<T>(x : T, l : Set<T>, r : Set<T>) : Set<T>
+  static function rotateLeft<X>(x : X, l : Set<X>, r : Set<X>) : Set<X>
     return switch r {
       case Bin(_, _, ly, ry) if(ly.size() < ratio * ry.size()):
         singleLeft(x, l, r);
@@ -64,7 +64,7 @@ abstract Set<T>(SetImpl<T>) from SetImpl<T> to SetImpl<T> {
         doubleLeft(x, l, r);
     };
 
-  static function rotateRight<T>(x : T, l : Set<T>, r : Set<T>) : Set<T>
+  static function rotateRight<X>(x : X, l : Set<X>, r : Set<X>) : Set<X>
     return switch l {
       case Bin(_, _, ly, ry) if(ry.size() < ratio * ly.size()):
         singleRight(x, l, r);
@@ -72,26 +72,26 @@ abstract Set<T>(SetImpl<T>) from SetImpl<T> to SetImpl<T> {
         doubleRight(x, l, r);
     };
 
-  static function singleLeft<T>(x1 : T, t1 : Set<T>, r : Set<T>) : Set<T>
+  static function singleLeft<X>(x1 : X, t1 : Set<X>, r : Set<X>) : Set<X>
     return switch r {
       case Bin(_, x2, t2, t3): bin(x2, bin(x1, t1, t2), t3);
       case _: throw new thx.Error("damn it, this should never happen");
     };
 
-  static function singleRight<T>(x1 : T, l : Set<T>, t3 : Set<T>) : Set<T>
+  static function singleRight<X>(x1 : X, l : Set<X>, t3 : Set<X>) : Set<X>
     return switch l {
       case Bin(_, x2, t1, t2): bin(x2, t1, bin(x1, t2, t3));
       case _: throw new thx.Error("damn it, this should never happen");
     };
 
-  static function doubleLeft<T>(x1 : T, t1 : Set<T>, r : Set<T>) : Set<T>
+  static function doubleLeft<X>(x1 : X, t1 : Set<X>, r : Set<X>) : Set<X>
     return switch r {
       case Bin(_, x2, Bin(_, x3, t2, t3), t4):
         bin(x3, bin(x1, t1, t2), bin(x2, t3, t4));
       case _: throw new thx.Error("damn it, this should never happen");
     };
 
-  static function doubleRight<T>(x1 : T, l : Set<T>, t4 : Set<T>) : Set<T>
+  static function doubleRight<X>(x1 : X, l : Set<X>, t4 : Set<X>) : Set<X>
     return switch l {
       case Bin(_, x2, t1, Bin(_, x3, t2, t3)):
         bin(x3, bin(x2, t1, t2), bin(x1, t3, t4));
@@ -124,22 +124,22 @@ class IntSet {
 }
 
 class ComparableOrdSet {
-  inline static public function exists<T : ComparableOrd<T>>(set : Set<T>, value : T) : Bool
+  inline static public function exists<X : ComparableOrd<X>>(set : Set<X>, value : X) : Bool
     return set.member(value, function(a, b) return a.compareTo(b));
 
-  inline static public function set<T : ComparableOrd<T>>(set : Set<T>, value : T) : Set<T>
-    return set.insert(value, function(a : T, b : T) return a.compareTo(b));
+  inline static public function set<X : ComparableOrd<X>>(set : Set<X>, value : X) : Set<X>
+    return set.insert(value, function(a : X, b : X) return a.compareTo(b));
 }
 
 class ComparableSet {
-  inline static public function exists<T : Comparable<T>>(set : Set<T>, value : T) : Bool
+  inline static public function exists<X : Comparable<X>>(set : Set<X>, value : X) : Bool
     return set.member(value, function(a, b) : Ordering return a.compareTo(b));
 
-  inline static public function set<T : Comparable<T>>(set : Set<T>, value : T) : Set<T>
-    return set.insert(value, function(a : T, b : T) : Ordering return a.compareTo(b));
+  inline static public function set<X : Comparable<X>>(set : Set<X>, value : X) : Set<X>
+    return set.insert(value, function(a : X, b : X) : Ordering return a.compareTo(b));
 }
 
-enum SetImpl<T> {
+enum SetImpl<X> {
   Tip;
-  Bin(size : Int, x : T, l : Set<T>, r : Set<T>);
+  Bin(size : Int, x : X, l : Set<X>, r : Set<X>);
 }
