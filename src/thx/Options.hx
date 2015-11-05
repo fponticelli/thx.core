@@ -41,6 +41,16 @@ values is the same as in `Options.equals()`.
     };
 
 /**
+`ap` transforms a value contained in `Option<T>` to `Option<TOut>` using a `callback`
+wrapped in another Option.
+**/
+  public static function ap<T, U>(option : Option<T>, fopt: Option<T -> U>): Option<U>
+    return switch option {
+      case None: None;
+      case Some(v): map(fopt, function(f) return f(v));
+    };
+
+/**
 `flatMap` reduces an `Option<T>` value into an `Array<T>` value applying the `callback`
 function if `Option` contains a value. If `Option` is `None` an empty array is returned.
 **/
@@ -53,18 +63,17 @@ function if `Option` contains a value. If `Option` is `None` an empty array is r
 /**
 `join` collapses a nested option into a single optional value.
 **/
-  public static function join<T>(option: Option<Option<T>>): Option<T> {
+  public static function join<T>(option: Option<Option<T>>): Option<T>
     return flatMap(option, identity);
-  }
 
 /**
 `foldLeft` reduce using an accumulating function and an initial value.
 **/
-  public static function foldLeft<T, B>(option: Option<T>, b: B, f: B -> T -> B): B 
+  public static function foldLeft<T, B>(option: Option<T>, b: B, f: B -> T -> B): B
     return switch option {
       case None: b;
       case Some(v): f(b, v);
-    }
+    };
 
 /**
 `toArray` transforms an `Option<T>` value into an `Array<T>` value. The result array
@@ -103,13 +112,13 @@ is be `None`.
       case Some(v) : v;
     };
 
-  public static function all<T>(option: Option<T>, f: T -> Bool): Bool 
+  public static function all<T>(option: Option<T>, f: T -> Bool): Bool
     return switch option {
       case None: true;
       case Some(v): f(v);
     };
-  
-  public static function any<T>(option: Option<T>, f: T -> Bool): Bool 
+
+  public static function any<T>(option: Option<T>, f: T -> Bool): Bool
     return switch option {
       case None: false;
       case Some(v): f(v);

@@ -8,6 +8,7 @@ import utest.Assert;
 using thx.Arrays;
 using thx.Functions;
 using thx.Floats;
+import haxe.ds.Option;
 
 class TestArrays {
   public function new() { }
@@ -311,6 +312,14 @@ class TestArrays {
     Assert.same([[1,2,3,4,5,6,7,8,9,0]], arr.splitByPad(10, 0));
     Assert.same([[1,2,3,4,5,6,7,8,9,0,0,0,0,0,0,0,0,0,0,0]], arr.splitByPad(20, 0));
   }
+
+//  public function testTraverseOption() {
+//    var arr = [1, 2, 3, 4, 5];
+//    var f = function(i: Int): Option<Int> { return if (i % 2 == 0) Some(i) else None; };
+//
+//    Assert.same(None, arr.traverseOption(f));
+//    Assert.same(Some(arr), arr.traverseOption(function(v) return Some(v)));
+//  }
 }
 
 private class Sample {
