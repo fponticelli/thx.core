@@ -145,8 +145,11 @@ match `end`. No interpolation is made.
     return days;
   }
 
-  inline public static function compare(a : DateTime, b : DateTime)
+  inline public static function compare(a : DateTime, b : DateTime): Int
     return a.compareTo(b);
+
+  inline public static function ord(): Ord<DateTime> 
+    return Ord.fromCompare(compare);
 
 /**
 Creates a DateTime instance from its components (year, mont, day, hour, minute,
