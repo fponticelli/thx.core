@@ -1,6 +1,7 @@
 package thx;
 
 using thx.Arrays;
+import thx.Functions;
 
 /**
  * A simple unordered immutable data structure that supports O(1) append and
@@ -18,6 +19,9 @@ abstract TreeBag<A> (TreeBagImpl<A>) from TreeBagImpl<A> to TreeBagImpl<A> {
   inline public static function fromArray<A>(xs: Array<A>): TreeBag<A> {
     return xs.reduce(function(acc, x) { return cons(x, acc); }, Empty);
   }
+
+  inline public static function flatten<A>(xs: TreeBag<TreeBag<A>>): TreeBag<A>
+    return xs.flatMap(Functions.identity);
 
   inline public function prepend(x : A) : TreeBag<A> {
     return Cons(x, this);
