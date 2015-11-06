@@ -15,6 +15,7 @@ class TestAll {
     runner.addCase(new thx.TestDecimal());
     runner.addCase(new thx.TestDisjunction());
     runner.addCase(new thx.TestDynamics());
+    runner.addCase(new thx.TestEithers());
     runner.addCase(new thx.TestEnums());
     runner.addCase(new thx.TestERegs());
     runner.addCase(new thx.TestError());
@@ -23,6 +24,7 @@ class TestAll {
     runner.addCase(new thx.TestHashSet());
     runner.addCase(new thx.TestInt64s());
     runner.addCase(new thx.TestInts());
+    runner.addCase(new thx.TestIterables());
     runner.addCase(new thx.TestIterators());
     runner.addCase(new thx.TestOrderedMap());
     runner.addCase(new thx.TestOrderedSet());

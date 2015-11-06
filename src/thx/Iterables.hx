@@ -1,6 +1,10 @@
 package thx;
 
+import haxe.ds.Option;
+
 import thx.Tuple;
+using thx.Options;
+
 #if macro
 import haxe.macro.Expr;
 #end
@@ -132,6 +136,30 @@ Refer to `thx.Arrays.reducei`.
 **/
   inline public static function toArray<T>(it : Iterable<T>) : Array<T>
     return Iterators.toArray(it.iterator());
+
+/**
+`min` finds the minimum value included in the iterable, accorrding
+to the specified ordering.
+**/
+  public static function min<A>(it: Iterable<A>, ord: Ord<A>): Option<A> {
+    var found: Option<A> = None;
+    for (a in it) {
+      found = found.any(function(a0) { return ord.order(a0, a) == LT; }) ? found : Some(a);
+    }
+    return found;
+  }
+
+/**
+`minBy` finds the minimum value included in the iterable, as compared by some 
+function of the values contained within the iterable.
+**/
+  public static function minBy<A, B>(it: Iterable<A>, f: A -> B, ord: Ord<B>): Option<A> {
+    var found: Option<A> = None;
+    for (a in it) {
+      found = found.any(function(a0) { return ord.order(f(a0), f(a)) == LT; }) ? found : Some(a);
+    }
+    return found;
+  }
 
 /**
 Unzip an iterable of Tuple2<T1, T2> to a Tuple2<Array<T1>, Array<T2>>.

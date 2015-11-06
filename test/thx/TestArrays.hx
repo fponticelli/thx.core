@@ -17,6 +17,27 @@ class TestArrays {
     Assert.same([2,2,2], arr);
   }
 
+  public function testEach() {
+    var arr = [4, 5, 6];
+    var sum = 0;
+    arr.each(function(item) {
+      sum += item;
+    });
+    Assert.same(15, sum);
+  }
+
+  public function testEachi() {
+    var arr = [4, 5, 6];
+    var sum = 0;
+    var indices = [];
+    arr.eachi(function(item, i) {
+      sum += item;
+      indices.push(i);
+    });
+    Assert.same(15, sum);
+    Assert.same([0, 1, 2], indices);
+  }
+
   public function testCrossMulti() {
     var r = [[1,2],[3,4],[5,6]].crossMulti();
     Assert.same([[1,3,5],[2,3,5],[1,4,5],[2,4,5],[1,3,6],[2,3,6],[1,4,6],[2,4,6]], r);
