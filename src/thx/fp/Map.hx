@@ -1,12 +1,7 @@
 package thx.fp;
 
 import haxe.ds.Option;
-import thx.Tuple;
 import thx.Ord;
-using thx.Options;
-import thx.Strings;
-import thx.Ints;
-import thx.Floats;
 
 abstract Map<K, V>(MapImpl<K, V>) from MapImpl<K, V> to MapImpl<K, V> {
   inline public static function empty<K, V>() : Map<K, V>

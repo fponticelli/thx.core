@@ -1,6 +1,5 @@
 package thx.fp;
 
-using thx.Arrays;
 using thx.Functions;
 import thx.Functions.*;
 

@@ -1,12 +1,8 @@
 package thx.fp;
 
 import haxe.ds.Option;
-import thx.Tuple;
 import thx.Ord;
 using thx.Options;
-import thx.Strings;
-import thx.Ints;
-import thx.Floats;
 
 class StringMap {
   inline static public function exists<V>(map : Map<String, V>, key : String) : Bool

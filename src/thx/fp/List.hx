@@ -2,7 +2,6 @@ package thx.fp;
 
 using thx.Arrays;
 using thx.Functions;
-import thx.Functions.*;
 
 abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
   inline static public function empty<A>() : List<A>
