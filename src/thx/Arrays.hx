@@ -648,7 +648,7 @@ If any of the values are None, return None, otherwise return the array of mapped
 values in a Some.
 **/
   public static function traverseOption<T, U>(arr: ReadonlyArray<T>, f: T -> Option<U>): Option<Array<U>>
-    return reduceRight(arr, function(acc: Option<Array<U>>, t: T) {
+    return reduce(arr, function(acc: Option<Array<U>>, t: T) {
       return f(t).ap(acc.map(function(ux: Array<U>) return function(u: U) { ux.push(u); return ux; }));
     }, Some([]));
 
@@ -658,7 +658,7 @@ If any of the values are Failures, return a Failure that accumulates all errors
 from the failed values, otherwise return the array of mapped values in a Success.
 **/
   public static function traverseValidation<E, T, U>(arr: ReadonlyArray<T>, f: T -> Validation<E, U>, s: Semigroup<E>): Validation<E, Array<U>>
-    return reduceRight(arr, function(acc: Validation<E, Array<U>>, t: T) {
+    return reduce(arr, function(acc: Validation<E, Array<U>>, t: T) {
       return f(t).ap(acc.map(function(ux) return function(u) { ux.push(u); return ux; }), s);
     }, Validation.success([]));
 
