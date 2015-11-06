@@ -3,6 +3,7 @@ package thx;
 import haxe.ds.Option;
 
 import thx.Tuple;
+import thx.Functions;
 using thx.Options;
 
 #if macro
@@ -138,18 +139,6 @@ Refer to `thx.Arrays.reducei`.
     return Iterators.toArray(it.iterator());
 
 /**
-`min` finds the minimum value included in the iterable, accorrding
-to the specified ordering.
-**/
-  public static function min<A>(it: Iterable<A>, ord: Ord<A>): Option<A> {
-    var found: Option<A> = None;
-    for (a in it) {
-      found = found.any(function(a0) { return ord.order(a0, a) == LT; }) ? found : Some(a);
-    }
-    return found;
-  }
-
-/**
 `minBy` finds the minimum value included in the iterable, as compared by some 
 function of the values contained within the iterable.
 **/
@@ -160,6 +149,52 @@ function of the values contained within the iterable.
     }
     return found;
   }
+
+/**
+`maxBy` finds the maximum value included in the iterable, as compared by some 
+function of the values contained within the iterable.
+**/
+  inline public static function maxBy<A, B>(it: Iterable<A>, f: A -> B, ord: Ord<B>): Option<A> 
+    return minBy(it, f, ord.inverse());
+
+/**
+`min` finds the minimum value included in the iterable, accorrding
+to the specified ordering.
+**/
+  inline public static function min<A>(it: Iterable<A>, ord: Ord<A>): Option<A> 
+    return minBy(it, Functions.identity, ord);
+
+/**
+`max` finds the maximum value included in the iterable, accorrding
+to the specified ordering.
+**/
+  inline public static function max<A>(it: Iterable<A>, ord: Ord<A>): Option<A> 
+    return min(it, ord.inverse());
+
+/**
+`extremaBy` finds both the minimum and maximum value included in the iterable, 
+as compared by some function of the values contained within the iterable and
+the specified ordering.
+**/
+  public static function extremaBy<A, B>(it: Iterable<A>, f: A -> B, ord: Ord<B>): Option<Tuple<A, A>> {
+    var found: Option<Tuple2<A, A>> = None;
+    for (a in it) {
+      found = switch found {
+        case None: Some(new Tuple(a, a));
+        case Some(t) if (ord.order(f(a), f(t._0)) == LT): Some(new Tuple(a, t._1));
+        case Some(t) if (ord.order(f(a), f(t._1)) == GT): Some(new Tuple(t._0, a));
+        case _: found;
+      }
+    }
+    return found;
+  }
+
+/**
+`extrema` finds both the minimum and maximum value included in the iterable, 
+as compared by the specified ordering.
+**/
+  inline public static function extrema<A>(it: Iterable<A>, ord: Ord<A>): Option<Tuple<A, A>> 
+    return extremaBy(it, Functions.identity, ord);
 
 /**
 Unzip an iterable of Tuple2<T1, T2> to a Tuple2<Array<T1>, Array<T2>>.
