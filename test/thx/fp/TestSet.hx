@@ -29,7 +29,7 @@ class TestSet {
   }
 
   public function testSet() {
-    var m = Set.singleton("Y").set("X").set("Z");
+    var m = Set.singleton("Y").set("X").set("Y").set("Z").set("Z");
     Assert.isTrue(m.exists("X"));
     Assert.isTrue(m.exists("Y"));
     Assert.isTrue(m.exists("Z"));
@@ -42,6 +42,14 @@ class TestSet {
         l = m.mapList(function(v) return v.toLowerCase());
 
     Assert.same(["x", "y", "z"], l.toArray().order(Strings.compare));
+  }
+
+  public function testFoldLeft() {
+    var set = Set.singleton(1).set(2).set(3);
+    Assert.same([1,2,3], set.foldLeft([], function(acc, v) {
+      acc.push(v);
+      return acc;
+    }).order(Ints.compare));
   }
 
   public function testToList() {

@@ -29,6 +29,12 @@ abstract Set<X>(SetImpl<X>) from SetImpl<X> to SetImpl<X> {
     };
   };
 
+  public function foldLeft<B>(b : B, f : B -> X -> B) : B
+    return switch this {
+      case Tip: b;
+      case Bin(_, x, l, r): r.foldLeft(l.foldLeft(f(b, x), f), f);
+    }
+
   public function insert(x : X, comparator : Ord<X>) : Set<X> return switch this {
     case Tip: singleton(x);
     case Bin(sz, y, l, r): switch comparator(x, y) {
