@@ -24,9 +24,8 @@ class TestList {
 
   public function testIntersperse() {
     var list : List<Int> = Cons(1, Cons(2, Cons(3, Nil))),
-        interspersed = list.intersperse(0),
-        arr = interspersed.toArray();
-    Assert.same([1,0,2,0,3], arr);
+        interspersed = list.intersperse(0);
+    Assert.same(Cons(1, Cons(0, Cons(2, Cons(0, Cons(3, Nil))))), interspersed);
   }
 
   public function testFromArray() {
@@ -38,8 +37,7 @@ class TestList {
     var l1 : List<Int> = Cons(1, Cons(2, Nil)),
         l2 : List<Int> = Cons(3, Cons(4, Nil)),
         l = l1.concat(l2);
-    trace(l.toString());
-    Assert.same([1,2,3,4], l.toArray());
+    Assert.same(Cons(1, Cons(2, Cons(3, Cons(4, Nil)))), l);
   }
 
   public function testToString() {
@@ -52,7 +50,7 @@ class TestList {
 
   public function testMap() {
     var list : List<Int> = Cons(1, Cons(2, Cons(3, Nil)));
-    Assert.same([2,4,6], list.map(function(v) return v * 2).toArray());
+    Assert.same(Cons(2, Cons(4, Cons(6, Nil))), list.map(function(v) return v * 2));
   }
 
   public function testFlatMap() {
@@ -64,8 +62,6 @@ class TestList {
         return List.bin(v, map(v-1));
     }
     var slist = list.flatMap(map);
-    trace(slist.toString());
-    trace(slist.toArray());
-    Assert.same([1,2,1,3,2,1], slist.toArray());
+    Assert.same(Cons(1, Cons(2, Cons(1, Cons(3, Cons(2, Cons(1, Nil)))))), slist);
   }
 }

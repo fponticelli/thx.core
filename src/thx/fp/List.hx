@@ -24,10 +24,10 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
       case Cons(x, xs): xs.foldLeft(f(b, x), f);
     }
 
-  public function flatMap<A, B>(f : A -> List<B>) : List<B>
+  public function flatMap<B>(f : A -> List<B>) : List<B>
     return switch this {
       case Nil: Nil;
-      case Cons(x, xs): xs.flatMap(f).concat(f(x));
+      case Cons(x, xs): f(x).concat(xs.flatMap(f));
     };
 
   public function concat(that : List<A>) : List<A>
@@ -77,7 +77,7 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
 
 class StringList {
   inline public static function toString(l : List<String>) : String
-    return "[" + l.intersperse(",").foldLeft("", fn(_1 + _0)) + "]";
+    return "[" + l.intersperse(",").foldLeft("", fn(_0 + _1)) + "]";
 }
 
 class FloatList {
