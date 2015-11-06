@@ -15,7 +15,6 @@ class TestMap {
     Assert.equals(0, m.size());
   }
 
-
   public function testSizes() {
     Assert.equals(3, Map.singleton("B", 1).set("A", 1).set("C", 1).size());
     Assert.equals(3, Map.singleton("A", 1).set("B", 1).set("C", 1).size());

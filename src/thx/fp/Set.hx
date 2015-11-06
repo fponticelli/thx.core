@@ -36,7 +36,14 @@ abstract Set<X>(SetImpl<X>) from SetImpl<X> to SetImpl<X> {
       case GT: r.balance(y, l, r.insert(x, comparator));
       case EQ: Bin(sz, x, l, r);
     };
-  }
+  };
+
+  public function mapList<Y>(f : X -> Y) : List<Y> return switch this {
+    case Tip:
+      List.empty();
+    case Bin(_, y, l, r):
+      List.bin(f(y), l.mapList(f).concat(r.mapList(f)));
+  };
 
   // helper functions
   inline static var delta = 4;
@@ -97,6 +104,13 @@ abstract Set<X>(SetImpl<X>) from SetImpl<X> to SetImpl<X> {
         bin(x3, bin(x2, t1, t2), bin(x1, t3, t4));
       case _: throw new thx.Error("damn it, this should never happen");
     };
+
+  public function toList() : List<X> return switch this {
+    case Tip:
+      List.empty();
+    case Bin(_, x, l, r):
+      List.bin(x, l.toList().concat(r.toList()));
+  };
 }
 
 class StringSet {

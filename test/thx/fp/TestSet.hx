@@ -2,9 +2,11 @@ package thx.fp;
 
 import haxe.ds.Option;
 import utest.Assert;
+using thx.fp.List;
 using thx.fp.Set;
 import thx.Functions.*;
 import thx.Strings.*;
+using thx.Arrays;
 
 class TestSet {
   public function new() {}
@@ -33,5 +35,19 @@ class TestSet {
     Assert.isTrue(m.exists("Z"));
     Assert.isFalse(m.exists("W"));
     Assert.equals(3, m.size());
+  }
+
+  public function testMapList() {
+    var m = Set.singleton("Y").set("X").set("Z"),
+        l = m.mapList(function(v) return v.toLowerCase());
+
+    Assert.same(["x", "y", "z"], l.toArray().order(Strings.compare));
+  }
+
+  public function testToList() {
+    var m = Set.singleton("Y").set("X").set("Z"),
+        l = m.toList();
+
+    Assert.same(["X", "Y", "Z"], l.toArray().order(Strings.compare));
   }
 }
