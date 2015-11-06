@@ -4,6 +4,8 @@ import haxe.ds.Option;
 import utest.Assert;
 using thx.fp.Map;
 import thx.Functions.*;
+using thx.Arrays;
+using thx.Ints;
 import thx.Strings.*;
 
 class TestMap {
@@ -24,6 +26,24 @@ class TestMap {
     Assert.equals(3, Map.singleton("A", 1).set("C", 1).set("B", 1).size());
 
     Assert.equals(1, Map.singleton("A", 1).set("A", 1).set("A", 1).size());
+  }
+
+  public function testFoldLeft() {
+    var map = Map.singleton("A", 1).set("B", 2).set("C", 3);
+    var arr = map.foldLeft([], function(arr, v) {
+      arr.push(v);
+      return arr;
+    });
+    Assert.same([1,2,3], arr.order(Ints.compare));
+  }
+
+  public function testFoldLeftKeys() {
+    var map = Map.singleton("A", 1).set("B", 2).set("C", 3);
+    var arr = map.foldLeftKeys([], function(arr, k) {
+      arr.push(k);
+      return arr;
+    });
+    Assert.same(["A","B", "C"], arr.order(compare));
   }
 
   public function testSet() {
