@@ -2,7 +2,8 @@ package thx.fp;
 
 import haxe.ds.Option;
 import utest.Assert;
-using thx.fp.Map;
+import thx.fp.Map;
+using thx.fp.Maps;
 import thx.Functions.*;
 using thx.Arrays;
 using thx.Ints;

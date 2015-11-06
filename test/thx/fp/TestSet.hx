@@ -2,8 +2,10 @@ package thx.fp;
 
 import haxe.ds.Option;
 import utest.Assert;
-using thx.fp.List;
-using thx.fp.Set;
+import thx.fp.List;
+using thx.fp.Lists;
+import thx.fp.Set;
+using thx.fp.Sets;
 import thx.Functions.*;
 import thx.Strings.*;
 using thx.Arrays;

@@ -1,7 +1,8 @@
 package thx.fp;
 
 import utest.Assert;
-using thx.fp.List;
+import thx.fp.List;
+using thx.fp.Lists;
 import thx.Functions.*;
 
 class TestList {

@@ -72,27 +72,7 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
     };
 
   public function toStringWithShow(show : A -> String) : String
-    return StringList.toString(map(show));
-}
-
-class StringList {
-  inline public static function toString(l : List<String>) : String
-    return "[" + l.intersperse(",").foldLeft("", fn(_0 + _1)) + "]";
-}
-
-class FloatList {
-  inline public static function toString(l : List<Float>) : String
-    return l.toStringWithShow(Floats.toString);
-}
-
-class IntList {
-  inline public static function toString(l : List<Int>) : String
-    return l.toStringWithShow(Ints.toString.bind(_, 10));
-}
-
-class ObjectList {
-  inline public static function toString(l : List<{ toString : Void -> String }>) : String
-    return l.toStringWithShow(function(o) return o.toString());
+    return thx.fp.Lists.StringList.toString(map(show));
 }
 
 enum ListImpl<A> {
