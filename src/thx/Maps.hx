@@ -62,4 +62,10 @@ Returns true if a value is of any type of Map. Equivalent to `Std.is(v, IMap)`.
 **/
   inline public static function isMap(v : Dynamic)
     return Std.is(v, IMap);
+
+  public static function string<TKey, TValue>(m : IMap<TKey, TValue>) : String {
+    return "[" + tuples(m).map(function(t : Tuple<TKey, TValue>) : String {
+      return Dynamics.string(t._0) + ' => ' + Dynamics.string(t._1);
+    }).join(", ") + "]";
+  }
 }
