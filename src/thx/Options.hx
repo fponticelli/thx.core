@@ -104,12 +104,21 @@ is be `None`.
     };
 
 /**
-`toValueWithAlt` extracts the value from `Option`. If the `Option` is `None`, `alt` value is returned.
+`getOrElse` extracts the value from `Option`. If the `Option` is `None`, `alt` value is returned.
 **/
   public static function getOrElse<T>(option : Option<T>, alt : T) : T
     return switch option {
       case None: alt;
       case Some(v) : v;
+    };
+
+/**
+`orElse` returns `option` if it holds a value or `alt` otherwise.
+**/
+  public static function orElse<T>(option : Option<T>, alt : Option<T>) : Option<T>
+    return switch option {
+      case None: alt;
+      case Some(_) : option;
     };
 
   public static function all<T>(option: Option<T>, f: T -> Bool): Bool
