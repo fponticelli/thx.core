@@ -38,7 +38,6 @@ class TestAll {
     runner.addCase(new thx.TestStaticResource());
     runner.addCase(new thx.TestStrings());
     runner.addCase(new thx.TestTime());
-    runner.addCase(new thx.TestTreeBag());
     runner.addCase(new thx.TestThx());
     runner.addCase(new thx.TestLambda());
     runner.addCase(new thx.TestLambdaStaticExtension());
@@ -48,6 +47,11 @@ class TestAll {
     runner.addCase(new thx.TestTuple());
     runner.addCase(new thx.TestUrl());
     runner.addCase(new thx.TestValidation());
+
+    runner.addCase(new thx.fp.TestList());
+    runner.addCase(new thx.fp.TestMap());
+    runner.addCase(new thx.fp.TestSet());
+    runner.addCase(new thx.fp.TestTreeBag());
   }
 
   public static function main() {

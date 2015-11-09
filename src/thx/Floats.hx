@@ -202,6 +202,9 @@ Rounds a number to the specified number of decimals.
   inline public static function sign<T : Float>(value : T) : Int
     return value < 0 ? -1 : 1;
 
+  inline public static function toString(v : Float) : String
+    return '$v';
+
 /**
 Alias for parse, mainly for disambiguation with other parses using mega Thx.
 **/

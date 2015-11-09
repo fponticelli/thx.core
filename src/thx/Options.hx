@@ -89,7 +89,7 @@ will be empty if `Option` is `None` or will contain one value otherwise.
 `toBool` transforms an `Option` value into a boolean: `None` maps to `false`, and
 `Some(_)` to `true`. The value in `Some` has no play in the conversion.
 **/
-  #if java @:generic #end
+  #if ((haxe <= 3.2) && java) @:generic #end
   public static function toBool<T>(option : Option<T>) : Bool
     return switch option {
       case None: false;
@@ -106,10 +106,28 @@ is be `None`.
 /**
 `toValue` extracts the value from `Option`. If the `Option` is `None`, `null` is returned.
 **/
-  public static function toValue<T>(option : Option<T>) : Null<T>
+  public static function get<T>(option : Option<T>) : Null<T>
     return switch option {
       case None: null;
       case Some(v) : v;
+    };
+
+/**
+`getOrElse` extracts the value from `Option`. If the `Option` is `None`, `alt` value is returned.
+**/
+  public static function getOrElse<T>(option : Option<T>, alt : T) : T
+    return switch option {
+      case None: alt;
+      case Some(v) : v;
+    };
+
+/**
+`orElse` returns `option` if it holds a value or `alt` otherwise.
+**/
+  public static function orElse<T>(option : Option<T>, alt : Option<T>) : Option<T>
+    return switch option {
+      case None: alt;
+      case Some(_) : option;
     };
 
   public static function all<T>(option: Option<T>, f: T -> Bool): Bool

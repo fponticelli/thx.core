@@ -2,6 +2,7 @@ package thx;
 
 import haxe.ds.Option;
 
+import thx.Ord;
 import thx.Tuple;
 import thx.Functions;
 using thx.Options;
@@ -139,7 +140,7 @@ Refer to `thx.Arrays.reducei`.
     return Iterators.toArray(it.iterator());
 
 /**
-`minBy` finds the minimum value included in the iterable, as compared by some 
+`minBy` finds the minimum value included in the iterable, as compared by some
 function of the values contained within the iterable.
 **/
   public static function minBy<A, B>(it: Iterable<A>, f: A -> B, ord: Ord<B>): Option<A> {
@@ -151,28 +152,28 @@ function of the values contained within the iterable.
   }
 
 /**
-`maxBy` finds the maximum value included in the iterable, as compared by some 
+`maxBy` finds the maximum value included in the iterable, as compared by some
 function of the values contained within the iterable.
 **/
-  inline public static function maxBy<A, B>(it: Iterable<A>, f: A -> B, ord: Ord<B>): Option<A> 
+  inline public static function maxBy<A, B>(it: Iterable<A>, f: A -> B, ord: Ord<B>): Option<A>
     return minBy(it, f, ord.inverse());
 
 /**
 `min` finds the minimum value included in the iterable, accorrding
 to the specified ordering.
 **/
-  inline public static function min<A>(it: Iterable<A>, ord: Ord<A>): Option<A> 
+  inline public static function min<A>(it: Iterable<A>, ord: Ord<A>): Option<A>
     return minBy(it, Functions.identity, ord);
 
 /**
 `max` finds the maximum value included in the iterable, accorrding
 to the specified ordering.
 **/
-  inline public static function max<A>(it: Iterable<A>, ord: Ord<A>): Option<A> 
+  inline public static function max<A>(it: Iterable<A>, ord: Ord<A>): Option<A>
     return min(it, ord.inverse());
 
 /**
-`extremaBy` finds both the minimum and maximum value included in the iterable, 
+`extremaBy` finds both the minimum and maximum value included in the iterable,
 as compared by some function of the values contained within the iterable and
 the specified ordering.
 **/
@@ -190,10 +191,10 @@ the specified ordering.
   }
 
 /**
-`extrema` finds both the minimum and maximum value included in the iterable, 
+`extrema` finds both the minimum and maximum value included in the iterable,
 as compared by the specified ordering.
 **/
-  inline public static function extrema<A>(it: Iterable<A>, ord: Ord<A>): Option<Tuple<A, A>> 
+  inline public static function extrema<A>(it: Iterable<A>, ord: Ord<A>): Option<Tuple<A, A>>
     return extremaBy(it, Functions.identity, ord);
 
 /**

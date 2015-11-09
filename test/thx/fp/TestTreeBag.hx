@@ -1,13 +1,13 @@
-package thx;
+package thx.fp;
 
-import thx.TreeBag.*;
+import thx.fp.TreeBag.*;
 import thx.Functions.*;
 
 import utest.Assert;
 
 class TestTreeBag {
   public function new() {}
-  
+
   static var t0 : TreeBag<Int> = empty();
   static var t1 : TreeBag<Int> = cons(1, cons(2, t0));
   static var t2 : TreeBag<Int> = cons(2, cons(3, t0));
