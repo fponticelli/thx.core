@@ -32,6 +32,21 @@ Converts a Map<TKey, TValue> into an Array<Tuple2<TKey, TValue>>
     );
 
 /**
+It maps values from one `Map` instance to another.
+**/
+  public static function mapValues<TKey, TValueA, TValueB>(map : IMap<TKey, TValueA>, f : TValueA -> TValueB, acc : Map<TKey, TValueB>) : Map<TKey, TValueB>
+    return reduce(map, function(m : Map<TKey, TValueB>, t) {
+      m.set(t._0, f(t._1));
+      return m;
+    }, acc);
+
+/**
+Applies the reduce function on every key/value pair in the map.
+**/
+  public static function reduce<TKey, TValue, TOut>(map: IMap<TKey, TValue>, f : TOut -> Tuple<TKey, TValue> -> TOut, acc : TOut) : TOut
+    return tuples(map).reduce(f, acc);
+
+/**
 Extracts the values of a Map<TKey, TValue> into Array<TValue>
 **/
   public static function values<TKey, TValue>(map: IMap<TKey, TValue>): Array<TValue>
