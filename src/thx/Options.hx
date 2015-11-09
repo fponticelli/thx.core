@@ -97,7 +97,7 @@ is be `None`.
 /**
 `toValue` extracts the value from `Option`. If the `Option` is `None`, `null` is returned.
 **/
-  public static function toValue<T>(option : Option<T>) : Null<T>
+  public static function get<T>(option : Option<T>) : Null<T>
     return switch option {
       case None: null;
       case Some(v) : v;
@@ -106,7 +106,7 @@ is be `None`.
 /**
 `toValueWithAlt` extracts the value from `Option`. If the `Option` is `None`, `alt` value is returned.
 **/
-  public static function toValueWithAlt<T>(option : Option<T>, alt : T) : T
+  public static function getOrElse<T>(option : Option<T>, alt : T) : T
     return switch option {
       case None: alt;
       case Some(v) : v;

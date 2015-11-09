@@ -12,7 +12,7 @@ class StringMap {
     return map.lookup(key, Strings.compare);
 
   inline static public function getAlt<V>(map : Map<String, V>, key : String, alt : V) : V
-    return map.lookup(key, Strings.compare).toValueWithAlt(alt);
+    return map.lookup(key, Strings.compare).getOrElse(alt);
 
   inline static public function set<V>(map : Map<String, V>, key : String, value : V) : Map<String, V>
     return map.insert(key, value, Strings.compare);
@@ -26,7 +26,7 @@ class FloatMap {
     return map.lookup(key, Floats.compare);
 
   inline static public function getAlt<V>(map : Map<Float, V>, key : Float, alt : V) : V
-    return map.lookup(key, Floats.compare).toValueWithAlt(alt);
+    return map.lookup(key, Floats.compare).getOrElse(alt);
 
   inline static public function set<V>(map : Map<Float, V>, key : Float, value : V) : Map<Float, V>
     return map.insert(key, value, Floats.compare);
@@ -40,7 +40,7 @@ class IntMap {
     return map.lookup(key, Ints.compare);
 
   inline static public function getAlt<V>(map : Map<Int, V>, key : Int, alt : V) : V
-    return map.lookup(key, Ints.compare).toValueWithAlt(alt);
+    return map.lookup(key, Ints.compare).getOrElse(alt);
 
   inline static public function set<V>(map : Map<Int, V>, key : Int, value : V) : Map<Int, V>
     return map.insert(key, value, Ints.compare);
@@ -54,7 +54,7 @@ class ComparableOrdMap {
     return map.lookup(key, function(a : T, b : T) return a.compareTo(b));
 
   inline static public function getAlt<V, T : ComparableOrd<T>>(map : Map<T, V>, key : T, alt : V) : V
-    return map.lookup(key, function(a : T, b : T) return a.compareTo(b)).toValueWithAlt(alt);
+    return map.lookup(key, function(a : T, b : T) return a.compareTo(b)).getOrElse(alt);
 
   inline static public function set<V, T : ComparableOrd<T>>(map : Map<T, V>, key : T, value : V) : Map<T, V>
     return map.insert(key, value, function(a : T, b : T) return a.compareTo(b));
@@ -68,7 +68,7 @@ class ComparableMap {
     return map.lookup(key, function(a : T, b : T) : Ordering return a.compareTo(b));
 
   inline static public function getAlt<V, T : Comparable<T>>(map : Map<T, V>, key : T, alt : V) : V
-    return map.lookup(key, function(a : T, b : T) : Ordering return a.compareTo(b)).toValueWithAlt(alt);
+    return map.lookup(key, function(a : T, b : T) : Ordering return a.compareTo(b)).getOrElse(alt);
 
   inline static public function set<V, T : Comparable<T>>(map : Map<T, V>, key : T, value : V) : Map<T, V>
     return map.insert(key, value, function(a : T, b : T) : Ordering return a.compareTo(b));
