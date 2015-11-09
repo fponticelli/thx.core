@@ -3,13 +3,13 @@ package thx;
 import thx.Semigroup;
 
 abstract Ordering(OrderingImpl) from OrderingImpl to OrderingImpl {
-  @:from public static function fromInt(value : Int) : Ordering
+  public static function fromInt(value : Int) : Ordering
     return value < 0 ? LT : (value > 0 ? GT : EQ);
 
   public static function fromFloat(value : Float) : Ordering
     return value < 0 ? LT : (value > 0 ? GT : EQ);
 
-  @:to public function toInt() : Int
+  public function toInt() : Int
     return switch this {
       case LT: -1;
       case GT: 1;
@@ -23,8 +23,8 @@ enum OrderingImpl {
 
 @:callable
 abstract Ord<A> (A -> A -> Ordering) from A -> A -> Ordering to A -> A -> Ordering {
-  @:from public static function fromIntComparison<A>(f : A -> A -> Int) : Ord<A>
-    return function(a : A, b : A) : Ordering return f(a, b);
+  public static function fromIntComparison<A>(f : A -> A -> Int) : Ord<A>
+    return function(a : A, b : A) : Ordering return Ordering.fromInt(f(a, b));
 
   inline public function order(a0: A, a1: A): Ordering
     return this(a0, a1);
@@ -34,7 +34,7 @@ abstract Ord<A> (A -> A -> Ordering) from A -> A -> Ordering to A -> A -> Orderi
 
   public function inverse(): Ord<A> return function(a0: A, a1: A) { return this(a1, a0); };
 
-  public static function fromCompare<A>(f: A -> A -> Int): Ord<A> 
+  public static function fromCompare<A>(f: A -> A -> Int): Ord<A>
     return function(a0: A, a1: A) {
       var i = f(a0, a1);
       return if (i < 0) LT else if (i == 0) EQ else GT;

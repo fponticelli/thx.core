@@ -4,6 +4,7 @@ import haxe.ds.Option;
 import utest.Assert;
 using thx.fp.Maps;
 using thx.Arrays;
+using thx.Ord;
 import thx.Strings.*;
 
 class TestMap {
@@ -85,7 +86,7 @@ class CO {
   var v : String;
   public function new(v : String) this.v = v;
   public function compareTo(that : CO) : thx.Ord.Ordering
-    return Strings.compare(v, that.v);
+    return Strings.compare(v, that.v).fromInt();
 }
 
 class CO2 {
