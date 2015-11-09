@@ -8,6 +8,7 @@ import utest.Assert;
 using thx.Arrays;
 using thx.Functions;
 using thx.Floats;
+import haxe.ds.Option;
 
 class TestArrays {
   public function new() { }
@@ -310,6 +311,23 @@ class TestArrays {
     Assert.same([[1,2,3,4],[5,6,7,8],[9,0,0,0]], arr.splitByPad(4, 0));
     Assert.same([[1,2,3,4,5,6,7,8,9,0]], arr.splitByPad(10, 0));
     Assert.same([[1,2,3,4,5,6,7,8,9,0,0,0,0,0,0,0,0,0,0,0]], arr.splitByPad(20, 0));
+  }
+
+  public function testTraverseOption() {
+    var arr = [1, 2, 3, 4, 5];
+    var f = function(i: Int): Option<Int> { return if (i % 2 == 0) Some(i) else None; };
+
+    Assert.same(None, arr.traverseOption(f));
+    Assert.same(Some(arr), arr.traverseOption(function(v) return Some(v)));
+  }
+
+  public function testTraverseValidation() {
+    var arr = [1, 2, 3, 4, 5];
+    var ff = function(i: Int): Validation.VNel<String, Int> { return if (i % 2 == 0) Validation.successNel(i) else Validation.failureNel('oops: $i'); };
+    var fs = function(i: Int): Validation.VNel<String, Int> { return Validation.successNel(i); };
+
+    Assert.same(Validation.failure(Nel.nel("oops: 5", ["oops: 3", "oops: 1"])), arr.traverseValidation(ff, Nel.semigroup()));
+    Assert.same(Validation.successNel(arr), arr.traverseValidation(fs, Nel.semigroup()));
   }
 }
 
