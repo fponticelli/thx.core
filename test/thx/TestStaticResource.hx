@@ -14,12 +14,18 @@ class TestStaticResource {
     Assert.equals("value", ResourceTest.fileJson.some);
     Assert.equals("some text\n", ResourceTest.fileText);
   }
+
+  public function testDir() {
+    Assert.equals("some text\n", ResourceDir.text);
+    Assert.equals("value", ResourceDir.object.some);
+  }
 }
 
 @:content({ a : 1 })
 @:json("test/thx/other-resource")
 @:file("test/thx/resource.json")
 @:resolve("&")
-class ResourceTest implements StaticResource {
+class ResourceTest implements StaticResource { }
 
-}
+@:dir("test/thx/resources")
+class ResourceDir implements StaticResource { }

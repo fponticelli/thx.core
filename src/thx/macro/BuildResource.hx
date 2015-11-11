@@ -8,7 +8,7 @@ using haxe.macro.ExprTools;
 using thx.macro.MacroFields;
 using thx.Objects;
 using thx.Arrays;
-using StringTools;
+using thx.Strings;
 
 class BuildResource {
   macro public static function buildStatic() : Array<Field> {
@@ -69,6 +69,7 @@ class BuildResource {
   static function getResourceObject(cls : ClassType) {
     var o = {},
         prefix = resolvePrefix(cls.meta);
+    Objects.assign(o, getDirMeta(cls.meta, cls.module, prefix));
     Objects.assign(o, getContentMeta(cls.meta, cls.module, prefix));
     Objects.assign(o, getMatchingFile(cls.name, cls.module, formats, prefix));
     Objects.assign(o, getContentFile(cls.meta, cls.module, prefix));
@@ -86,6 +87,26 @@ class BuildResource {
       .map(function(n) Objects.assign(o, n));
     var path = thx.macro.Macros.getModuleDirectory(module);
     resolveReferences(o, prefix, module, path);
+    return o;
+  }
+
+  // TODO support nested folders
+  static function getDirMeta(meta : MetaAccess, module : String, prefix : String) : {} {
+    if(!meta.has(":dir"))
+      return {};
+    var o = {};
+    meta.extract(":dir")
+      .map(function(v) return v.params)
+      .flatten()
+      .map(function(p) return ExprTools.getValue(p))
+      .map(function(path) {
+        for(file in sys.FileSystem.readDirectory(path)) {
+          if(file.startsWith(".")) continue; // ignore hidden files
+          var fullPath = '$path/$file',
+              name = Strings.capitalizeWords(file.split(".").slice(0, -1).join(" ")).lowerCaseFirst();
+          Reflect.setField(o, name, getFromFile(fullPath, module, prefix, null, true));
+        }
+      });
     return o;
   }
 
