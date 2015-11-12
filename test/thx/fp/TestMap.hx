@@ -80,6 +80,14 @@ class TestMap {
     Assert.same(Some(3), m.get(c));
     Assert.equals(3, m.size());
   }
+
+  public function testFromNative() {
+    var native = ["a" => 1, "b" => 2],
+        map = StringMap.fromNative(native);
+    Assert.equals(2, map.size());
+    Assert.isTrue(map.exists("a"));
+    Assert.isTrue(map.exists("b"));
+  }
 }
 
 class CO {
