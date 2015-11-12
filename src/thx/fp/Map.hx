@@ -2,6 +2,11 @@ package thx.fp;
 
 import haxe.ds.Option;
 import thx.Ord;
+#if (haxe_ver >= 3.200)
+import haxe.Constraints.IMap;
+#else
+import Map.IMap;
+#end
 
 abstract Map<K, V>(MapImpl<K, V>) from MapImpl<K, V> to MapImpl<K, V> {
   inline public static function empty<K, V>() : Map<K, V>
@@ -10,6 +15,13 @@ abstract Map<K, V>(MapImpl<K, V>) from MapImpl<K, V> to MapImpl<K, V> {
     return Bin(1, k, v, Tip, Tip);
   inline public static function bin<K, V>(k : K, v : V, lhs : Map<K, V>, rhs : Map<K, V>) : Map<K, V>
     return Bin(lhs.size() + rhs.size() + 1, k, v, lhs, rhs);
+
+  public static function fromNative<K, V>(map : IMap<K, V>, comparator : Ord<K>) : Map<K, V> {
+    var r = empty();
+    for(key in map.keys())
+      r = r.insert(key, map.get(key), comparator);
+    return r;
+  }
 
   public function lookup(key : K, comparator : Ord<K>) : Option<V> {
     switch this {
