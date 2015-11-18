@@ -1,12 +1,12 @@
 package thx;
 
 import thx.Either;
-import thx.Disjunction;
 import thx.Validation;
 import thx.Validation.*;
 import thx.Nel;
 import thx.Nel.*;
-using Thx;
+
+using thx.Eithers;
 using thx.Functions;
 
 import utest.Assert;

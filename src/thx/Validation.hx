@@ -4,6 +4,7 @@ import thx.Either;
 import thx.Tuple;
 import thx.Validation;
 using thx.Functions;
+using thx.Eithers;
 
 typedef VNel<E, A> = Validation<Nel<E>, A>;
 /**
@@ -40,8 +41,8 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
   inline public static function nnNel<E, A>(a: Null<A>, e: E): VNel<E, A>
     return (a == null) ? failureNel(e) : successNel(a);
 
-  public var disjunction(get, never): Disjunction<E, A>;
-  public function get_disjunction(): Disjunction<E, A>
+  public var either(get, never): Either<E, A>;
+  public inline function get_either(): Either<E, A>
     return this;
 
   inline public function map<B>(f: A -> B): Validation<E, B>
@@ -50,26 +51,26 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
   public function ap<B>(v: Validation<E, A -> B>, s: Semigroup<E>): Validation<E, B>
     return switch this {
       case Left(e0):
-        switch v.disjunction {
+        switch v.either {
           case Left(e1): Left(s.append(e0, e1));
           case Right(b): Left(e0);
         }
       case Right(a):
-        switch v.disjunction {
+        switch v.either {
           case Left(e): Left(e);
           case Right(f): Right(f(a));
         }
     };
 
   inline public function zip<B>(v: Validation<E, B>, s: Semigroup<E>): Validation<E, Tuple2<A, B>>
-    return ap((v.disjunction.map(function(b: B){ return Tuple2.of.bind(_, b); }): Either<E, A -> Tuple2<A, B>>), s);
+    return ap((v.either.map(function(b: B){ return Tuple2.of.bind(_, b); }): Either<E, A -> Tuple2<A, B>>), s);
 
   inline public function leftMap<E0>(f: E -> E0): Validation<E0, A>
-    return (disjunction.leftMap(f) : Either<E0, A>);
+    return (either.leftMap(f) : Either<E0, A>);
 
   // This is not simply flatMap because it is not consistent with ap,
   // as should be the case in other monads. It is equivalent to
-  // `this.disjunction.flatMap(f).validation`
+  // `this.either.flatMap(f).validation`
   inline public function flatMapV<B>(f: A -> Validation<E, B>): Validation<E, B>
     return switch this {
       case Left(a) : Left(a);

@@ -66,6 +66,12 @@ class Eithers {
     };
   }
 
+  public static function map<L, RIn, ROut>(either: Either<L, RIn>, f: RIn -> ROut): Either<L, ROut>
+    return switch either {
+      case Left(v) : Left(v);
+      case Right(v) : Right(f(v));
+    };
+
   /**
     Maps an Either<L, RIn> to and Either<L, ROut>.
   **/
@@ -75,4 +81,10 @@ class Eithers {
       case Right(v) : f(v);
     };
   }
+
+  public static function leftMap<LIn, LOut, R>(either: Either<LIn, R>, f: LIn -> LOut): Either<LOut, R>
+    return switch either {
+      case Left(v) : Left(f(v));
+      case Right(v): Right(v);
+    };
 }

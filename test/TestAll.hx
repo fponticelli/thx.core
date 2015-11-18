@@ -13,7 +13,6 @@ class TestAll {
     runner.addCase(new thx.TestDateTime());
     runner.addCase(new thx.TestDateTimeUtc());
     runner.addCase(new thx.TestDecimal());
-    runner.addCase(new thx.TestDisjunction());
     runner.addCase(new thx.TestDynamics());
     runner.addCase(new thx.TestEffects());
     runner.addCase(new thx.TestEithers());
