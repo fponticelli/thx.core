@@ -1,7 +1,7 @@
-package thx;
+package thx.fp;
 
 import thx.Tuple;
-import thx.State.*;
+import thx.fp.State.*;
 using thx.Functions;
 
 import utest.Assert;
