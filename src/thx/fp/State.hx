@@ -4,6 +4,9 @@ import thx.Tuple;
 
 @:callable
 abstract State<S, A> (S -> Tuple<S, A>) from S -> Tuple<S, A> {
+  public static function void<S>(): State<S, Void>
+    return pure(null);
+
   public static function pure<S, A>(a: A): State<S, A>
     return function(s: S) (return new Tuple2(s, a));
 
@@ -13,7 +16,7 @@ abstract State<S, A> (S -> Tuple<S, A>) from S -> Tuple<S, A> {
   public static function putState<S>(s: S): State<S, Void>
     return (function(_: S) return new Tuple2(s, null));
 
-  public function map<B>(f: A -> B): State<S, B> 
+  public inline function map<B>(f: A -> B): State<S, B> 
     return (function(s: S) return this(s).map(f));
 
   @:op(S1 >>= F)
@@ -23,6 +26,9 @@ abstract State<S, A> (S -> Tuple<S, A>) from S -> Tuple<S, A> {
       return f(res0._1)(res0._0);
     };
   }
+
+  public function voided(): State<S, Void>
+    return map(function(a) return null);
 
   @:op(S1 >> S2)
   public function then<B>(next: State<S, B>): State<S, B> 
