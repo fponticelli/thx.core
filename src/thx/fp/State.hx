@@ -44,11 +44,4 @@ abstract State<S, A> (S -> Tuple<S, A>) from S -> Tuple<S, A> {
   /** Run the composed computation just for the purpose of obtaining the final state. */
   public function runState(s: S): S
     return this(s)._0;
-
-  /** Run the composed computation, and lift the resulting value into a new
-      State instance. May be needed to avoid stack overflow. **/
-  public function force(s: S): State<S, A> {
-    var forced = this(s);
-    return function(s: S) (return forced);
-  }
 }
