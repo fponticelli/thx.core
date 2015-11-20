@@ -85,4 +85,11 @@ class TestEithers {
     }).toRightUnsafe());
   }
 
+  public function testLeftMap() {
+    var l: Either<Int, Bool> = Left(1);
+    var rt: Either<Int, Bool> = Right(true);
+    var l2: Either<Int, Bool> = Left(2);
+    Assert.same(l2, l.leftMap(function(i) { return i + 1; }));
+    Assert.same(rt, rt.leftMap(function(i) { return i + 1; }));
+  }
 }

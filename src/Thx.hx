@@ -13,7 +13,6 @@ typedef Dates = thx.Dates;
 typedef DateTime = thx.DateTime;
 typedef DateTimeUtc = thx.DateTimeUtc;
 typedef Decimal = thx.Decimal;
-typedef Disjunction<E, A> = thx.Disjunction<E, A>;
 typedef Dynamics = thx.Dynamics;
 typedef Either<Left, Right> = thx.Either<Left, Right>;
 typedef Eithers = thx.Eithers;

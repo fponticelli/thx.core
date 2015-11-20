@@ -131,6 +131,9 @@ Provides a string representation of the Tuple
   inline public function toString()
     return 'Tuple2(${this._0},${this._1})';
 
+  public function map<T2>(f: T1 -> T2): Tuple2<T0, T2>
+    return new Tuple2(this._0, f(this._1));
+
   @:from inline static public function arrayToTuple2<T>(v : Array<T>) : Tuple2<T, T>
     return new Tuple2(v[0], v[1]);
 }

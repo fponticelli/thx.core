@@ -1,5 +1,7 @@
 package thx;
 
+import haxe.ds.Option;
+
 class Bools {
 /**
 Returns a comparison value (`Int`) from two boolean values.
@@ -35,4 +37,11 @@ Returns `true` when arguments are different.
 */
   inline public static function xor(a : Bool, b : Bool) : Bool
     return a != b;
+
+  /**
+   * Depending upon the condition, return the provided value wrapped 
+   * in a Some, or None if the condition is false.
+   */
+  inline public static function option<A>(cond: Bool, a: A): Option<A>
+    return if (cond) Some(a) else None;
 }

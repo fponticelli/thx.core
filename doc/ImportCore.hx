@@ -11,7 +11,6 @@ import thx.Dates;
 import thx.DateTime;
 import thx.DateTimeUtc;
 import thx.Decimal;
-import thx.Disjunction;
 import thx.Dynamics;
 import thx.Either;
 import thx.Enums;
