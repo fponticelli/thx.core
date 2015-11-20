@@ -219,10 +219,6 @@ Wraps `callback` in a function that negates its results.
   public inline static function curry<A, B, C, D>(f: A -> B -> C -> D): A -> B -> (C -> D)
     return function(a: A, b: B) { return function(c) { return f(a, b, c); } };
 
-  public static function flatMap<A, B, C>(f0 : A -> B, f : B -> (A -> C)) : A -> C
-    return function(a : A) : C {
-      return f(f0(a))(a);
-    };
 
 /**
 Lambda expressions
@@ -254,6 +250,13 @@ class Functions7 {
 class Functions8 {
   public inline static function curry<A, B, C, D, E, F, G, H, I>(f: A -> B -> C -> D -> E -> F -> G -> H -> I): A -> B -> C -> D -> E -> F -> G -> (H -> I)
     return function(a: A, b: B, c: C, d: D, e: E, f0: F, g: G) { return function(h) { return f(a, b, c, d, e, f0, g, h); } };
+}
+
+abstract Reader<A, B> (A -> B) from A -> B to A -> B {
+  public function flatMap<C>(f : B -> (A -> C)) : A -> C
+    return function(a : A) : C {
+      return f(this(a))(a);
+    };
 }
 
 
