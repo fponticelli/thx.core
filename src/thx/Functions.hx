@@ -236,6 +236,22 @@ class Functions5 {
     return function(a: A, b: B, c: C, d: D) { return function(e) { return f(a, b, c, d, e); } };
 }
 
+class Functions6 {
+  public inline static function curry<A, B, C, D, E, F, G>(f: A -> B -> C -> D -> E -> F -> G): A -> B -> C -> D -> E -> (F -> G)
+    return function(a: A, b: B, c: C, d: D, e: E) { return function(f0) { return f(a, b, c, d, e, f0); } };
+}
+
+class Functions7 {
+  public inline static function curry<A, B, C, D, E, F, G, H>(f: A -> B -> C -> D -> E -> F -> G -> H): A -> B -> C -> D -> E -> F -> (G -> H)
+    return function(a: A, b: B, c: C, d: D, e: E, f0: F) { return function(g) { return f(a, b, c, d, e, f0, g); } };
+}
+
+class Functions8 {
+  public inline static function curry<A, B, C, D, E, F, G, H, I>(f: A -> B -> C -> D -> E -> F -> G -> H -> I): A -> B -> C -> D -> E -> F -> G -> (H -> I)
+    return function(a: A, b: B, c: C, d: D, e: E, f0: F, g: G) { return function(h) { return f(a, b, c, d, e, f0, g, h); } };
+}
+
+
 /**
 Generic helper for functions.
 **/
