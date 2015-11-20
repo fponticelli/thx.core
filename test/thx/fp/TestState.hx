@@ -21,7 +21,7 @@ class TestState {
       return s.modify.fn(_ + "b").map.fn(_ + i);
     }
 
-    Assert.same(new Tuple("ab", 2), (s >>= f)("a"));
+    Assert.same(new Tuple("ab", 2), (s.flatMap(f))("a"));
   }
 }
 
