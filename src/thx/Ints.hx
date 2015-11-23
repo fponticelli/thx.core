@@ -3,6 +3,7 @@ package thx;
 using thx.Arrays;
 using thx.Strings;
 import thx.Ord;
+import thx.Monoid;
 using StringTools;
 
 /**
@@ -265,6 +266,9 @@ Similar to `wrap`, it works for numbers between 0 and `max`.
 
   public static var order(default, never): Ord<Int> = 
     function(i0, i1) { return if (i0 > i1) GT else if (i0 == i1) EQ else LT; };
+
+  public static var monoid(default, never): Monoid<Int> = 
+    { zero: 0, append: function(a: Int, b: Int) return a + b };
 }
 
 class RangeIterator {

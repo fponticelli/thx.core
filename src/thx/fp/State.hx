@@ -1,7 +1,7 @@
 package thx.fp;
 
 import thx.Tuple;
-import thx.fp.Functions.*;
+import thx.fp.Functions.const;
 using thx.Functions;
 
 @:callable

@@ -2,6 +2,7 @@ package thx;
 
 using StringTools;
 using thx.Arrays;
+import thx.Monoid;
 import haxe.Utf8;
 
 /** Alias of `StringTools`, included so mixins work with `using thx.Strings;` **/
@@ -623,6 +624,9 @@ Words whose length exceeds `columns` are not split.
       return s;
     }
   }
+
+  public static var monoid(default, never): Monoid<String> = 
+    { zero: "", append: function(a: String, b: String) return a + b }
 
   static var UCWORDS = ~/[^a-zA-Z]([a-z])/g;
   static var IS_BREAKINGWHITESPACE = ~/[^\t\n\r ]/;
