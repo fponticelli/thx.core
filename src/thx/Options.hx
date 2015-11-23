@@ -7,6 +7,9 @@ import haxe.ds.Option;
 Extension methods for the `haxe.ds.Option` type.
 **/
 class Options {
+  inline public static function ofValue<T>(value : Null<T>) : Option<T>
+    return null == value ? None : Some(value);
+
 /**
 Equality function to campare two `Option` values of the same type. An optional equality
 function can be provided if values inside `Some` should be compared using something
