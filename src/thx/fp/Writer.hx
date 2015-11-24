@@ -2,6 +2,7 @@ package thx.fp;
 
 import thx.Tuple;
 import thx.Monoid;
+import thx.Unit;
 using thx.Functions;
 import thx.fp.Functions.const;
 
@@ -11,13 +12,13 @@ abstract Writer<W, A> (Tuple3<Monoid<W>, W, A>) {
   function new(t3: Tuple3<Monoid<W>, W, A>) { this = t3; }
   inline function repr(): Tuple3<Monoid<W>, W, A> return this;
 
-  inline public static function void<W>(mw: Monoid<W>): Writer<W, Void>
+  inline public static function void<W>(mw: Monoid<W>): Writer<W, Unit>
     return pure(null, mw);
 
   inline public static function pure<W, A>(a: A, mw: Monoid<W>): Writer<W, A>
     return new Writer(new Tuple3(mw, mw.zero, a));
 
-  inline public static function tell<W, A>(w: W, mw: Monoid<W>): Writer<W, Void>
+  inline public static function tell<W, A>(w: W, mw: Monoid<W>): Writer<W, Unit>
     return new Writer(new Tuple3(mw, w, null));
 
   inline public function map<B>(f: A -> B): Writer<W, B> 
@@ -43,7 +44,7 @@ abstract Writer<W, A> (Tuple3<Monoid<W>, W, A>) {
     return new Writer(new Tuple3(this._0, res0.repr()._1, this._2));
   }
 
-  public function voided(): Writer<W, Void>
+  public function voided(): Writer<W, Unit>
     return map(const(null));
 
   /** Run the composed computation, returning the result */

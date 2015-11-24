@@ -1,12 +1,13 @@
 package thx.fp;
 
 import thx.Tuple;
+import thx.Unit;
 import thx.fp.Functions.const;
 using thx.Functions;
 
 @:callable
 abstract State<S, A> (S -> Tuple<S, A>) from S -> Tuple<S, A> {
-  public static function void<S>(): State<S, Void>
+  public static function void<S>(): State<S, Unit>
     return pure(null);
 
   public static function pure<S, A>(a: A): State<S, A>
@@ -15,7 +16,7 @@ abstract State<S, A> (S -> Tuple<S, A>) from S -> Tuple<S, A> {
   public static function getState<S>(): State<S, S>
     return (function(s: S) return new Tuple2(s, s));
 
-  public static function putState<S>(s: S): State<S, Void>
+  public static function putState<S>(s: S): State<S, Unit>
     return (function(_: S) return new Tuple2(s, null));
 
   public inline function map<B>(f: A -> B): State<S, B> 
@@ -31,7 +32,7 @@ abstract State<S, A> (S -> Tuple<S, A>) from S -> Tuple<S, A> {
       return f(res0._1)(res0._0);
     };
 
-  public function voided(): State<S, Void>
+  public function voided(): State<S, Unit>
     return map(const(null));
 
   @:op(S1 >> S2)
