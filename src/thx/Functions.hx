@@ -265,12 +265,6 @@ Generic helper for functions.
 **/
 class Functions {
 /**
-`constant` creates a function that always returns the same value.
-**/
-  public static function constant<T>(v : T)
-    return function() return v;
-
-/**
 It provides strict equality between the two arguments `a` and `b`.
 **/
   public static function equality<T>(a : T, b : T) : Bool

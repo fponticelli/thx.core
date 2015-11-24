@@ -1,6 +1,6 @@
 package thx.fp;
 
-abstract Functions (Void) {
+class Functions {
   /**
    * The proper constant function, which returns a function of
    * one argument.

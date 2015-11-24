@@ -184,6 +184,9 @@ Provides a string representation of the Tuple
 
   @:from inline static public function arrayToTuple3<T>(v : Array<T>) : Tuple3<T, T, T>
     return new Tuple3(v[0], v[1], v[2]);
+
+  public function map<T3>(f: T2 -> T3): Tuple3<T0, T1, T3>
+    return new Tuple3(this._0, this._1, f(this._2));
 }
 
 /**
