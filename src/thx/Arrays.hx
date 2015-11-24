@@ -678,6 +678,18 @@ Transforms an array like `[[a0,b0],[a1,b1],[a2,b2]]` into
     return result;
   }
 
+  public static function sliding2<T, U>(arr: ReadonlyArray<T>, f: T -> T -> U): Array<U> {
+    if (arr.length < 2) {
+      return [];
+    } else {
+      var result = [];
+      for (i in 0...(arr.length - 1)) {
+        result.push(f(arr[i], arr[i + 1]));
+      }
+      return result;
+    }
+  }
+
 /**
 Unzip an array of Tuple2<T1, T2> to a Tuple2<Array<T1>, Array<T2>>.
 **/
