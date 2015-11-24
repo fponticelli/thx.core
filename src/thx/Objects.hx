@@ -56,6 +56,8 @@ object is typed as an object containing all of the fields from both `first` and 
 Copies the values from the fields of `first` and `second` to a new object. If `first` and `second` contain
 fields with the same name, the returned object will use the fields from `second`. Both objects passed
 to this function will be unmodified.
+
+The `combine` operation is not recursive and does a shallow merge of the two objects.
 **/
   public static function combine(first : {}, second : {}) : {} {
     var to = {};
