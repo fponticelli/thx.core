@@ -52,7 +52,7 @@ abstract Writer<W, A> (Tuple3<Monoid<W>, W, A>) {
     return new Tuple2(this._1, this._2);
 
   /** Run the composed computation just for the purpose of obtaining the final state. */
-  public function runLog(s: W): W
+  public function runLog(): W
     return this._1;
 
   /** Convenience functions for applicative programming style */

@@ -9,24 +9,23 @@ import thx.Monoid;
  * concatenation.
  */
 abstract TreeBag<A> (TreeBagImpl<A>) from TreeBagImpl<A> to TreeBagImpl<A> {
-  inline public static function empty<A>() : TreeBag<A> {
+  inline public static function empty<A>() : TreeBag<A> 
     return Empty;
-  }
 
-  inline public static function cons<A>(x : A, xs: TreeBag<A>) : TreeBag<A> {
+  inline public static function singleton<A>(a: A): TreeBag<A>
+    return Cons(a, Empty);
+
+  inline public static function cons<A>(x : A, xs: TreeBag<A>) : TreeBag<A> 
     return Cons(x, xs);
-  }
 
-  inline public static function fromArray<A>(xs: Array<A>): TreeBag<A> {
+  inline public static function fromArray<A>(xs: Array<A>): TreeBag<A> 
     return xs.reduce(function(acc, x) { return cons(x, acc); }, Empty);
-  }
 
   inline public static function flatten<A>(xs: TreeBag<TreeBag<A>>): TreeBag<A>
     return xs.flatMap(Functions.identity);
 
-  inline public function prepend(x : A) : TreeBag<A> {
+  inline public function prepend(x : A) : TreeBag<A> 
     return Cons(x, this);
-  }
 
   @:op(A+B) inline public function append(other: TreeBag<A>): TreeBag<A> {
     return switch [this, other] {
