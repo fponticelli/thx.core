@@ -10,6 +10,9 @@ abstract ReadonlyArray<T>(Array<T>) from Array<T> {
   inline function get(index : Int)
     return this[index];
 
-  public function toArray() : Array<T>
+  inline public function toArray() : Array<T>
     return this.copy();
+
+  inline public function unsafe() : Array<T>
+    return this;
 }
