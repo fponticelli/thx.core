@@ -5,13 +5,24 @@
 package thx;
 
 import utest.Assert;
-using thx.Arrays;
 using thx.Functions;
 using thx.Floats;
+using thx.Arrays;
 import haxe.ds.Option;
 
 class TestArrays {
   public function new() { }
+
+  public function testWith() {
+    var arr = [1];
+    Assert.isFalse(arr == arr.with(2)); // test identity
+
+    Assert.same([1, 2, 3], [1, 2].with(3));
+    Assert.same([1, 2, 3], [2, 3].withPrepend(1));
+    Assert.same([1, 2, 3], [1, 3].withInsert(2, 1));
+    Assert.same([1, 2, 3, 4, 5], [1, 2, 3, 4, 5].withSlice([3, 4], 2, 2));
+    Assert.same([1, 2, 3, 4, 5], [1, 2, 5].withSlice([3, 4], 2));
+  }
 
   public function testCreate() {
     var arr = Arrays.create(3, 2);

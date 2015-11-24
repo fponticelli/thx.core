@@ -756,6 +756,30 @@ Pairs the elements of two arrays in an array of `Tuple2`.
   }
 
 /**
+Returns a copy of the array with the new element added to the beginning.
+**/
+  inline public static function withPrepend<T>(arr : ReadonlyArray<T>, el : T) : ReadonlyArray<T>
+    return [el].concat(arr.unsafe());
+
+/**
+Returns a copy of the array with the new element added to the end.
+**/
+  inline public static function with<T>(arr : ReadonlyArray<T>, el : T) : ReadonlyArray<T>
+    return arr.concat([el]);
+
+/**
+Returns a copy of the array with the `other` elements inserted at `start`. The `length` elements after `start` are going to be removed.
+**/
+  public static function withSlice<T>(arr : ReadonlyArray<T>, other : ReadonlyArray<T>, start : Int, ?length : Int = 0) : ReadonlyArray<T>
+    return arr.slice(0, start).concat(other.unsafe()).concat(arr.slice(start + length));
+
+/**
+Returns a copy of the array with the new element inserted at position `pos`.
+**/
+  public static function withInsert<T>(arr : ReadonlyArray<T>, el : T, pos : Int) : ReadonlyArray<T>
+    return arr.slice(0, pos).concat([el]).concat(arr.slice(pos));
+
+/**
 Pairs the elements of three arrays in an array of `Tuple3`.
 **/
   public static function zip3<T1, T2, T3>(array1 : ReadonlyArray<T1>, array2 : ReadonlyArray<T2>, array3 : ReadonlyArray<T3>) : Array<Tuple3<T1, T2, T3>> {
