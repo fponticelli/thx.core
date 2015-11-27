@@ -21,6 +21,25 @@ Note that some of the examples imply `using thx.Arrays;`.
 **/
 class Arrays {
 /**
+Arrays.add pushes an element at the end of the `array` and returns it. Practical
+for chaining push operations.
+**/
+  public static function add<T>(array : Array<T>, element : T) : Array<T> {
+    array.push(element);
+    return array;
+  }
+
+/**
+Arrays.addIf conditionaly pushes an element at the end of the `array` and returns it.
+Practical for chaining push operations.
+**/
+  public static function addIf<T>(array : Array<T>, cond : Bool, element : T) : Array<T> {
+    if(cond)
+      array.push(element);
+    return array;
+  }
+
+/**
 Finds the first occurrance of `element` and returns all the elements after it.
 **/
   inline public static function after<T>(array : ReadonlyArray<T>, element : T)
