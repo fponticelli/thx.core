@@ -24,7 +24,7 @@ class Arrays {
 Arrays.add pushes an element at the end of the `array` and returns it. Practical
 for chaining push operations.
 **/
-  public static function add<T>(array : Array<T>, element : T) : Array<T> {
+  public static function append<T>(array : Array<T>, element : T) : Array<T> {
     array.push(element);
     return array;
   }
@@ -33,7 +33,7 @@ for chaining push operations.
 Arrays.addIf conditionaly pushes an element at the end of the `array` and returns it.
 Practical for chaining push operations.
 **/
-  public static function addIf<T>(array : Array<T>, cond : Bool, element : T) : Array<T> {
+  public static function appendIf<T>(array : Array<T>, cond : Bool, element : T) : Array<T> {
     if(cond)
       array.push(element);
     return array;
@@ -617,6 +617,16 @@ Returns all but the first element of the array
 **/
   inline public static function rest<T>(array : ReadonlyArray<T>) : Array<T>
     return array.slice(1);
+
+/**
+Creates a copy of the array with its elements in reverse order.
+*/
+  inline public static function reversed<T>(array: ReadonlyArray<T>): Array<T> {
+    var result = array.copy();
+    result.reverse();
+    return result;
+  }
+    
 
 /**
 Returns `n` elements at random from the array. Elements will not be repeated.

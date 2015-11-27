@@ -87,4 +87,10 @@ class Eithers {
       case Left(v) : Left(f(v));
       case Right(v): Right(v);
     };
+
+  public static function orThrow<L, R>(either: Either<L, R>, message: String): R
+    return switch either {
+      case Left(v) : throw new thx.Error('$message: $v');
+      case Right(v): v;
+    };
 }
