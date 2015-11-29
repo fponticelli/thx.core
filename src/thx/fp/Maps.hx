@@ -8,6 +8,7 @@ import haxe.Constraints.IMap;
 #else
 import Map.IMap;
 #end
+import Map as M;
 
 class StringMap {
   static var comparator = Strings.compare.fromIntComparison();
@@ -25,6 +26,12 @@ class StringMap {
 
   public static function fromNative<V>(map : IMap<String, V>) : Map<String, V>
     return Map.fromNative(map, comparator);
+
+  public static function toNative<V>(map : Map<String, V>) : M<String, V>
+    return map.foldLeftTuples(new M(), function(acc, t) {
+      acc.set(t.left, t.right);
+      return acc;
+    });
 }
 
 class FloatMap {
@@ -43,6 +50,12 @@ class FloatMap {
 
   public static function fromNative<V>(map : IMap<Float, V>) : Map<Float, V>
     return Map.fromNative(map, comparator);
+
+  public static function toNative<V>(map : Map<String, V>) : M<String, V>
+    return map.foldLeftTuples(new M(), function(acc, t) {
+      acc.set(t.left, t.right);
+      return acc;
+    });
 }
 
 class IntMap {
@@ -61,6 +74,12 @@ class IntMap {
 
   public static function fromNative<V>(map : IMap<Int, V>) : Map<Int, V>
     return Map.fromNative(map, comparator);
+
+  public static function toNative<V>(map : Map<String, V>) : M<String, V>
+    return map.foldLeftTuples(new M(), function(acc, t) {
+      acc.set(t.left, t.right);
+      return acc;
+    });
 }
 
 class ComparableOrdMap {
