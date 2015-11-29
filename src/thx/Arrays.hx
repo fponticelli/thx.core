@@ -426,6 +426,43 @@ In case you have to use a type that is not supported by `@:generic`, please use 
   }
 #end
 
+  /**
+   * Group the array by a function of the index.
+   */ 
+  @:generic
+  public static function groupByIndex<A, K>(arr: ReadonlyArray<A>, groupKey: Int -> K): Map<K, Array<A>> {
+    var map : Map<K, Array<A>> = new Map<K, Array<A>>();
+    for(i in 0...arr.length) {
+      var k: K = groupKey(i),
+          acc: Array<A> = map.get(k);
+      if(null == acc) {
+        acc = [arr[i]];
+        map.set(k, acc);
+      } else {
+        acc.push(arr[i]);
+      }
+    }
+    return map;
+  }
+
+  public static function spanByIndex<A, K>(arr: ReadonlyArray<A>, spanKey: Int -> K): Array<Array<A>> {
+    var acc: Array<Array<A>> = [];
+    var cur: K = null;
+    var j: Int = -1;
+    for(i in 0...arr.length) {
+      var k: K = spanKey(i);
+      if (k == null) throw new thx.Error('spanKey function returned null for index $i');
+      if (cur == k) {
+        acc[j].push(arr[i]);
+      } else {
+        cur = k;
+        j++;
+        acc.push([arr[i]]);
+      }
+    }
+    return acc;
+  }
+
 /**
 Returns `true` if the array contains at least one element.
 **/
