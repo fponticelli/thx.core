@@ -144,4 +144,16 @@ is be `None`.
       case None: false;
       case Some(v): f(v);
     };
+
+  public static function toSuccess<E, T>(option: Option<T>, error: E): Validation<E, T>
+    return switch option {
+      case None: Validation.failure(error);
+      case Some(v): Validation.success(v);
+    };      
+
+  public static function toSuccessNel<E, T>(option: Option<T>, error: E): Validation.VNel<E, T>
+    return switch option {
+      case None: Validation.failureNel(error);
+      case Some(v): Validation.successNel(v);
+    };      
 }
