@@ -318,7 +318,7 @@ Filters out all `null` values from an array.
   }
 
 /**
-It returns the first element of the array that matches the provided predicate function.
+It returns the first element of the array that matches the predicate function.
 If none is found it returns null.
 **/
   public static function find<T>(array : ReadonlyArray<T>, predicate : T -> Bool) : Null<T> {
@@ -326,6 +326,17 @@ If none is found it returns null.
       if(predicate(element))
         return element;
     return null;
+  }
+
+/**
+It returns the index of the first element of the array that matches the predicate function.
+If none is found it returns `-1`.
+**/
+  public static function findIndex<T>(array : ReadonlyArray<T>, predicate : T -> Bool) : Int {
+    for(i in 0...array.length)
+      if(predicate(array[i]))
+        return i;
+    return -1;
   }
 
 /**
@@ -428,7 +439,7 @@ In case you have to use a type that is not supported by `@:generic`, please use 
 
   /**
    * Group the array by a function of the index.
-   */ 
+   */
   @:generic
   public static function groupByIndex<A, K>(arr: ReadonlyArray<A>, groupKey: Int -> K): Map<K, Array<A>> {
     var map : Map<K, Array<A>> = new Map<K, Array<A>>();
