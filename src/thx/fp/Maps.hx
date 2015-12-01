@@ -24,6 +24,9 @@ class StringMap {
   inline static public function set<V>(map : Map<String, V>, key : String, value : V) : Map<String, V>
     return map.insert(key, value, comparator);
 
+  inline static public function remove<V>(map : Map<String, V>, key : String) : Map<String, V>
+    return map.delete(key, comparator);
+
   public static function fromNative<V>(map : IMap<String, V>) : Map<String, V>
     return Map.fromNative(map, comparator);
 
@@ -47,6 +50,9 @@ class FloatMap {
 
   inline static public function set<V>(map : Map<Float, V>, key : Float, value : V) : Map<Float, V>
     return map.insert(key, value, Floats.compare.fromIntComparison());
+
+  inline static public function remove<V>(map : Map<Float, V>, key : Float) : Map<Float, V>
+    return map.delete(key, comparator);
 
   public static function fromNative<V>(map : IMap<Float, V>) : Map<Float, V>
     return Map.fromNative(map, comparator);
@@ -72,6 +78,9 @@ class IntMap {
   inline static public function set<V>(map : Map<Int, V>, key : Int, value : V) : Map<Int, V>
     return map.insert(key, value, Ints.compare.fromIntComparison());
 
+  inline static public function remove<V>(map : Map<Int, V>, key : Int) : Map<Int, V>
+    return map.delete(key, comparator);
+
   public static function fromNative<V>(map : IMap<Int, V>) : Map<Int, V>
     return Map.fromNative(map, comparator);
 
@@ -95,6 +104,9 @@ class ComparableOrdMap {
   inline static public function set<V, T : ComparableOrd<T>>(map : Map<T, V>, key : T, value : V) : Map<T, V>
     return map.insert(key, value, function(a : T, b : T) return a.compareTo(b));
 
+  inline static public function remove<V, T : ComparableOrd<T>>(map : Map<T, V>, key : T) : Map<T, V>
+    return map.delete(key, function(a : T, b : T) return a.compareTo(b));
+
   public static function fromNative<V, T : ComparableOrd<T>>(map : IMap<T, V>) : Map<T, V>
     return Map.fromNative(map, function(a : T, b : T) return a.compareTo(b));
 }
@@ -111,6 +123,9 @@ class ComparableMap {
 
   inline static public function set<V, T : Comparable<T>>(map : Map<T, V>, key : T, value : V) : Map<T, V>
     return map.insert(key, value, function(a : T, b : T) : Ordering return a.compareTo(b).fromInt());
+
+  inline static public function remove<V, T : Comparable<T>>(map : Map<T, V>, key : T) : Map<T, V>
+    return map.delete(key, function(a : T, b : T) : Ordering return a.compareTo(b).fromInt());
 
   public static function fromNative<V, T : Comparable<T>>(map : IMap<T, V>) : Map<T, V>
     return Map.fromNative(map, function(a : T, b : T) return a.compareTo(b).fromInt());
