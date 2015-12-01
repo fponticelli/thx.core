@@ -68,6 +68,9 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
   inline public function leftMap<E0>(f: E -> E0): Validation<E0, A>
     return (either.leftMap(f) : Either<E0, A>);
 
+  inline public function wrapNel(): VNel<E, A>
+    return (either.leftMap(Nel.pure) : Either<Nel<E>, A>);
+
   // This is not simply flatMap because it is not consistent with ap,
   // as should be the case in other monads. It is equivalent to
   // `this.either.flatMap(f).validation`
