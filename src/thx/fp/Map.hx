@@ -40,22 +40,31 @@ abstract Map<K, V>(MapImpl<K, V>) from MapImpl<K, V> to MapImpl<K, V> {
     }
   }
 
-  public function lookupTuple(key : K, comparator : Ord<K>) : Option<Tuple<K, V>> {
-    switch this {
-      case Tip:
-        return None;
-      case Bin(size, xkey, xvalue, lhs, rhs):
-        var c = comparator(key, xkey);
-        switch c {
-          case LT:
-            return lhs.lookupTuple(key, comparator);
-          case GT:
-            return rhs.lookupTuple(key, comparator);
-          case EQ:
-            return Some(new Tuple(xkey, xvalue));
-        }
-    }
-  }
+  public function lookupTuple(key : K, comparator : Ord<K>) : Option<Tuple<K, V>> switch this {
+    case Tip:
+      return None;
+    case Bin(size, xkey, xvalue, lhs, rhs):
+      var c = comparator(key, xkey);
+      switch c {
+        case LT:
+          return lhs.lookupTuple(key, comparator);
+        case GT:
+          return rhs.lookupTuple(key, comparator);
+        case EQ:
+          return Some(new Tuple(xkey, xvalue));
+      }
+  };
+
+  public function delete(key : K, comparator : Ord<K>) : Map<K, V> return switch this {
+    case Tip:
+      Tip;
+    case Bin(size, kx, x, lhs, rhs):
+      switch comparator(key, kx) {
+        case LT: balance(kx, x, lhs.delete(key, comparator), rhs);
+        case GT: balance(kx, x, lhs, rhs.delete(key, comparator));
+        case EQ: lhs.glue(rhs);
+      }
+  };
 
   public function insert(kx : K, x : V, comparator : Ord<K>) : Map<K, V> return switch this {
     case Tip:
@@ -101,7 +110,7 @@ abstract Map<K, V>(MapImpl<K, V>) from MapImpl<K, V> to MapImpl<K, V> {
   // utility methods
   inline static var delta = 5;
   inline static var ratio = 2;
-  function balance(k : K, x : V, lhs : Map<K, V>, rhs : Map<K, V>) : Map<K, V> {
+  static function balance<K, V>(k : K, x : V, lhs : Map<K, V>, rhs : Map<K, V>) : Map<K, V> {
     var ls = lhs.size(),
         rs = rhs.size(),
         xs = ls + rs + 1;
@@ -114,6 +123,37 @@ abstract Map<K, V>(MapImpl<K, V>) from MapImpl<K, V> to MapImpl<K, V> {
     else
       return Bin(xs, k, x, lhs, rhs);
   }
+
+  function glue(that : Map<K, V>) : Map<K, V> return switch [this, that] {
+    case [Tip, _]: that;
+    case [_, Tip]: this;
+    case [l, r] if((l : Map<K, V>).size() > (r : Map<K, V>).size()):
+      var t = deleteFindMax(l);
+      balance(t.k, t.x, t.t, r);
+    case [l, r]:
+      var t = deleteFindMin(r);
+      balance(t.k, t.x, l, t.t);
+  };
+
+  static function deleteFindMin<K, V>(map : Map<K, V>) return switch map {
+    case Bin(_, k, x, Tip, r):
+      { k : k, x : x, t : r};
+    case Bin(_, k, x, l, r):
+      var t = deleteFindMin(l);
+      { k : t.k, x : t.x, t : balance(k, x, t.t, r) }
+    case Tip:
+      throw new thx.Error('can not return the minimal element of an empty map');
+  };
+
+  static function deleteFindMax<K, V>(map : Map<K, V>) return switch map {
+    case Bin(_, k, x, l, Tip):
+      { k : k, x : x, t : l };
+    case Bin(_, k, x, l, r):
+      var t = deleteFindMax(r);
+      { k : t.k, x : t.x, t : balance(k, x, l, t.t) }
+    case Tip:
+      throw new thx.Error('can not return the maximal element of an empty map');
+  };
 
   static function rotateLeft<K, V>(k : K, x : V, lhs : Map<K, V>, rhs : Map<K, V>) : Map<K, V>
     return switch rhs {
