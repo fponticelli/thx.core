@@ -8,6 +8,13 @@ import thx.Tuple;
 class TestEnums {
   public function new() { }
 
+  public function testIssue20151201() {
+    var o = { oldId: "1", newId: "2" },
+        e = Test(o),
+        s = Enums.string(e);
+    Assert.equals('Test({oldId : "1", newId : "2"})', s);
+  }
+
   public function testCompare() {
     Assert.same(
       [A, B(1), B(2)],
@@ -26,4 +33,9 @@ class TestEnums {
 private enum Sample {
   A;
   B(v : Int);
+}
+
+enum Enum20151201 {
+  Test(obj : { oldId: String, newId : String });
+  None;
 }

@@ -139,9 +139,13 @@ circular references.
   public static function string(o : {}) : String {
     return "{" +
       Reflect.fields(o)
-        .map(function(key) return '$key : ${string(Reflect.field(o, key))}')
+        .map(function(key) return '$key : ${Dynamics.string(Reflect.field(o, key))}')
         .join(", ") +
       "}";
+  }
+
+  static function stringImpl(o : {}, cache : Map<{}, Bool>) {
+
   }
 
 /**

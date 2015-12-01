@@ -11,6 +11,12 @@ typedef SpecialObject = {
 class TestObjects {
   public function new() { }
 
+  public function testIssue20151201() {
+    var o = { oldId: "1", newId: "2" },
+        s = Objects.string(o);
+    Assert.equals('{oldId : "1", newId : "2"}', s);
+  }
+
   public function testObjects() {
     var ob = {};
     Assert.isTrue(ob.isEmpty());
