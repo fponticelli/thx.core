@@ -10,6 +10,16 @@ import thx.Strings.*;
 class TestMap {
   public function new() {}
 
+  public function testRemove() {
+    var m = Map.singleton("Y", 1)
+                .set("X", 2)
+                .set("Z", 3)
+                .remove("X");
+    Assert.same(Some(1), m.get("Y"));
+    Assert.same(Some(3), m.get("Z"));
+    Assert.equals(2, m.size());
+  }
+
   public function testEmpty() {
     var m : Map<String, Int> = Map.empty();
     Assert.same(None, m.get("some"));
