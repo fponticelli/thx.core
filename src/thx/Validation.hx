@@ -104,4 +104,16 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
       v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>, v5: Validation<X, E>, v6: Validation<X, F>,
       s: Semigroup<X>): Validation<X, G>
     return v6.ap(val5(f.curry(), v1, v2, v3, v4, v5, s), s);
+
+  inline static public function val7<X, A, B, C, D, E, F, G, H>(
+      f: A -> B -> C -> D -> E -> F -> G -> H,
+      v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>, v5: Validation<X, E>, v6: Validation<X, F>, v7: Validation<X, G>,
+      s: Semigroup<X>): Validation<X, H>
+    return v7.ap(val6(f.curry(), v1, v2, v3, v4, v5, v6, s), s);
+
+  inline static public function val8<X, A, B, C, D, E, F, G, H, I>(
+      f: A -> B -> C -> D -> E -> F -> G -> H -> I,
+      v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>, v5: Validation<X, E>, v6: Validation<X, F>, v7: Validation<X, G>, v8: Validation<X, H>,
+      s: Semigroup<X>): Validation<X, I>
+    return v8.ap(val7(f.curry(), v1, v2, v3, v4, v5, v6, v7, s), s);
 }
