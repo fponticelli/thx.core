@@ -244,8 +244,7 @@ Convert any value into a `String`.
       case TObject:
         return Objects.string(v);
       case TClass(c):
-        var name = Type.getClassName(c);
-        switch name {
+        switch Type.getClassName(c) {
           case "Array":
             return Arrays.string(v);
           case "String":
@@ -253,7 +252,10 @@ Convert any value into a `String`.
           case "Date":
             return (v : Date).toString();
           default:
-            return Std.string(v);
+            if(Maps.isMap(v))
+              return Maps.string(v);
+            else
+              return Std.string(v);
         }
       case TEnum(e):
         return Enums.string(v);
