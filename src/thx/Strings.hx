@@ -336,14 +336,14 @@ Returns a random substring from the `value` argument. The length of such value i
 /**
 Returns a random sampling of the specified length from the seed string.
 **/
-  public static function randomSequence(seed : String, length = 1) : String
+  public static function randomSequence(seed : String, length : Int) : String
     return Ints.range(0, length).map(function (_) return random(seed)).join("");
 
 /**
 Like `Strings.randomSequence`, but automatically uses `haxe.crypto.Base64.CHARS`
-as the seed String.
+as the seed string.
 **/
-  public static function randomSequence64(length = 1) : String
+  public static function randomSequence64(length : Int) : String
     return randomSequence(haxe.crypto.Base64.CHARS, length);
 
 /**
