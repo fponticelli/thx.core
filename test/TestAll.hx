@@ -28,6 +28,7 @@ class TestAll {
     runner.addCase(new thx.TestIterators());
     runner.addCase(new thx.TestOrderedMap());
     runner.addCase(new thx.TestOrderedSet());
+    runner.addCase(new thx.TestMake());
     runner.addCase(new thx.TestMaps());
     runner.addCase(new thx.TestNulls());
     runner.addCase(new thx.TestObjects());
