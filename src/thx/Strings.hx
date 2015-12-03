@@ -334,6 +334,19 @@ Returns a random substring from the `value` argument. The length of such value i
     return Utf8.sub(value, Math.floor((Utf8.length(value) - length + 1) * Math.random()), length);
 
 /**
+Returns a random sampling of the specified length from the seed string.
+**/
+  public static function randomSequence(seed : String, length = 1) : String
+    return Ints.range(0, length).map(function (_) return random(seed)).join("");
+
+/**
+Like `Strings.randomSequence`, but automatically uses `haxe.crypto.Base64.CHARS`
+as the seed String.
+**/
+  public static function randomSequence64(length = 1) : String
+    return randomSequence(haxe.crypto.Base64.CHARS, length);
+
+/**
 It returns an iterator holding in sequence one character of the string per iteration.
 **/
   public static function iterator(s : String) : Iterator<String>
@@ -627,7 +640,7 @@ Words whose length exceeds `columns` are not split.
     }
   }
 
-  public static var monoid(default, never): Monoid<String> = 
+  public static var monoid(default, never): Monoid<String> =
     { zero: "", append: function(a: String, b: String) return a + b }
 
   static var UCWORDS = ~/[^a-zA-Z]([a-z])/g;
