@@ -139,7 +139,15 @@ circular references.
   public static function string(o : {}) : String {
     return "{" +
       Reflect.fields(o)
-        .map(function(key) return '$key : ${Dynamics.string(Reflect.field(o, key))}')
+        .map(function(key) {
+          var v = Reflect.field(o, key);
+          var s = if(Std.is(v, String)) {
+                    Strings.quote((v : String));
+                  } else {
+                    Dynamics.string(v);
+                  }
+          return '$key : $s';
+        })
         .join(", ") +
       "}";
   }
