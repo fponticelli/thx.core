@@ -2,6 +2,7 @@ package thx;
 
 import utest.Assert;
 using thx.Objects;
+using thx.Strings;
 
 typedef SpecialObject = {
   ?foo : String,
@@ -14,7 +15,11 @@ class TestObjects {
   public function testIssue20151201() {
     var o = { oldId: "1", newId: "2" },
         s = Objects.string(o);
-    Assert.equals('{oldId : "1", newId : "2"}', s);
+    Assert.stringContains('oldId : "1"', s);
+    Assert.stringContains('newId : "2"', s);
+    Assert.stringContains(', ', s);
+    Assert.isTrue(s.startsWith("{"));
+    Assert.isTrue(s.endsWith("}"));
   }
 
   public function testObjects() {
