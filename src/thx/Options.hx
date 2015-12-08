@@ -55,8 +55,7 @@ wrapped in another Option.
     };
 
 /**
-`flatMap` reduces an `Option<T>` value into an `Array<T>` value applying the `callback`
-function if `Option` contains a value. If `Option` is `None` an empty array is returned.
+`flatMap` is shortcut for `map(cb).join()`
 **/
   public static function flatMap<T, TOut>(option : Option<T>, callback : T -> Option<TOut>) : Option<TOut>
     return switch option {

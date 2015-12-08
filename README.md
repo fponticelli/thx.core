@@ -241,7 +241,7 @@ Extension methods for objects.
 Extension methods for the `haxe.ds.Option` type.
 
   * `equals` campares two `Option` values of the same type
-  * `flatMap` reduces an `Option<T>` value into an `Array<T>`
+  * `flatMap` maps the contained value using a function `T -> Option<TOut>`
   * `map` transforms a value contained in `Option<T>` to `Option<TOut>`
   * `toArray` transforms an `Option` value to an `Array`
   * `toBool` transforms an `Option` to `true` (`Some(_)`) or `false` (`None`)
