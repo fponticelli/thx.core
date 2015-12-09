@@ -143,6 +143,12 @@ Provides a string representation of the Tuple
 **/
 @:forward(_0, _1, _2)
 abstract Tuple3<T0, T1, T2>({_0 : T0, _1 : T1, _2 : T2}) from {_0 : T0, _1 : T1, _2 : T2} to {_0 : T0, _1 : T1, _2 : T2} {
+  /**
+  Static constructor, required to work around Haxe compiler bug.
+  **/
+  inline public static function of<T0, T1, T2>(_0 : T0, _1 : T1, _2 : T2): Tuple3<T0, T1, T2>
+    return new Tuple3(_0, _1, _2);
+
 /**
 Constructs an instance of `Tuple3` the 3 required value.
 **/
@@ -194,6 +200,12 @@ Provides a string representation of the Tuple
 **/
 @:forward(_0, _1, _2, _3)
 abstract Tuple4<T0, T1, T2, T3>({ _0 : T0, _1 : T1, _2 : T2, _3 : T3}) from { _0 : T0, _1 : T1, _2 : T2, _3 : T3} to { _0 : T0, _1 : T1, _2 : T2, _3 : T3} {
+  /**
+  Static constructor, required to work around Haxe compiler bug.
+  **/
+  inline public static function of<T0, T1, T2, T3>(_0 : T0, _1 : T1, _2 : T2, _3 : T3): Tuple4<T0, T1, T2, T3>
+    return new Tuple4(_0, _1, _2, _3);
+
 /**
 Constructs an instance of `Tuple4` the 4 required value.
 **/
@@ -242,6 +254,12 @@ Provides a string representation of the Tuple
 **/
 @:forward(_0, _1, _2, _3, _4)
 abstract Tuple5<T0, T1, T2, T3, T4>({ _0: T0, _1 : T1, _2 : T2, _3 : T3, _4 : T4}) from { _0: T0, _1 : T1, _2 : T2, _3 : T3, _4 : T4} to { _0: T0, _1 : T1, _2 : T2, _3 : T3, _4 : T4} {
+  /**
+  Static constructor, required to work around Haxe compiler bug.
+  **/
+  inline public static function of<T0, T1, T2, T3, T4>(_0 : T0, _1 : T1, _2 : T2, _3 : T3, _4: T4): Tuple5<T0, T1, T2, T3, T4>
+    return new Tuple5(_0, _1, _2, _3, _4);
+
 /**
 Constructs an instance of `Tuple5` the 5 required value.
 **/
@@ -290,6 +308,12 @@ Provides a string representation of the Tuple
 **/
 @:forward(_0, _1, _2, _3, _4, _5)
 abstract Tuple6<T0, T1, T2, T3, T4, T5>({ _0 : T0, _1 : T1, _2 : T2, _3 : T3, _4 : T4, _5 : T5 }) from { _0 : T0, _1 : T1, _2 : T2, _3 : T3, _4 : T4, _5 : T5 } to { _0 : T0, _1 : T1, _2 : T2, _3 : T3, _4 : T4, _5 : T5 } {
+  /**
+  Static constructor, required to work around Haxe compiler bug.
+  **/
+  inline public static function of<T0, T1, T2, T3, T4, T5>(_0 : T0, _1 : T1, _2 : T2, _3 : T3, _4: T4, _5: T5): Tuple6<T0, T1, T2, T3, T4, T5>
+    return new Tuple6(_0, _1, _2, _3, _4, _5);
+
 /**
 Constructs an instance of `Tuple6` the 6 required value.
 **/
