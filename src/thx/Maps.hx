@@ -5,9 +5,11 @@ import haxe.Constraints.IMap;
 #else
 import Map.IMap;
 #end
+import haxe.ds.Option;
 import thx.Tuple;
 using thx.Iterators;
 using thx.Arrays;
+using thx.Options;
 
 /**
 Extension methods for Maps
@@ -53,6 +55,12 @@ Extracts the values of a Map<TKey, TValue> into Array<TValue>
     return map.keys().map(function(key : TKey) : TValue
       return map.get(key)
     );
+
+/**
+Null-safe get.
+**/
+  public static function getOption<TKey, TValue>(map: IMap<TKey, TValue>, key : TKey): Option<TValue>
+    return Options.ofValue(map.get(key));
 
 /**
 `mapToObject` transforms a `Map<String, T>` into an anonymous object.
