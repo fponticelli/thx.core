@@ -106,6 +106,26 @@ class Convert {
   public static function toDateTimeOr(value : Dynamic, alt : DateTime) : DateTime
     return try toDateTime(value) catch(e : Error) alt;
 
+  public static function toDateTimeUtc(value : Dynamic) : DateTimeUtc {
+    if(null == value) throw new Error('unable to convert null to DateTimeUtc');
+    return switch Types.valueTypeToString(value) {
+      case "Int", "Float":
+        DateTimeUtc.fromTime((value : Float));
+      case "String":
+        try
+          DateTimeUtc.fromString((value : String))
+        catch(e : Dynamic)
+          throw new Error('unable to convert string $value to DateTimeUtc');
+      case "Date":
+        (value : Date);
+      case _:
+        throw new Error('unable to convert $value to DateTimeUtc');
+    }
+  }
+
+  public static function toDateTimeUtcOr(value : Dynamic, alt : DateTimeUtc) : DateTimeUtc
+    return try toDateTimeUtc(value) catch(e : Error) alt;
+
   public static function toObject(value : Dynamic) : {} {
     if(null == value)
       return null;
