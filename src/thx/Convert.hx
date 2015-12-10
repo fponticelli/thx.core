@@ -87,7 +87,7 @@ class Convert {
     return try toDate(value) catch(e : Error) alt;
 
   public static function toDateTime(value : Dynamic) : DateTime {
-    if(null == value) throw new Error('unable to convert null to DateTime');
+    if(null == value) return null;
     return switch Types.valueTypeToString(value) {
       case "Int", "Float":
         DateTime.fromTime((value : Float));
@@ -107,7 +107,7 @@ class Convert {
     return try toDateTime(value) catch(e : Error) alt;
 
   public static function toDateTimeUtc(value : Dynamic) : DateTimeUtc {
-    if(null == value) throw new Error('unable to convert null to DateTimeUtc');
+    if(null == value) return null;
     return switch Types.valueTypeToString(value) {
       case "Int", "Float":
         DateTimeUtc.fromTime((value : Float));
