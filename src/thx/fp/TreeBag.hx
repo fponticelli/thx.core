@@ -34,6 +34,7 @@ abstract TreeBag<A> (TreeBagImpl<A>) from TreeBagImpl<A> to TreeBagImpl<A> {
       case [Empty, Empty]: Empty;
       case [Empty, _]: other;
       case [_, Empty]: this;
+      case [Cons(x, Empty), _]: Cons(x, other);
       case _: Branch(this, other);
     }
   }
