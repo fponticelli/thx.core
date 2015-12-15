@@ -3,6 +3,7 @@ package thx.fp;
 using thx.Arrays;
 import thx.Functions;
 import thx.Monoid;
+import thx.fp.List;
 
 /**
  * A simple unordered immutable data structure that supports O(1) append and
@@ -27,7 +28,8 @@ abstract TreeBag<A> (TreeBagImpl<A>) from TreeBagImpl<A> to TreeBagImpl<A> {
   inline public function prepend(x : A) : TreeBag<A> 
     return Cons(x, this);
 
-  @:op(A+B) inline public function append(other: TreeBag<A>): TreeBag<A> {
+  @:op(A+B) 
+  inline public function append(other: TreeBag<A>): TreeBag<A> {
     return switch [this, other] {
       case [Empty, Empty]: Empty;
       case [Empty, _]: other;
@@ -57,12 +59,27 @@ abstract TreeBag<A> (TreeBagImpl<A>) from TreeBagImpl<A> to TreeBagImpl<A> {
   }
 
   public function foldLeft<A, B>(b: B, f : B -> A -> B) : B {
-    return switch this {
-      case Empty: b;
-      case Cons(x, xs): xs.foldLeft(f(b, x), f);
-      case Branch(l, r): r.foldLeft(l.foldLeft(b, f), f);
+    var acc = b;
+    var nodes = List.singleton(this);
+    while(true) {
+      switch nodes {
+        case ListImpl.Nil: return acc;
+        case ListImpl.Cons(y, ys):
+          switch y {
+            case Empty: 
+              nodes = ys;
+            case Cons(x, xs): 
+              acc = f(acc, x);
+              nodes = ys.prepend(xs);
+            case Branch(l, r): 
+              nodes = ys.prepend(r).prepend(l);
+          }
+      }
     }
   }
+
+  public function length(): Int
+    return foldLeft(0, function(c, a) return c + 1);
 
   public function toArray(): Array<A> {
     return foldLeft([], function(b: Array<A>, a: A) { b.push(a); return b; });
