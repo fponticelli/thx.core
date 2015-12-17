@@ -4,6 +4,7 @@ import utest.Assert;
 import thx.Nil;
 import thx.Enums;
 import thx.Tuple;
+using thx.Strings;
 
 class TestEnums {
   public function new() { }
@@ -12,7 +13,11 @@ class TestEnums {
     var o = { oldId: "1", newId: "2" },
         e = Test(o),
         s = Enums.string(e);
-    Assert.equals('Test({oldId : "1", newId : "2"})', s);
+    Assert.stringContains('oldId : "1"', s);
+    Assert.stringContains('newId : "2"', s);
+    Assert.stringContains(', ', s);
+    Assert.isTrue(s.startsWith("Test({"));
+    Assert.isTrue(s.endsWith("})"));
   }
 
   public function testCompare() {

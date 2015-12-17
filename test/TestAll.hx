@@ -9,6 +9,7 @@ class TestAll {
     runner.addCase(new thx.TestBigInt());
     runner.addCase(new thx.TestChar());
     runner.addCase(new thx.TestChars());
+    runner.addCase(new thx.TestConvert());
     runner.addCase(new thx.TestDates());
     runner.addCase(new thx.TestDateTime());
     runner.addCase(new thx.TestDateTimeUtc());

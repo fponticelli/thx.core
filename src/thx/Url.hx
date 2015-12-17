@@ -14,7 +14,10 @@ cannot be parsed to a valid URL.
 
 The URL can be either relative or absolute.
 */
-  @:from public static function parse(s : String) : Url {
+  @:from public static function fromString(s : String) : Url
+    return parse(s, true);
+
+  public static function parse(s : String, parseQueryString : Bool) : Url {
     if(!pattern.match(s)) throw new Error('unable to parse "$s" to Url');
     var port = pattern.matched(12),
         o : Url = {
@@ -105,10 +108,17 @@ equals.
       hostName: hostName,
       port: port,
       pathName: pathName,
-      queryString: queryString,
+      queryString: queryString.clone(),
       search: search,
       hash: hash
     };
+  }
+
+  public function ensureQueryString() {
+    if(this.queryString != null)
+      return this.queryString;
+    else
+      return queryString = new Map();
   }
 
   inline function get_auth()
@@ -160,7 +170,7 @@ equals.
     return toString();
 
   inline function set_href(value : String) {
-    this = (parse(value) : UrlType);
+    this = (parse(value, true) : UrlType);
     return value;
   }
 

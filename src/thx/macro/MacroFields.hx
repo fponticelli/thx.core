@@ -2,6 +2,7 @@ package thx.macro;
 
 #if (neko || macro)
 import haxe.macro.Expr;
+import haxe.macro.ExprTools;
 import thx.Arrays;
 /**
 Extension methods to work with class fields at macro time.
@@ -92,6 +93,13 @@ does not exist.
 */
   public static function getFirstMetaParam(field : Field, name : String)
     return getMetaParams(field, name)[0];
+
+/**
+Returns the params as `Array<String>` of a meta with `name`. It always returns an array even if
+no matches are found.
+*/
+  public static function getMetaParamsAsStrings(field : Field, name : String)
+    return getMetaParams(field, name).map(ExprTools.toString);
 
 /**
 Returns the params of a meta with `name`. It always returns an array even if

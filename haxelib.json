@@ -5,7 +5,7 @@
   "classPath": "src",
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
-  "releasenote": "updated docs.",
-  "version": "0.37.1",
+  "releasenote": "The FP release.",
+  "version": "0.38.0",
   "contributors": ["fponticelli"]
 }

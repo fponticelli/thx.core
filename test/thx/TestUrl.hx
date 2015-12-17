@@ -35,7 +35,7 @@ class TestUrl {
       "ldap://ldap.example.com/cn=Barbara%20Jensen,dc=example,dc=com?cn,mail,telephoneNumber"
     ];
     for(url in urls)
-      Assert.equals(url, (url : Url).toString());
+      Assert.equals(url, Url.parse(url, false).toString());
   }
 
   public function testAbsolute() {

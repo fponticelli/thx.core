@@ -16,6 +16,9 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
   public static var encodeURIComponent = function(s : String) return s.urlEncode().replace("%20", "+");
   public static var decodeURIComponent = function(s : String) return s.urlDecode().replace("+", " ");
 
+  public static function empty() : QueryString
+    return new Map();
+
   public static function parseWithSymbols(s : String, separator : String, assignment : String, ?decodeURIComponent : String -> String) : QueryString {
     var qs : QueryString = new Map();
     if(null == s)
@@ -107,6 +110,13 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
     return this;
   }
 
+  public function clone() : QueryString {
+    var map = new Map();
+    for(key in this.keys())
+      map.set(key, (this.get(key).copy() : QueryStringValue));
+    return map;
+  }
+
   public function setMany(name : String, values : Array<String>) {
     this.set(name, values);
     return this;
@@ -145,6 +155,7 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
     return toStringWithSymbols(separator, assignment, encodeURIComponent);
 }
 
+@:forward(copy)
 abstract QueryStringValue(Array<String>) from Array<String> to Array<String> {
   @:to function toString() : String
     return this == null || this.length == 0 ? null : this.join(",");

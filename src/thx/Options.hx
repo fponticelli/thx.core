@@ -1,5 +1,6 @@
 package thx;
 
+import thx.Functions;
 import thx.Functions.*;
 import haxe.ds.Option;
 
@@ -54,8 +55,7 @@ wrapped in another Option.
     };
 
 /**
-`flatMap` reduces an `Option<T>` value into an `Array<T>` value applying the `callback`
-function if `Option` contains a value. If `Option` is `None` an empty array is returned.
+`flatMap` is shortcut for `map(cb).join()`
 **/
   public static function flatMap<T, TOut>(option : Option<T>, callback : T -> Option<TOut>) : Option<TOut>
     return switch option {
@@ -159,4 +159,35 @@ is be `None`.
       case None: Validation.failureNel(error);
       case Some(v): Validation.successNel(v);
     };      
+  
+  inline static public function ap2<X, A, B, C>(f: A -> B -> C, v1: Option<A>, v2: Option<B>): Option<C>
+    return ap(v2, map(v1, Functions2.curry(f)));
+
+  inline static public function ap3<X, A, B, C, D>(f: A -> B -> C -> D, v1: Option<A>, v2: Option<B>, v3: Option<C>): Option<D>
+    return ap(v3, ap2(Functions3.curry(f), v1, v2));
+
+  inline static public function ap4<X, A, B, C, D, E>(
+      f: A -> B -> C -> D -> E,
+      v1: Option<A>, v2: Option<B>, v3: Option<C>, v4: Option<D>): Option<E>
+    return ap(v4, ap3(Functions4.curry(f), v1, v2, v3));
+
+  inline static public function ap5<X, A, B, C, D, E, F>(
+      f: A -> B -> C -> D -> E -> F,
+      v1: Option<A>, v2: Option<B>, v3: Option<C>, v4: Option<D>, v5: Option<E>): Option<F>
+    return ap(v5, ap4(Functions5.curry(f), v1, v2, v3, v4));
+
+  inline static public function ap6<X, A, B, C, D, E, F, G>(
+      f: A -> B -> C -> D -> E -> F -> G,
+      v1: Option<A>, v2: Option<B>, v3: Option<C>, v4: Option<D>, v5: Option<E>, v6: Option<F>): Option<G>
+    return ap(v6, ap5(Functions6.curry(f), v1, v2, v3, v4, v5));
+
+  inline static public function ap7<X, A, B, C, D, E, F, G, H>(
+      f: A -> B -> C -> D -> E -> F -> G -> H,
+      v1: Option<A>, v2: Option<B>, v3: Option<C>, v4: Option<D>, v5: Option<E>, v6: Option<F>, v7: Option<G>): Option<H>
+    return ap(v7, ap6(Functions7.curry(f), v1, v2, v3, v4, v5, v6));
+
+  inline static public function ap8<X, A, B, C, D, E, F, G, H, I>(
+      f: A -> B -> C -> D -> E -> F -> G -> H -> I,
+      v1: Option<A>, v2: Option<B>, v3: Option<C>, v4: Option<D>, v5: Option<E>, v6: Option<F>, v7: Option<G>, v8: Option<H>): Option<I>
+    return ap(v8, ap7(Functions8.curry(f), v1, v2, v3, v4, v5, v6, v7));
 }
