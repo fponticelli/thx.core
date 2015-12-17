@@ -329,6 +329,17 @@ If none is found it returns null.
   }
 
 /**
+It returns the first element of the array that matches the predicate function.
+If none is found it returns null.
+**/
+  public static function findOption<T>(array : ReadonlyArray<T>, predicate : T -> Bool) : Option<T> {
+    for(element in array)
+      if(predicate(element))
+        return Some(element);
+    return None;
+  }
+
+/**
 It returns the index of the first element of the array that matches the predicate function.
 If none is found it returns `-1`.
 **/

@@ -67,7 +67,10 @@ function if `Option` contains a value. If `Option` is `None` an empty array is r
 `join` collapses a nested option into a single optional value.
 **/
   public static function join<T>(option: Option<Option<T>>): Option<T>
-    return flatMap(option, identity);
+    return switch option {
+      case None: None;
+      case Some(v): v;
+    };
 
 /**
 `foldLeft` reduce using an accumulating function and an initial value.

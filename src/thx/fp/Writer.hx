@@ -13,13 +13,13 @@ abstract Writer<W, A> (Tuple3<Monoid<W>, W, A>) {
   inline function repr(): Tuple3<Monoid<W>, W, A> return this;
 
   inline public static function void<W>(mw: Monoid<W>): Writer<W, Unit>
-    return pure(null, mw);
+    return pure(unit, mw);
 
   inline public static function pure<W, A>(a: A, mw: Monoid<W>): Writer<W, A>
     return new Writer(new Tuple3(mw, mw.zero, a));
 
   inline public static function tell<W, A>(w: W, mw: Monoid<W>): Writer<W, Unit>
-    return new Writer(new Tuple3(mw, w, null));
+    return new Writer(new Tuple3(mw, w, unit));
 
   inline public function map<B>(f: A -> B): Writer<W, B> 
     return new Writer(this.map(f));
@@ -45,7 +45,7 @@ abstract Writer<W, A> (Tuple3<Monoid<W>, W, A>) {
   }
 
   public function voided(): Writer<W, Unit>
-    return map(const(null));
+    return map(const(unit));
 
   /** Run the composed computation, returning the result */
   public function run(): Tuple<W, A>
