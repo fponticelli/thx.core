@@ -270,10 +270,14 @@ E.g. { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.2", 4) -> returns { key1: 
       var currentPath = paths[i],
           nextPath = paths[i + 1];
 
-      if (currentPath.isDigitsOnly()) {
-        var index = Std.parseInt(currentPath);
+      if (currentPath.isDigitsOnly() || currentPath == "*") {
+        var index = if(currentPath == "*") {
+          (current : Array<Dynamic>).length;
+        } else {
+          Std.parseInt(currentPath);
+        }
         if (current[index] == null) {
-          if (nextPath.isDigitsOnly()) {
+          if (nextPath.isDigitsOnly() || nextPath == "*") {
             current[index] = [];
           } else {
             current[index] = {};
@@ -282,7 +286,7 @@ E.g. { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.2", 4) -> returns { key1: 
         current = current[index];
       } else {
         if (!Reflect.hasField(current, currentPath)) {
-          if (nextPath.isDigitsOnly()) {
+          if (nextPath.isDigitsOnly() || nextPath == "*") {
             Reflect.setField(current, currentPath, []);
           } else {
             Reflect.setField(current, currentPath, {});
@@ -295,6 +299,8 @@ E.g. { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.2", 4) -> returns { key1: 
     if (p.isDigitsOnly()) {
       var index = Std.parseInt(p);
       current[index] = val;
+    } else if(p == "*") {
+      (current : Array<Dynamic>).push(val);
     } else {
       Reflect.setField(current, p, val);
     }
@@ -315,8 +321,10 @@ E.g. { foo : 'bar' }.removePath('foo') -> returns {}
     // iterate over all remaining fields to find the sub-object containing
     // the target field to be removed
     try {
-      var sub = paths.reduce(function(existing, nextPath) {
-        if (nextPath.isDigitsOnly()) {
+      var sub = paths.reduce(function(existing : Dynamic, nextPath) {
+        if (nextPath == "*") {
+          return (existing : Array<Dynamic>).pop();
+        } else if (nextPath.isDigitsOnly()) {
           var current : Dynamic = existing;
           var index = Std.parseInt(nextPath);
           return current[index];

@@ -185,6 +185,11 @@ class TestObjects {
     Assert.same({ key1: { key2: "val" } }, { key1: { key2: "before" } }.setPath("key1.key2", "val"));
     Assert.same({ key1: { key2: [ 1, 55, 3 ] } }, { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.1", 55));
     Assert.same({ key1: 123, newKey: "val" }, { key1: 123 }.setPath("newKey", "val"));
+
+    Assert.same([1, 2], [].setPath("*", 1).setPath("*", 2));
+    Assert.same({ list : [1, 2] }, ({}).setPath("list.*", 1).setPath("list.*", 2));
+    Assert.same([[1, 2]], [].setPath("0.*", 1).setPath("0.*", 2));
+    Assert.same([[1], [2]], [].setPath("0.*", 1).setPath("*.*", 2));
   }
 
   public function testRemovePath() {
