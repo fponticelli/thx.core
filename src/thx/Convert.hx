@@ -1,6 +1,7 @@
 package thx;
 
 import thx.Error;
+using thx.Arrays;
 
 class Convert {
   public static function toString(value : Dynamic) : String {
@@ -208,5 +209,13 @@ class Convert {
     return Std.is(value, Array) ?
       (value : Array<Dynamic>).map(convert):
       throw new Error('unable to convert $value to Array<T>');
+  }
+
+  public static function toMap<T>(value : Dynamic, convert : Dynamic -> T) : Map<String, T> {
+    var obj = toObject(value);
+    return Reflect.fields(obj).reduce(function (map : Map<String, T>, field : String) {
+      map.set(field, convert(Reflect.field(obj, field)));
+      return map;
+    }, new Map());
   }
 }

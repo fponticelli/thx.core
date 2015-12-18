@@ -37,4 +37,18 @@ class TestConvert {
 
     Assert.equals(true, Convert.toBoolOr("z", true));
   }
+
+  public function testMap() {
+    var objOfArrays = { "foo" : ["bar"], "baz" : ["qux"] },
+        objOfNumbers = { "a" : 1, "b" : 2, "c" : 3 };
+
+    Assert.equals("bar", Convert.toMap(objOfArrays, function (val) {
+      return Convert.toArray(val, Convert.toString);
+    }).get("foo")[0]);
+
+    Assert.equals(2, Convert.toMap(objOfNumbers, Convert.toInt).get("b"));
+
+    Assert.raises(function () Convert.toMap(3, Convert.toString));
+    Assert.raises(function () Convert.toMap(objOfArrays, Convert.toString));
+  }
 }
