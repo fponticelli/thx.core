@@ -111,6 +111,7 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
   }
 
   public function clone() : QueryString {
+    if(null == this) return null;
     var map = new Map();
     for(key in this.keys())
       map.set(key, (this.get(key).copy() : QueryStringValue));
