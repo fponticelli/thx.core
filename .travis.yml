@@ -26,10 +26,10 @@ matrix:
       addons: {apt: {packages: [nodejs]}}
     - env: TARGET=php
       haxe: 3.2.0
-      addons: {apt: {packages: [php5-cli=5.6.16]}}
+      addons: {apt: {packages: [php5-cli-5.6.16]}}
     - env: TARGET=php
       haxe: development
-      addons: {apt: {packages: [php5-cli=5.6.16]}}
+      addons: {apt: {packages: [php5-cli-5.6.16]}}
     - env: TARGET=neko
       haxe: 3.2.0
     - env: TARGET=neko
