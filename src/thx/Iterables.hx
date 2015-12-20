@@ -182,8 +182,8 @@ the specified ordering.
     for (a in it) {
       found = switch found {
         case None: Some(new Tuple(a, a));
-        case Some(t) if (ord.order(f(a), f(t._0)) == LT): Some(new Tuple(a, t._1));
-        case Some(t) if (ord.order(f(a), f(t._1)) == GT): Some(new Tuple(t._0, a));
+        case Some(t) if (ord(f(a), f(t._0)) == LT): Some(new Tuple(a, t._1));
+        case Some(t) if (ord(f(a), f(t._1)) == GT): Some(new Tuple(t._0, a));
         case _: found;
       }
     }

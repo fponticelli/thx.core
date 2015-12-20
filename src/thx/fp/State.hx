@@ -19,14 +19,14 @@ abstract State<S, A> (S -> Tuple<S, A>) from S -> Tuple<S, A> {
   public static function putState<S>(s: S): State<S, Unit>
     return (function(_: S) return new Tuple2(s, null));
 
-  public inline function map<B>(f: A -> B): State<S, B> 
+  public #if !php inline #end function map<B>(f: A -> B): State<S, B> 
     return (function(s: S) return this(s).map(f));
 
   public function ap<B>(s2: State<S, A -> B>): State<S, B>
     return flatMap(function(a: A) return s2.map(function(f: A -> B) return f(a)));
 
   @:op(S1 * F)
-  public function flatMap<B>(f: A -> State<S, B>): State<S, B> 
+  public function flatMap<B>(f: A -> State<S, B>): State<S, B>
     return function(s: S) {
       var res0 = this(s);
       return f(res0._1)(res0._0);
@@ -36,7 +36,7 @@ abstract State<S, A> (S -> Tuple<S, A>) from S -> Tuple<S, A> {
     return map(const(null));
 
   @:op(S1 >> S2)
-  public function then<B>(next: State<S, B>): State<S, B> 
+  public function then<B>(next: State<S, B>): State<S, B>
     return function(s: S) (return next(this(s)._0));
 
   public function foreachM<B>(f: A -> State<S, B>): State<S, A>
