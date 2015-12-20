@@ -1,12 +1,33 @@
 package thx;
 
+import haxe.Json;
 import thx.Error;
 using thx.Arrays;
 
 class Convert {
   public static function toString(value : Dynamic) : String {
-    if(null == value) return null;
-    return Dynamics.string(value);
+    switch Type.typeof(value) {
+      case TNull:
+        return null;
+      case TInt, TFloat, TBool:
+        return '$value';
+      case TObject:
+        return try Json.stringify(value) catch(e : Dynamic) throw new Error('unable to convert object to String');
+      case TClass(c):
+        switch Type.getClassName(c) {
+          case "String":
+            return value;
+          case "Date":
+            return (value : Date).toString();
+          default:
+            if(Maps.isMap(value))
+              return try Json.stringify(Maps.toObject(value)) catch(e : Dynamic) throw new Error('unable to convert object to String');
+            else
+              return throw new Error('unable to convert $value to String');
+        }
+      case _:
+        return throw new Error('unable to convert $value to String');
+    }
   }
 
   public static function toStringOr(value : Dynamic, alt : String) : String
@@ -135,7 +156,7 @@ class Convert {
     return switch Types.valueTypeToString(value) {
       case "String":
         try
-          haxe.Json.parse((value : String))
+          Json.parse((value : String))
         catch(e : Dynamic)
           throw new Error('unable to convert string $value to Object');
       case _:
