@@ -87,7 +87,7 @@ class Convert {
   public static function toDateOr(value : Dynamic, alt : Date) : Date
     return try toDate(value) catch(e : Error) alt;
 
-  public static function toDateTime(value : Dynamic) : DateTime {
+  public static function toDateTime(value : Dynamic) : Null<DateTime> {
     if(null == value) return null;
     return switch Types.valueTypeToString(value) {
       case "Int", "Float":
@@ -104,10 +104,10 @@ class Convert {
     }
   }
 
-  public static function toDateTimeOr(value : Dynamic, alt : DateTime) : DateTime
+  public static function toDateTimeOr(value : Dynamic, alt : DateTime) : Null<DateTime>
     return try toDateTime(value) catch(e : Error) alt;
 
-  public static function toDateTimeUtc(value : Dynamic) : DateTimeUtc {
+  public static function toDateTimeUtc(value : Dynamic) : Null<DateTimeUtc> {
     if(null == value) return null;
     return switch Types.valueTypeToString(value) {
       case "Int", "Float":
@@ -124,7 +124,7 @@ class Convert {
     }
   }
 
-  public static function toDateTimeUtcOr(value : Dynamic, alt : DateTimeUtc) : DateTimeUtc
+  public static function toDateTimeUtcOr(value : Dynamic, alt : DateTimeUtc) : Null<DateTimeUtc>
     return try toDateTimeUtc(value) catch(e : Error) alt;
 
   public static function toObject(value : Dynamic) : {} {
