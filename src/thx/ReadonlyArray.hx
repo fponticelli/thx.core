@@ -78,7 +78,7 @@ abstract ReadonlyArray<T>(Array<T>) from Array<T> {
     return this.slice(0, pos).concat(this.slice(pos + 1));
 
   inline public function prepend(el : T) : ReadonlyArray<T>
-    return ([el] : ReadonlyArray<T>).concat(this);
+    return [el].concat(this);
 
   inline public function append(el : T) : ReadonlyArray<T>
     return this.concat([el]);
