@@ -34,6 +34,12 @@ abstract ReadonlyArray<T>(Array<T>) from Array<T> {
   inline public function tail() : ReadonlyArray<T>
     return this.slice(1);
 
+  public function reverse() : ReadonlyArray<T> {
+    var arr = this.copy();
+    arr.reverse();
+    return arr;
+  }
+
   inline public function toArray() : Array<T>
     return this.copy();
 
