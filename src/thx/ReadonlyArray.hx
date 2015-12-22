@@ -2,8 +2,7 @@ package thx;
 
 import thx.Functions;
 
-@:forward(length, copy, filter, iterator, join, lastIndexOf,
-          map, slice, toString)
+@:forward(length, copy, filter, iterator, join, map, slice, toString)
 abstract ReadonlyArray<T>(Array<T>) from Array<T> {
   inline public static function empty<T>() : ReadonlyArray<T>
     return [];
@@ -12,6 +11,15 @@ abstract ReadonlyArray<T>(Array<T>) from Array<T> {
     if(null == eq) eq = Functions.equality;
     for(i in 0...this.length)
       if(eq(el, this[i]))
+        return i;
+    return -1;
+  }
+
+  public function lastIndexOf(el : T, ?eq : T -> T -> Bool) : Int {
+    if(null == eq) eq = Functions.equality;
+    var len = this.length;
+    for(i in 0...len)
+      if(eq(el, this[len-i-1]))
         return i;
     return -1;
   }
