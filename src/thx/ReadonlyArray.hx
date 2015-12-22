@@ -28,6 +28,12 @@ abstract ReadonlyArray<T>(Array<T>) from Array<T> {
   inline function get(index : Int)
     return this[index];
 
+  public function head() : Null<T>
+    return this[0];
+
+  public function tail() : Array<T>
+    return this.slice(1);
+
   inline public function toArray() : Array<T>
     return this.copy();
 
