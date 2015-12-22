@@ -637,7 +637,7 @@ Creates a copy of the array with its elements in reverse order.
     result.reverse();
     return result;
   }
-    
+
 
 /**
 Returns `n` elements at random from the array. Elements will not be repeated.
@@ -707,6 +707,12 @@ Splits an array by the given number and pads last group with the given element i
       Arrays.last(res).push(pad);
     return res;
   }
+
+/**
+It returns the elements of the array after the first.
+**/
+inline public static function tail<T>(array : ReadonlyArray<T>) : Array<T>
+  return array.slice(1);
 
 /**
 Returns the first `n` elements from the array.
