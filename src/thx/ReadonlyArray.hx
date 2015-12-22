@@ -1,10 +1,20 @@
 package thx;
 
-@:forward(length, copy, filter, indexOf, iterator, join, lastIndexOf,
+import thx.Functions;
+
+@:forward(length, copy, filter, iterator, join, lastIndexOf,
           map, slice, toString)
 abstract ReadonlyArray<T>(Array<T>) from Array<T> {
   inline public static function empty<T>() : ReadonlyArray<T>
     return [];
+
+  public function indexOf(el : T, ?eq : T -> T -> Bool) : Int {
+    if(null == eq) eq = Functions.equality;
+    for(i in 0...this.length)
+      if(eq(el, this[i]))
+        return i;
+    return -1;
+  }
 
   @:arrayAccess
   inline function get(index : Int)
