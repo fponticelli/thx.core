@@ -87,30 +87,8 @@ Transforms an epoch time value in milliconds into `DateTimeUtc`.
 Parses a string into a `DateTimeUtc` value. If parsing is not possible an
 exception is thrown.
 */
-  @:from public static function fromString(s : String) : DateTimeUtc {
-    var pattern = ~/^([-])?(\d+)[-](\d{2})[-](\d{2})(?:[T ](\d{2})[:](\d{2})[:](\d{2})(?:\.(\d+))?Z?)?$/;
-    if(!pattern.match(s))
-      throw new thx.Error('unable to parse DateTimeUtc string: "$s"');
-    var smticks = pattern.matched(8),
-        mticks = 0;
-    if(null != smticks) {
-      smticks = "1" + smticks.rpad("0", 7).substring(0, 7);
-      mticks = Std.parseInt(smticks) - 10000000;
-    }
-
-    var date = create(
-        Std.parseInt(pattern.matched(2)),
-        Std.parseInt(pattern.matched(3)),
-        Std.parseInt(pattern.matched(4)),
-        Std.parseInt(pattern.matched(5)),
-        Std.parseInt(pattern.matched(6)),
-        Std.parseInt(pattern.matched(7)),
-        0
-      ) + mticks;
-    if(pattern.matched(1) == "-")
-      return DateTimeUtc.fromInt64(-date.ticks);
-    return date;
-  }
+  @:from public static function fromString(s : String) : DateTimeUtc
+    return DateTime.fromString(s).utc;
 
   inline public static function compare(a : DateTimeUtc, b : DateTimeUtc)
     return a.compareTo(b);
