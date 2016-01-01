@@ -148,7 +148,7 @@ match `end`. No interpolation is made.
   inline public static function compare(a : DateTime, b : DateTime): Int
     return a.compareTo(b);
 
-  inline public static function ord(): Ord<DateTime> 
+  inline public static function ord(): Ord<DateTime>
     return Ord.fromCompare(compare);
 
 /**
@@ -438,7 +438,8 @@ Snaps a time to the nearest second, minute, hour, day, week, month or year.
         var mod = day > Math.round(daysInMonth(year, month) / 2) ? 1 : 0;
         create(year, month + mod, 1, 0, 0, 0, offset);
       case Year:
-        var mod = self() > create(year, 6, 2, 0, 0, 0, offset) ? 1 : 0;
+        var other = create(year, 6, 2, 0, 0, 0, offset),
+            mod = self() > other ? 1 : 0;
         create(year + mod, 1, 1, 0, 0, 0, offset);
     };
 
@@ -451,25 +452,25 @@ Returns true if this date and the `other` date share the same year.
 /**
 Returns true if this date and the `other` date share the same year and month.
 **/
-  public function sameMonth(other : DateTime)
+  public function sameMonth(other : DateTime) : Bool
     return sameYear(other) && month == other.month;
 
 /**
 Returns true if this date and the `other` date share the same year, month and day.
 **/
-  public function sameDay(other : DateTime)
+  public function sameDay(other : DateTime) : Bool
     return sameMonth(other) && day == other.day;
 
 /**
 Returns true if this date and the `other` date share the same year, month, day and hour.
 **/
-  public function sameHour(other : DateTime)
+  public function sameHour(other : DateTime) : Bool
     return sameDay(other) && hour == other.hour;
 
 /**
 Returns true if this date and the `other` date share the same year, month, day, hour and minute.
 **/
-  public function sameMinute(other : DateTime)
+  public function sameMinute(other : DateTime) : Bool
     return sameHour(other) && minute == other.minute;
 
 /**
@@ -478,84 +479,87 @@ Returns true if this date and the `other` date share the same year, month, day, 
   public function sameSecond(other : DateTime)
     return sameMinute(other) && second == other.second;
 
-  public function withYear(year : Int)
+  public function withYear(year : Int) : DateTime
     return create(year, month, day, hour, minute, second, millisecond, offset);
 
-  public function withMonth(month : Int)
+  public function withMonth(month : Int) : DateTime
     return create(year, month, day, hour, minute, second, millisecond, offset);
 
-  public function withDay(day : Int)
+  public function withDay(day : Int) : DateTime
     return create(year, month, day, hour, minute, second, millisecond, offset);
 
-  public function withHour(hour : Int)
+  public function withHour(hour : Int) : DateTime
     return create(year, month, day, hour, minute, second, millisecond, offset);
 
-  public function withMinute(minute : Int)
+  public function withMinute(minute : Int) : DateTime
     return create(year, month, day, hour, minute, second, millisecond, offset);
 
-  public function withSecond(second : Int)
+  public function withSecond(second : Int) : DateTime
     return create(year, month, day, hour, minute, second, millisecond, offset);
 
-  public function withMillisecond(millisecond : Int)
+  public function withMillisecond(millisecond : Int) : DateTime
     return create(year, month, day, hour, minute, second, millisecond, offset);
 
-  inline public function withOffset(offset : Time)
+  inline public function withOffset(offset : Time) : DateTime
     return new DateTime(utc, offset);
 
-  @:op(A+B) inline function add(time : Time)
+  @:op(A+B) inline function add(time : Time) : DateTime
     return new DateTime(DateTimeUtc.fromInt64(utc.ticks + time.ticks), offset);
 
-  @:op(A+B) inline function addTicks(ticks : Int64)
+  @:op(A+B) inline function addTicks(ticks : Int64) : DateTime
     return new DateTime(DateTimeUtc.fromInt64(utc.ticks + ticks), offset);
 
-  @:op(A-B) inline function subtract(time : Time)
+  @:op(A-B) inline function subtract(time : Time) : DateTime
     return new DateTime(DateTimeUtc.fromInt64(utc.ticks - time.ticks), offset);
 
-  @:op(A-B) inline function subtractDate(date : DateTime) : Time
-    return new DateTime(DateTimeUtc.fromInt64(utc.ticks + date.utc.ticks), offset);
+  @:op(A-B) function subtractDate(date : DateTime) : Time {
+    var base = DateTimeUtc.fromInt64(utc.ticks + date.utc.ticks),
+        date = new DateTime(base, offset);
+    return new Time(date.utc.ticks);
+  }
 
-  inline public function addDays(days : Float)
+  inline public function addDays(days : Float) : DateTime
     return new DateTime(utc.addDays(days), offset);
 
-  inline public function addHours(hours : Float)
+  inline public function addHours(hours : Float) : DateTime
     return new DateTime(utc.addHours(hours), offset);
 
-  inline public function addMilliseconds(milliseconds : Int)
+  inline public function addMilliseconds(milliseconds : Int) : DateTime
     return new DateTime(utc.addMilliseconds(milliseconds), offset);
 
-  inline public function addMinutes(minutes : Float)
+  inline public function addMinutes(minutes : Float) : DateTime
     return new DateTime(utc.addMinutes(minutes), offset);
 
-  inline public function addMonths(months : Int)
+  inline public function addMonths(months : Int) : DateTime
     return new DateTime(utc.addMonths(months), offset);
 
-  inline public function addSeconds(seconds : Float)
+  inline public function addSeconds(seconds : Float) : DateTime
     return new DateTime(utc.addSeconds(seconds), offset);
 
-  inline public function addYears(years : Int)
+  inline public function addYears(years : Int) : DateTime
     return new DateTime(utc.addYears(years), offset);
 
   // TODO should it consider offset?
   inline public function compareTo(other : DateTime) : Int
     return Int64s.compare(utc.ticks, other.utc.ticks);
 
-  inline public function equalsTo(that : DateTime)
+  inline public function equalsTo(that : DateTime) : Bool
     return utc.ticks == that.utc.ticks;
   // TODO should it consider offset?
   @:op(A==B)
-  inline static public function equals(self : DateTime, that : DateTime)
+  inline static public function equals(self : DateTime, that : DateTime) : Bool
     return self.utc.ticks == that.utc.ticks;
 
   // TODO should it consider offset?
-  inline public function notEqualsTo(that : DateTime)
+  inline public function notEqualsTo(that : DateTime) : Bool
     return utc.ticks != that.utc.ticks;
 
   @:op(A!=B)
-  inline static public function notEquals(self : DateTime, that : DateTime)
+  inline static public function notEquals(self : DateTime, that : DateTime) : Bool
     return self.utc.ticks != that.utc.ticks;
 
   // TODO should it consider offset?
-  public function nearEqualsTo(other : DateTime, span : Time) {
+  public function nearEqualsTo(other : DateTime, span : Time) : Bool {
     var ticks = Int64s.abs(other.utc.ticks - utc.ticks);
     return ticks <= span.abs().ticks;
   }
@@ -588,7 +592,7 @@ Returns true if this date and the `other` date share the same year, month, day, 
   inline static public function lessEquals(self : DateTime, that : DateTime) : Bool
     return self.compareTo(that) <= 0;
 
-  inline public function changeOffset(newoffset : Time)
+  inline public function changeOffset(newoffset : Time) : DateTime
     return new DateTime(clockDateTime() - newoffset, newoffset);
 
   @:to inline public function toUtc() : DateTimeUtc
