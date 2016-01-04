@@ -11,13 +11,22 @@ class Types {
     return Reflect.isObject(v) && null == Type.getClass(v);
 
 /**
-Return `true` if v is any of the following types: Int, Float, Bool or String.
+Return `true` if `v` is any of the following types: Int, Float, Bool or String.
 **/
   public static function isPrimitive(v : Dynamic)
     return switch Type.typeof(v) {
       case TInt, TFloat, TBool: true;
       case TNull, TFunction, TEnum(_), TObject, TUnknown : false;
       case TClass(c): Type.getClassName(c) == "String";
+    };
+
+/**
+Returns `true` if `v` is an instance of any Enum type.
+**/
+  public static function isEnumValue(v : Dynamic)
+    return switch Type.typeof(v) {
+      case TEnum(_): true;
+      case _: false;
     };
 
 /**
