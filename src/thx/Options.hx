@@ -11,6 +11,9 @@ class Options {
   inline public static function ofValue<T>(value : Null<T>) : Option<T>
     return null == value ? None : Some(value);
 
+  inline public static function maybe<T>(value : Null<T>) : Option<T>
+    return null == value ? None : Some(value);
+
 /**
 Equality function to campare two `Option` values of the same type. An optional equality
 function can be provided if values inside `Some` should be compared using something
@@ -149,14 +152,14 @@ is be `None`.
     return switch option {
       case None: Validation.failure(error);
       case Some(v): Validation.success(v);
-    };      
+    };
 
   public static function toSuccessNel<E, T>(option: Option<T>, error: E): Validation.VNel<E, T>
     return switch option {
       case None: Validation.failureNel(error);
       case Some(v): Validation.successNel(v);
-    };      
-  
+    };
+
   inline static public function ap2<X, A, B, C>(f: A -> B -> C, v1: Option<A>, v2: Option<B>): Option<C>
     return ap(v2, map(v1, Functions2.curry(f)));
 

@@ -7,6 +7,14 @@ abstract ReadonlyArray<T>(Array<T>) from Array<T> {
   inline public static function empty<T>() : ReadonlyArray<T>
     return [];
 
+  #if js inline #end
+  public static function flatten<T>(array : ReadonlyArray<ReadonlyArray<T>>) : ReadonlyArray<T>
+    #if js
+      return untyped __js__('Array.prototype.concat.apply')([], array);
+    #else
+      return Arrays.reduce(array, function(acc : ReadonlyArray<T>, element) return acc.concat(element), []);
+    #end
+
   public function indexOf(el : T, ?eq : T -> T -> Bool) : Int {
     if(null == eq) eq = Functions.equality;
     for(i in 0...this.length)
