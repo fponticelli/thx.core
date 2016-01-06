@@ -51,4 +51,11 @@ class TestConvert {
     Assert.raises(function () Convert.toMap(3, Convert.toString));
     Assert.raises(function () Convert.toMap(objOfArrays, Convert.toString));
   }
+
+  public function testDateTimeUtc() {
+    var value : Dynamic = null,
+        date = Convert.toDateTimeUtc(value);
+    trace(date);
+    Assert.isNull(value);
+  }
 }

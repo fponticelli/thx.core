@@ -240,10 +240,10 @@ match `end`. No interpolation is made.
   public var timeOfDay(get, never) : Time;
 
   public function min(other : DateTimeUtc) : DateTimeUtc
-    return compare(other) <= 0 ? self() : other;
+    return compareTo(other) <= 0 ? self() : other;
 
   public function max(other : DateTimeUtc) : DateTimeUtc
-    return compare(other) >= 0 ? self() : other;
+    return compareTo(other) >= 0 ? self() : other;
 
 /**
   Get a date relative to the current date, shifting by a set period of time.
@@ -652,28 +652,30 @@ Returns true if this date and the `other` date share the same year, month, day, 
   inline static public function lessEquals(self : DateTimeUtc, that : DateTimeUtc) : Bool
     return self.ticks.compare(that.ticks) <= 0;
 
-  @:to inline public function toTime() : Float
+  inline public function toTime() : Float
     return ticks.sub(unixEpochTicks).div(ticksPerMillisecondI64).toFloat();
 
-  @:to inline public function toDate() : Date
+  inline public function toDate() : Date
 #if cs // because of issue https://github.com/HaxeFoundation/haxe/issues/4452
     return untyped Date.fromNative(new cs.system.DateTime(ticks));
 #else
     return Date.fromTime(toTime());
 #end
 
-  @:to inline public function toDateTime() : DateTime
+  inline public function toDateTime() : DateTime
     return new DateTime(self(), Time.zero);
 
   //1997-07-16T19:20:30Z
-  @:to public function toString() {
+  public function toString() {
+    if(null == this)
+      return "";
     var abs = DateTimeUtc.fromInt64(ticks.abs());
     var decimals = abs.tickInSecond != 0 ? '.' + abs.tickInSecond.lpad("0", 7).trimCharsRight(")") : "";
     var isneg = ticks < Int64s.zero;
     return (isneg ? "-" : "") + '${abs.year}-${abs.month.lpad("0", 2)}-${abs.day.lpad("0", 2)}T${abs.hour.lpad("0", 2)}:${abs.minute.lpad("0", 2)}:${abs.second.lpad("0", 2)}${decimals}Z';
   }
 
-  @:to inline function get_ticks() : Int64
+  inline function get_ticks() : Int64
     return this;
 
   inline function get_year() : Int

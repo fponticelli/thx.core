@@ -56,7 +56,7 @@ class TestDateTime {
   }
 
   public function testToString() {
-    var d : String = date;
+    var d : String = date.toString();
     Assert.equals("2015-07-26T21:40:30-06:00", d);
   }
 

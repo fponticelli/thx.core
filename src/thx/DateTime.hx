@@ -90,6 +90,8 @@ timezone and can be replaced with a time offset in the format:
 In this case the sign (`+`/`-`) is not optional and seconds cannot be used.
 */
   @:from public static function fromString(s : String) : DateTime {
+    if(s == null)
+      throw new thx.Error('null String cannot be parsed to DateTime');
     var pattern = ~/^([-])?(\d+)[-](\d{2})[-](\d{2})(?:[T ](\d{2})[:](\d{2})[:](\d{2})(?:\.(\d+))?(Z|([+-]\d{2})[:](\d{2}))?)?$/;
     if(!pattern.match(s))
       throw new thx.Error('unable to parse DateTime string: "$s"');
@@ -190,10 +192,10 @@ DateTime constructor, requires a utc value and an offset.
   public var timeOfDay(get, never) : Time;
 
   inline public function min(other : DateTime) : DateTime
-    return utc.compare(other.utc) <= 0 ? self() : other;
+    return utc.compareTo(other.utc) <= 0 ? self() : other;
 
   inline public function max(other : DateTime) : DateTime
-    return utc.compare(other.utc) >= 0 ? self() : other;
+    return utc.compareTo(other.utc) >= 0 ? self() : other;
 
 /**
   Get a date relative to the current date, shifting by a set period of time.
@@ -595,24 +597,26 @@ Returns true if this date and the `other` date share the same year, month, day, 
   inline public function changeOffset(newoffset : Time) : DateTime
     return new DateTime(clockDateTime() - newoffset, newoffset);
 
-  @:to inline public function toUtc() : DateTimeUtc
+  inline public function toUtc() : DateTimeUtc
     return utc;
 
   inline function clockDateTime() : DateTimeUtc
     return new DateTimeUtc(utc.ticks + offset.ticks);
 
   //1997-07-16T19:20:30+01:00
-  @:to public function toString() {
+  public function toString() {
+    if(null == this)
+      return "";
     var abs = new DateTime(new DateTimeUtc(utc.ticks.abs()), offset);
     var decimals = abs.tickInSecond != 0 ? '.' + abs.tickInSecond.lpad("0", 7).trimCharsRight(")") : "";
     var isneg = utc.ticks < Int64s.zero;
     return (isneg ? "-" : "") + '${abs.year}-${abs.month.lpad("0", 2)}-${abs.day.lpad("0", 2)}T${abs.hour.lpad("0", 2)}:${abs.minute.lpad("0", 2)}:${abs.second.lpad("0", 2)}${decimals}${offset.toGmtString()}';
   }
 
-  @:to inline function get_utc() : DateTimeUtc
+  inline function get_utc() : DateTimeUtc
     return new DateTimeUtc(this[0]);
 
-  @:to inline function get_offset() : Time
+  inline function get_offset() : Time
     return new Time(this[1]);
 
   inline function get_year() : Int

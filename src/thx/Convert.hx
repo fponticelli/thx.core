@@ -125,8 +125,10 @@ class Convert {
     }
   }
 
-  public static function toDateTimeOr(value : Dynamic, alt : DateTime) : Null<DateTime>
-    return try toDateTime(value) catch(e : Error) alt;
+  public static function toDateTimeOr(value : Dynamic, alt : DateTime) : Null<DateTime> {
+    var v = return try toDateTime(value) catch(e : Error) null;
+    return null == v ? alt : v;
+  }
 
   public static function toDateTimeUtc(value : Dynamic) : Null<DateTimeUtc> {
     if(null == value) return null;
@@ -142,11 +144,13 @@ class Convert {
         (value : Date);
       case _:
         throw new Error('unable to convert $value to DateTimeUtc');
-    }
+    };
   }
 
-  public static function toDateTimeUtcOr(value : Dynamic, alt : DateTimeUtc) : Null<DateTimeUtc>
-    return try toDateTimeUtc(value) catch(e : Error) alt;
+  public static function toDateTimeUtcOr(value : Dynamic, alt : DateTimeUtc) : Null<DateTimeUtc> {
+    var v = return try toDateTimeUtc(value) catch(e : Error) null;
+    return null == v ? alt : v;
+  }
 
   public static function toObject(value : Dynamic) : {} {
     if(null == value)
