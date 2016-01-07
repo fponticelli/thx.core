@@ -542,8 +542,12 @@ Returns true if this date and the `other` date share the same year, month, day, 
     return new DateTime(utc.addYears(years), offset);
 
   // TODO should it consider offset?
-  inline public function compareTo(other : DateTime) : Int
+  public function compareTo(other : DateTime) : Int {
+    if(null == other && this == null) return 0;
+    if(null == this) return -1;
+    else if(null == other) return 1;
     return Int64s.compare(utc.ticks, other.utc.ticks);
+  }
 
   inline public function equalsTo(that : DateTime) : Bool
     return utc.ticks == that.utc.ticks;

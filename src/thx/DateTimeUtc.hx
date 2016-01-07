@@ -602,8 +602,12 @@ Returns true if this date and the `other` date share the same year, month, day, 
   inline public function addYears(years : Int)
     return addMonths(years * 12);
 
-  inline public function compareTo(other : DateTimeUtc) : Int
+  public function compareTo(other : DateTimeUtc) : Int {
+    if(null == other && this == null) return 0;
+    if(null == this) return -1;
+    else if(null == other) return 1;
     return Int64s.compare(ticks, other.ticks);
+  }
 
   inline public function equalsTo(that : DateTimeUtc)
     return ticks == that.ticks;

@@ -69,8 +69,15 @@ Replaces occurrances of `\r\n`, `\n\r`, `\r` with `\n`;
 /**
 Compares two strings ignoring their case.
 **/
-  inline public static function caseInsensitiveCompare(a : String, b : String) : Int
+  public static function caseInsensitiveCompare(a : String, b : String) : Int {
+    if(null == a && null == b)
+      return 0;
+    if(null == a)
+      return -1;
+    else if(null == b)
+      return 1;
     return compare(a.toLowerCase(), b.toLowerCase());
+  }
 
 /**
 Returns true if `s` ends with `end` ignoring their case.
