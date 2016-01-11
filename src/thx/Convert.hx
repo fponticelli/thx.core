@@ -126,7 +126,7 @@ class Convert {
   }
 
   public static function toDateTimeOr(value : Dynamic, alt : DateTime) : Null<DateTime> {
-    var v = return try toDateTime(value) catch(e : Error) null;
+    var v = try toDateTime(value) catch(e : Error) null;
     return null == v ? alt : v;
   }
 
@@ -148,7 +148,7 @@ class Convert {
   }
 
   public static function toDateTimeUtcOr(value : Dynamic, alt : DateTimeUtc) : Null<DateTimeUtc> {
-    var v = return try toDateTimeUtc(value) catch(e : Error) null;
+    var v = try toDateTimeUtc(value) catch(e : Error) null;
     return null == v ? alt : v;
   }
 
