@@ -2,6 +2,8 @@ package thx.macro;
 
 #if (neko || macro)
 using thx.Arrays;
+import haxe.macro.Context;
+import haxe.macro.Expr;
 import haxe.macro.TypeTools;
 import haxe.macro.Type;
 /**
@@ -22,6 +24,15 @@ passed `ClassType`.
 
   public static function inheritanceAsStrings(cls : ClassType) : Array<String> {
     return inheritance(cls).map(function(c) return toString(c));
+  }
+
+  public static function toComplexType(cls : ClassType) : ComplexType {
+    return TypeTools.toComplexType(toType(cls));
+  }
+
+  public static function toType(cls : ClassType) : Type {
+    var typeName = cls.pack.concat([cls.name]).join(".");
+    return Context.getType(typeName);
   }
 
   public static function interfaces(cls : ClassType) : Array<ClassType> {
