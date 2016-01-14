@@ -230,7 +230,7 @@ class Convert {
   }
 
   public static function toArray<T>(value : Dynamic, convert : Dynamic -> T) : Array<T> {
-    if(null == value) return null;
+    if(null == value) return [];
     return Std.is(value, Array) ?
       (value : Array<Dynamic>).map(convert):
       throw new Error('unable to convert $value to Array<T>');
