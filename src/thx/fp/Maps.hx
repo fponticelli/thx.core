@@ -54,13 +54,6 @@ class FloatMap {
   inline static public function remove<V>(map : Map<Float, V>, key : Float) : Map<Float, V>
     return map.delete(key, comparator);
 
-  public static function fromNative<V>(map : IMap<Float, V>) : Map<Float, V>
-    return Map.fromNative(map, comparator);
-
-  public static function toNative<V>(map : Map<String, V>) : M<String, V>
-    return map.foldLeftTuples(new M(), function(acc, t) {
-      acc.set(t.left, t.right);
-      return acc;
     });
 }
 
@@ -84,7 +77,7 @@ class IntMap {
   public static function fromNative<V>(map : IMap<Int, V>) : Map<Int, V>
     return Map.fromNative(map, comparator);
 
-  public static function toNative<V>(map : Map<String, V>) : M<String, V>
+  public static function toNative<V>(map : Map<Int, V>) : M<Int, V>
     return map.foldLeftTuples(new M(), function(acc, t) {
       acc.set(t.left, t.right);
       return acc;
