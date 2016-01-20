@@ -56,5 +56,11 @@ populate but can be provided if preferred.
   }
 
   public function toString()
-    return message + "\nfrom: " + pos.className + "." + pos.methodName + "() at " + pos.lineNumber + "\n\n" + CallStack.toString(stackItems);
+    return message + "\nfrom: " + getPosition() + "\n\n" + stackToString();
+
+  public function getPosition()
+    return pos.className + "." + pos.methodName + "() at " + pos.lineNumber;
+
+  public function stackToString()
+    return CallStack.toString(stackItems);
 }

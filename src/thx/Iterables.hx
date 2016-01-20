@@ -146,7 +146,7 @@ function of the values contained within the iterable.
   public static function minBy<A, B>(it: Iterable<A>, f: A -> B, ord: Ord<B>): Option<A> {
     var found: Option<A> = None;
     for (a in it) {
-      found = found.any(function(a0) { return ord.order(f(a0), f(a)) == LT; }) ? found : Some(a);
+      found = found.any(function(a0) { return ord(f(a0), f(a)) == LT; }) ? found : Some(a);
     }
     return found;
   }
@@ -182,8 +182,8 @@ the specified ordering.
     for (a in it) {
       found = switch found {
         case None: Some(new Tuple(a, a));
-        case Some(t) if (ord.order(f(a), f(t._0)) == LT): Some(new Tuple(a, t._1));
-        case Some(t) if (ord.order(f(a), f(t._1)) == GT): Some(new Tuple(t._0, a));
+        case Some(t) if (ord(f(a), f(t._0)) == LT): Some(new Tuple(a, t._1));
+        case Some(t) if (ord(f(a), f(t._1)) == GT): Some(new Tuple(t._0, a));
         case _: found;
       }
     }

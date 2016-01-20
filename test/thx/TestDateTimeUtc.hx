@@ -79,18 +79,18 @@ class TestDateTimeUtc {
   }
 
   public function testFromToDate() {
-    var d : Date = date;
+    var d : Date = date.toDate();
     Assert.isTrue(date == d, 'expected $date but got ${(d : DateTimeUtc)}');
   }
 
   public function testFromToTime() {
-    var d : Float = date,
+    var d : Float = date.toTime(),
         date2 : DateTimeUtc = d;
     Assert.isTrue(date == date2, 'expected $date but got $date2');
   }
 
   public function testFromToString() {
-    var d : String = date;
+    var d : String = date.toString();
     Assert.isTrue(date == d);
 
     Assert.equals("-1-07-27T00:00:00Z",    ("0-06-07" : DateTimeUtc).toString());

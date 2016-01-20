@@ -1,6 +1,8 @@
 package thx.macro;
 
 #if(neko || macro)
+import haxe.macro.Context;
+import haxe.macro.Expr;
 import haxe.macro.TypeTools;
 import haxe.macro.Type.ClassType;
 import haxe.macro.Type;
@@ -104,5 +106,39 @@ passed `Type`.
 #else
     return null;
 #end
+
+  public static function typeToTypePath(t : Type) : TypePath
+    return switch Context.follow(t) {
+      case TInst(t, params):
+        baseTypeToTypePath(t.get(), [for (p in params) TPType(qualifyComplexType(Context.toComplexType(p)))]);
+      case TEnum(t, params):
+        baseTypeToTypePath(t.get(), [for (p in params) TPType(qualifyComplexType(Context.toComplexType(p)))]);
+      case TType(t, params):
+        baseTypeToTypePath(t.get(), [for (p in params) TPType(qualifyComplexType(Context.toComplexType(p)))]);
+      case TAbstract(t, params):
+        baseTypeToTypePath(t.get(), [for (p in params) TPType(qualifyComplexType(Context.toComplexType(p)))]);
+      case _:
+        throw 'Cannot convert this to TypePath: $t';
+    };
+
+  public static function baseTypeToTypePath(t : BaseType, params : Array<TypeParam>) : TypePath
+    return {
+      pack : t.pack,
+      name : t.module.substring(t.module.lastIndexOf(".")+1),
+      sub : t.name,
+      params : params
+    };
+
+/**
+Fully-qualify a `ComplexType`.
+For example, turn `Option<Int>` to `haxe.ds.Option.Option<StdTypes.Int>`.
+In case the process fail, it will return the input `ComplexType`.
+*/
+  public static function qualifyComplexType(ct : ComplexType) : ComplexType
+    return try {
+      TPath(typeToTypePath(Context.typeof(macro (null : $ct))));
+    } catch(e : Dynamic) {
+      ct;
+    };
 }
 #end

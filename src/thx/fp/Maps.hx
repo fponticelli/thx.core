@@ -35,6 +35,11 @@ class StringMap {
       acc.set(t.left, t.right);
       return acc;
     });
+
+  public static function merge<V>(a : Map<String, V>, b : Map<String, V>) : Map<String, V>
+    return b.foldLeftTuples(a, function(acc, t) {
+      return acc.insert(t._0, t._1, comparator);
+    });
 }
 
 class FloatMap {
@@ -54,13 +59,9 @@ class FloatMap {
   inline static public function remove<V>(map : Map<Float, V>, key : Float) : Map<Float, V>
     return map.delete(key, comparator);
 
-  public static function fromNative<V>(map : IMap<Float, V>) : Map<Float, V>
-    return Map.fromNative(map, comparator);
-
-  public static function toNative<V>(map : Map<String, V>) : M<String, V>
-    return map.foldLeftTuples(new M(), function(acc, t) {
-      acc.set(t.left, t.right);
-      return acc;
+  public static function merge<V>(a : Map<Float, V>, b : Map<Float, V>) : Map<Float, V>
+    return b.foldLeftTuples(a, function(acc, t) {
+      return acc.insert(t._0, t._1, comparator);
     });
 }
 
@@ -84,10 +85,15 @@ class IntMap {
   public static function fromNative<V>(map : IMap<Int, V>) : Map<Int, V>
     return Map.fromNative(map, comparator);
 
-  public static function toNative<V>(map : Map<String, V>) : M<String, V>
+  public static function toNative<V>(map : Map<Int, V>) : M<Int, V>
     return map.foldLeftTuples(new M(), function(acc, t) {
       acc.set(t.left, t.right);
       return acc;
+    });
+
+  public static function merge<V>(a : Map<Int, V>, b : Map<Int, V>) : Map<Int, V>
+    return b.foldLeftTuples(a, function(acc, t) {
+      return acc.insert(t._0, t._1, comparator);
     });
 }
 
@@ -109,6 +115,11 @@ class ComparableOrdMap {
 
   public static function fromNative<V, T : ComparableOrd<T>>(map : IMap<T, V>) : Map<T, V>
     return Map.fromNative(map, function(a : T, b : T) return a.compareTo(b));
+
+  public static function merge<V, T : ComparableOrd<T>>(a : Map<T, V>, b : Map<T, V>) : Map<T, V>
+    return b.foldLeftTuples(a, function(acc, t) {
+      return acc.insert(t._0, t._1, function(a : T, b : T) return a.compareTo(b));
+    });
 }
 
 class ComparableMap {
@@ -129,4 +140,9 @@ class ComparableMap {
 
   public static function fromNative<V, T : Comparable<T>>(map : IMap<T, V>) : Map<T, V>
     return Map.fromNative(map, function(a : T, b : T) return a.compareTo(b).fromInt());
+
+  public static function merge<V, T : Comparable<T>>(a : Map<T, V>, b : Map<T, V>) : Map<T, V>
+    return b.foldLeftTuples(a, function(acc, t) {
+      return acc.insert(t._0, t._1, function(a : T, b : T) return a.compareTo(b).fromInt());
+    });
 }

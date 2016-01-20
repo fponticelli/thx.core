@@ -91,4 +91,23 @@ Returns true if a value is of any type of Map. Equivalent to `Std.is(v, IMap)`.
       return Dynamics.string(t._0) + ' => ' + Dynamics.string(t._1);
     }).join(", ") + "]";
   }
+
+/**
+Merges 0 or more maps of the same type into a destination map.  Successive source maps will overwrite values for
+the same key from previous sources.  The destination map is modified in place, and the destination is also returned
+from the function.  To merge into an empty map, pass a new empty map as the dest argument.
+
+```
+var result1 = map1.merge([map2, map3]); // result1 and map1 should be the same after this.  map2 and map3 are not modified.
+var result2 = (new Map() : Map<String, Int>).merge(map1, map2); // map1 and map2 not modified
+```
+**/
+  public static function merge<TKey, TValue>(dest : IMap<TKey, TValue>, sources: Array<IMap<TKey, TValue>>) : IMap<TKey, TValue> {
+    return sources.reduce(function(result : IMap<TKey, TValue>, source) {
+      return source.keys().reduce(function(result : IMap<TKey, TValue>, key) {
+        result.set(key, source.get(key));
+        return result;
+      }, result);
+    }, dest);
+  }
 }

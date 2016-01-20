@@ -69,8 +69,15 @@ Replaces occurrances of `\r\n`, `\n\r`, `\r` with `\n`;
 /**
 Compares two strings ignoring their case.
 **/
-  inline public static function caseInsensitiveCompare(a : String, b : String) : Int
+  public static function caseInsensitiveCompare(a : String, b : String) : Int {
+    if(null == a && null == b)
+      return 0;
+    if(null == a)
+      return -1;
+    else if(null == b)
+      return 1;
     return compare(a.toLowerCase(), b.toLowerCase());
+  }
 
 /**
 Returns true if `s` ends with `end` ignoring their case.
@@ -121,6 +128,16 @@ or otherwise a positive non-sero number.
   public static var ord(default, never): Ord<String> = Ord.fromIntComparison(compare);
 
 /**
+`contains` returns `true` if `s` contains one or more occurrences of `test` regardless of the text case.
+**/
+  inline public static function caseInsensitiveContains(s : String, test : String)
+  #if php
+    return test == "" || s.toLowerCase().indexOf(test.toLowerCase()) >= 0;
+  #else
+    return s.toLowerCase().indexOf(test.toLowerCase()) >= 0;
+  #end
+
+/**
 `contains` returns `true` if `s` contains one or more occurrences of `test`.
 **/
   inline public static function contains(s : String, test : String)
@@ -135,6 +152,12 @@ Return the number of occurances of `test` in `s`.
 **/
   public static function count(s : String, test : String)
     return s.split(test).length - 1;
+
+/**
+`contains` returns `true` if `s` contains any of the strings in `tests` regardless of the text case
+**/
+  inline public static function caseInsensitiveContainsAny(s : String, tests : Array<String>)
+    return tests.any(caseInsensitiveContains.bind(s, _));
 
 /**
 `contains` returns `true` if `s` contains any of the strings in `tests`

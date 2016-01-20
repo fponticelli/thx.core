@@ -1,11 +1,33 @@
 package thx;
 
+import haxe.Json;
 import thx.Error;
+using thx.Arrays;
 
 class Convert {
   public static function toString(value : Dynamic) : String {
-    if(null == value) return null;
-    return Dynamics.string(value);
+    switch Type.typeof(value) {
+      case TNull:
+        return null;
+      case TInt, TFloat, TBool:
+        return '$value';
+      case TObject:
+        return try Json.stringify(value) catch(e : Dynamic) throw new Error('unable to convert object to String');
+      case TClass(c):
+        switch Type.getClassName(c) {
+          case "String":
+            return value;
+          case "Date":
+            return (value : Date).toString();
+          default:
+            if(Maps.isMap(value))
+              return try Json.stringify(Maps.toObject(value)) catch(e : Dynamic) throw new Error('unable to convert object to String');
+            else
+              return throw new Error('unable to convert $value to String');
+        }
+      case _:
+        return throw new Error('unable to convert $value to String');
+    }
   }
 
   public static function toStringOr(value : Dynamic, alt : String) : String
@@ -86,7 +108,7 @@ class Convert {
   public static function toDateOr(value : Dynamic, alt : Date) : Date
     return try toDate(value) catch(e : Error) alt;
 
-  public static function toDateTime(value : Dynamic) : DateTime {
+  public static function toDateTime(value : Dynamic) : Null<DateTime> {
     if(null == value) return null;
     return switch Types.valueTypeToString(value) {
       case "Int", "Float":
@@ -103,10 +125,12 @@ class Convert {
     }
   }
 
-  public static function toDateTimeOr(value : Dynamic, alt : DateTime) : DateTime
-    return try toDateTime(value) catch(e : Error) alt;
+  public static function toDateTimeOr(value : Dynamic, alt : DateTime) : Null<DateTime> {
+    var v = try toDateTime(value) catch(e : Error) null;
+    return null == v ? alt : v;
+  }
 
-  public static function toDateTimeUtc(value : Dynamic) : DateTimeUtc {
+  public static function toDateTimeUtc(value : Dynamic) : Null<DateTimeUtc> {
     if(null == value) return null;
     return switch Types.valueTypeToString(value) {
       case "Int", "Float":
@@ -120,11 +144,13 @@ class Convert {
         (value : Date);
       case _:
         throw new Error('unable to convert $value to DateTimeUtc');
-    }
+    };
   }
 
-  public static function toDateTimeUtcOr(value : Dynamic, alt : DateTimeUtc) : DateTimeUtc
-    return try toDateTimeUtc(value) catch(e : Error) alt;
+  public static function toDateTimeUtcOr(value : Dynamic, alt : DateTimeUtc) : Null<DateTimeUtc> {
+    var v = try toDateTimeUtc(value) catch(e : Error) null;
+    return null == v ? alt : v;
+  }
 
   public static function toObject(value : Dynamic) : {} {
     if(null == value)
@@ -134,7 +160,7 @@ class Convert {
     return switch Types.valueTypeToString(value) {
       case "String":
         try
-          haxe.Json.parse((value : String))
+          Json.parse((value : String))
         catch(e : Dynamic)
           throw new Error('unable to convert string $value to Object');
       case _:
@@ -204,9 +230,17 @@ class Convert {
   }
 
   public static function toArray<T>(value : Dynamic, convert : Dynamic -> T) : Array<T> {
-    if(null == value) return null;
+    if(null == value) return [];
     return Std.is(value, Array) ?
       (value : Array<Dynamic>).map(convert):
       throw new Error('unable to convert $value to Array<T>');
+  }
+
+  public static function toMap<T>(value : Dynamic, convert : Dynamic -> T) : Map<String, T> {
+    var obj = toObject(value);
+    return Reflect.fields(obj).reduce(function (map : Map<String, T>, field : String) {
+      map.set(field, convert(Reflect.field(obj, field)));
+      return map;
+    }, new Map());
   }
 }

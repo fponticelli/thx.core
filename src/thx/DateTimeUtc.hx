@@ -87,30 +87,8 @@ Transforms an epoch time value in milliconds into `DateTimeUtc`.
 Parses a string into a `DateTimeUtc` value. If parsing is not possible an
 exception is thrown.
 */
-  @:from public static function fromString(s : String) : DateTimeUtc {
-    var pattern = ~/^([-])?(\d+)[-](\d{2})[-](\d{2})(?:[T ](\d{2})[:](\d{2})[:](\d{2})(?:\.(\d+))?Z?)?$/;
-    if(!pattern.match(s))
-      throw new thx.Error('unable to parse DateTimeUtc string: "$s"');
-    var smticks = pattern.matched(8),
-        mticks = 0;
-    if(null != smticks) {
-      smticks = "1" + smticks.rpad("0", 7).substring(0, 7);
-      mticks = Std.parseInt(smticks) - 10000000;
-    }
-
-    var date = create(
-        Std.parseInt(pattern.matched(2)),
-        Std.parseInt(pattern.matched(3)),
-        Std.parseInt(pattern.matched(4)),
-        Std.parseInt(pattern.matched(5)),
-        Std.parseInt(pattern.matched(6)),
-        Std.parseInt(pattern.matched(7)),
-        0
-      ) + mticks;
-    if(pattern.matched(1) == "-")
-      return DateTimeUtc.fromInt64(-date.ticks);
-    return date;
-  }
+  @:from public static function fromString(s : String) : DateTimeUtc
+    return DateTime.fromString(s).utc;
 
   inline public static function compare(a : DateTimeUtc, b : DateTimeUtc)
     return a.compareTo(b);
@@ -262,10 +240,10 @@ match `end`. No interpolation is made.
   public var timeOfDay(get, never) : Time;
 
   public function min(other : DateTimeUtc) : DateTimeUtc
-    return compare(other) <= 0 ? self() : other;
+    return compareTo(other) <= 0 ? self() : other;
 
   public function max(other : DateTimeUtc) : DateTimeUtc
-    return compare(other) >= 0 ? self() : other;
+    return compareTo(other) >= 0 ? self() : other;
 
 /**
   Get a date relative to the current date, shifting by a set period of time.
@@ -624,8 +602,12 @@ Returns true if this date and the `other` date share the same year, month, day, 
   inline public function addYears(years : Int)
     return addMonths(years * 12);
 
-  inline public function compareTo(other : DateTimeUtc) : Int
+  public function compareTo(other : DateTimeUtc) : Int {
+    if(null == other && this == null) return 0;
+    if(null == this) return -1;
+    else if(null == other) return 1;
     return Int64s.compare(ticks, other.ticks);
+  }
 
   inline public function equalsTo(that : DateTimeUtc)
     return ticks == that.ticks;
@@ -674,28 +656,30 @@ Returns true if this date and the `other` date share the same year, month, day, 
   inline static public function lessEquals(self : DateTimeUtc, that : DateTimeUtc) : Bool
     return self.ticks.compare(that.ticks) <= 0;
 
-  @:to inline public function toTime() : Float
+  inline public function toTime() : Float
     return ticks.sub(unixEpochTicks).div(ticksPerMillisecondI64).toFloat();
 
-  @:to inline public function toDate() : Date
+  inline public function toDate() : Date
 #if cs // because of issue https://github.com/HaxeFoundation/haxe/issues/4452
     return untyped Date.fromNative(new cs.system.DateTime(ticks));
 #else
     return Date.fromTime(toTime());
 #end
 
-  @:to inline public function toDateTime() : DateTime
+  inline public function toDateTime() : DateTime
     return new DateTime(self(), Time.zero);
 
   //1997-07-16T19:20:30Z
-  @:to public function toString() {
+  public function toString() {
+    if(null == this)
+      return "";
     var abs = DateTimeUtc.fromInt64(ticks.abs());
     var decimals = abs.tickInSecond != 0 ? '.' + abs.tickInSecond.lpad("0", 7).trimCharsRight(")") : "";
     var isneg = ticks < Int64s.zero;
     return (isneg ? "-" : "") + '${abs.year}-${abs.month.lpad("0", 2)}-${abs.day.lpad("0", 2)}T${abs.hour.lpad("0", 2)}:${abs.minute.lpad("0", 2)}:${abs.second.lpad("0", 2)}${decimals}Z';
   }
 
-  @:to inline function get_ticks() : Int64
+  inline function get_ticks() : Int64
     return this;
 
   inline function get_year() : Int
