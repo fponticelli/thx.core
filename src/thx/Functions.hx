@@ -69,7 +69,7 @@ class Functions1 {
 `compose` returns a function that calls the first argument function with the result
 of the following one.
  **/
-  public inline static function compose<TIn, TRet1, TRet2>(fa : TRet2 -> TRet1, fb : TIn -> TRet2)
+  public inline static function compose<TIn, TRet1, TRet2>(fa : TRet2 -> TRet1, fb : TIn -> TRet2): TIn -> TRet1
     return function(v : TIn) return fa(fb(v));
 
 /**
