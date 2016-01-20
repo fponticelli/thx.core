@@ -70,7 +70,10 @@ wrapped in another Option.
 `join` collapses a nested option into a single optional value.
 **/
   public static function join<T>(option: Option<Option<T>>): Option<T>
-    return flatMap(option, identity);
+    return switch option {
+      case None: None;
+      case Some(v): v;
+    };
 
 /**
 `foldLeft` reduce using an accumulating function and an initial value.
@@ -146,6 +149,17 @@ is be `None`.
     return switch option {
       case None: false;
       case Some(v): f(v);
+    };
+
+  /**
+  Traverse the array with a function that may return values wrapped in Validation.
+  If any of the values are Failures, return a Failure that accumulates all errors
+  from the failed values, otherwise return the array of mapped values in a Success.
+  **/
+  public static function traverseValidation<E, T, U>(option: Option<T>, f: T -> Validation<E, U>): Validation<E, Option<U>>
+    return switch option {
+      case Some(v): f(v).map(function(v) return Some(v));
+      case None: Validation.success(None);
     };
 
   public static function toSuccess<E, T>(option: Option<T>, error: E): Validation<E, T>

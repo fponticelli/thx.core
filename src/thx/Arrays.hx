@@ -4,6 +4,7 @@ import thx.Functions.Functions in F;
 import thx.Functions;
 import thx.Validation;
 import thx.Semigroup;
+import thx.Monoid;
 
 import haxe.ds.Option;
 using thx.Options;
@@ -38,6 +39,15 @@ Practical for chaining push operations.
       array.push(element);
     return array;
   }
+
+  /**
+   * The concatenation monoid for arrays.
+   */
+  public static function monoid<A>(): Monoid<Array<A>>
+    return {
+      zero: [],
+      append: function(a: Array<A>, b: Array<A>) return a.concat(b)
+    };
 
 /**
 Finds the first occurrance of `element` and returns all the elements after it.
@@ -326,6 +336,17 @@ If none is found it returns null.
       if(predicate(element))
         return element;
     return null;
+  }
+
+/**
+It returns the first element of the array that matches the predicate function.
+If none is found it returns null.
+**/
+  public static function findOption<T>(array : ReadonlyArray<T>, predicate : T -> Bool) : Option<T> {
+    for(element in array)
+      if(predicate(element))
+        return Some(element);
+    return None;
   }
 
 /**
