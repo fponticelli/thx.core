@@ -73,4 +73,14 @@ class Dynamics {
     var property = ob.getPath(name);
     return if (property != null) f(property).map(function(a) return Some(a)) else successNel(None);
   }
+
+  public static function parseArray<A>(v: Dynamic, f: Dynamic -> VNel<String, A>): VNel<String, Array<A>>
+    return switch Type.typeof(v) {
+      case TClass(name) :
+        switch Type.getClassName(Type.getClass(v)) {
+          case "Array": (v: Array<Dynamic>).traverseValidation(f, Nel.semigroup());
+          case other: failureNel('$v is not array-valued (type resolved to $other)');
+        };
+      case other: failureNel('$v is not array-valued (type resolved to $other)');
+    };
 }
