@@ -860,30 +860,6 @@ Pairs the elements of two arrays in an array of `Tuple2`.
   }
 
 /**
-Returns a copy of the array with the new element added to the beginning.
-**/
-  inline public static function withPrepend<T>(arr : ReadonlyArray<T>, el : T) : ReadonlyArray<T>
-    return [el].concat(arr.unsafe());
-
-/**
-Returns a copy of the array with the new element added to the end.
-**/
-  inline public static function with<T>(arr : ReadonlyArray<T>, el : T) : ReadonlyArray<T>
-    return arr.concat([el]);
-
-/**
-Returns a copy of the array with the `other` elements inserted at `start`. The `length` elements after `start` are going to be removed.
-**/
-  public static function withSlice<T>(arr : ReadonlyArray<T>, other : ReadonlyArray<T>, start : Int, ?length : Int = 0) : ReadonlyArray<T>
-    return arr.slice(0, start).concat(other.unsafe()).concat(arr.slice(start + length));
-
-/**
-Returns a copy of the array with the new element inserted at position `pos`.
-**/
-  public static function withInsert<T>(arr : ReadonlyArray<T>, el : T, pos : Int) : ReadonlyArray<T>
-    return arr.slice(0, pos).concat([el]).concat(arr.slice(pos));
-
-/**
 Pairs the elements of three arrays in an array of `Tuple3`.
 **/
   public static function zip3<T1, T2, T3>(array1 : ReadonlyArray<T1>, array2 : ReadonlyArray<T2>, array3 : ReadonlyArray<T3>) : Array<Tuple3<T1, T2, T3>> {
@@ -915,6 +891,65 @@ Pairs the elements of five arrays in an array of `Tuple5`.
       array.push(new Tuple5(array1[i], array2[i], array3[i], array4[i], array5[i]));
     return array;
   }
+
+  /**
+   * The 'zip' applicative functor operation.
+   */
+  public static function zipAp<A, B>(ax: ReadonlyArray<A>, fx: ReadonlyArray<A -> B>): Array<B> {
+    var result = [];
+    for(i in 0...(Ints.min(ax.length, fx.length))) {
+      result.push(fx[i](ax[i]));
+    }
+    return result;
+  }
+
+  /**
+   * Zip two arrays by applying the provided function to the aligned members.
+   */
+  public static function zip2Ap<A, B, C>(f: A -> B -> C, ax: ReadonlyArray<A>, bx: ReadonlyArray<B>): Array<C> 
+    return zipAp(bx, ax.map(Functions2.curry(f)));
+
+  /**
+   * Zip three arrays by applying the provided function to the aligned members.
+   */
+  public static function zip3Ap<A, B, C, D>(f: A -> B -> C -> D, ax: ReadonlyArray<A>, bx: ReadonlyArray<B>, cx: ReadonlyArray<C>): Array<D> 
+    return zipAp(cx, zip2Ap(Functions3.curry(f), ax, bx));
+
+  /**
+   * Zip four arrays by applying the provided function to the aligned members.
+   */
+  public static function zip4Ap<A, B, C, D, E>(f: A -> B -> C -> D -> E, ax: ReadonlyArray<A>, bx: ReadonlyArray<B>, cx: ReadonlyArray<C>, dx: ReadonlyArray<D>): Array<E>
+    return zipAp(dx, zip3Ap(Functions4.curry(f), ax, bx, cx));
+
+  /**
+   * Zip five arrays by applying the provided function to the aligned members.
+   */
+  public static function zip5Ap<A, B, C, D, E, F>(f: A -> B -> C -> D -> E -> F, ax: ReadonlyArray<A>, bx: ReadonlyArray<B>, cx: ReadonlyArray<C>, dx: ReadonlyArray<D>, ex: ReadonlyArray<E>): Array<F>
+    return zipAp(ex, zip4Ap(Functions5.curry(f), ax, bx, cx, dx));
+
+/**
+Returns a copy of the array with the new element added to the beginning.
+**/
+  inline public static function withPrepend<T>(arr : ReadonlyArray<T>, el : T) : ReadonlyArray<T>
+    return [el].concat(arr.unsafe());
+
+/**
+Returns a copy of the array with the new element added to the end.
+**/
+  inline public static function with<T>(arr : ReadonlyArray<T>, el : T) : ReadonlyArray<T>
+    return arr.concat([el]);
+
+/**
+Returns a copy of the array with the `other` elements inserted at `start`. The `length` elements after `start` are going to be removed.
+**/
+  public static function withSlice<T>(arr : ReadonlyArray<T>, other : ReadonlyArray<T>, start : Int, ?length : Int = 0) : ReadonlyArray<T>
+    return arr.slice(0, start).concat(other.unsafe()).concat(arr.slice(start + length));
+
+/**
+Returns a copy of the array with the new element inserted at position `pos`.
+**/
+  public static function withInsert<T>(arr : ReadonlyArray<T>, el : T, pos : Int) : ReadonlyArray<T>
+    return arr.slice(0, pos).concat([el]).concat(arr.slice(pos));
 
 #if js
   static function __init__() {
