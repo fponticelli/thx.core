@@ -96,6 +96,14 @@ abstract Map<K, V>(MapImpl<K, V>) from MapImpl<K, V> to MapImpl<K, V> {
         r.foldLeftKeys(l.foldLeftKeys(f(b, kx), f), f);
     };
 
+  public function foldLeftAll<B>(b: B, f: B -> K -> V -> B): B
+    return switch this {
+      case Tip:
+        b;
+      case Bin(_, kx, x, l, r):
+        r.foldLeftAll(l.foldLeftAll(f(b, kx, x), f), f);
+    };
+
   public function foldLeftTuples<B>(b : B, f : B -> Tuple<K, V> -> B) : B
     return switch this {
       case Tip:

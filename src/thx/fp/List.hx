@@ -70,6 +70,40 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
       case Cons(x, xs): Cons(f(x), xs.map(f));
     };
 
+  public function zipAp<B>(other: List<A -> B>): List<B>
+    return switch this {
+      case Nil: Nil;
+      case Cons(x, xs): 
+        switch other {
+          case Nil: Nil;
+          case Cons(y, ys): Cons(y(x), xs.zipAp(ys));
+        };
+    };
+
+  /**
+   * Zip two arrays by applying the provided function to the aligned members.
+   */
+  public static function zip2Ap<A, B, C>(f: A -> B -> C, ax: List<A>, bx: List<B>): List<C> 
+    return bx.zipAp(ax.map(Functions2.curry(f)));
+
+  /**
+   * Zip three arrays by applying the provided function to the aligned members.
+   */
+  public static function zip3Ap<A, B, C, D>(f: A -> B -> C -> D, ax: List<A>, bx: List<B>, cx: List<C>): List<D> 
+    return cx.zipAp(zip2Ap(Functions3.curry(f), ax, bx));
+
+  /**
+   * Zip four arrays by applying the provided function to the aligned members.
+   */
+  public static function zip4Ap<A, B, C, D, E>(f: A -> B -> C -> D -> E, ax: List<A>, bx: List<B>, cx: List<C>, dx: List<D>): List<E>
+    return dx.zipAp(zip3Ap(Functions4.curry(f), ax, bx, cx));
+
+  /**
+   * Zip five arrays by applying the provided function to the aligned members.
+   */
+  public static function zip5Ap<A, B, C, D, E, F>(f: A -> B -> C -> D -> E -> F, ax: List<A>, bx: List<B>, cx: List<C>, dx: List<D>, ex: List<E>): List<F>
+    return ex.zipAp(zip4Ap(Functions5.curry(f), ax, bx, cx, dx));
+
   public function toStringWithShow(show : A -> String) : String
     return thx.fp.Lists.StringList.toString(map(show));
 }
