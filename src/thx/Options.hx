@@ -76,6 +76,15 @@ wrapped in another Option.
     };
 
 /**
+`cata` the option catamorphism, useful for inline deconstruction.
+**/
+  public static function cata<A, B>(option: Option<A>, ifNone: B, f: A -> B): B
+    return switch option {
+      case None: ifNone;
+      case Some(v): f(v);
+    };
+  
+/**
 `foldLeft` reduce using an accumulating function and an initial value.
 **/
   public static function foldLeft<T, B>(option: Option<T>, b: B, f: B -> T -> B): B

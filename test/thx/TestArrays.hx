@@ -5,6 +5,7 @@
 package thx;
 
 import utest.Assert;
+import thx.Arrays;
 using thx.Functions;
 using thx.Floats;
 using thx.Arrays;
@@ -339,6 +340,17 @@ class TestArrays {
 
     Assert.same(Validation.failure(Nel.nel("oops: 5", ["oops: 3", "oops: 1"])), arr.traverseValidation(ff, Nel.semigroup()));
     Assert.same(Validation.successNel(arr), arr.traverseValidation(fs, Nel.semigroup()));
+  }
+
+  // This transitively tests zipAp and zip2Ap..zip5Ap
+  public function testZip5Ap() {
+    var sx = ["a", "b", "c"];
+    var ix = [1, 2];
+    var tx = ["x", "y", "z"];
+    var jx = [3, 4];
+    var bx = [true, false, true];
+
+    Assert.same(["a1x3true", "b2y4false"], Arrays.zip5Ap(function(s: String, i: Int, t: String, j: Int, b: Bool) return '$s$i$t$j$b', sx, ix, tx, jx, bx));
   }
 }
 
