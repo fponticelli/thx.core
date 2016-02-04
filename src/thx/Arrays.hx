@@ -951,6 +951,18 @@ Returns a copy of the array with the new element inserted at position `pos`.
   public static function withInsert<T>(arr : ReadonlyArray<T>, el : T, pos : Int) : ReadonlyArray<T>
     return arr.slice(0, pos).concat([el]).concat(arr.slice(pos));
 
+/**
+Finds the min element of the array given the specified ordering.
+**/
+  public static function maxBy<A>(arr: ReadonlyArray<A>, ord: Ord<A>): Option<A>
+    return arr.length == 0 ? None : Some(reduce(arr, ord.max, arr[0])); 
+
+/**
+Finds the min element of the array given the specified ordering.
+**/
+  public static function minBy<A>(arr: ReadonlyArray<A>, ord: Ord<A>): Option<A>
+    return arr.length == 0 ? None : Some(reduce(arr, ord.min, arr[0])); 
+
 #if js
   static function __init__() {
     untyped __js__("
@@ -1014,13 +1026,13 @@ Filters out all null or Math.NaN floats in the array
 Finds the max float element in the array.
 **/
   public static function max(arr : ReadonlyArray<Float>) : Null<Float>
-    return arr.length == 0 ? null : Arrays.reduce(arr, function(max, v) return v > max ? v : max, arr[0]);
+    return Arrays.maxBy(arr, Floats.order).getOrElse(null);
 
 /**
 Finds the min float element in the array.
 **/
   public static function min(arr : ReadonlyArray<Float>) : Null<Float>
-    return arr.length == 0 ? null : Arrays.reduce(arr, function(min, v) return v < min ? v : min, arr[0]);
+    return Arrays.minBy(arr, Floats.order).getOrElse(null);
 
 /**
 Resizes an array of `Float` to an arbitrary length by adding more elements (default is `0.0`)
@@ -1069,13 +1081,13 @@ Finds the average of all the elements in the array.
 Finds the max int element in the array.
 **/
   public static function max(arr : ReadonlyArray<Int>) : Null<Int>
-    return arr.length == 0 ? null : Arrays.reduce(arr, function(max, v) return v > max ? v : max, arr[0]);
+    return Arrays.maxBy(arr, Ints.order).getOrElse(null);
 
 /**
 Finds the min int element in the array.
 **/
   public static function min(arr : ReadonlyArray<Int>) : Null<Int>
-    return arr.length == 0 ? null : Arrays.reduce(arr, function(min, v) return v < min ? v : min, arr[0]);
+    return Arrays.minBy(arr, Ints.order).getOrElse(null);
 
 /**
 Resizes an array of `Int` to an arbitrary length by adding more elements (default is `0`)
@@ -1111,11 +1123,11 @@ Filters out all null or empty strings in the array
 Finds the max string element in the array.
 **/
   public static function max(arr : ReadonlyArray<String>) : Null<String>
-    return arr.length == 0 ? null : Arrays.reduce(arr, function(max, v) return v > max ? v : max, arr[0]);
+    return Arrays.maxBy(arr, Strings.order).getOrElse(null);
 
 /**
 Finds the min string element in the array.
 **/
   public static function min(arr : ReadonlyArray<String>) : Null<String>
-    return arr.length == 0 ? null : Arrays.reduce(arr, function(min, v) return v < min ? v : min, arr[0]);
+    return Arrays.minBy(arr, Strings.order).getOrElse(null);
 }
