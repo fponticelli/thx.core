@@ -94,6 +94,15 @@ wrapped in another Option.
     };
 
 /**
+`filter` returns the current value if any contained value matches the predicate, None otherwise.
+**/
+  public static function filter<A>(option: Option<A>, f: A -> Bool): Option<A>
+    return switch option {
+      case Some(v) if (f(v)): option;
+      case _: None;
+    };
+
+/**
 `toArray` transforms an `Option<T>` value into an `Array<T>` value. The result array
 will be empty if `Option` is `None` or will contain one value otherwise.
 **/
