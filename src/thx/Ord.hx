@@ -1,6 +1,8 @@
 package thx;
 
 import thx.Semigroup;
+import thx.fp.Comparable;
+import thx.fp.ComparableOrd;
 
 abstract Ordering(OrderingImpl) from OrderingImpl to OrderingImpl {
   public static function fromInt(value : Int) : Ordering
@@ -23,9 +25,6 @@ enum OrderingImpl {
 
 @:callable
 abstract Ord<A> (A -> A -> Ordering) from A -> A -> Ordering to A -> A -> Ordering {
-  public static function fromIntComparison<A>(f : A -> A -> Int) : Ord<A>
-    return function(a : A, b : A) : Ordering return Ordering.fromInt(f(a, b));
-
   inline public function order(a0: A, a1: A): Ordering
     return this(a0, a1);
 
@@ -34,9 +33,19 @@ abstract Ord<A> (A -> A -> Ordering) from A -> A -> Ordering to A -> A -> Orderi
 
   public function inverse(): Ord<A> return function(a0: A, a1: A) { return this(a1, a0); };
 
-  public static function fromCompare<A>(f: A -> A -> Int): Ord<A>
-    return function(a0: A, a1: A) {
-      var i = f(a0, a1);
-      return if (i < 0) LT else if (i == 0) EQ else GT;
+
+  public static function fromIntComparison<A>(f : A -> A -> Int) : Ord<A>
+    return function(a : A, b : A) {
+      return Ordering.fromInt(f(a, b));
+    };
+
+  public static function forComparable<T : Comparable<T>>(): Ord<T>
+    return function(a: T, b: T) {
+      return Ordering.fromInt(a.compareTo(b));
+    };
+
+  public static function forComparableOrd<T : ComparableOrd<T>>(): Ord<T>
+    return function(a: T, b: T) {
+      return a.compareTo(b);
     };
 }
