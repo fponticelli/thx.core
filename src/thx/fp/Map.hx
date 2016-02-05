@@ -85,6 +85,11 @@ abstract Map<K, V>(MapImpl<K, V>) from MapImpl<K, V> to MapImpl<K, V> {
         r.foldLeft(l.foldLeft(f(b, x), f), f);
     };
 
+  public function map<B>(f: V -> B): Map<K, B> return switch this {
+    case Tip: Tip;
+    case Bin(sz, ky, y, lhs, rhs): Bin(sz, ky, f(y), lhs.map(f), rhs.map(f));
+  };
+
   public function values(): Array<V>
     return foldLeft([], function(acc, v) { acc.push(v); return acc; });
 
