@@ -238,6 +238,11 @@ Similar to `wrap`, it works for numbers between 0 and `max`.
       v += max;
     return v;
   }
+
+  /**
+   * The ordering instance for floating-point values.
+   */
+  public static var order(default, never) = Ord.fromIntComparison(compare);
 }
 
 typedef HaxeMath = Math;

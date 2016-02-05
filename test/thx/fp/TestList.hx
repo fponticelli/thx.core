@@ -65,4 +65,15 @@ class TestList {
     var slist = list.flatMap(map);
     Assert.same(Cons(1, Cons(2, Cons(1, Cons(3, Cons(2, Cons(1, Nil)))))), slist);
   }
+
+  // This transitively tests zipAp and zip2Ap..zip5Ap
+  public function testZip5Ap() {
+    var sx = List.fromArray(["a", "b", "c"]);
+    var ix = List.fromArray([1, 2]);
+    var tx = List.fromArray(["x", "y", "z"]);
+    var jx = List.fromArray([3, 4]);
+    var bx = List.fromArray([true, false, true]);
+
+    Assert.same(List.fromArray(["a1x3true", "b2y4false"]), List.zip5Ap(function(s: String, i: Int, t: String, j: Int, b: Bool) return '$s$i$t$j$b', sx, ix, tx, jx, bx));
+  }
 }

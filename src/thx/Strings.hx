@@ -125,7 +125,7 @@ or otherwise a positive non-sero number.
     return Utf8.compare(a, b);
   #end
 
-  public static var ord(default, never): Ord<String> = Ord.fromIntComparison(compare);
+  public static var order(default, never): Ord<String> = Ord.fromIntComparison(compare);
 
 /**
 `contains` returns `true` if `s` contains one or more occurrences of `test` regardless of the text case.

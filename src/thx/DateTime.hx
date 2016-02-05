@@ -151,7 +151,7 @@ match `end`. No interpolation is made.
     return a.compareTo(b);
 
   inline public static function ord(): Ord<DateTime>
-    return Ord.fromCompare(compare);
+    return Ord.fromIntComparison(compare);
 
 /**
 Creates a DateTime instance from its components (year, mont, day, hour, minute,
