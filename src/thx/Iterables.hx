@@ -109,11 +109,23 @@ Refer to `Array.map`.
   inline public static function map<T, S>(it : Iterable<T>, f : T -> S) : Array<S>
     return Iterators.map(it.iterator(), f);
 
+  /**
+   * A proper Functor-like map function that preverses iterable structure.
+   */
+  inline public static function fmap<T, S>(it : Iterable<T>, f : T -> S) : Iterable<S>
+    return { iterator: function() return Iterators.fmap(it.iterator(), f) };
+
 /**
 Refer to `thx.Arrays.mapi`.
 **/
   inline public static function mapi<T, S>(it : Iterable<T>, f : T -> Int -> S) : Array<S>
     return Iterators.mapi(it.iterator(), f);
+
+  /**
+   * A proper Functor-like mapi function that preverses iterable structure, with index information.
+   */
+  inline public static function fmapi<T, S>(it : Iterable<T>, f : T -> Int -> S) : Iterable<S>
+    return { iterator: function() return Iterators.fmapi(it.iterator(), f) };
 
 /**
 Refer to `thx.Arrays.order`.

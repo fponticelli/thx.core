@@ -48,6 +48,18 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
   inline public function map<B>(f: A -> B): Validation<E, B>
     return ap(Right(f), function(e1: E, e2: E) { throw "Unreachable"; });
 
+  public function foldLeft<B>(b: B, f: B -> A -> B): B
+    return switch this {
+      case Left(_): b;
+      case Right(a): f(b, a);
+    };
+
+/**
+ * Fold by mapping the contained value into some monoidal type and reducing with that monoid.
+ */
+  public function foldMap<B>(f: A -> B, m: Monoid<B>): B
+    return (map(f): Validation<E, B>).foldLeft(m.zero, m.append);
+
   public function ap<B>(v: Validation<E, A -> B>, s: Semigroup<E>): Validation<E, B>
     return switch this {
       case Left(e0):

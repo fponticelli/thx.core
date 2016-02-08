@@ -425,16 +425,19 @@ In case you have to use a type that is not supported by `@:generic`, please use 
   @:generic
   public static function groupBy<TKey, TValue>(arr : ReadonlyArray<TValue>, resolver : TValue -> TKey) : Map<TKey, Array<TValue>> {
     var map : Map<TKey, Array<TValue>> = new Map<TKey, Array<TValue>>();
-    arr.map(function(v : TValue) {
+
+    for (i in 0...arr.length) {
+      var v = arr[i];
       var key : TKey = resolver(v),
-          arr : Array<TValue> = map.get(key);
-      if(null == arr) {
-        arr = [v];
-        map.set(key, arr);
+          acc : Array<TValue> = map.get(key);
+
+      if(null == acc) {
+        map.set(key, [v]);
       } else {
-        arr.push(v);
+        acc.push(v);
       }
-    });
+    };
+
     return map;
   }
 
@@ -444,16 +447,18 @@ In case you have to use a type that is not supported by `@:generic`, please use 
   Groups are appended to the passed map.
   **/
   public static function groupByAppend<TKey, TValue>(arr : ReadonlyArray<TValue>, resolver : TValue -> TKey, map : Map<TKey, Array<TValue>>) : Map<TKey, Array<TValue>> {
-    arr.map(function(v : TValue) {
+    for (i in 0...arr.length) {
+      var v = arr[i];
       var key : TKey = resolver(v),
-          arr : Array<TValue> = map.get(key);
-      if(null == arr) {
-        arr = [v];
-        map.set(key, arr);
+          acc : Array<TValue> = map.get(key);
+
+      if (null == acc) {
+        map.set(key, [v]);
       } else {
-        arr.push(v);
+        acc.push(v);
       }
-    });
+    }
+
     return map;
   }
 #end
@@ -606,9 +611,9 @@ It applies a function against an accumulator and each value of the array (from l
   public static inline function foldLeft<A, B>(array: ReadonlyArray<A>, init: B, f: B -> A -> B): B
     return reduce(array, f, init);
 
-/**
- * Fold by mapping the contained values into some monoidal type and reducing with that monoid.
- */
+  /**
+   * Fold by mapping the contained values into some monoidal type and reducing with that monoid.
+   */
   public static function foldMap<A, B>(array: ReadonlyArray<A>, f: A -> B, m: Monoid<B>): B
     return foldLeft(array.map(f), m.zero, m.append);
 

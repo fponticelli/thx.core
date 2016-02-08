@@ -146,16 +146,6 @@ Refer to `thx.Arrays.last`.
   }
 
 /**
-Refer to `Array.map`.
-**/
-  public static function map<T, S>(it : Iterator<T>, f : T -> S) : Array<S> {
-    var acc = [];
-    for(v in it)
-      acc.push(f(v));
-    return acc;
-  }
-
-/**
 Effectful traversal. Use this instead of .map if producing side-effects.
 This method consumes the original iterator.
 */
@@ -166,15 +156,21 @@ This method consumes the original iterator.
   }
 
 /**
- * Fold by mapping the contained values into some monoidal type and reducing with that monoid.
- * FIXME: when map is fixed to return an Iterator, this could use reduce without constructing an intermediate
- * data structure; for now it is inefficient and so must be implemented manually.
- */
-  public static function foldMap<A, B>(it: Iterator<A>, f: A -> B, m: Monoid<B>): B {
-    var acc = m.zero;
-    for (v in it) acc = m.append(acc, f(v));
+Refer to `Array.map`.
+**/
+  public static function map<T, S>(it : Iterator<T>, f : T -> S) : Array<S> {
+    var acc = [];
+    for(v in it)
+      acc.push(f(v));
     return acc;
   }
+
+  /**
+   * Produce a new Iterator that lazily applies the provided function to
+   * each element of this iterator.
+   */
+  public static function fmap<T, S>(it : Iterator<T>, f : T -> S) : Iterator<S> 
+    return new MapIterator(it, f);
 
 /**
 Refer to `thx.Arrays.mapi`.
@@ -187,10 +183,18 @@ Refer to `thx.Arrays.mapi`.
     return acc;
   }
 
+  /**
+   * Produce a new Iterator that lazily applies the provided function to
+   * each element of this iterator and an index value that increases with
+   * each application.
+   */
+  public static function fmapi<T, S>(it : Iterator<T>, f : T -> Int -> S) : Iterator<S> 
+    return new MapIIterator(it, f);
+
 /**
 Refer to `thx.Arrays.order`.
 **/
-  public static function order<T>(it : Iterator<T>, sort : T -> T -> Int) {
+  public static function order<T>(it : Iterator<T>, sort : T -> T -> Int): Array<T> {
     var n = Iterators.toArray(it);
     n.sort(sort);
     return n;
@@ -200,8 +204,11 @@ Refer to `thx.Arrays.order`.
 Refer to `thx.Arrays.reduce`.
 **/
   public static function reduce<TElement, TAcc>(it : Iterator<TElement>, callback : TAcc -> TElement -> TAcc, initial : TAcc) : TAcc {
-    map(it, function(v) initial = callback(initial, v));
-    return initial;
+    var result = initial;
+    while (it.hasNext()) {
+      result = callback(initial, it.next());
+    }
+    return result;
   }
 
 /**
@@ -211,6 +218,15 @@ Refer to `thx.Arrays.reducei`.
     mapi(it, function(v, i) initial = callback(initial, v, i));
     return initial;
   }
+
+  public static function foldLeft<A, B>(it: Iterator<A>, zero: B, f: B -> A -> B): B
+    return reduce(it, f, zero);
+
+  /**
+   * Fold by mapping the contained values into some monoidal type and reducing with that monoid.
+   */
+  public static function foldMap<A, B>(it: Iterator<A>, f: A -> B, m: Monoid<B>): B 
+    return foldLeft(fmap(it, f), m.zero, m.append);
 
 /**
 `toArray` transforms an `Iterator<T>` into an `Array<T>`.
@@ -227,7 +243,7 @@ Unzip an iterator of Tuple2<T1, T2> to a Tuple2<Array<T1>, Array<T2>>.
 **/
   public static function unzip<T1, T2>(it : Iterator<Tuple2<T1, T2>>) {
     var a1 = [], a2 = [];
-    Iterators.map(it, function(t) {
+    forEach(it, function(t) {
       a1.push(t._0);
       a2.push(t._1);
     });
@@ -239,7 +255,7 @@ Unzip an iterator of Tuple3<T1, T2, T3> to a Tuple3<Array<T1>, Array<T2>, Array<
 **/
   public static function unzip3<T1, T2, T3>(it : Iterator<Tuple3<T1, T2, T3>>) {
     var a1 = [], a2 = [], a3 = [];
-    Iterators.map(it, function(t) {
+    forEach(it, function(t) {
       a1.push(t._0);
       a2.push(t._1);
       a3.push(t._2);
@@ -252,7 +268,7 @@ Unzip an iterator of Tuple4<T1, T2, T3, T4> to a Tuple4<Array<T1>, Array<T2>, Ar
 **/
   public static function unzip4<T1, T2, T3, T4>(it : Iterator<Tuple4<T1, T2, T3, T4>>) {
     var a1 = [], a2 = [], a3 = [], a4 = [];
-    Iterators.map(it, function(t) {
+    forEach(it, function(t) {
       a1.push(t._0);
       a2.push(t._1);
       a3.push(t._2);
@@ -266,7 +282,7 @@ Unzip an iterator of Tuple5<T1, T2, T3, T4, T5> to a Tuple5<Array<T1>, Array<T2>
 **/
   public static function unzip5<T1, T2, T3, T4, T5>(it : Iterator<Tuple5<T1, T2, T3, T4, T5>>) {
     var a1 = [], a2 = [], a3 = [], a4 = [], a5 = [];
-    Iterators.map(it, function(t) {
+    forEach(it, function(t) {
       a1.push(t._0);
       a2.push(t._1);
       a3.push(t._2);
@@ -315,4 +331,40 @@ Pairs the elements of five iterators in an array of `Tuple5`.
       array.push(new Tuple5(it1.next(), it2.next(), it3.next(), it4.next(), it5.next()));
     return array;
   }
+}
+
+class MapIterator<A, B> {
+  private var base: Iterator<A>;
+  private var f: A -> B;
+
+  public function new(base: Iterator<A>, f: A -> B) {
+    this.base = base;
+    this.f = f;
+  }
+
+  public function next(): B
+    return f(base.next());
+
+  public function hasNext(): Bool
+    return base.hasNext();
+}
+
+class MapIIterator<A, B> {
+  private var base: Iterator<A>;
+  private var f: A -> Int -> B;
+  private var i: Int = 0;
+
+  public function new(base: Iterator<A>, f: A -> Int -> B) {
+    this.base = base;
+    this.f = f;
+  }
+
+  public function next(): B {
+    var result = f(base.next(), i);
+    i++;
+    return result;
+  }
+
+  public function hasNext(): Bool
+    return base.hasNext();
 }

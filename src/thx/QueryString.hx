@@ -20,21 +20,22 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
     return new Map();
 
   public static function parseWithSymbols(s : String, separator : String, assignment : String, ?decodeURIComponent : String -> String) : QueryString {
-    var qs : QueryString = new Map();
-    if(null == s)
-      return qs;
-    if(null == decodeURIComponent)
-      decodeURIComponent = QueryString.decodeURIComponent;
-    if(s.startsWith("?") || s.startsWith("#"))
-      s = s.substring(1);
-    s = s.ltrim();
-    s.split(separator)
-      .map(function(v) {
-        var parts = v.split(assignment);
-        if(parts[0] == "") return;
-        qs.add(decodeURIComponent(parts[0]), null == parts[1] ? null : decodeURIComponent(parts[1]));
-      });
-    return qs;
+    return if (null == s) {
+      new Map();
+    } else {
+      if(null == decodeURIComponent)
+        decodeURIComponent = QueryString.decodeURIComponent;
+      if(s.startsWith("?") || s.startsWith("#"))
+        s = s.substring(1);
+      s = s.ltrim();
+      s.split(separator).reduce(
+        function(qs: QueryString, v: String) {
+          var parts = v.split(assignment);
+          if (parts[0] != "") qs.add(decodeURIComponent(parts[0]), null == parts[1] ? null : decodeURIComponent(parts[1]));
+          return qs;
+        }, new Map() 
+      );
+    }
   }
 
   @:from inline public static function parse(s : String) : QueryString
@@ -54,17 +55,16 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
   }
 
   @:to public function toObject() : {} {
-    var o : Dynamic = {};
-    this.keys().map(function(key) {
-        var v : Array<String> = this.get(key);
-        if(v.length == 0)
-          Reflect.setField(o, key, null);
-        else if(v.length == 1)
-          Reflect.setField(o, key, v[0]);
-        else
-          Reflect.setField(o, key, v);
-      });
-    return o;
+    return this.keys().reduce(function(o: Dynamic, key: String) {
+      var v : Array<String> = this.get(key);
+      if(v.length == 0)
+        Reflect.setField(o, key, null);
+      else if(v.length == 1)
+        Reflect.setField(o, key, v[0]);
+      else
+        Reflect.setField(o, key, v);
+      return o;
+    }, {});
   }
 
   inline public function isEmpty() : Bool

@@ -26,7 +26,7 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
 
   public function foldMap<B>(f: A -> B, m: Monoid<B>): B
     return map(f).foldLeft(m.zero, m.append);
-    
+
   public function flatMap<B>(f : A -> List<B>) : List<B>
     return switch this {
       case Nil: Nil;
