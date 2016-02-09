@@ -48,6 +48,20 @@ class TestOrderedMap {
     Assert.same(["z", "x"], ml.keys().toArray());
   }
 
+  public function testToTuples() {
+    var m = OrderedMap.createString();
+    m.set("foo", 10);
+    m.set("bar", 20);
+    m.insert(2, "baz", 30);
+
+    var tuples = m.tuples();
+
+    Assert.same("foo", tuples[0].left);
+    Assert.same(20, tuples[1].right);
+    Assert.same("baz", tuples[2].left);
+    Assert.same(30, tuples[2].right);
+  }
+
   public function testAbstract() {
     var ml = OrderedMap.createString();
     ml["k"] = "value";
