@@ -1,8 +1,9 @@
 package thx;
 
 import haxe.Constraints.IMap;
+import thx.Tuple;
 
-@:forward(length, set, insert, exists, remove, keys, iterator, toArray, toString, keyAt, keyIndex, valueIndex, removeAt)
+@:forward(length, set, insert, exists, remove, keys, iterator, tuples, toArray, toString, keyAt, keyIndex, valueIndex, removeAt)
 abstract OrderedMap<K, V>(OrderedMapImpl<K, V>) to IMap<K, V> {
   inline public static function createString<V>() : OrderedMap<String, V>
     return new OrderedMap(new StringOrderedMap());
@@ -132,6 +133,10 @@ class OrderedMapImpl<K, V> implements IMap<K, V> {
 
   public function iterator() : Iterator<V>
     return toArray().iterator();
+
+  public function tuples() : Array<Tuple2<K, V>>
+    return arr.map(function (key)
+      return new Tuple2(key, map.get(key)));
 
   public function toString() : String {
     var s = "";
