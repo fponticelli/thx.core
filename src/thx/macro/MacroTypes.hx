@@ -117,6 +117,8 @@ passed `Type`.
         baseTypeToTypePath(t.get(), [for (p in params) TPType(qualifyComplexType(Context.toComplexType(p)))]);
       case TAbstract(t, params):
         baseTypeToTypePath(t.get(), [for (p in params) TPType(qualifyComplexType(Context.toComplexType(p)))]);
+      case TMono(t):
+        typeToTypePath(t.get());
       case _:
         throw 'Cannot convert this to TypePath: $t';
     };
@@ -131,12 +133,12 @@ passed `Type`.
 
 /**
 Fully-qualify a `ComplexType`.
-For example, turn `Option<Int>` to `haxe.ds.Option.Option<StdTypes.Int>`.
-In case the process fail, it will return the input `ComplexType`.
+For example, turn `Option<Int>` to `haxe.ds.Option.Option<StdTypes.Int>` when `haxe.ds.Option` is in context view `using` or `import`.
+If the type cannot be qualified the original `ComplexType` is returned.
 */
   public static function qualifyComplexType(ct : ComplexType) : ComplexType
     return try {
-      TPath(typeToTypePath(Context.typeof(macro (null : $ct))));
+      TypeTools.toComplexType(Context.typeof(macro (null : $ct)));
     } catch(e : Dynamic) {
       ct;
     };
