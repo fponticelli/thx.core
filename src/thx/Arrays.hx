@@ -546,6 +546,10 @@ Same as `Array.map` but it adds a second argument to the `callback` function wit
     #end
   }
 
+  public static function forEach<A>(array: ReadonlyArray<A>, f: A -> Void): Void {
+    for(i in 0...array.length) f(array[i]);
+  }
+
 /**
 Same as `Array.map` but traverses the array from the last to the first element.
 **/
