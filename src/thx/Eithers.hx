@@ -93,4 +93,17 @@ class Eithers {
       case Left(v) : throw new thx.Error('$message: $v');
       case Right(v): v;
     };
+
+  public static function toVNel<E, T>(either: Either<E, T>): Validation.VNel<E, T>
+    return switch either {
+      case Left(e): Validation.failureNel(e);
+      case Right(v): Validation.successNel(v);
+    };
+
+  public static function cata<L, R, A>(either: Either<L, R>, l: L -> A, r: R -> A): A
+    return switch either {
+      case Left(l0):  l(l0);
+      case Right(r0): r(r0);
+    };
+
 }

@@ -69,6 +69,12 @@ class Dynamics {
   public static function parseProperty<A>(ob: {}, name: String, f: Dynamic -> VNel<String, A>): VNel<String, A> 
     return nnNel(ob.getPath(name), 'Property "$name" was not found.').flatMapV(f);
 
+  // This demands that the parser for the field value be able to accept
+  // null values, which is not the usual way of things.
+  public static function parseNullableProperty<A>(ob: {}, name: String, f: Null<Dynamic> -> VNel<String, A>): VNel<String, A> {
+    return f(ob.getPath(name));
+  }
+
   public static function parseOptionalProperty<A>(ob: {}, name: String, f: Dynamic -> VNel<String, A>): VNel<String, Option<A>> {
     var property = ob.getPath(name);
     return if (property != null) f(property).map(function(a) return Some(a)) else successNel(None);

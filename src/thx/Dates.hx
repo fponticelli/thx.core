@@ -1,5 +1,7 @@
 package thx;
 
+import thx.Either;
+
 /**
 `Dates` provides additional extension methods on top of the `Date` type.
 
@@ -482,6 +484,19 @@ Returns a new date that is modified only by the second.
 **/
   public static function withSecond(date : Date, second : Int)
     return Dates.create(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), second);
+
+  /**
+   * Safely parse a string value to a date.
+   */
+  public static function parseDate(s: String): Either<String, Date> {
+    try {
+      return Right(Date.fromString(s));
+    } catch(e: Dynamic) {
+      return Left('$s could not be parsed to a valid Date value.');
+    }
+  };
+
+
 }
 
 /** Alias of `DateTools`, included so mixins work with `using thx.Dates;` **/
