@@ -89,4 +89,14 @@ class Dynamics {
         };
       case other: failureNel('$v is not array-valued (type resolved to $other)');
     };
+
+  public static function parseArrayIndexed<A>(v: Dynamic, f: Dynamic -> Int -> VNel<String, A>): VNel<String, Array<A>>
+    return switch Type.typeof(v) {
+      case TClass(name) :
+        switch Type.getClassName(Type.getClass(v)) {
+          case "Array": (v: Array<Dynamic>).traverseValidationIndexed(f, Nel.semigroup());
+          case other: failureNel('$v is not array-valued (type resolved to $other)');
+        };
+      case other: failureNel('$v is not array-valued (type resolved to $other)');
+    };
 }

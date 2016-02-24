@@ -600,6 +600,12 @@ It applies a function against an accumulator and each value of the array (from l
     #end
   }
 
+  /**
+   * Alias for reduce that puts the arguments in the proper order.
+   */
+  public static inline function foldLeft<A, B>(array: ReadonlyArray<A>, init: B, f: B -> A -> B): B
+    return reduce(array, f, init);
+
 /**
 Resizes an array of `T` to an arbitrary length by adding more elements to its end
 or by removing extra elements.
@@ -768,6 +774,16 @@ from the failed values, otherwise return the array of mapped values in a Success
   public static function traverseValidation<E, T, U>(arr: ReadonlyArray<T>, f: T -> Validation<E, U>, s: Semigroup<E>): Validation<E, Array<U>>
     return reduce(arr, function(acc: Validation<E, Array<U>>, t: T) {
       return f(t).ap(acc.map(function(ux) return function(u) { ux.push(u); return ux; }), s);
+    }, Validation.success([]));
+
+/**
+Traverse the array with a function that may return values wrapped in Validation.
+If any of the values are Failures, return a Failure that accumulates all errors
+from the failed values, otherwise return the array of mapped values in a Success.
+**/
+  public static function traverseValidationIndexed<E, T, U>(arr: ReadonlyArray<T>, f: T -> Int -> Validation<E, U>, s: Semigroup<E>): Validation<E, Array<U>>
+    return reducei(arr, function(acc: Validation<E, Array<U>>, t: T, i: Int) {
+      return f(t, i).ap(acc.map(function(ux) return function(u) { ux.push(u); return ux; }), s);
     }, Validation.success([]));
 
 /**
