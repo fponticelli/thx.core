@@ -14,7 +14,7 @@ class BuildResource {
   macro public static function buildStatic() : Array<Field> {
     var fields = Context.getBuildFields(),
         o = getResourceObject(Context.getLocalClass().get());
-    return fields.concat(generateFieldsFromObjectLiteral(o));
+    return generateFieldsFromObjectLiteral(o).concat(fields);
   }
 
   static var formats = ["json" #if yaml , "yaml" #end];
@@ -44,7 +44,7 @@ class BuildResource {
         if(!Std.is(t.right, String))
           return;
         var key = t.left.substring(length),
-             value : String = path.isEmpty() ? t.right : '$path/${t.right}',
+            value : String = path.isEmpty() ? t.right : '$path/${t.right}',
             newvalue = getFromFile(value, module, prefix, true);
         Reflect.deleteField(o, t.left);
         Reflect.setField(o, key, newvalue);
@@ -90,24 +90,38 @@ class BuildResource {
     return o;
   }
 
-  // TODO support nested folders
   static function getDirMeta(meta : MetaAccess, module : String, prefix : String) : {} {
     if(!meta.has(":dir"))
       return {};
-    var o = {};
-    meta.extract(":dir")
+    var out = meta.extract(":dir")
       .map(function(v) return v.params)
       .flatten()
       .map(function(p) return ExprTools.getValue(p))
-      .map(function(path) {
-        for(file in sys.FileSystem.readDirectory(path)) {
-          if(file.startsWith(".")) continue; // ignore hidden files
-          var fullPath = '$path/$file',
-              name = Strings.capitalizeWords(file.split(".").slice(0, -1).join(" ")).lowerCaseFirst();
-          Reflect.setField(o, name, getFromFile(fullPath, module, prefix, null, true));
-        }
-      });
-    return o;
+      .map(function(path) return getFromDir(Std.string(path), module, prefix))
+      .reduce(function(acc, o) return Objects.assign(acc, o), {});
+    return out;
+  }
+
+  static function getFromDir(dir : String, module : String, prefix : String) {
+    var ob = {};
+    for(path in sys.FileSystem.readDirectory(dir)) {
+      if(path.startsWith(".")) continue; // ignore hidden files
+      var fullPath = '$dir/$path',
+          name = normalizeName(path);
+      if(sys.FileSystem.isDirectory(fullPath)) {
+        setField(ob, name, getFromDir(fullPath, module, prefix));
+      } else {
+        setField(ob, name, getFromFile(fullPath, module, prefix, null, true));
+      }
+    }
+    return ob;
+  }
+
+  static function normalizeName(s : String) {
+    var parts = s.split(".");
+    if(parts.length > 1)
+      parts.pop();
+    return Strings.capitalizeWords(parts.join(" ")).lowerCaseFirst();
   }
 
   static function getMatchingFile(type : String, module : String, formats : Array<String>, prefix : String) {
@@ -147,6 +161,13 @@ class BuildResource {
         .filter(function(item) return item != null),
       module,
       prefix);
+  }
+
+  static function setField(o : {}, field : String, value : Dynamic) {
+    if(Reflect.hasField(o, field))
+      throw 'duplicate key $field';
+    Reflect.setField(o, field, value);
+    return o;
   }
 
   static function getFromFiles(list : Array<{ file : String, format : String }>, module : String, prefix : String) {
