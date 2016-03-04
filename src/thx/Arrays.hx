@@ -607,6 +607,12 @@ It applies a function against an accumulator and each value of the array (from l
     return reduce(array, f, init);
 
 /**
+ * Fold by mapping the contained values into some monoidal type and reducing with that monoid.
+ */
+  public static function foldMap<A, B>(array: ReadonlyArray<A>, f: A -> B, m: Monoid<B>): B
+    return foldLeft(array.map(f), m.zero, m.append);
+
+/**
 Resizes an array of `T` to an arbitrary length by adding more elements to its end
 or by removing extra elements.
 

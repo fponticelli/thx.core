@@ -156,6 +156,27 @@ Refer to `Array.map`.
   }
 
 /**
+Effectful traversal. Use this instead of .map if producing side-effects.
+This method consumes the original iterator.
+*/
+  public static function forEach<A>(it: Iterator<A>, proc: A -> Void): Void {
+    while (it.hasNext()) {
+      proc(it.next());
+    }
+  }
+
+/**
+ * Fold by mapping the contained values into some monoidal type and reducing with that monoid.
+ * FIXME: when map is fixed to return an Iterator, this could use reduce without constructing an intermediate
+ * data structure; for now it is inefficient and so must be implemented manually.
+ */
+  public static function foldMap<A, B>(it: Iterator<A>, f: A -> B, m: Monoid<B>): B {
+    var acc = m.zero;
+    for (v in it) acc = m.append(acc, f(v));
+    return acc;
+  }
+
+/**
 Refer to `thx.Arrays.mapi`.
 **/
   public static function mapi<T, S>(it : Iterator<T>, f : T -> Int -> S) : Array<S> {
