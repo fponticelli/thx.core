@@ -66,37 +66,37 @@ class Dynamics {
       case other: failureNel('Cannot parse a boolean value from $v (type resolved to $other)');
     };
 
-  public static function parseProperty<A>(ob: {}, name: String, f: Dynamic -> VNel<String, A>): VNel<String, A> 
-    return nnNel(ob.getPath(name), 'Property "$name" was not found.').flatMapV(f);
+  public static function parseProperty<E, A>(ob: {}, name: String, f: Dynamic -> VNel<E, A>, err: String -> E): VNel<E, A> 
+    return nnNel(ob.getPath(name), err('Property "$name" was not found.')).flatMapV(f);
 
   // This demands that the parser for the field value be able to accept
   // null values, which is not the usual way of things.
-  public static function parseNullableProperty<A>(ob: {}, name: String, f: Null<Dynamic> -> VNel<String, A>): VNel<String, A> {
+  public static function parseNullableProperty<E, A>(ob: {}, name: String, f: Null<Dynamic> -> VNel<E, A>): VNel<E, A> {
     return f(ob.getPath(name));
   }
 
-  public static function parseOptionalProperty<A>(ob: {}, name: String, f: Dynamic -> VNel<String, A>): VNel<String, Option<A>> {
+  public static function parseOptionalProperty<E, A>(ob: {}, name: String, f: Dynamic -> VNel<E, A>): VNel<E, Option<A>> {
     var property = ob.getPath(name);
     return if (property != null) f(property).map(function(a) return Some(a)) else successNel(None);
   }
 
-  public static function parseArray<A>(v: Dynamic, f: Dynamic -> VNel<String, A>): VNel<String, Array<A>>
+  public static function parseArray<E, A>(v: Dynamic, f: Dynamic -> VNel<E, A>, err: String -> E): VNel<E, Array<A>>
     return switch Type.typeof(v) {
       case TClass(name) :
         switch Type.getClassName(Type.getClass(v)) {
           case "Array": (v: Array<Dynamic>).traverseValidation(f, Nel.semigroup());
-          case other: failureNel('$v is not array-valued (type resolved to $other)');
+          case other: failureNel(err('$v is not array-valued (type resolved to $other)'));
         };
-      case other: failureNel('$v is not array-valued (type resolved to $other)');
+      case other: failureNel(err('$v is not array-valued (type resolved to $other)'));
     };
 
-  public static function parseArrayIndexed<A>(v: Dynamic, f: Dynamic -> Int -> VNel<String, A>): VNel<String, Array<A>>
+  public static function parseArrayIndexed<E, A>(v: Dynamic, f: Dynamic -> Int -> VNel<E, A>, err: String -> E): VNel<E, Array<A>>
     return switch Type.typeof(v) {
       case TClass(name) :
         switch Type.getClassName(Type.getClass(v)) {
           case "Array": (v: Array<Dynamic>).traverseValidationIndexed(f, Nel.semigroup());
-          case other: failureNel('$v is not array-valued (type resolved to $other)');
+          case other: failureNel(err('$v is not array-valued (type resolved to $other)'));
         };
-      case other: failureNel('$v is not array-valued (type resolved to $other)');
+      case other: failureNel(err('$v is not array-valued (type resolved to $other)'));
     };
 }
