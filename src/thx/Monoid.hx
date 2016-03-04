@@ -14,6 +14,6 @@ abstract Monoid<A> (MonoidImpl<A>) from MonoidImpl<A> {
   public var zero(get, never): A;
   function get_zero() return this.zero;
 
-  inline public function append(a0: A, a1: A): A
+  public function append(a0: A, a1: A): A
     return this.append(a0, a1);
 }
