@@ -25,22 +25,22 @@ enum OrderingImpl {
 
 @:callable
 abstract Ord<A> (A -> A -> Ordering) from A -> A -> Ordering to A -> A -> Ordering {
-  inline public function order(a0: A, a1: A): Ordering
+  public function order(a0: A, a1: A): Ordering
     return this(a0, a1);
 
-  inline public function max(a0: A, a1: A): A
+  public function max(a0: A, a1: A): A
     return switch this(a0, a1) {
       case LT | EQ: a1;
       case GT: a0;
     };
 
-  inline public function min(a0: A, a1: A): A
+  public function min(a0: A, a1: A): A
     return switch this(a0, a1) {
       case LT | EQ: a0;
       case GT: a1;
     };
 
-  inline public function equal(a0: A, a1: A): Bool
+  public function equal(a0: A, a1: A): Bool
     return this(a0, a1) == EQ;
 
   public function contramap<B>(f: B -> A): Ord<B>
