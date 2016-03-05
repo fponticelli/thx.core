@@ -117,3 +117,9 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
       s: Semigroup<X>): Validation<X, I>
     return v8.ap(val7(f.curry(), v1, v2, v3, v4, v5, v6, v7, s), s);
 }
+
+class ValidationExtensions {
+  public static inline function leftMapNel<E, E0, A>(n: VNel<E, A>, f: E -> E0): VNel<E0, A>
+    return n.leftMap(function(n) return n.map(f));
+}
+
