@@ -33,7 +33,6 @@ class TestAll {
     runner.addCase(new thx.TestMaps());
     runner.addCase(new thx.TestNulls());
     runner.addCase(new thx.TestObjects());
-    runner.addCase(new thx.TestOptions());
     runner.addCase(new thx.TestPath());
     runner.addCase(new thx.TestRational());
     runner.addCase(new thx.TestReadonlyArray());
