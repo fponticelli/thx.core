@@ -94,6 +94,12 @@ wrapped in another Option.
     };
 
 /**
+ * Fold by mapping the contained value into some monoidal type and reducing with that monoid.
+ */
+  public static function foldMap<A, B>(option: Option<A>, f: A -> B, m: Monoid<B>): B
+    return foldLeft(map(option, f), m.zero, m.append);
+
+/**
 `filter` returns the current value if any contained value matches the predicate, None otherwise.
 **/
   public static function filter<A>(option: Option<A>, f: A -> Bool): Option<A>

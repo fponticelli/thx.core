@@ -71,7 +71,7 @@ It returns an iterator of strings containing all the field keys in the object.
 It returns an iterator of values in the object.
 **/
   public function iterator() : Iterator<V>
-    return keys().map(function(k) return Reflect.field(o, k)).iterator();
+    return keys().fmap(Reflect.field.bind(o, _));
 
 /**
 It returns a string representation of the object.

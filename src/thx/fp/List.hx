@@ -1,5 +1,6 @@
 package thx.fp;
 
+import thx.Monoid;
 using thx.Arrays;
 using thx.Functions;
 
@@ -22,6 +23,9 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
       case Nil: b;
       case Cons(x, xs): xs.foldLeft(f(b, x), f);
     }
+
+  public function foldMap<B>(f: A -> B, m: Monoid<B>): B
+    return map(f).foldLeft(m.zero, m.append);
 
   public function flatMap<B>(f : A -> List<B>) : List<B>
     return switch this {
