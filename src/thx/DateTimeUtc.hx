@@ -669,6 +669,9 @@ Returns true if this date and the `other` date share the same year, month, day, 
   inline public function toDateTime(?offset : Time) : DateTime
     return new DateTime(self(), null == offset ? Time.zero : offset);
 
+  inline public function toLocalDateTime() : DateTime
+    return new DateTime(self(), DateTime.localOffset());
+
   //1997-07-16T19:20:30Z
   public function toString() {
     if(null == this)
