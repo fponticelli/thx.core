@@ -26,6 +26,7 @@ import thx.Int64s;
 import thx.Ints;
 import thx.Iterables;
 import thx.Iterators;
+import thx.LocalDate;
 import thx.Make;
 import thx.Maps;
 import thx.Monoid;

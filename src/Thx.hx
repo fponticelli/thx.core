@@ -22,6 +22,7 @@ typedef Error = thx.Error;
 typedef Floats = thx.Floats;
 typedef HashSet<T : { function hashCode() : Int; }> = thx.HashSet<T>;
 typedef HaxeMath = Math;
+typedef LocalDate = thx.LocalDate;
 typedef Functions0 = thx.Functions.Functions0;
 typedef Functions1 = thx.Functions.Functions1;
 typedef Functions2 = thx.Functions.Functions2;
