@@ -14,25 +14,12 @@ abstract LocalDate(Int) {
   static var millisPerMinute : Float = millisPerSecond * 60;
   static var millisPerHour : Float = millisPerMinute * 60;
   static var millisPerDay : Float = millisPerHour * 24;
-//
-//   static var tenI64 : Int = 10;
-//   static var hundredI64 : Int = 100;
-//   static var thousandI64 : Int = 1000;
-//   static var tenThousandI64 : Int = 10000;
-//   static var millionI64 : Int = 1000000;
-//   static var daysPerMicrosecondI64 : Int = tenI64;
-//   static var daysPerMillisecond : Int = 10000;
-//   static var daysPerMillisecondI64 : Int = Int.ofInt(daysPerMillisecond);
-//   static var daysPerSecondI64 : InLocalDatet64 = daysPerMillisecondI64 * 1000;
-//   static var daysPerMinuteI64 : Int = daysPerSecondI64 * 60;
-//   static var daysPerHourI64 : Int = daysPerMinuteI64 * 60;
-//   static var daysPerDayI64 : Int = daysPerHourI64 * 24;
-//
+
   static var daysPerYear : Int = 365;
   static var daysPer4Years : Int = daysPerYear * 4 + 1;       // 1461
   static var daysPer100Years : Int = daysPer4Years * 25 - 1;  // 36524
   static var daysPer400Years : Int = daysPer100Years * 4 + 1; // 146097
-//
+
   static var unixEpochDays : Int = daysPer400Years * 4 + daysPer100Years * 3 + daysPer4Years * 17 + daysPerYear; // 719,162
 
   static var DATE_PART_YEAR = 0;
@@ -42,7 +29,7 @@ abstract LocalDate(Int) {
 
   static var daysToMonth365 = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365];
   static var daysToMonth366 = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366];
-//
+
 /**
 Returns the system date/time relative to UTC.
 */
@@ -53,7 +40,7 @@ Returns the system date/time relative to UTC.
 #else
     return fromDate(Date.now());
 #end
-//
+
 /**
 Returns a LocalDate instance from an `Int` value. The value is the number of days
 since 1 C.E. (A.D.).
@@ -162,7 +149,6 @@ Creates a LocalDate instance from its components (year, mont, day).
     }
     return throw new Error('bad year-month-day $year-$month-$day');
   }
-
 
 /**
 Creates an array of dates that begin at `start` and end at `end` included.
