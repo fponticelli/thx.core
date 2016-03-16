@@ -246,11 +246,11 @@ class TestArrays {
 
 #if !cs
   public function testGroupByAnonymous() {
-    var panels = [{ level : 1 }, { level : 2 }];
+    var panels = [{ level : 1 }, { level : 1 }, { level : 2 }];
     var map = new Map();
     var results = panels.groupByAppend(function(el) : Int return el.level, map);
     Assert.same([
-      1 => [{ level : 1 }],
+      1 => [{ level : 1 }, { level : 1 }],
       2 => [{ level : 2 }],
     ], results);
   }

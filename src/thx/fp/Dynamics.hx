@@ -99,4 +99,22 @@ class Dynamics {
         };
       case other: failureNel(err('$v is not array-valued (type resolved to $other)'));
     };
+
+  public static function parseMap<E, K, V>(v: Dynamic, f: String -> Dynamic -> VNel<E, Tuple<K, V>>, keyOrder: Ord<K>, err: String -> E): VNel<E, thx.fp.Map<K, V>> {
+    return if (Reflect.isObject(v)) {
+      Reflect.fields(v).traverseValidation(
+        function(field: String) return f(field, Reflect.getProperty(v, field)), 
+        Nel.semigroup()
+      ).flatMapV(
+        function(tuples) return Arrays.toMap(tuples, keyOrder).leftMap(
+          function(collidingKeys) return collidingKeys.map(
+            function(key) return err('Key ${key} occurred multiple types in in object $v')
+          )
+        )
+      );
+    } else {
+      failureNel(err('$v is not object-valued (type resolved to ${Type.typeof(v)})'));
+    };
+  }
+
 }
