@@ -55,6 +55,12 @@ Finds the first occurrance of `element` and returns all the elements after it.
   inline public static function after<T>(array : ReadonlyArray<T>, element : T)
     return array.slice(array.indexOf(element)+1);
 
+  /**
+   * Safe indexed access to array elements.
+   */
+  public static function atIndex<T>(array : ReadonlyArray<T>, i: Int): Option<T>
+    return if (i >= 0 && i < array.length) Some(array[i]) else None;
+
 /**
 Applies a side-effect function to all elements in the array.
 **/
@@ -551,10 +557,6 @@ Same as `Array.map` but it adds a second argument to the `callback` function wit
     #end
   }
 
-  public static function forEach<A>(array: ReadonlyArray<A>, f: A -> Void): Void {
-    for(i in 0...array.length) f(array[i]);
-  }
-
 /**
 Same as `Array.map` but traverses the array from the last to the first element.
 **/
@@ -610,6 +612,18 @@ It applies a function against an accumulator and each value of the array (from l
    */
   public static inline function foldLeft<A, B>(array: ReadonlyArray<A>, init: B, f: B -> A -> B): B
     return reduce(array, f, init);
+
+  public static function foldLeftEither<A, E, B>(array: ReadonlyArray<A>, init: B, f: B -> A -> Either<E, B>): Either<E, B> {
+    var acc: Either<E, B> = Right(init);
+    for (a in array) {
+      switch acc {
+        case Left(error): return acc;
+        case Right(b): acc = f(b, a);
+      }
+    }
+
+    return acc;
+  }
 
   /**
    * Fold by mapping the contained values into some monoidal type and reducing with that monoid.
@@ -999,6 +1013,25 @@ Finds the min element of the array given the specified ordering.
 **/
   public static function minBy<A>(arr: ReadonlyArray<A>, ord: Ord<A>): Option<A>
     return arr.length == 0 ? None : Some(reduce(arr, ord.min, arr[0])); 
+
+  /**
+   * Convert an array of tuples to a map. If there are collisions between keys,
+   * return an error.
+   */
+  public static function toMap<K, V>(arr: ReadonlyArray<Tuple<K, V>>, keyOrder: Ord<K>): VNel<K, thx.fp.Map<K, V>> {
+    var m = thx.fp.Map.empty();
+    var collisions: Array<K> = [];
+    for (i in 0...arr.length) {
+      var tuple = arr[i];
+      if (m.lookup(tuple._0, keyOrder).isNone()) {
+        m = m.insert(tuple._0, tuple._1, keyOrder);
+      } else {
+        collisions.push(tuple._0);
+      }
+    }
+
+    return Options.toFailure(Nel.fromArray(collisions), m);
+  }
 
 #if js
   static function __init__() {

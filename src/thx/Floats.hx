@@ -243,6 +243,9 @@ Similar to `wrap`, it works for numbers between 0 and `max`.
    * The ordering instance for floating-point values.
    */
   public static var order(default, never) = Ord.fromIntComparison(compare);
+
+  public static var monoid(default, never): Monoid<Float> = 
+    { zero: 0.0, append: function(a: Float, b: Float) return a + b };
 }
 
 typedef HaxeMath = Math;
