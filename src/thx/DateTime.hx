@@ -72,8 +72,7 @@ a `DateTime` type.
     return new DateTime(DateTimeUtc.fromTime(timestamp), Time.zero);
 
 /**
-Converts a string into a `DateTime` value. The format accepted is looks like
-this:
+Converts a string into a `DateTime` value. The accepted format looks like this:
 ```
 2016-08-07T23:18:22.123Z
 ```
