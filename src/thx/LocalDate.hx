@@ -1,14 +1,12 @@
 package thx;
 
-// using haxe.Int;
-// import thx.TimePeriod;
-// import thx.Weekday;
 using thx.Ints;
 using thx.Strings;
 
 /**
-`Date` represents a date (without time) between `???` and `???`.
-
+`Date` represents a date (without time) between 5879611-07-12 and -5879611-07-13
+(the actual boundary values are platform specific and depend on the precision
+of the `Int` type).
 `Date` represents a moment in time with no time-offset information.
 */
 abstract LocalDate(Int) {
