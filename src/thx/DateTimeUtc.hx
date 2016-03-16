@@ -11,7 +11,7 @@ using thx.Strings;
 `DateTimeUtc` represents a UTC instant between `-29228-09-14T02:48:05.4775807Z`
 and `29228-09-14T02:48:05.4775807Z`.
 
-`DateTimeUtc` represents an moment in time with no time-zone offset and it is
+`DateTimeUtc` represents a moment in time with no time-zone offset and it is
 relative to UTC (Coordinated Universal Time).
 */
 abstract DateTimeUtc(Int64) {

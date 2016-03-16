@@ -70,7 +70,7 @@ class TestDateTime {
               .addSeconds(7)
               .addMilliseconds(7),
         e = "2018-05-07T04:50:37.007-06:00";
-    Assert.isTrue(d == "2018-05-07T04:50:37.007-06:00", 'expected $e but got $d');
+    Assert.isTrue(d == e, 'expected $e but got $d');
   }
 
   public function testOffset() {
