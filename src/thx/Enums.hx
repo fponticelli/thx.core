@@ -28,6 +28,12 @@ are compared using the same rules applied for `thx.Arrays.compare`.
   }
 
 /**
+Compares two enum instances for equality ignoring the constructor arguments.
+**/
+  inline public static function sameConstructor<T : EnumValue>(a : T, b : T) : Bool
+    return Type.enumIndex(a) == Type.enumIndex(b);
+
+/**
 Returns the lower between two enum instances. Sequence is determined by their
 index in the type definition.
 **/
