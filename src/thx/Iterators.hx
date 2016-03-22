@@ -206,7 +206,7 @@ Refer to `thx.Arrays.reduce`.
   public static function reduce<TElement, TAcc>(it : Iterator<TElement>, callback : TAcc -> TElement -> TAcc, initial : TAcc) : TAcc {
     var result = initial;
     while (it.hasNext()) {
-      result = callback(initial, it.next());
+      result = callback(result, it.next());
     }
     return result;
   }

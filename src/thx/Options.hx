@@ -130,6 +130,13 @@ will be empty if `Option` is `None` or will contain one value otherwise.
     };
 
 /**
+`isNone` determines whether the option is a None
+**/
+  #if ((haxe <= 3.2) && java) @:generic #end
+  public static function isNone<T>(option: Option<T>): Bool
+    return !toBool(option);
+
+/**
 `toOption` transforms any type T into `Option<T>`. If the value is null, the result
 is be `None`.
 **/
@@ -196,6 +203,18 @@ is be `None`.
     return switch option {
       case None: Validation.failureNel(error);
       case Some(v): Validation.successNel(v);
+    };
+
+  public static function toFailure<E, T>(error: Option<E>, value: T): Validation<E, T>
+    return switch error {
+      case None: Validation.success(value);
+      case Some(e): Validation.failure(e);
+    };
+
+  public static function toFailureNel<E, T>(error: Option<E>, value: T): Validation.VNel<E, T>
+    return switch error {
+      case None: Validation.successNel(value);
+      case Some(e): Validation.failureNel(e);
     };
 
   inline static public function ap2<X, A, B, C>(f: A -> B -> C, v1: Option<A>, v2: Option<B>): Option<C>

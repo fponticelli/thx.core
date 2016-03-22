@@ -5,6 +5,7 @@
 package thx;
 
 import utest.Assert;
+import thx.Ord;
 
 using thx.Strings;
 
@@ -264,5 +265,11 @@ lines";
     var t = "a☺b☺☺c☺☺☺",
         e = "☺☺☺c☺☺b☺a";
     Assert.same(e, t.reverse());
+  }
+
+  public function testOrder() {
+    Assert.equals(EQ, Strings.order.order("companyId", "companyId"));
+    Assert.equals(LT, Strings.order.order("companyIc", "companyId"));
+    Assert.equals(GT, Strings.order.order("companyId", "companyIc"));
   }
 }
