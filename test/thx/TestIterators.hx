@@ -20,4 +20,9 @@ class TestIterators {
     Assert.isFalse(a.iterator().equals(b.iterator()));
     Assert.isFalse(a.iterator().equals(c.iterator()));
   }
+
+  public function testReduce() {
+    var a = [2, 3, 5, 7];
+    Assert.equals(17, a.iterator().reduce(function(a, b) return a + b, 0));
+  }
 }
