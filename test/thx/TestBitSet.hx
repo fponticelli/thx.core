@@ -51,7 +51,6 @@ class TestBitSet {
     Assert.same(33, bits.length);
     Assert.same('111111111111111111111111111111111', bits.toString());
 
-    js.Lib.debug();
     bits.clearAll();
     Assert.same(33, bits.length);
     Assert.same('000000000000000000000000000000000', bits.toString());
