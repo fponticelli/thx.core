@@ -11,8 +11,9 @@ using thx.Ints;
   Attemptiing to access an index which is < 0 or >= the BitSet length will result in
   an exception.
 **/
-@:forward(setAll, clearAll, raw, toString)
-abstract BitSet(BitSetImpl) from BitSetImpl {
+abstract BitSet(Array<Int32>) from Array<Int32> {
+  static inline var blockSize = 32;
+
 /**
   Gives the number of bit values currently held in the BitSet
 **/
@@ -22,19 +23,25 @@ abstract BitSet(BitSetImpl) from BitSetImpl {
   Creates a new, empty BitSet
 **/
   public function new(?length : Int = 0) {
-    this = new BitSetImpl(length);
+    this = [length]; // store the bitset length at block index 0
   }
 
-  public function get_length() {
-    return this.length;
+  function get_length() {
+    return this[0];
   }
 
 /**
-  Gets a bit value at the given index
+  Gets a bit value at the given index.  If the index is outside the BitSet size, an error is thrown.
 **/
   @:arrayAccess
   public function at(index : Int) : Bool {
-    return this.at(index);
+    if (index < 0 || index > length) {
+      throw new Error('BitSet: index $index out of bounds');
+    }
+    var blockIndex = Math.floor(index / blockSize) + 1;
+    var block = this[blockIndex];
+    var bitIndex = index % blockSize;
+    return (block & (1 << bitIndex)) != 0;
   }
 
 /**
@@ -42,48 +49,16 @@ abstract BitSet(BitSetImpl) from BitSetImpl {
 **/
   @:arrayAccess
   public function setAt(index : Int, value : Bool) : Bool {
-    return this.setAt(index, value);
-  }
-}
-
-class BitSetImpl {
-  static inline var blockSize = 32;
-  public var length(get, null) : Int;
-  var blocks : Array<Int32>;
-
-  public function new(?length : Int = 0) {
-    this.blocks = [];
-    this.length = length;
-  }
-
-  public function get_length() {
-    return length;
-  }
-
-  public function at(index : Int) : Bool {
-    if (index < 0 || index > length) {
-      throw new Error('BitSet index $index is out of bounds');
-    }
-    var blockIndex = Math.floor(index / blockSize);
-    if (blocks[blockIndex] == null) {
-      blocks[blockIndex] = 0;
-    }
-    var block = blocks[blockIndex];
+    if ((index + 1) > length) this[0] = index + 1;
+    var blockIndex = Math.floor(index / blockSize) + 1;
     var bitIndex = index % blockSize;
-    return (block & (1 << bitIndex)) != 0;
+    this[blockIndex] |= (1 << bitIndex);
+    return value;
   }
 
-  public function setAt(index : Int, value : Bool) : Bool {
-    if ((index + 1) > length) length = index + 1;
-    var blockIndex = Math.floor(index / blockSize);
-    if (blocks[blockIndex] == null) {
-      blocks[blockIndex] = 0;
-    }
-    var bitIndex = index % blockSize;
-    blocks[blockIndex] |= (1 << bitIndex);
-    return (blocks[blockIndex] & (1 << bitIndex)) != 0;
-  }
-
+/**
+  Sets all bits in the BitSet to true (does not change length)
+**/
   public function setAll() : BitSet {
     for (i in 0...length) {
       setAt(i, true);
@@ -91,6 +66,9 @@ class BitSetImpl {
     return this;
   }
 
+/**
+  Sets all bits in the BitSet to false (does not change length)
+**/
   public function clearAll() : BitSet {
     for (i in 0...length) {
       setAt(i, false);
@@ -98,13 +76,12 @@ class BitSetImpl {
     return this;
   }
 
-  public function raw() : Array<Int32> {
-    return blocks;
-  }
-
+/**
+  Returns a string representation of the BitSet
+**/
   public function toString() : String {
     return length.range().map(function(index) {
-      return at(index);
+      return at(index) ? '1' : '0';
     }).join("");
   }
 }

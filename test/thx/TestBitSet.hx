@@ -9,7 +9,7 @@ class TestBitSet {
   public function testBitSet() {
     var bits = new BitSet();
     Assert.same(0, bits.length);
-    Assert.same([], bits.raw());
+    Assert.same('', bits.toString());
 
     Assert.raises(function() { var bit = bits[0]; });
     Assert.raises(function() { var bit = bits[-1]; });
@@ -18,19 +18,19 @@ class TestBitSet {
 
     bits[0] = true;
     Assert.same(1, bits.length);
-    Assert.same([1], bits.raw());
+    Assert.same('1', bits.toString());
 
     bits[1] = true;
     Assert.same(2, bits.length);
-    Assert.same([3], bits.raw());
+    Assert.same('11', bits.toString());
 
     bits[2] = true;
     Assert.same(3, bits.length);
-    Assert.same([7], bits.raw());
+    Assert.same('111', bits.toString());
 
     bits[32] = true;
     Assert.same(33, bits.length);
-    Assert.same([7, 1], bits.raw());
+    Assert.same('111000000000000000000000000000001', bits.toString());
 
     for (i in 0...bits.length) {
       if (Arrays.contains([0, 1, 2, 32], i)) {
