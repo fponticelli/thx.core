@@ -52,7 +52,11 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
     if ((index + 1) > length) this[0] = index + 1;
     var blockIndex = Math.floor(index / blockSize) + 1;
     var bitIndex = index % blockSize;
-    this[blockIndex] |= (1 << bitIndex);
+    if (value) {
+      this[blockIndex] |= (1 << bitIndex);
+    } else {
+      this[blockIndex] &= ~(1 << bitIndex);
+    }
     return value;
   }
 

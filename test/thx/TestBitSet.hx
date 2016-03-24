@@ -28,12 +28,17 @@ class TestBitSet {
     Assert.same(3, bits.length);
     Assert.same('111', bits.toString());
 
+    bits[1] = false;
+    Assert.same(3, bits.length);
+    Assert.same('101', bits.toString());
+
+
     bits[32] = true;
     Assert.same(33, bits.length);
-    Assert.same('111000000000000000000000000000001', bits.toString());
+    Assert.same('101000000000000000000000000000001', bits.toString());
 
     for (i in 0...bits.length) {
-      if (Arrays.contains([0, 1, 2, 32], i)) {
+      if (Arrays.contains([0, 2, 32], i)) {
         Assert.isTrue(bits[i]);
       } else {
         Assert.isFalse(bits[i]);
@@ -41,6 +46,15 @@ class TestBitSet {
     }
 
     Assert.raises(function() { var bit = bits[bits.length + 1]; });
+
+    bits.setAll();
+    Assert.same(33, bits.length);
+    Assert.same('111111111111111111111111111111111', bits.toString());
+
+    js.Lib.debug();
+    bits.clearAll();
+    Assert.same(33, bits.length);
+    Assert.same('000000000000000000000000000000000', bits.toString());
   }
 
   public function testPresetLength() {
