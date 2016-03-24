@@ -54,9 +54,9 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
       case Right(a): f(b, a);
     };
 
-/**
- * Fold by mapping the contained value into some monoidal type and reducing with that monoid.
- */
+  /**
+   * Fold by mapping the contained value into some monoidal type and reducing with that monoid.
+   */
   public function foldMap<B>(f: A -> B, m: Monoid<B>): B
     return (map(f): Validation<E, B>).foldLeft(m.zero, m.append);
 
@@ -82,6 +82,12 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
 
   inline public function wrapNel(): VNel<E, A>
     return (either.leftMap(Nel.pure) : Either<Nel<E>, A>);
+
+  public function ensure(p: A -> Bool, error: E): Validation<E, A>
+    return switch this {
+      case Right(a): if (p(a)) this else failure(error);
+      case left: left;
+    };
 
   // This is not simply flatMap because it is not consistent with ap,
   // as should be the case in other monads. It is equivalent to
@@ -133,5 +139,12 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
 class ValidationExtensions {
   public static inline function leftMapNel<E, E0, A>(n: VNel<E, A>, f: E -> E0): VNel<E0, A>
     return n.leftMap(function(n) return n.map(f));
+
+  public static function ensureNel<E, A>(v: VNel<E, A>, p: A -> Bool, error: E): VNel<E, A>
+    return switch v {
+      case Right(a): if (p(a)) v else Validation.failureNel(error);
+      case left: left;
+    };
+
 }
 

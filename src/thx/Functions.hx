@@ -72,6 +72,18 @@ of the following one.
   public inline static function compose<TIn, TRet1, TRet2>(fa : TRet2 -> TRet1, fb : TIn -> TRet2): TIn -> TRet1
     return function(v : TIn) return fa(fb(v));
 
+  /**
+   * The covariant functor for Function1<A, _>
+   */
+  public inline static function map<A, B, C>(fab: A -> B, fbc: B -> C): A -> C
+    return function(a: A) return fbc(fab(a));
+
+  /**
+   * The contravariant functor for Function1<_, B>. Equivalent to compose.
+   */
+  public inline static function contramap<A, B, C>(fbc: B -> C, fab: A -> B): A -> C
+    return function(a: A) return fbc(fab(a));
+
 /**
 `join` creates a function that calls the 2 functions passed as arguments in sequence
 and passes the same argument value to the both of them.
