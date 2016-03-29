@@ -7,6 +7,7 @@ class TestAll {
     runner.addCase(new thx.TestArrays());
     runner.addCase(new thx.TestAssert());
     runner.addCase(new thx.TestBigInt());
+    runner.addCase(new thx.TestBitMatrix());
     runner.addCase(new thx.TestBitSet());
     runner.addCase(new thx.TestChar());
     runner.addCase(new thx.TestChars());
