@@ -26,6 +26,24 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
     this = [length]; // store the bitset length at block index 0
   }
 
+/**
+  Converts an Array<Bool> to a BitSet
+**/
+  public static function fromBools(values : Array<Bool>) : BitSet {
+    return Arrays.reducei(values, function(acc : BitSet, value, i) {
+      acc.setAt(i, value);
+      return acc;
+    }, new BitSet());
+  }
+
+  public static function fromString(str : String) : BitSet {
+    var chars = str.split("");
+    return Arrays.reducei(chars, function(acc : BitSet, char, i) {
+      acc.setAt(i, char == "1");
+      return acc;
+    }, new BitSet());
+  }
+
   function get_length() {
     return this[0];
   }
@@ -87,5 +105,72 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
     return length.range().map(function(index) {
       return at(index) ? '1' : '0';
     }).join("");
+  }
+
+/**
+  ANDs together this BitSet with another BitSet.
+  No changes are made to this BitSet.
+**/
+  @:op(A & B)
+  public function and(other : BitSet) : BitSet {
+    var l = Ints.max(length, other.length);
+    return Arrays.reduce(l.range(), function(acc : BitSet, i) {
+      acc.setAt(i, at(i) && other.at(i));
+      return acc;
+    }, new BitSet());
+  }
+
+/**
+  ORs together this BitSet with another BitSet.
+  No changes are made to this BitSet.
+**/
+  @:op(A | B)
+  public function or(other : BitSet) : BitSet {
+    var l = Ints.max(length, other.length);
+    return Arrays.reduce(l.range(), function(acc : BitSet, i) {
+      acc.setAt(i, at(i) || other.at(i));
+      return acc;
+    }, new BitSet());
+  }
+
+/**
+  XORs together this BitSet with another BitSet.
+  No changes are made to this BitSet.
+**/
+  @:op(A ^ B)
+  public function xor(other : BitSet) : BitSet {
+    var l = Ints.max(length, other.length);
+    return Arrays.reduce(l.range(), function(acc : BitSet, i) {
+      var left = at(i);
+      var right = other.at(i);
+      acc.setAt(i, (left && !right) || (!left && right));
+      return acc;
+    }, new BitSet());
+  }
+
+/**
+  Returns a new BitSet that is a bitwise negation of this BitSet.
+  No changes are made to this BitSet.
+**/
+  @:op(~A)
+  public function negate() : BitSet {
+    return Arrays.reduce(length.range(), function(acc : BitSet, i) {
+      acc.setAt(i, !at(i));
+      return acc;
+    }, new BitSet());
+  }
+
+  @:op(A == B)
+  public function equals(other : BitSet) : Bool {
+    if (length != other.length) return false;
+    for (i in 0...length) {
+      if (at(i) != other.at(i)) return false;
+    }
+    return true;
+  }
+
+  @:op(A != B)
+  public function notEquals(other : BitSet) : Bool {
+    return !equals(other);
   }
 }
