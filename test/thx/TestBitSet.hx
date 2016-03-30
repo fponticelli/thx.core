@@ -163,4 +163,12 @@ class TestBitSet {
     Assert.isTrue(BitSet.fromString('11111111') == ~BitSet.fromString('00000000'));
     Assert.isTrue(BitSet.fromString('01010011') == ~BitSet.fromString('10101100'));
   }
+
+  public function testClone() {
+    var a = BitSet.fromString('0101');
+    var b = a.clone();
+    b.setAt(0, true);
+    Assert.same('0101', a.toString());
+    Assert.same('1101', b.toString());
+  }
 }

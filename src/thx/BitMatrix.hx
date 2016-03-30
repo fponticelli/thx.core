@@ -2,6 +2,9 @@ package thx;
 
 import thx.BitSet;
 import thx.Error;
+using thx.Arrays;
+using thx.Functions;
+using thx.Ints;
 
 abstract BitMatrix(Array<BitSet>) {
   public var bitSetCount(get, never) : Int;
@@ -12,6 +15,25 @@ abstract BitMatrix(Array<BitSet>) {
     for (i in 0...bitSetCount) {
       setBitSetAt(i, new BitSet(length));
     }
+  }
+
+  public static function fromBitSets(bitSets : Array<BitSet>) {
+    var bitMatrix = new BitMatrix();
+    for (i in 0...bitSets.length) {
+      bitMatrix.setBitSetAt(i, bitSets[i]);
+    }
+    return bitMatrix;
+  }
+
+  public static function fromBools(input : Array<Array<Bool>>) : BitMatrix {
+    var bitSets = input.map.fn(BitSet.fromBools(_));
+    return fromBitSets(bitSets);
+  }
+
+  public static function fromString(input : String, ?delimiter : String = ",") : BitMatrix {
+    var bitSetStrings = input.split(delimiter);
+    var bitSets = bitSetStrings.map(BitSet.fromString);
+    return fromBitSets(bitSets);
   }
 
   function get_bitSetCount() : Int {
@@ -47,5 +69,24 @@ abstract BitMatrix(Array<BitSet>) {
   public function setBitAt(bitSetIndex : Int, bitIndex : Int, value : Bool) : Bool {
     var bitSet = bitSetAt(bitSetIndex);
     return bitSet[bitIndex] = value;
+  }
+
+  public function clone() : BitMatrix {
+    return Arrays.reduce(bitSetCount.range(), function(acc : BitMatrix, i) {
+      acc.setBitSetAt(i, bitSetAt(i).clone());
+      return acc;
+    }, new BitMatrix());
+  }
+
+  public function toString(?delimiter : String = ",") : String {
+    return this.map.fn(_.toString()).join(delimiter);
+  }
+
+  public function equals(other : BitMatrix) : Bool {
+    if (bitSetCount != other.bitSetCount) return false;
+    for (i in 0...bitSetCount) {
+      if (!bitSetAt(i).equals(other.bitSetAt(i))) return false;
+    }
+    return true;
   }
 }

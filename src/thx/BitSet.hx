@@ -79,6 +79,16 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   }
 
 /**
+  Clones this BitSet
+**/
+  public function clone() : BitSet {
+    return Arrays.reduce(length.range(), function(acc : BitSet, i) {
+      acc.setAt(i, at(i));
+      return acc;
+    }, new BitSet());
+  }
+
+/**
   Sets all bits in the BitSet to true (does not change length)
 **/
   public function setAll() : BitSet {
