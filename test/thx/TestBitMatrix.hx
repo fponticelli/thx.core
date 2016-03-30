@@ -30,4 +30,29 @@ class TestBitMatrix {
     Assert.equals('000', bits[1].toString());
     Assert.equals('101', bits[2].toString());
   }
+
+  public function testClone() {
+    var bits = new BitMatrix(2, 3);
+    bits[0][0] = true;
+    bits[0][1] = true;
+    bits[0][2] = true;
+    bits[1][0] = false;
+    bits[1][1] = false;
+    bits[1][2] = false;
+    var clone = bits.clone();
+    clone[0][1] = false;
+    clone[1][1] = true;
+    Assert.same('111,000', bits.toString());
+    Assert.same('101,010', clone.toString());
+  }
+
+  public function testFromToString() {
+    var bits = BitMatrix.fromString('000,111,101,010');
+    Assert.same('000,111,101,010', bits.toString());
+  }
+
+  public function testFromToBools() {
+    var bits = BitMatrix.fromBools([[true, true], [false, false], [true, false], [false, true]]);
+    Assert.same('11,00,10,01', bits.toString());
+  }
 }
