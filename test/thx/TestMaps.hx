@@ -4,6 +4,7 @@ import utest.Assert;
 using thx.Arrays;
 using thx.Iterators;
 using thx.Maps;
+using thx.Options;
 
 class TestMaps {
   public function new() { }
@@ -32,6 +33,13 @@ class TestMaps {
     ];
     var values = map.values().order(Ints.compare);
     Assert.same([1, 2, 3], values);
+  }
+
+  public function testGetOption() {
+    var map = [ "key1" => 1];
+
+    Assert.same(map.getOption("key1").get(), 1);
+    Assert.same(map.getOption("key2").toBool(), false);
   }
 
   public function testMerge() {

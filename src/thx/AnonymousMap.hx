@@ -37,6 +37,12 @@ It gets the value at the specified key.
     return Reflect.field(o, k);
 
 /**
+Null-safe get
+**/
+  public function getOption(k : String) : haxe.ds.Option<V>
+    return Options.ofValue(get(k));
+
+/**
 `getObject` returns the undetlying anonymous object.
 **/
   public inline function getObject() : {}
