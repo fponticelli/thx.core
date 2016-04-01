@@ -1,5 +1,6 @@
 package thx;
 
+import haxe.ds.Option;
 import thx.Functions.Functions in F;
 import thx.Tuple;
 #if macro
@@ -68,6 +69,12 @@ Get the element at the `index` position.
   }
 
 /**
+Refer to `thx.Arrays.getOption`
+**/
+  public static function getOption<T>(it : Iterator<T>, index : Int) : Option<T>
+    return Options.ofValue(get(it, index));
+
+/**
 Refer to `thx.Arrays.eachPair`.
 **/
   public static function eachPair<TIn, TOut>(it : Iterator<TIn>, handler : TIn -> TIn -> Bool)
@@ -92,6 +99,12 @@ Refer to `thx.Arrays.find`.
         return element;
     return null;
   }
+
+/**
+Refer to `thx.Arrays.findOption`.
+**/
+  public static function findOption<T, TFind>(it : Iterator<T>, f : T -> Bool) : Option<T>
+    return Options.ofValue(find(it, f));
 
 /**
 Refer to `thx.Arrays.first`.
@@ -169,7 +182,7 @@ Refer to `Array.map`.
    * Produce a new Iterator that lazily applies the provided function to
    * each element of this iterator.
    */
-  public static function fmap<T, S>(it : Iterator<T>, f : T -> S) : Iterator<S> 
+  public static function fmap<T, S>(it : Iterator<T>, f : T -> S) : Iterator<S>
     return new MapIterator(it, f);
 
 /**
@@ -188,7 +201,7 @@ Refer to `thx.Arrays.mapi`.
    * each element of this iterator and an index value that increases with
    * each application.
    */
-  public static function fmapi<T, S>(it : Iterator<T>, f : T -> Int -> S) : Iterator<S> 
+  public static function fmapi<T, S>(it : Iterator<T>, f : T -> Int -> S) : Iterator<S>
     return new MapIIterator(it, f);
 
 /**
@@ -225,7 +238,7 @@ Refer to `thx.Arrays.reducei`.
   /**
    * Fold by mapping the contained values into some monoidal type and reducing with that monoid.
    */
-  public static function foldMap<A, B>(it: Iterator<A>, f: A -> B, m: Monoid<B>): B 
+  public static function foldMap<A, B>(it: Iterator<A>, f: A -> B, m: Monoid<B>): B
     return foldLeft(fmap(it, f), m.zero, m.append);
 
 /**

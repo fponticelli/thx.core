@@ -56,6 +56,12 @@ Refer to `thx.Arrays.find`.
     return Iterators.find(it.iterator(), predicate);
 
 /**
+Refer to `thx.Arrays.findOption`.
+**/
+  inline public static function findOption<T, TFind>(it : Iterable<T>, predicate : T -> Bool) : Option<T>
+    return Options.ofValue(find(it, predicate));
+
+/**
 Refer to `thx.Arrays.first`.
 **/
   inline public static function first<T, TFind>(it : Iterable<T>) : Null<T>
@@ -66,6 +72,12 @@ Get the element at the `index` position.
 **/
   inline public static function get<T>(it : Iterable<T>, index : Int) : Null<T>
     return Iterators.get(it.iterator(), index);
+
+/**
+Refer to `thx.Arrays.getOption`.
+**/
+  inline public static function getOption<T>(it : Iterable<T>, index : Int) : Option<T>
+    return Options.ofValue(get(it, index));
 
 /**
 Refer to `thx.Arrays.last`.
