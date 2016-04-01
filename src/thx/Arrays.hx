@@ -55,11 +55,19 @@ Finds the first occurrance of `element` and returns all the elements after it.
   inline public static function after<T>(array : ReadonlyArray<T>, element : T)
     return array.slice(array.indexOf(element)+1);
 
-  /**
-   * Safe indexed access to array elements.
-   */
+/**
+Safe indexed access to array elements. Deprecated in favor of `getOption`.
+**/
+  @:deprecated("atIndex is deprecated, use getOption instead")
   public static function atIndex<T>(array : ReadonlyArray<T>, i: Int): Option<T>
     return if (i >= 0 && i < array.length) Some(array[i]) else None;
+
+/**
+Safe indexed access to array elements.
+Null values within `array` will also return `None` instead of `Some(null)`.
+**/
+  public static function getOption<T>(array : ReadonlyArray<T>, i : Int) : Option<T>
+    return Options.ofValue(array[i]);
 
 /**
 Applies a side-effect function to all elements in the array.
@@ -957,13 +965,13 @@ Pairs the elements of five arrays in an array of `Tuple5`.
   /**
    * Zip two arrays by applying the provided function to the aligned members.
    */
-  public static function zip2Ap<A, B, C>(f: A -> B -> C, ax: ReadonlyArray<A>, bx: ReadonlyArray<B>): Array<C> 
+  public static function zip2Ap<A, B, C>(f: A -> B -> C, ax: ReadonlyArray<A>, bx: ReadonlyArray<B>): Array<C>
     return zipAp(bx, ax.map(Functions2.curry(f)));
 
   /**
    * Zip three arrays by applying the provided function to the aligned members.
    */
-  public static function zip3Ap<A, B, C, D>(f: A -> B -> C -> D, ax: ReadonlyArray<A>, bx: ReadonlyArray<B>, cx: ReadonlyArray<C>): Array<D> 
+  public static function zip3Ap<A, B, C, D>(f: A -> B -> C -> D, ax: ReadonlyArray<A>, bx: ReadonlyArray<B>, cx: ReadonlyArray<C>): Array<D>
     return zipAp(cx, zip2Ap(Functions3.curry(f), ax, bx));
 
   /**
@@ -1006,13 +1014,13 @@ Returns a copy of the array with the new element inserted at position `pos`.
 Finds the min element of the array given the specified ordering.
 **/
   public static function maxBy<A>(arr: ReadonlyArray<A>, ord: Ord<A>): Option<A>
-    return arr.length == 0 ? None : Some(reduce(arr, ord.max, arr[0])); 
+    return arr.length == 0 ? None : Some(reduce(arr, ord.max, arr[0]));
 
 /**
 Finds the min element of the array given the specified ordering.
 **/
   public static function minBy<A>(arr: ReadonlyArray<A>, ord: Ord<A>): Option<A>
-    return arr.length == 0 ? None : Some(reduce(arr, ord.min, arr[0])); 
+    return arr.length == 0 ? None : Some(reduce(arr, ord.min, arr[0]));
 
   /**
    * Convert an array of tuples to a map. If there are collisions between keys,
