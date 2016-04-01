@@ -2,6 +2,7 @@ package thx;
 
 using thx.OrderedMap;
 using thx.Iterators;
+using thx.Options;
 import utest.Assert;
 
 class TestOrderedMap {
@@ -46,6 +47,14 @@ class TestOrderedMap {
 
     Assert.same(["Z", "X"], ml.toArray());
     Assert.same(["z", "x"], ml.keys().toArray());
+  }
+
+  public function testGetOption() {
+    var m = OrderedMap.createString();
+    m.set("key1", 1);
+
+    Assert.same(m.getOption("key1").get(), 1);
+    Assert.same(m.getOption("key2").toBool(), false);
   }
 
   public function testToTuples() {

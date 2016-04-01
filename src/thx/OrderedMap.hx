@@ -20,6 +20,9 @@ abstract OrderedMap<K, V>(OrderedMapImpl<K, V>) to IMap<K, V> {
   inline function new(inst : OrderedMapImpl<K, V>)
     this = inst;
 
+  inline public function getOption(key : K)
+    return Options.ofValue(get(key));
+
   @:arrayAccess public inline function get(key : K)
     return this.get(key);
   @:arrayAccess public inline function at(index : Int) : Null<V>
