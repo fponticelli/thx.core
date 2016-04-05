@@ -55,11 +55,19 @@ Finds the first occurrance of `element` and returns all the elements after it.
   inline public static function after<T>(array : ReadonlyArray<T>, element : T)
     return array.slice(array.indexOf(element)+1);
 
-  /**
-   * Safe indexed access to array elements.
-   */
+/**
+Safe indexed access to array elements. Deprecated in favor of `getOption`.
+**/
+  @:deprecated("atIndex is deprecated, use getOption instead")
   public static function atIndex<T>(array : ReadonlyArray<T>, i: Int): Option<T>
     return if (i >= 0 && i < array.length) Some(array[i]) else None;
+
+/**
+Safe indexed access to array elements.
+Null values within `array` will also return `None` instead of `Some(null)`.
+**/
+  public static function getOption<T>(array : ReadonlyArray<T>, i : Int) : Option<T>
+    return Options.ofValue(array[i]);
 
 /**
 Applies a side-effect function to all elements in the array.

@@ -1,5 +1,6 @@
 package thx;
 
+import haxe.ds.Option;
 import thx.Functions;
 
 @:forward(length, copy, filter, iterator, join, map, slice, toString)
@@ -90,4 +91,36 @@ abstract ReadonlyArray<T>(Array<T>) from Array<T> {
 
   inline public function append(el : T) : ReadonlyArray<T>
     return this.concat([el]);
+
+/**
+  Alias for prepend
+**/
+  inline public function unshift(el : T) : ReadonlyArray<T>
+    return prepend(el);
+
+/**
+  Removes and returns the value at the beginning of the array.  The original ReadonlyArray is unchanged.
+**/
+  public function shift() : Tuple<Null<T>, ReadonlyArray<T>> {
+    if (this.length == 0) return new Tuple(null, this);
+    var value = this[0];
+    var array = removeAt(0);
+    return new Tuple(value, array);
+  }
+
+/**
+  Alias for append
+**/
+  inline public function push(el : T) : ReadonlyArray<T>
+    return append(el);
+
+/**
+  Removes and returns the value at the end of the array.  The original ReadonlyArray is unchanged.
+**/
+  inline public function pop() : Tuple<Null<T>, ReadonlyArray<T>> {
+    if (this.length == 0) return new Tuple(null, this);
+    var value = this[this.length - 1];
+    var array = removeAt(this.length - 1);
+    return new Tuple(value, array);
+  }
 }

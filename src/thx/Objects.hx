@@ -1,5 +1,6 @@
 package thx;
 
+import haxe.ds.Option;
 import thx.Dynamics;
 import thx.Tuple;
 using thx.Arrays;
@@ -227,6 +228,12 @@ E.g. { key1: { key2: [1, 2, 3] } }.getPath("key1.key2.2") -> returns 3
     }
     return current;
   }
+
+  /**
+  Null-safe getPath
+  **/
+  public static function getPathOption(o : {}, path : String) : Option<Dynamic>
+    return Options.ofValue(getPath(o, path));
 
   /**
   Gets a value from an object by a string path.  The path can contain object keys and array indices separated
