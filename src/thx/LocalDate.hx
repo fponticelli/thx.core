@@ -453,9 +453,11 @@ Returns true if this date and the `other` date share the same year and month.
     return addMonths(years * 12);
 
   public function compareTo(other : LocalDate) : Int {
+#if(js || php || neko)
     if(null == other && this == null) return 0;
     if(null == this) return -1;
     else if(null == other) return 1;
+#end
     return Ints.compare(days, other.days);
   }
 

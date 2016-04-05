@@ -603,9 +603,11 @@ Returns true if this date and the `other` date share the same year, month, day, 
     return addMonths(years * 12);
 
   public function compareTo(other : DateTimeUtc) : Int {
+#if(js || php || neko)
     if(null == other && this == null) return 0;
     if(null == this) return -1;
     else if(null == other) return 1;
+#end
     return Int64s.compare(ticks, other.ticks);
   }
 
@@ -674,8 +676,10 @@ Returns true if this date and the `other` date share the same year, month, day, 
 
   //1997-07-16T19:20:30Z
   public function toString() {
+#if(js || php || neko)
     if(null == this)
       return "";
+#end
     var abs = DateTimeUtc.fromInt64(ticks.abs());
     var decimals = abs.tickInSecond != 0 ? '.' + abs.tickInSecond.lpad("0", 7).trimCharsRight(")") : "";
     var isneg = ticks < Int64s.zero;

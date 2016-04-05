@@ -957,13 +957,13 @@ Pairs the elements of five arrays in an array of `Tuple5`.
   /**
    * Zip two arrays by applying the provided function to the aligned members.
    */
-  public static function zip2Ap<A, B, C>(f: A -> B -> C, ax: ReadonlyArray<A>, bx: ReadonlyArray<B>): Array<C> 
+  public static function zip2Ap<A, B, C>(f: A -> B -> C, ax: ReadonlyArray<A>, bx: ReadonlyArray<B>): Array<C>
     return zipAp(bx, ax.map(Functions2.curry(f)));
 
   /**
    * Zip three arrays by applying the provided function to the aligned members.
    */
-  public static function zip3Ap<A, B, C, D>(f: A -> B -> C -> D, ax: ReadonlyArray<A>, bx: ReadonlyArray<B>, cx: ReadonlyArray<C>): Array<D> 
+  public static function zip3Ap<A, B, C, D>(f: A -> B -> C -> D, ax: ReadonlyArray<A>, bx: ReadonlyArray<B>, cx: ReadonlyArray<C>): Array<D>
     return zipAp(cx, zip2Ap(Functions3.curry(f), ax, bx));
 
   /**
@@ -1006,13 +1006,13 @@ Returns a copy of the array with the new element inserted at position `pos`.
 Finds the min element of the array given the specified ordering.
 **/
   public static function maxBy<A>(arr: ReadonlyArray<A>, ord: Ord<A>): Option<A>
-    return arr.length == 0 ? None : Some(reduce(arr, ord.max, arr[0])); 
+    return arr.length == 0 ? None : Some(reduce(arr, ord.max, arr[0]));
 
 /**
 Finds the min element of the array given the specified ordering.
 **/
   public static function minBy<A>(arr: ReadonlyArray<A>, ord: Ord<A>): Option<A>
-    return arr.length == 0 ? None : Some(reduce(arr, ord.min, arr[0])); 
+    return arr.length == 0 ? None : Some(reduce(arr, ord.min, arr[0]));
 
   /**
    * Convert an array of tuples to a map. If there are collisions between keys,
@@ -1096,13 +1096,13 @@ Filters out all null or Math.NaN floats in the array
 Finds the max float element in the array.
 **/
   public static function max(arr : ReadonlyArray<Float>) : Null<Float>
-    return Arrays.maxBy(arr, Floats.order).getOrElse(null);
+    return Arrays.maxBy(arr, Floats.order).get();
 
 /**
 Finds the min float element in the array.
 **/
   public static function min(arr : ReadonlyArray<Float>) : Null<Float>
-    return Arrays.minBy(arr, Floats.order).getOrElse(null);
+    return Arrays.minBy(arr, Floats.order).get();
 
 /**
 Resizes an array of `Float` to an arbitrary length by adding more elements (default is `0.0`)
@@ -1151,13 +1151,13 @@ Finds the average of all the elements in the array.
 Finds the max int element in the array.
 **/
   public static function max(arr : ReadonlyArray<Int>) : Null<Int>
-    return Arrays.maxBy(arr, Ints.order).getOrElse(null);
+    return Arrays.maxBy(arr, Ints.order).get();
 
 /**
 Finds the min int element in the array.
 **/
   public static function min(arr : ReadonlyArray<Int>) : Null<Int>
-    return Arrays.minBy(arr, Ints.order).getOrElse(null);
+    return Arrays.minBy(arr, Ints.order).get();
 
 /**
 Resizes an array of `Int` to an arbitrary length by adding more elements (default is `0`)
