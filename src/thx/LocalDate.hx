@@ -34,12 +34,7 @@ abstract LocalDate(Int) {
 Returns the system date/time relative to UTC.
 */
   public static function now() : LocalDate
-// Date.getTime() in C# is broken hence the special case
-#if cs // because of issue https://github.com/HaxeFoundation/haxe/issues/4452
-    return new LocalDate(cs.system.LocalDate.Now.ToUniversalTime().Days);
-#else
     return fromDate(Date.now());
-#end
 
 /**
 Returns a LocalDate instance from an `Int` value. The value is the number of days
@@ -52,11 +47,7 @@ since 1 C.E. (A.D.).
 Transforms a Haxe native `Date` instance into `LocalDate`.
 */
   @:from public static function fromDate(date : Date) : LocalDate
-#if cs // because of issue https://github.com/HaxeFoundation/haxe/issues/4452
-    return new LocalDate(untyped date.date.Days);
-#else
     return fromTime(date.getTime());
-#end
 
 /**
 Transforms an epoch time value in milliconds into `LocalDate`.
@@ -513,8 +504,10 @@ Returns true if this date and the `other` date share the same year and month.
 
   //1997-07-16
   public function toString() {
+#if(js || php || neko)
     if(null == this)
       return "";
+#end
     var abs = LocalDate.fromInt(Ints.abs(days));
     var isneg = days < 0;
     return (isneg ? "-" : "") + '${abs.year}-${abs.month.lpad("0", 2)}-${abs.day.lpad("0", 2)}';
