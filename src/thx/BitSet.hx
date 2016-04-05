@@ -121,7 +121,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   ANDs together this BitSet with another BitSet.
   No changes are made to this BitSet.
 **/
-  @:op(A & B)
+  #if (haxe_ver >= 3.300) @:op(A & B) #end
   public function and(other : BitSet) : BitSet {
     var l = Ints.max(length, other.length);
     return Arrays.reduce(l.range(), function(acc : BitSet, i) {
@@ -134,7 +134,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   ORs together this BitSet with another BitSet.
   No changes are made to this BitSet.
 **/
-  @:op(A | B)
+  #if (haxe_ver >= 3.300) @:op(A | B) #end
   public function or(other : BitSet) : BitSet {
     var l = Ints.max(length, other.length);
     return Arrays.reduce(l.range(), function(acc : BitSet, i) {
@@ -147,7 +147,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   XORs together this BitSet with another BitSet.
   No changes are made to this BitSet.
 **/
-  @:op(A ^ B)
+  #if (haxe_ver >= 3.300) @:op(A ^ B) #end
   public function xor(other : BitSet) : BitSet {
     var l = Ints.max(length, other.length);
     return Arrays.reduce(l.range(), function(acc : BitSet, i) {
@@ -162,7 +162,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   Returns a new BitSet that is a bitwise negation of this BitSet.
   No changes are made to this BitSet.
 **/
-  @:op(~A)
+  #if (haxe_ver >= 3.200) @:op(~A) #end
   public function negate() : BitSet {
     return Arrays.reduce(length.range(), function(acc : BitSet, i) {
       acc.setAt(i, !at(i));

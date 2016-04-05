@@ -53,3 +53,5 @@ install:
 
 script:
   - haxe "hxml/$TARGET.run.hxml" -D travis
+
+# force restart
