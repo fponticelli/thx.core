@@ -69,7 +69,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   public function setAt(index : Int, value : Bool) : Bool {
     if ((index + 1) > length) this[0] = index + 1;
     var blockIndex = Math.floor(index / blockSize) + 1;
-    var bitIndex = index % blockSize;
+    var bitIndex : Int32 = index % blockSize;
     if (value) {
       this[blockIndex] |= (1 << bitIndex);
     } else {
