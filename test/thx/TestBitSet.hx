@@ -128,8 +128,8 @@ class TestBitSet {
     var b3 = BitSet.fromString('00000000');
     var b4 = BitSet.fromString('111');
     var b5 = BitSet.fromString('000');
-    Assert.isTrue(BitSet.fromString('10101100') == (b1 & b2));
-    Assert.isTrue(BitSet.fromString('00000000') == (b1 & b3));
+    Assert.isTrue(BitSet.fromString('10101100') == (b1.and(b2)));
+    Assert.isTrue(BitSet.fromString('00000000') == (b1.and(b3)));
     Assert.raises(function() { b1 & b4; });
     Assert.raises(function() { b1 & b5; });
   }
@@ -140,8 +140,8 @@ class TestBitSet {
     var b3 = BitSet.fromString('00000000');
     var b4 = BitSet.fromString('111');
     var b5 = BitSet.fromString('000');
-    Assert.isTrue(BitSet.fromString('11111111') == (b1 | b2));
-    Assert.isTrue(BitSet.fromString('10101100') == (b1 | b3));
+    Assert.isTrue(BitSet.fromString('11111111') == (b1.or(b2)));
+    Assert.isTrue(BitSet.fromString('10101100') == (b1.or(b3)));
     Assert.raises(function() { b1 | b4; });
     Assert.raises(function() { b1 | b5; });
   }
@@ -154,14 +154,14 @@ class TestBitSet {
     var b5 = BitSet.fromString('000');
     Assert.isTrue(BitSet.fromString('01010011') == (b1 ^ b2));
     Assert.isTrue(BitSet.fromString('10101100') == (b1 ^ b3));
-    Assert.raises(function() { b1 ^ b4; });
-    Assert.raises(function() { b1 ^ b5; });
+    Assert.raises(function() { b1.xor(b4); });
+    Assert.raises(function() { b1.xor(b5); });
   }
 
   public function testNegate() {
-    Assert.isTrue(BitSet.fromString('00000000') == ~BitSet.fromString('11111111'));
-    Assert.isTrue(BitSet.fromString('11111111') == ~BitSet.fromString('00000000'));
-    Assert.isTrue(BitSet.fromString('01010011') == ~BitSet.fromString('10101100'));
+    Assert.isTrue(BitSet.fromString('00000000') == BitSet.fromString('11111111').negate());
+    Assert.isTrue(BitSet.fromString('11111111') == BitSet.fromString('00000000').negate());
+    Assert.isTrue(BitSet.fromString('01010011') == BitSet.fromString('10101100').negate());
   }
 
   public function testClone() {
