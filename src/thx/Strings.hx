@@ -247,11 +247,12 @@ version of the string.
 /**
 Same as `filter` but `predicate` operates on integer char codes instead of string characters.
 **/
-  public static function filterCharcode(s : String, predicate : Int -> Bool)
-    return toCharcodes(s)
-      .filter(predicate)
-      .map(function(i) return String.fromCharCode(i))
+  public static function filterCharcode(s : String, predicate : Int -> Bool) {
+    var codes : Array<Int> = toCharcodes(s).filter(predicate);
+    return codes
+      .map(function(i : Int) return String.fromCharCode(i))
       .join('');
+  }
 
 /**
 `from` searches for the first occurrance of `searchFor` and returns the text from that point on.

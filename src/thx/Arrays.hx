@@ -730,8 +730,10 @@ Returns one element at random from the array or null if the array is empty.
 /**
 Converts an `Array<T>` into a string.
 **/
-  public static function string<T>(arr : ReadonlyArray<T>) : String
-    return "[" + arr.map(Dynamics.string).join(", ") + "]";
+  public static function string<T>(arr : ReadonlyArray<T>) : String {
+    var strings : Array<String> = arr.map(Dynamics.string);
+    return "[" + strings.join(", ") + "]";
+  }
 
 /**
 It returns a copy of the array with its elements randomly changed in position.
