@@ -53,7 +53,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
 **/
   @:arrayAccess
   public function at(index : Int) : Bool {
-    if (index < 0 || index > length) {
+    if (index < 0 || index >= length) {
       throw new Error('BitSet: index $index out of bounds');
     }
     var blockIndex = Math.floor(index / blockSize) + 1;
