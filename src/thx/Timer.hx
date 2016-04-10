@@ -286,7 +286,7 @@ Note that the initial value might change from platform to platform so only delta
   static function __init__() untyped {
     // Polyfills
     // SCOPE
-    var scope : Dynamic = __js__('("undefined" !== typeof window && window) || ("undefined" !== typeof global && global) || this');
+    var scope : Dynamic = __js__('("undefined" !== typeof window && window) || ("undefined" !== typeof global && global) || Function("return this")()');
 
     // setImmediate
     if(!scope.setImmediate)
