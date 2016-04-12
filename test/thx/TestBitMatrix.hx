@@ -57,7 +57,7 @@ class TestBitMatrix {
   public function testAnd() {
     var b1 = BitMatrix.fromString('11,00');
     var b2 = BitMatrix.fromString('10,10');
-    var actual = b1 & b2;
+    var actual = b1.and(b2);
     var expected = BitMatrix.fromString('10,00');
     Assert.isTrue(expected.equals(actual));
   }
@@ -65,7 +65,7 @@ class TestBitMatrix {
   public function testOr() {
     var b1 = BitMatrix.fromString('11,00');
     var b2 = BitMatrix.fromString('10,10');
-    var actual = b1 | b2;
+    var actual = b1.or(b2);
     var expected = BitMatrix.fromString('11,10');
     Assert.isTrue(expected.equals(actual));
   }
@@ -73,14 +73,14 @@ class TestBitMatrix {
   public function testXor() {
     var b1 = BitMatrix.fromString('11,00');
     var b2 = BitMatrix.fromString('10,10');
-    var actual = b1 ^ b2;
+    var actual = b1.xor(b2);
     var expected = BitMatrix.fromString('01,10');
     Assert.isTrue(expected.equals(actual));
   }
 
   public function testNegate() {
     var b1 = BitMatrix.fromString('11,00');
-    var actual = ~b1;
+    var actual = b1.negate();
     var expected = BitMatrix.fromString('00,11');
     Assert.isTrue(expected.equals(actual));
   }
