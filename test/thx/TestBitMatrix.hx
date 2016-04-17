@@ -27,6 +27,22 @@ class TestBitMatrix {
     bits.setBitAt(2, 1, false);
     bits.setBitAt(2, 2, true);
     Assert.equals('111,000,101', bits.toString());
+
+    // Can't set bit in non-existent BitSet
+    Assert.raises(function() { bits.setBitAt(3, 0, true); });
+
+    // Can set bits beyond length
+    bits.setBitAt(0, 3, true);
+    Assert.equals('1111,0000,1010', bits.toString());
+    Assert.same(4, bits.length);
+
+    bits.setBitAt(1, 4, true);
+    Assert.equals('11110,00001,10100', bits.toString());
+    Assert.same(5, bits.length);
+
+    bits.setBitAt(2, 5, true);
+    Assert.equals('111100,000010,101001', bits.toString());
+    Assert.same(6, bits.length);
   }
 
   public function testClone() {
@@ -51,7 +67,35 @@ class TestBitMatrix {
 
   public function testFromToBools() {
     var bits = BitMatrix.fromBools([[true, true], [false, false], [true, false], [false, true]]);
-    Assert.same('11,00,10,01', bits.toString());
+    Assert.same([[true, true], [false, false], [true, false], [false, true]], bits.toBools());
+  }
+
+  public function testConcat() {
+    var b1 = BitMatrix.fromString('000,111,101,010');
+    var b2 = BitMatrix.fromString('111,000,111,000');
+    var b3 = b1.concat(b2);
+    Assert.same('000,111,101,010', b1.toString());
+    Assert.same('111,000,111,000', b2.toString());
+    Assert.same('000111,111000,101111,010000', b3.toString());
+    Assert.same(4, b1.bitSetCount);
+    Assert.same(4, b2.bitSetCount);
+    Assert.same(4, b3.bitSetCount);
+    Assert.same(3, b1.length);
+    Assert.same(3, b2.length);
+    Assert.same(6, b3.length);
+
+    Assert.raises(function(){
+      var b1 = BitMatrix.fromString('000,111');
+      var b2 = BitMatrix.fromString('000,111,000');
+      b1.concat(b2);
+    });
+  }
+
+  public function testExpand() {
+    var b1 = BitMatrix.fromString('000,111,101,010');
+    var b2 = b1.expand(3);
+    Assert.same('000,111,101,010', b1.toString());
+    Assert.same('000000000,111111111,111000111,000111000', b2.toString());
   }
 
   public function testAnd() {

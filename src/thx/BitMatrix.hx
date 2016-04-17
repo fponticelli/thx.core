@@ -30,15 +30,24 @@ abstract BitMatrix(Array<BitSet>) from Array<BitSet> {
     return bitMatrix;
   }
 
+  @:from
   public static function fromBools(input : Array<Array<Bool>>) : BitMatrix {
     var bitSets = input.map.fn(BitSet.fromBools(_));
     return fromBitSets(bitSets);
   }
 
+  @:from
   public static function fromString(input : String, ?delimiter : String = ",") : BitMatrix {
     var bitSetStrings = input.split(delimiter);
     var bitSets = bitSetStrings.map(BitSet.fromString);
     return fromBitSets(bitSets);
+  }
+
+  @:to
+  public function toBools() : Array<Array<Bool>> {
+    return this.map(function(bitSet) {
+      return bitSet.toBools();
+    });
   }
 
   public function bitAt(bitSetIndex : Int, bitIndex : Int) : Bool {
@@ -47,6 +56,11 @@ abstract BitMatrix(Array<BitSet>) from Array<BitSet> {
   }
 
   public function setBitAt(bitSetIndex : Int, bitIndex : Int, value : Bool) : Bool {
+    if (bitIndex >= length) {
+      for (bitSet in this) {
+        bitSet.setAt(bitIndex, false);
+      }
+    }
     var bitSet = bitSetAt(bitSetIndex);
     return bitSet[bitIndex] = value;
   }
@@ -56,6 +70,24 @@ abstract BitMatrix(Array<BitSet>) from Array<BitSet> {
       acc.setBitSetAt(i, bitSetAt(i).clone());
       return acc;
     }, new BitMatrix());
+  }
+
+  public function concat(right : BitMatrix) : BitMatrix {
+    var left : BitMatrix = this;
+    if (left.bitSetCount != right.bitSetCount) {
+      throw new Error('cannot concat bit matrices with different bit set counts');
+    }
+    var bitSets = left.bitSetCount.range().reduce(function(bitSets : Array<BitSet>, bitSetIndex) {
+      bitSets[bitSetIndex] = left.bitSetAt(bitSetIndex).concat(right.bitSetAt(bitSetIndex));
+      return bitSets;
+    }, []);
+    return fromBitSets(bitSets);
+  }
+
+  public function expand(count : Int) : BitMatrix {
+    return fromBitSets(this.map(function(bitSet) {
+      return bitSet.expand(count);
+    }));
   }
 
   public function toString(?delimiter : String = ",") : String {

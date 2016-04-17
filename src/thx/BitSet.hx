@@ -1,6 +1,7 @@
 package thx;
 
 import haxe.Int32;
+import thx.Arrays;
 using thx.Ints;
 
 /**
@@ -36,6 +37,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
 /**
   Converts an Array<Bool> to a BitSet
 **/
+  @:from
   public static function fromBools(values : Array<Bool>) : BitSet {
     return Arrays.reducei(values, function(acc : BitSet, value, i) {
       acc.setAt(i, value);
@@ -46,12 +48,23 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
 /**
   Converts a string of 0s and 1s (e.g. "10101") to a BitSet
 **/
+  @:from
   public static function fromString(str : String) : BitSet {
     var chars = str.split("");
     return Arrays.reducei(chars, function(acc : BitSet, char, i) {
       acc.setAt(i, char == "1");
       return acc;
     }, new BitSet());
+  }
+
+/**
+  Converts a BitSet into an Array<Bool>
+**/
+  @:to
+  public function toBools() : Array<Bool> {
+    return length.range().map(function(index) {
+      return at(index);
+    });
   }
 
 /**
@@ -109,6 +122,23 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
 **/
   public function clearAll() : BitSet {
     return setAll(false);
+  }
+
+/**
+  Concatenates this BitSet with another BitSet
+**/
+  public function concat(right : BitSet) : BitSet {
+    var left : BitSet = this;
+    return BitSet.fromBools(left.toBools().concat(right.toBools()));
+  }
+
+/**
+  Expands the BitSet by internally copying each bit `count` times.  E.g. `('101' : BitSet).expand(3) => '111000111'`
+**/
+  public function expand(count : Int) : BitSet {
+    return fromBools(thx.Arrays.flatMap(length.range(), function(index) {
+      return thx.Arrays.create(count, at(index));
+    }));
   }
 
 /**
