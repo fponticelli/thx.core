@@ -110,9 +110,11 @@ class TestBitSet {
 
   public function testExpand() {
     var b1 = BitSet.fromString('1011');
-    var b2 = b1.expand(3);
+    var b2 = b1.expand(1);
+    var b3 = b1.expand(3);
     Assert.same('1011', b1.toString());
-    Assert.same('111000111111', b2.toString());
+    Assert.same('11001111', b2.toString());
+    Assert.same('1111000011111111', b3.toString());
   }
 
   public function testEquals() {
