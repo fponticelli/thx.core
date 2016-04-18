@@ -133,11 +133,11 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   }
 
 /**
-  Expands the BitSet by internally copying each bit `count` times.  E.g. `('101' : BitSet).expand(3) => '111000111'`
+  Expands the BitSet by internally copying each bit `count` times.  E.g. `('101' : BitSet).expand(3) => '111100001111'`
 **/
   public function expand(count : Int) : BitSet {
     return fromBools(thx.Arrays.flatMap(length.range(), function(index) {
-      return thx.Arrays.create(count, at(index));
+      return thx.Arrays.create(count + 1, at(index));
     }));
   }
 

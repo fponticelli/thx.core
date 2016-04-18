@@ -93,9 +93,11 @@ class TestBitMatrix {
 
   public function testExpand() {
     var b1 = BitMatrix.fromString('000,111,101,010');
-    var b2 = b1.expand(3);
+    var b2 = b1.expand(1);
+    var b3 = b1.expand(3);
     Assert.same('000,111,101,010', b1.toString());
-    Assert.same('000000000,111111111,111000111,000111000', b2.toString());
+    Assert.same('000000,111111,110011,001100', b2.toString());
+    Assert.same('000000000000,111111111111,111100001111,000011110000', b3.toString());
   }
 
   public function testAnd() {
