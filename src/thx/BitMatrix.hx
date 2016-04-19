@@ -36,7 +36,6 @@ abstract BitMatrix(Array<BitSet>) from Array<BitSet> {
     return fromBitSets(bitSets);
   }
 
-  @:from
   public static function fromString(input : String, ?delimiter : String = ",") : BitMatrix {
     var bitSetStrings = input.split(delimiter);
     var bitSets = bitSetStrings.map(BitSet.fromString);
