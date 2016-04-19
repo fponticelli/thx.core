@@ -55,7 +55,6 @@ class TestConvert {
   public function testDateTimeUtc() {
     var value : Dynamic = null,
         date = Convert.toDateTimeUtc(value);
-    trace(date);
     Assert.isNull(value);
   }
 }
