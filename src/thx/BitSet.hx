@@ -23,14 +23,14 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
 /**
   Creates a new, empty BitSet, with the given length
 **/
-  public function new(?length : Int = 0) {
-    return empty(length);
+  public inline function new(?length : Int = 0) {
+    this = [length];
   }
 
 /**
   Creates a new, empty BitSet, with the given length
 **/
-  public static function empty(?length : Int = 0) : BitSet {
+  public static inline function empty(?length : Int = 0) : BitSet {
     return [length]; // store the BitSet length at block index 0
   }
 
@@ -38,7 +38,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   Converts an Array<Bool> to a BitSet
 **/
   @:from
-  public static function fromBools(values : Array<Bool>) : BitSet {
+  public static inline function fromBools(values : Array<Bool>) : BitSet {
     return Arrays.reducei(values, function(acc : BitSet, value, i) {
       acc.setAt(i, value);
       return acc;
@@ -49,7 +49,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   Converts a string of 0s and 1s (e.g. "10101") to a BitSet
 **/
   @:from
-  public static function fromString(str : String) : BitSet {
+  public static inline function fromString(str : String) : BitSet {
     var chars = str.split("");
     return Arrays.reducei(chars, function(acc : BitSet, char, i) {
       acc.setAt(i, char == "1");
@@ -61,10 +61,15 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   Converts a BitSet into an Array<Bool>
 **/
   @:to
-  public function toBools() : Array<Bool> {
+  public inline function toBools() : Array<Bool> {
     return length.range().map(function(index) {
       return at(index);
     });
+  }
+
+  @:to
+  public inline function toInt32s() : Array<Int32> {
+    return this.slice(1);
   }
 
 /**
@@ -100,7 +105,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
 /**
   Clones this BitSet
 **/
-  public function clone() : BitSet {
+  public inline function clone() : BitSet {
     return Arrays.reduce(length.range(), function(acc : BitSet, i) {
       acc.setAt(i, at(i));
       return acc;
@@ -110,7 +115,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
 /**
   Sets all bits in the BitSet to true (does not change length)
 **/
-  public function setAll(?value : Bool = true) : BitSet {
+  public inline function setAll(?value : Bool = true) : BitSet {
     for (i in 0...length) {
       setAt(i, value);
     }
@@ -120,16 +125,24 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
 /**
   Sets all bits in the BitSet to false (does not change length)
 **/
-  public function clearAll() : BitSet {
+  public inline function clearAll() : BitSet {
     return setAll(false);
   }
 
 /**
   Concatenates this BitSet with another BitSet
 **/
-  public function concat(right : BitSet) : BitSet {
+  public inline function concat(right : BitSet) : BitSet {
     var left : BitSet = this;
-    return BitSet.fromBools(left.toBools().concat(right.toBools()));
+    var result = BitSet.empty(left.length + right.length);
+    var index = 0;
+    for (leftIndex in 0...left.length) {
+      result.setAt(index++, left.at(leftIndex));
+    }
+    for (rightIndex in 0...right.length) {
+      result.setAt(index++, right.at(rightIndex));
+    }
+    return result;
   }
 
 /**

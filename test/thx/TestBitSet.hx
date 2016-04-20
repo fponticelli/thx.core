@@ -70,6 +70,11 @@ class TestBitSet {
     Assert.same([true, false, true, false, true], bits.toBools());
   }
 
+  public function testToInt32s() {
+    var bits = BitSet.fromString('10101');
+    var result = bits.toInt32s();
+    Assert.same([21], result);
+  }
 
   public function testFromString() {
     var bits = BitSet.fromString('1011');
