@@ -49,6 +49,13 @@ abstract Ord<A> (A -> A -> Ordering) from A -> A -> Ordering to A -> A -> Orderi
   public function inverse(): Ord<A> 
     return function(a0: A, a1: A) { return this(a1, a0); };
 
+  public function intComparison(a0: A, a1: A): Int
+    return switch this(a0, a1) {
+      case LT: -1;
+      case EQ: 0;
+      case GT: 1;
+    };
+
   public static function fromIntComparison<A>(f : A -> A -> Int) : Ord<A>
     return function(a : A, b : A) { return Ordering.fromInt(f(a, b)); };
 
@@ -57,4 +64,5 @@ abstract Ord<A> (A -> A -> Ordering) from A -> A -> Ordering to A -> A -> Orderi
 
   public static function forComparableOrd<T : ComparableOrd<T>>(): Ord<T>
     return function(a: T, b: T) { return a.compareTo(b); };
+
 }

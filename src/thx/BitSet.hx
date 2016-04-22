@@ -1,6 +1,7 @@
 package thx;
 
 import haxe.Int32;
+import thx.Arrays;
 using thx.Ints;
 
 /**
@@ -20,23 +21,35 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   public var length(get, never) : Int;
 
 /**
-  Creates a new, empty BitSet
+  Creates a new, empty BitSet, with the given length
 **/
-  public function new(?length : Int = 0) {
-    this = [length]; // store the bitset length at block index 0
+  public inline function new(?length : Int = 0) {
+    this = [length];
+  }
+
+/**
+  Creates a new, empty BitSet, with the given length
+**/
+  public static inline function empty(?length : Int = 0) : BitSet {
+    return [length]; // store the BitSet length at block index 0
   }
 
 /**
   Converts an Array<Bool> to a BitSet
 **/
-  public static function fromBools(values : Array<Bool>) : BitSet {
+  @:from
+  public static inline function fromBools(values : Array<Bool>) : BitSet {
     return Arrays.reducei(values, function(acc : BitSet, value, i) {
       acc.setAt(i, value);
       return acc;
     }, new BitSet());
   }
 
-  public static function fromString(str : String) : BitSet {
+/**
+  Converts a string of 0s and 1s (e.g. "10101") to a BitSet
+**/
+  @:from
+  public static inline function fromString(str : String) : BitSet {
     var chars = str.split("");
     return Arrays.reducei(chars, function(acc : BitSet, char, i) {
       acc.setAt(i, char == "1");
@@ -44,8 +57,19 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
     }, new BitSet());
   }
 
-  function get_length() {
-    return this[0];
+/**
+  Converts a BitSet into an Array<Bool>
+**/
+  @:to
+  public inline function toBools() : Array<Bool> {
+    return length.range().map(function(index) {
+      return at(index);
+    });
+  }
+
+  @:to
+  public inline function toInt32s() : Array<Int32> {
+    return this.slice(1);
   }
 
 /**
@@ -81,7 +105,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
 /**
   Clones this BitSet
 **/
-  public function clone() : BitSet {
+  public inline function clone() : BitSet {
     return Arrays.reduce(length.range(), function(acc : BitSet, i) {
       acc.setAt(i, at(i));
       return acc;
@@ -91,9 +115,9 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
 /**
   Sets all bits in the BitSet to true (does not change length)
 **/
-  public function setAll() : BitSet {
+  public inline function setAll(?value : Bool = true) : BitSet {
     for (i in 0...length) {
-      setAt(i, true);
+      setAt(i, value);
     }
     return this;
   }
@@ -101,11 +125,33 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
 /**
   Sets all bits in the BitSet to false (does not change length)
 **/
-  public function clearAll() : BitSet {
-    for (i in 0...length) {
-      setAt(i, false);
+  public inline function clearAll() : BitSet {
+    return setAll(false);
+  }
+
+/**
+  Concatenates this BitSet with another BitSet
+**/
+  public inline function concat(right : BitSet) : BitSet {
+    var left : BitSet = this;
+    var result = BitSet.empty(left.length + right.length);
+    var index = 0;
+    for (leftIndex in 0...left.length) {
+      result.setAt(index++, left.at(leftIndex));
     }
-    return this;
+    for (rightIndex in 0...right.length) {
+      result.setAt(index++, right.at(rightIndex));
+    }
+    return result;
+  }
+
+/**
+  Expands the BitSet by internally copying each bit `count` times.  E.g. `('101' : BitSet).expand(3) => '111100001111'`
+**/
+  public function expand(count : Int) : BitSet {
+    return fromBools(thx.Arrays.flatMap(length.range(), function(index) {
+      return thx.Arrays.create(count + 1, at(index));
+    }));
   }
 
 /**
@@ -122,12 +168,8 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   No changes are made to this BitSet.
 **/
   #if (haxe_ver >= 3.300) @:op(A & B) #end
-  public function and(other : BitSet) : BitSet {
-    var l = Ints.max(length, other.length);
-    return Arrays.reduce(l.range(), function(acc : BitSet, i) {
-      acc.setAt(i, at(i) && other.at(i));
-      return acc;
-    }, new BitSet());
+  public function and(right : BitSet) : BitSet {
+    return combine(right, function(l, r) return l && r);
   }
 
 /**
@@ -135,12 +177,8 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   No changes are made to this BitSet.
 **/
   #if (haxe_ver >= 3.300) @:op(A | B) #end
-  public function or(other : BitSet) : BitSet {
-    var l = Ints.max(length, other.length);
-    return Arrays.reduce(l.range(), function(acc : BitSet, i) {
-      acc.setAt(i, at(i) || other.at(i));
-      return acc;
-    }, new BitSet());
+  public function or(right : BitSet) : BitSet {
+    return combine(right, function(l, r) return l || r);
   }
 
 /**
@@ -148,14 +186,8 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   No changes are made to this BitSet.
 **/
   #if (haxe_ver >= 3.300) @:op(A ^ B) #end
-  public function xor(other : BitSet) : BitSet {
-    var l = Ints.max(length, other.length);
-    return Arrays.reduce(l.range(), function(acc : BitSet, i) {
-      var left = at(i);
-      var right = other.at(i);
-      acc.setAt(i, (left && !right) || (!left && right));
-      return acc;
-    }, new BitSet());
+  public function xor(right : BitSet) : BitSet {
+    return combine(right, function(l, r) return (l && !r) || (!l && r));
   }
 
 /**
@@ -182,5 +214,20 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   @:op(A != B)
   public function notEquals(other : BitSet) : Bool {
     return !equals(other);
+  }
+
+  function combine(right : BitSet, combiner : Bool -> Bool -> Bool) : BitSet {
+    var left : BitSet = this;
+    var length = Ints.max(left.length, right.length);
+    return Arrays.reduce(length.range(), function(acc : BitSet, i) {
+      var leftBit = left.at(i);
+      var rightBit = right.at(i);
+      acc.setAt(i, combiner(leftBit, rightBit));
+      return acc;
+    }, new BitSet());
+  }
+
+  function get_length() {
+    return this[0];
   }
 }

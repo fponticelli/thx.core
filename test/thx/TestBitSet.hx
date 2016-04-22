@@ -65,6 +65,17 @@ class TestBitSet {
     Assert.same(true, bits[3]);
   }
 
+  public function testToBools() {
+    var bits = BitSet.fromString('10101');
+    Assert.same([true, false, true, false, true], bits.toBools());
+  }
+
+  public function testToInt32s() {
+    var bits = BitSet.fromString('10101');
+    var result = bits.toInt32s();
+    Assert.same([21], result);
+  }
+
   public function testFromString() {
     var bits = BitSet.fromString('1011');
     Assert.same(4, bits.length);
@@ -88,6 +99,27 @@ class TestBitSet {
       Assert.isTrue(bits2[i]);
     }
     Assert.raises(function( ) { var bit = bits2[35]; });
+  }
+
+  public function testConcat() {
+    var b1 = BitSet.fromString('10101');
+    var b2 = BitSet.fromString('111');
+    var b3 = b1.concat(b2);
+    Assert.same('10101', b1.toString());
+    Assert.same('111', b2.toString());
+    Assert.same('10101111', b3.toString());
+    Assert.same(5, b1.length);
+    Assert.same(3, b2.length);
+    Assert.same(8, b3.length);
+  }
+
+  public function testExpand() {
+    var b1 = BitSet.fromString('1011');
+    var b2 = b1.expand(1);
+    var b3 = b1.expand(3);
+    Assert.same('1011', b1.toString());
+    Assert.same('11001111', b2.toString());
+    Assert.same('1111000011111111', b3.toString());
   }
 
   public function testEquals() {

@@ -18,7 +18,7 @@ abstract Nel<A> (NonEmptyList<A>) from NonEmptyList<A> to NonEmptyList<A> {
   public static function cons<A>(a: A, nl: NonEmptyList<A>): Nel<A>
     return ConsNel(a, nl);
 
-  public static function fromArray<A>(arr: Array<A>): Option<Nel<A>> 
+  public static function fromArray<A>(arr: ReadonlyArray<A>): Option<Nel<A>> 
     return 
       if (arr.length == 0) None else {
         var res: NonEmptyList<A> = Single(arr[arr.length - 1]);
@@ -36,6 +36,12 @@ abstract Nel<A> (NonEmptyList<A>) from NonEmptyList<A> to NonEmptyList<A> {
     return switch this {
       case Single(x): f(x);
       case ConsNel(x, xs): (f(x): Nel<B>) + xs.flatMap(f);
+    };
+
+  public function fold(s: Semigroup<A>): A
+    return switch this {
+      case Single(x): x;
+      case ConsNel(x, xs): s.append(x, xs.fold(s));
     };
 
   @:op(N+N0) 
