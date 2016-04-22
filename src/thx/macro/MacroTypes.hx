@@ -1,6 +1,7 @@
 package thx.macro;
 
 #if(neko || macro)
+import haxe.macro.ComplexTypeTools;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.TypeTools;
@@ -110,18 +111,21 @@ passed `Type`.
   public static function typeToTypePath(t : Type) : TypePath
     return switch Context.follow(t) {
       case TInst(t, params):
-        baseTypeToTypePath(t.get(), [for (p in params) TPType(qualifyComplexType(Context.toComplexType(p)))]);
+        baseTypeToTypePath(t.get(), [for (p in params) TPType(qualifyType(p))]);
       case TEnum(t, params):
-        baseTypeToTypePath(t.get(), [for (p in params) TPType(qualifyComplexType(Context.toComplexType(p)))]);
+        baseTypeToTypePath(t.get(), [for (p in params) TPType(qualifyType(p))]);
       case TType(t, params):
-        baseTypeToTypePath(t.get(), [for (p in params) TPType(qualifyComplexType(Context.toComplexType(p)))]);
+        baseTypeToTypePath(t.get(), [for (p in params) TPType(qualifyType(p))]);
       case TAbstract(t, params):
-        baseTypeToTypePath(t.get(), [for (p in params) TPType(qualifyComplexType(Context.toComplexType(p)))]);
+        baseTypeToTypePath(t.get(), [for (p in params) TPType(qualifyType(p))]);
       case TMono(t):
         typeToTypePath(t.get());
       case _:
         throw 'Cannot convert this to TypePath: $t';
     };
+
+  public static function qualifyType(t : Type) : ComplexType
+    return qualifyComplexType(Context.toComplexType(Context.follow(t)));
 
   public static function baseTypeToTypePath(t : BaseType, params : Array<TypeParam>) : TypePath
     return {
@@ -142,5 +146,22 @@ If the type cannot be qualified the original `ComplexType` is returned.
     } catch(e : Dynamic) {
       ct;
     };
+
+  public static function simplifiedType(t : Type) : SimplifiedType {
+    var tp = typeToTypePath(t);
+    var name = tp.pack.concat([tp.sub]).join(".");
+    return {
+      name : name,
+      params : tp.params.map(function(p) return switch p {
+        case TPType(t): ComplexTypeTools.toType(qualifyComplexType(t));
+        case TPExpr(e): Context.typeof(e);
+      })
+    };
+  }
+}
+
+typedef SimplifiedType = {
+  name : String,
+  params : Array<Type>
 }
 #end
