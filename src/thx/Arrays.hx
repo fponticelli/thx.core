@@ -645,6 +645,18 @@ It applies a function against an accumulator and each value of the array (from l
   public static function fold<A>(array: ReadonlyArray<A>, m: Monoid<A>): A
     return foldMap(array, Functions.identity, m);
 
+  /**
+   * Safely convert to a non-empty list.
+   */
+  public static function nel<A>(array: ReadonlyArray<A>): Option<Nel<A>>
+    return Nel.fromArray(array);
+
+  /**
+   * Reduce with a semigroup, returning None if the array is empty.
+   */
+  public static function foldS<A>(array: ReadonlyArray<A>, s: Semigroup<A>): Option<A>
+    return nel(array).map(function(x) return x.fold(s));
+
 /**
 Resizes an array of `T` to an arbitrary length by adding more elements to its end
 or by removing extra elements.
