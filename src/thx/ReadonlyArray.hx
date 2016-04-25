@@ -43,6 +43,21 @@ abstract ReadonlyArray<T>(Array<T>) from Array<T> {
   inline public function tail() : ReadonlyArray<T>
     return this.slice(1);
 
+  public function reduce<A, B>(arr : Array<A>, f : B -> A -> B, initial : B) : B {
+    for(v in arr)
+      initial = f(initial, v);
+    return initial;
+  }
+
+  /**
+  It is the same as `reduce` but with the extra integer `index` parameter.
+  **/
+  public static function reducei<A, B>(array : ReadonlyArray<A>, f : B -> A -> Int -> B, initial : B) : B {
+    for(i in 0...array.length)
+      initial = f(initial, array[i], i);
+    return initial;
+  }
+
   public function reverse() : ReadonlyArray<T> {
     var arr = this.copy();
     arr.reverse();

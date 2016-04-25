@@ -108,6 +108,12 @@ class TestArrays {
     Assert.equals(9, [1,3,5,7,9].findLast.fn(_ % 3 == 0));
   }
 
+  public function testIntersperse() {
+    Assert.same([1,2,3,2,5], [1,3,5].intersperse(2));
+    Assert.same([1], [1].intersperse(2));
+    Assert.same([], [].intersperse(2));
+  }
+
   public function testFn() {
     Assert.same([2,4,8], [1,2,4].map.fn(_ * 2));
   }

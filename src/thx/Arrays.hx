@@ -220,7 +220,7 @@ An optional equality function can be passed as the last argument. If not provide
 Creates a new `Array` with `length` elements all set to `fillWith`.
 **/
   public static function create<T>(length : Int, fillWith : T) {
-    var arr = #if js untyped __js__("new Array")(length) #else [] #end;
+    var arr = #if js length > 0 ? untyped __js__("new Array")(length) : [] #else [] #end;
     for(i in 0...length)
       arr[i] = fillWith;
     return arr;
@@ -340,6 +340,18 @@ Filters out all `null` values from an array.
       if(null != v) arr.push(v);
     return arr;
   }
+
+/**
+Filters out all `None` values from an array and extracts `Some(value)` to `value`.
+**/
+  public static function filterOption<T>(a : ReadonlyArray<Option<T>>) : Array<T>
+    return reduce(a, function(acc : Array<T>, maybeV) {
+      switch maybeV {
+        case Some(v): acc.push(v);
+        case None: // don't do anything
+      }
+      return acc;
+    }, []);
 
 /**
 It returns the first element of the array that matches the predicate function.
@@ -539,6 +551,15 @@ Get all the elements from `array` except for the last one.
     return array.slice(0, array.length - 1);
 
 /**
+Creates a new array that alternates the values in `array` with `value`.
+**/
+  public static function intersperse<T>(array : ReadonlyArray<T>, value : T) : Array<T>
+    return reducei(array, function(acc, v, i) {
+      acc[i * 2] = v;
+      return acc;
+    }, create(array.length * 2 - 1, value));
+
+/**
 It returns `true` if the array contains zero elements.
 **/
   inline public static function isEmpty<T>(array : ReadonlyArray<T>) : Bool
@@ -605,14 +626,10 @@ It pushes `value` onto the array if `condition` is true. Also returns the array 
 /**
 It applies a function against an accumulator and each value of the array (from left-to-right) has to reduce it to a single value.
 **/
-  #if js inline #end public static function reduce<TElement, TAcc>(array : ReadonlyArray<TElement>, callback : TAcc -> TElement -> TAcc, initial : TAcc) : TAcc {
-    #if js
-      return untyped array.reduce(callback, initial);
-    #else
-      for(v in array)
-        initial = callback(initial, v);
-      return initial;
-    #end
+  public static function reduce<A, B>(array : ReadonlyArray<A>, f : B -> A -> B, initial : B) : B {
+    for(v in array)
+      initial = f(initial, v);
+    return initial;
   }
 
   /**
@@ -673,22 +690,19 @@ Note that the function changes the passed array and doesn't create a copy.
 /**
 It is the same as `reduce` but with the extra integer `index` parameter.
 **/
-  inline public static function reducei<TElement, TAcc>(array : ReadonlyArray<TElement>, callback : TAcc -> TElement -> Int -> TAcc, initial : TAcc) : TAcc {
-    #if js
-      return untyped array.reduce(callback, initial);
-    #else
-      Arrays.mapi(array, function(v, i) initial = callback(initial, v, i));
-      return initial;
-    #end
+  public static function reducei<A, B>(array : ReadonlyArray<A>, f : B -> A -> Int -> B, initial : B) : B {
+    for(i in 0...array.length)
+      initial = f(initial, array[i], i);
+    return initial;
   }
 
 /**
 Same as `Arrays.reduce` but starting from the last element and traversing to the first
 **/
-  inline public static function reduceRight<TElement, TAcc>(array : ReadonlyArray<TElement>, callback : TAcc -> TElement -> TAcc, initial : TAcc) : TAcc {
+  inline public static function reduceRight<A, B>(array : ReadonlyArray<A>, f : B -> A -> B, initial : B) : B {
     var i = array.length;
     while(--i >= 0)
-      initial = callback(initial, array[i]);
+      initial = f(initial, array[i]);
     return initial;
   }
 
@@ -1054,44 +1068,6 @@ Finds the min element of the array given the specified ordering.
 
     return Options.toFailure(Nel.fromArray(collisions), m);
   }
-
-#if js
-  static function __init__() {
-    untyped __js__("
-      // Production steps of ECMA-262, Edition 5, 15.4.4.21
-      // Reference: http://es5.github.io/#x15.4.4.21
-      if (!Array.prototype.reduce) {
-        Array.prototype.reduce = function(callback /*, initialValue*/) {
-          'use strict';
-          if (this == null) {
-            throw new TypeError('Array.prototype.reduce called on null or undefined');
-          }
-          if (typeof callback !== 'function') {
-            throw new TypeError(callback + ' is not a function');
-          }
-          var t = Object(this), len = t.length >>> 0, k = 0, value;
-          if (arguments.length == 2) {
-            value = arguments[1];
-          } else {
-            while (k < len && ! k in t) {
-              k++;
-            }
-            if (k >= len) {
-              throw new TypeError('Reduce of empty array with no initial value');
-            }
-            value = t[k++];
-          }
-          for (; k < len; k++) {
-            if (k in t) {
-              value = callback(value, t[k], k, t);
-            }
-          }
-          return value;
-        };
-      }
-    ");
-  }
-#end
 }
 
 /**
