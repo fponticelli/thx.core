@@ -624,6 +624,26 @@ It pushes `value` onto the array if `condition` is true. Also returns the array 
   }
 
 /**
+Given an array of values, it returns an array of indexes permutated applying the function `compare`.
+
+```
+var arr = ["C","A","B"];
+var indexes = Arrays.rank(arr, Strings.compare);
+trace(indexes); // output [2,0,1]
+```
+**/
+  public static function rank<T>(array : ReadonlyArray<T>, compare : T -> T -> Int) : Array<Int> {
+    var arr = Arrays.order(
+                Arrays.mapi(array, (function(v, i) return Tuple.of(v, i))),
+                function(a, b) return compare(a.left, b.left)
+              );
+    return  Arrays.reducei(arr, function(acc, x, i) {
+        acc[x.right] = i > 0 && compare(arr[i-1].left, x.left) == 0 ? acc[arr[i-1].right] : i;
+        return acc;
+      }, []);
+  }
+
+/**
 It applies a function against an accumulator and each value of the array (from left-to-right) has to reduce it to a single value.
 **/
   public static function reduce<A, B>(array : ReadonlyArray<A>, f : B -> A -> B, initial : B) : B {

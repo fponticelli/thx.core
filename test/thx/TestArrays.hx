@@ -14,6 +14,22 @@ import haxe.ds.Option;
 class TestArrays {
   public function new() { }
 
+  public function testRank() {
+    var tests = [
+      { test : [3,1,2], expected : [2,0,1] },
+      { test : [1,2,3], expected : [0,1,2] },
+      { test : [3,2,1], expected : [2,1,0] },
+      { test : [2,1], expected : [1,0] },
+      { test : [1,2], expected : [0,1] },
+      { test : [2], expected : [0] },
+      { test : [], expected : [] }
+    ];
+
+    for(item in tests) {
+      Assert.same(item.expected, Arrays.rank(item.test, Ints.compare));
+    }
+  }
+
   public function testWith() {
     var arr = [1];
     Assert.isFalse(arr == arr.with(2)); // test identity
