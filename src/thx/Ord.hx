@@ -32,6 +32,12 @@ class Orderings {
       case GT: GT;
     }
   };
+
+  public static function negate(o: Ordering): Ordering return switch o {
+    case LT: GT;
+    case EQ: EQ;
+    case GT: LT;
+  };
 }
 
 @:callable
