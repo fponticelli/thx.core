@@ -14,6 +14,10 @@ import haxe.ds.Option;
 class TestArrays {
   public function new() { }
 
+  public function testApplyIndexes() {
+    Assert.same(["A", "B", "C"], Arrays.applyIndexes(["B", "C", "A"], [1, 2, 0]));
+  }
+
   public function testRank() {
     var tests = [
       { test : [3,1,2], expected : [2,0,1] },

@@ -40,6 +40,23 @@ Practical for chaining push operations.
     return array;
   }
 
+/**
+Arrays.applyIndexes takes an `array` and returns a copy of it with its elements rearranged according to `indexes`.
+
+var result = Arrays.applyIndexes(["B", "C", "A"], [1, 2, 0]);
+trace(result); // output ["A", "B", "C"]
+**/
+  public static function applyIndexes<T>(array : ReadonlyArray<T>, indexes : Array<Int>) : Array<T> {
+    if(indexes.length != array.length)
+      throw new thx.Error('`Arrays.applyIndexes` can only be applied to two arrays with the same length');
+    var result = [];
+    for(i in 0...array.length) {
+      var index = indexes[i];
+      result[index] = array[i];
+    }
+    return result;
+  }
+
   /**
    * The concatenation monoid for arrays.
    */
