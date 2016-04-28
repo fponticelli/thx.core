@@ -23,6 +23,23 @@ enum OrderingImpl {
   LT; GT; EQ;
 }
 
+class Orderings {
+  public static var monoid(default, never): Monoid<Ordering> = {
+    zero: EQ,
+    append: function(o0: Ordering, o1: Ordering): Ordering return switch o0 {
+      case LT: LT;
+      case EQ: o1;
+      case GT: GT;
+    }
+  };
+
+  public static function negate(o: Ordering): Ordering return switch o {
+    case LT: GT;
+    case EQ: EQ;
+    case GT: LT;
+  };
+}
+
 @:callable
 abstract Ord<A> (A -> A -> Ordering) from A -> A -> Ordering to A -> A -> Ordering {
   public function order(a0: A, a1: A): Ordering
