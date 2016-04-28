@@ -110,4 +110,16 @@ var result2 = (new Map() : Map<String, Int>).merge(map1, map2); // map1 and map2
       }, result);
     }, dest);
   }
+
+  /**
+   * The way that Haxe specializes maps inhibits us from defining a Monoid
+   * instance for maps. The recommended way to reduce an array of maps
+   * is `Nel.nel(new Map(), maps).fold(Maps.semigroup())`
+   */
+  @:generic
+  public static function semigroup<K, V>(): Semigroup<IMap<K, V>> {
+    return function(m0: IMap<K, V>, m1: IMap<K, V>) {
+      return merge(m0, [m1]);
+    }
+  }
 }
