@@ -382,6 +382,27 @@ If none is found it returns null.
   }
 
 /**
+Like `find`, but each item's index is also passed to the predicate.
+**/
+  public static function findi<T>(array : ReadonlyArray<T>, predicate : T -> Int -> Bool) : Null<T> {
+    for(i in 0...array.length)
+      if(predicate(array[i], i))
+        return array[i];
+    return null;
+  }
+
+/**
+Like `findOption`, but each item's index is also passed to the predicate.
+**/
+  public static function findiOption<T>(array : ReadonlyArray<T>, predicate : T -> Int -> Bool) : Option<T> {
+    for(i in 0...array.length)
+      if(predicate(array[i], i))
+        return Some(array[i]);
+    return None;
+  }
+
+
+/**
 It returns the first element of the array that matches the predicate function.
 If none is found it returns null.
 **/
