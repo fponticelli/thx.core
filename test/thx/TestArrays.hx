@@ -116,6 +116,10 @@ class TestArrays {
     Assert.equals(3, [1,3,5,7,9].find(function(item) return item % 3 == 0));
   }
 
+  public function testFindOption() {
+    Assert.equals(3, [1,3,5,7,9].findi(function(item, i) return i == 1));
+  }
+
   public function testFindLast() {
     Assert.equals(9, [1,3,5,7,9].findLast(function(item) return item % 3 == 0));
   }
