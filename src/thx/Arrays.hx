@@ -43,16 +43,28 @@ Practical for chaining push operations.
 /**
 Arrays.applyIndexes takes an `array` and returns a copy of it with its elements rearranged according to `indexes`.
 
+If the `indexes` array does not contain continuous values, you may want to set `incrementDuplicates` to `true`.
+
 var result = Arrays.applyIndexes(["B", "C", "A"], [1, 2, 0]);
 trace(result); // output ["A", "B", "C"]
 **/
-  public static function applyIndexes<T>(array : ReadonlyArray<T>, indexes : Array<Int>) : Array<T> {
+  public static function applyIndexes<T>(array : ReadonlyArray<T>, indexes : Array<Int>, ?incrementDuplicates = false) : Array<T> {
     if(indexes.length != array.length)
       throw new thx.Error('`Arrays.applyIndexes` can only be applied to two arrays with the same length');
     var result = [];
-    for(i in 0...array.length) {
-      var index = indexes[i];
-      result[index] = array[i];
+    if(incrementDuplicates) {
+      var usedIndexes = thx.Set.createInt();
+      for(i in 0...array.length) {
+        var index = indexes[i];
+        while(usedIndexes.exists(index))
+          index++;
+        usedIndexes.add(index);
+        result[index] = array[i];
+      }
+    } else {
+      for(i in 0...array.length) {
+        result[indexes[i]] = array[i];
+      }
     }
     return result;
   }
@@ -643,21 +655,36 @@ It pushes `value` onto the array if `condition` is true. Also returns the array 
 /**
 Given an array of values, it returns an array of indexes permutated applying the function `compare`.
 
+By default `rank` will return continuous values. If you know that your set does not contain duplicates you might want to turn off that feature by setting `incrementDuplicates` to `false`.
+
 ```
 var arr = ["C","A","B"];
 var indexes = Arrays.rank(arr, Strings.compare);
 trace(indexes); // output [2,0,1]
 ```
 **/
-  public static function rank<T>(array : ReadonlyArray<T>, compare : T -> T -> Int) : Array<Int> {
+  public static function rank<T>(array : ReadonlyArray<T>, compare : T -> T -> Int, ?incrementDuplicates = true) : Array<Int> {
     var arr = Arrays.order(
                 Arrays.mapi(array, (function(v, i) return Tuple.of(v, i))),
                 function(a, b) return compare(a.left, b.left)
               );
-    return  Arrays.reducei(arr, function(acc, x, i) {
+    if(incrementDuplicates) {
+      var usedIndexes = thx.Set.createInt();
+      return  Arrays.reducei(arr, function(acc, x, i) {
+        var index = i > 0 && compare(arr[i-1].left, x.left) == 0 ? acc[arr[i-1].right] : i;
+        while(usedIndexes.exists(index)) {
+          index++;
+        }
+        usedIndexes.add(index);
+        acc[x.right] = index;
+        return acc;
+      }, []);
+    } else {
+      return  Arrays.reducei(arr, function(acc, x, i) {
         acc[x.right] = i > 0 && compare(arr[i-1].left, x.left) == 0 ? acc[arr[i-1].right] : i;
         return acc;
       }, []);
+    }
   }
 
 /**

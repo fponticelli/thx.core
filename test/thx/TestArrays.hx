@@ -16,6 +16,7 @@ class TestArrays {
 
   public function testApplyIndexes() {
     Assert.same(["A", "B", "C"], Arrays.applyIndexes(["B", "C", "A"], [1, 2, 0]));
+    Assert.same([1,1,2,2,3], Arrays.applyIndexes([1,3,2,1,2], [0,4,2,0,2], true));
   }
 
   public function testRank() {
@@ -26,11 +27,13 @@ class TestArrays {
       { test : [2,1], expected : [1,0] },
       { test : [1,2], expected : [0,1] },
       { test : [2], expected : [0] },
-      { test : [], expected : [] }
+      { test : [], expected : [] },
+      { test : [1,3,2,1,2], expected : [0,4,2,1,3] }
     ];
 
     for(item in tests) {
-      Assert.same(item.expected, Arrays.rank(item.test, Ints.compare));
+      var ranks = Arrays.rank(item.test, Ints.compare);
+      Assert.same(item.expected, ranks, 'expected ${item.expected} but it is ${ranks}');
     }
   }
 
