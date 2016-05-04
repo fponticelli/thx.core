@@ -622,6 +622,21 @@ It returns the last element of the array or null if the array is empty.
     return array[array.length-1];
 
 /**
+Static wrapper for `Array` `map` function.
+**/
+  #if js inline #end
+  public static function map<TIn, TOut>(array : ReadonlyArray<TIn>, callback : TIn -> TOut) : Array<TOut> {
+    #if js
+    return (cast array : Dynamic).map(callback);
+    #else
+    var r = [];
+    for(v in array)
+      r.push(callback(v));
+    return r;
+    #end
+  }
+
+/**
 Same as `Array.map` but it adds a second argument to the `callback` function with the current index value.
 **/
   #if js inline #end
