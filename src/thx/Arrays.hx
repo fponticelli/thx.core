@@ -8,6 +8,7 @@ import thx.Monoid;
 
 import haxe.ds.Option;
 using thx.Options;
+using thx.Arrays;
 
 
 #if macro
@@ -102,7 +103,7 @@ Null values within `array` will also return `None` instead of `Some(null)`.
 Applies a side-effect function to all elements in the array.
 **/
   public static function each<T>(arr : ReadonlyArray<T>, effect : T -> Void): Void {
-    for(element in arr) effect(element);
+    for (i in 0...arr.length) effect(arr[i]);
   }
 
 /**
@@ -116,8 +117,8 @@ Applies a side-effect function to all elements in the array.
 Checks if `predicate` returns true for all elements in the array.
 **/
   public static function all<T>(arr : ReadonlyArray<T>, predicate : T -> Bool) {
-    for(element in arr)
-      if(!predicate(element))
+    for(i in 0...arr.length)
+      if(!predicate(arr[i]))
         return false;
     return true;
   }
@@ -126,8 +127,8 @@ Checks if `predicate` returns true for all elements in the array.
 Checks if `predicate` returns true for at least one element in the array.
 **/
   public static function any<T>(arr : ReadonlyArray<T>, predicate : T -> Bool) {
-    for(element in arr)
-      if(predicate(element))
+    for(i in 0...arr.length)
+      if(predicate(arr[i]))
         return true;
     return false;
   }
@@ -626,14 +627,10 @@ Static wrapper for `Array` `map` function.
 **/
   #if js inline #end
   public static function map<TIn, TOut>(array : ReadonlyArray<TIn>, callback : TIn -> TOut) : Array<TOut> {
-    #if js
-    return (cast array : Dynamic).map(callback);
-    #else
     var r = [];
-    for(v in array)
-      r.push(callback(v));
+    for(i in 0...array.length)
+      r.push(callback(array[i]));
     return r;
-    #end
   }
 
 /**
@@ -641,14 +638,10 @@ Same as `Array.map` but it adds a second argument to the `callback` function wit
 **/
   #if js inline #end
   public static function mapi<TIn, TOut>(array : ReadonlyArray<TIn>, callback : TIn -> Int -> TOut) : Array<TOut> {
-    #if js
-    return (cast array : Dynamic).map(callback);
-    #else
     var r = [];
     for(i in 0...array.length)
       r.push(callback(array[i], i));
     return r;
-    #end
   }
 
 /**
