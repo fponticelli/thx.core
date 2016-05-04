@@ -19,7 +19,7 @@ abstract State<S, A> (S -> Tuple<S, A>) from S -> Tuple<S, A> {
   public static function putState<S>(s: S): State<S, Unit>
     return (function(_: S) return new Tuple2(s, null));
 
-  public #if !php inline #end function map<B>(f: A -> B): State<S, B> 
+  public #if !php inline #end function map<B>(f: A -> B): State<S, B>
     return (function(s: S) return this(s).map(f));
 
   public function ap<B>(s2: State<S, A -> B>): State<S, B>

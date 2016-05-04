@@ -685,13 +685,11 @@ trace(indexes); // output [2,0,1]
 ```
 **/
   public static function rank<T>(array : ReadonlyArray<T>, compare : T -> T -> Int, ?incrementDuplicates = true) : Array<Int> {
-    var arr = Arrays.order(
-                Arrays.mapi(array, (function(v, i) return Tuple.of(v, i))),
-                function(a, b) return compare(a.left, b.left)
-              );
+    var arr = Arrays.mapi(array, function(v, i) return Tuple.of(v, i));
+    arr.sort(function(a, b) return compare(a.left, b.left));
     if(incrementDuplicates) {
       var usedIndexes = thx.Set.createInt();
-      return  Arrays.reducei(arr, function(acc, x, i) {
+      return Arrays.reducei(arr, function(acc, x, i) {
         var index = i > 0 && compare(arr[i-1].left, x.left) == 0 ? acc[arr[i-1].right] : i;
         while(usedIndexes.exists(index)) {
           index++;

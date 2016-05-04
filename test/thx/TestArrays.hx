@@ -21,19 +21,20 @@ class TestArrays {
 
   public function testRank() {
     var tests = [
-      { test : [3,1,2], expected : [2,0,1] },
-      { test : [1,2,3], expected : [0,1,2] },
-      { test : [3,2,1], expected : [2,1,0] },
-      { test : [2,1], expected : [1,0] },
-      { test : [1,2], expected : [0,1] },
-      { test : [2], expected : [0] },
+      { test : [3,1,2], expected : [1,2,3] },
+      { test : [1,2,3], expected : [1,2,3] },
+      { test : [3,2,1], expected : [1,2,3] },
+      { test : [2,1], expected : [1,2] },
+      { test : [1,2], expected : [1,2] },
+      { test : [2], expected : [2] },
       { test : [], expected : [] },
-      { test : [1,3,2,1,2], expected : [0,4,2,1,3] }
+      { test : [1,3,2,1,2], expected : [1,1,2,2,3] }
     ];
 
     for(item in tests) {
       var ranks = Arrays.rank(item.test, Ints.compare);
-      Assert.same(item.expected, ranks, 'expected ${item.expected} but it is ${ranks}');
+      var applied = Arrays.applyIndexes(item.test, ranks);
+      Assert.same(item.expected, applied, 'expected ${item.expected} but it is ${ranks}');
     }
   }
 
