@@ -146,7 +146,7 @@ If the type cannot be qualified the original `ComplexType` is returned.
     } catch(e : Dynamic) {
       ct;
     };
-
+#if macro
   public static function simplifiedType(t : Type) : SimplifiedType {
     var tp = typeToTypePath(t);
     var name = tp.pack.concat([tp.sub]).join(".");
@@ -158,6 +158,7 @@ If the type cannot be qualified the original `ComplexType` is returned.
       })
     };
   }
+#end
 }
 
 typedef SimplifiedType = {
