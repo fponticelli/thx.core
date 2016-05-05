@@ -1,7 +1,0 @@
--cp src
--cp test
--lib utest
--lib hxjava
--java bin/java
--main TestAll
--D thx-core

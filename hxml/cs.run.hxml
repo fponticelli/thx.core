@@ -1,9 +1,0 @@
--cp src
--cp test
--lib utest
--lib hxcs
--cs bin/cs
--main TestAll
--D thx-core
-
--cmd mono bin/cs/bin/TestAll.exe

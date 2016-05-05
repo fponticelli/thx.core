@@ -1,57 +1,31 @@
+sudo: required
+dist: trusty
+
 language: haxe
 
-sudo: false
+os:
+  - linux
+  - osx
+
+haxe:
+  - "3.2.1"
+  - development
 
 matrix:
-  include:
-    - env: TARGET=cpp
-      haxe: 3.2.1
-    - env: TARGET=cpp
-      haxe: development
-    - env: TARGET=cs
-      haxe: 3.2.1
-      addons: {apt: {packages: [mono-devel, mono-mcs]}}
-    - env: TARGET=cs
-      haxe: development
-      addons: {apt: {packages: [mono-devel, mono-mcs]}}
-    - env: TARGET=java
-      haxe: 3.2.1
-    - env: TARGET=java
-      haxe: development
-    - env: TARGET=js
-      haxe: 3.2.1
-      addons: {apt: {packages: [nodejs]}}
-    - env: TARGET=js
-      haxe: development
-      addons: {apt: {packages: [nodejs]}}
-    - env: TARGET=php
-      haxe: 3.2.1
-      addons: {apt: {packages: [php5-cli]}}
-    - env: TARGET=php
-      haxe: development
-      addons: {apt: {packages: [php5-cli]}}
-    - env: TARGET=neko
-      haxe: 3.2.1
-    - env: TARGET=neko
-      haxe: development
-    - env: TARGET=python
-      haxe: 3.2.1
-      addons: {apt: {packages: [python3]}}
-    - env: TARGET=python
-      haxe: development
-      addons: {apt: {packages: [python3]}}
-
-before_install:
-  - git clone --branch=master git://github.com/fponticelli/haxe_travis_scripts
-  - source haxe_travis_scripts/scripts.sh
+  allow_failures:
+    - haxe: development
 
 install:
-  - if [[ $TARGET == "cpp"  ]]; then install_hxcpp;  fi
-  - if [[ $TARGET == "java" ]]; then install_hxjava; fi
-  - if [[ $TARGET == "cs"   ]]; then install_hxcs;   fi
-  - haxelib install utest
+  - haxelib install travix
+  - haxelib run travix install
 
 script:
-  - haxe "hxml/$TARGET.run.hxml" -D travis
-
-# force restart
+  # - haxelib run travix interp
+  - haxelib run travix neko
+  - haxelib run travix python
+  - haxelib run travix node
+  - haxelib run travix flash
+  - haxelib run travix java
+  - haxelib run travix cpp
+  - haxelib run travix cs
+  - haxelib run travix php
