@@ -24,14 +24,17 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   Creates a new, empty BitSet, with the given length
 **/
   public inline function new(?length : Int = 0) {
-    this = [length];
+    this = [length]; // store the BitSet length at block index 0
+#if !js // resizing is not needed in JS but might still be a good idea
+    Arrays.resize(this, length + 1, 0);
+#end
   }
 
 /**
   Creates a new, empty BitSet, with the given length
 **/
   public static inline function empty(?length : Int = 0) : BitSet {
-    return [length]; // store the BitSet length at block index 0
+    return new BitSet(length);
   }
 
 /**
@@ -69,7 +72,10 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
 
   @:to
   public inline function toInt32s() : Array<Int32> {
-    return this.slice(1);
+    var parts = this.slice(1);
+    while(parts[parts.length-1] == 0)
+      parts.pop();
+    return parts;
   }
 
 /**
@@ -91,7 +97,12 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
 **/
   @:arrayAccess
   public function setAt(index : Int, value : Bool) : Bool {
-    if ((index + 1) > length) this[0] = index + 1;
+    if ((index + 1) > length) {
+      this[0] = index + 1;
+      for(i in this.length...(index + 2)) {
+        this[i] = 0;
+      }
+    };
     var blockIndex = Math.floor(index / blockSize) + 1;
     var bitIndex : Int32 = index % blockSize;
     if (value) {
