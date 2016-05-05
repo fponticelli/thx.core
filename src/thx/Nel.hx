@@ -38,10 +38,10 @@ abstract Nel<A> (NonEmptyList<A>) from NonEmptyList<A> to NonEmptyList<A> {
       case ConsNel(x, xs): (f(x): Nel<B>) + xs.flatMap(f);
     };
 
-  public function fold(s: Semigroup<A>): A
+  public function fold(f: A -> A -> A): A
     return switch this {
       case Single(x): x;
-      case ConsNel(x, xs): s.append(x, xs.fold(s));
+      case ConsNel(x, xs): f(x, xs.fold(f));
     };
 
   @:op(N+N0) 
