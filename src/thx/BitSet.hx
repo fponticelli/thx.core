@@ -21,9 +21,9 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   public var length(get, never) : Int;
 
 /**
-  Creates a new, empty BitSet, with the given length
+  Creates a new, empty BitSet, with the given `length`
 **/
-  public inline function new(?length : Int = 0) {
+  public inline function new(length : Int) {
     this = [length]; // store the BitSet length at block index 0
 #if !js // resizing is not needed in JS but might still be a good idea
     Arrays.resize(this, length + 1, 0);
@@ -45,7 +45,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
     return Arrays.reducei(values, function(acc : BitSet, value, i) {
       acc.setAt(i, value);
       return acc;
-    }, new BitSet());
+    }, new BitSet(0));
   }
 
 /**
@@ -57,7 +57,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
     return Arrays.reducei(chars, function(acc : BitSet, char, i) {
       acc.setAt(i, char == "1");
       return acc;
-    }, new BitSet());
+    }, new BitSet(0));
   }
 
 /**
@@ -120,7 +120,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
     return Arrays.reduce(length.range(), function(acc : BitSet, i) {
       acc.setAt(i, at(i));
       return acc;
-    }, new BitSet());
+    }, new BitSet(0));
   }
 
 /**
@@ -210,7 +210,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
     return Arrays.reduce(length.range(), function(acc : BitSet, i) {
       acc.setAt(i, !at(i));
       return acc;
-    }, new BitSet());
+    }, new BitSet(0));
   }
 
   @:op(A == B)
@@ -235,7 +235,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
       var rightBit = right.at(i);
       acc.setAt(i, combiner(leftBit, rightBit));
       return acc;
-    }, new BitSet());
+    }, new BitSet(0));
   }
 
   function get_length() {

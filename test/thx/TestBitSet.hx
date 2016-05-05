@@ -7,7 +7,7 @@ class TestBitSet {
   public function new() {}
 
   public function testBitSet() {
-    var bits = new BitSet();
+    var bits = new BitSet(0);
     Assert.same(0, bits.length);
     Assert.same('', bits.toString());
 
