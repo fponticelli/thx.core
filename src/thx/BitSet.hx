@@ -99,7 +99,7 @@ abstract BitSet(Array<Int32>) from Array<Int32> {
   @:arrayAccess
   public function setAt(index : Int, value : Bool) : Bool {
     var blockIndex = Math.floor(index / blockSize) + 1;
-    if (blockIndex > this.length) {
+    if (blockIndex >= this.length) {
       Arrays.resize(this, blockIndex + 1, 0);
     };
     if(this[0] <= index)
