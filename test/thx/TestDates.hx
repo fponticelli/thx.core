@@ -10,26 +10,26 @@ class TestDates {
   public function testCreate() {
     var expectations = [
       // normal
-      { expected : Date.fromString("2014-12-01"), test : Dates.create(2014,11,1) },
+      { expected : new Date(2014, 11, 1, 0, 0, 0), test : Dates.create(2014,11,1) },
       // month overflow
-      { expected : Date.fromString("2015-04-01"), test : Dates.create(2014,15,1) },
-      { expected : Date.fromString("2013-12-01"), test : Dates.create(2014,-1,1) },
+      { expected : new Date(2015,  3, 1, 0, 0, 0), test : Dates.create(2014,15,1) },
+      { expected : new Date(2013, 11, 1, 0, 0, 0), test : Dates.create(2014,-1,1) },
 
       // day overflow
-      { expected : Date.fromString("2014-03-04"), test : Dates.create(2014,1,32) },
-      { expected : Date.fromString("2013-12-31"), test : Dates.create(2014,0,0) },
+      { expected : new Date(2014,  2,  4, 0, 0, 0), test : Dates.create(2014,1,32) },
+      { expected : new Date(2013, 11, 31, 0, 0, 0), test : Dates.create(2014,0,0) },
 
       // hour overflow
-      { expected : Date.fromString("2014-02-02 02:00:00"), test : Dates.create(2014,1,1,26) },
-      { expected : Date.fromString("2013-12-31 23:00:00"), test : Dates.create(2014,0,1,-1) },
+      { expected : new Date(2014,  1,  2,  2,  0,  0), test : Dates.create(2014,1,1,26) },
+      { expected : new Date(2013, 11, 31, 23,  0,  0), test : Dates.create(2014,0,1,-1) },
 
       // minute overflow
-      { expected : Date.fromString("2014-02-01 01:05:00"), test : Dates.create(2014,1,1,0,65) },
-      { expected : Date.fromString("2013-12-31 23:59:00"), test : Dates.create(2014,0,1,0,-1) },
+      { expected : new Date(2014,  1,  1,  1,  5,  0), test : Dates.create(2014,1,1,0,65) },
+      { expected : new Date(2013, 11, 31, 23, 59,  0), test : Dates.create(2014,0,1,0,-1) },
 
       // second overflow
-      { expected : Date.fromString("2014-02-01 00:01:05"), test : Dates.create(2014,1,1,0,0,65) },
-      { expected : Date.fromString("2013-12-31 23:59:59"), test : Dates.create(2014,0,1,0,0,-1) }
+      { expected : new Date(2014,  1,  1,  0,  1,  5), test : Dates.create(2014,1,1,0,0,65) },
+      { expected : new Date(2013, 11, 31, 23, 59, 59), test : Dates.create(2014,0,1,0,0,-1) }
     ];
 
     expectations.map(function(o) {
