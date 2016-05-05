@@ -61,6 +61,8 @@ class TestLocalDate {
     Assert.isFalse(tomorrow <= date);
   }
 
+// C# Date functions are broken in <= 3.2.1
+#if (cs && haxe_ver <= 3.210)
   public function testFromToDate() {
     var d = LocalDate.fromDate(date.toDate());
     Assert.isTrue(date == d, 'expected $date but got ${(d : LocalDate)}');
@@ -70,6 +72,7 @@ class TestLocalDate {
     var date2 : LocalDate = LocalDate.fromTime(date.toDate().getTime());
     Assert.isTrue(date == date2, 'expected $date but got $date2');
   }
+#end
 
   public function testFromToString() {
     Assert.isTrue(date == LocalDate.fromString(date.toString()));

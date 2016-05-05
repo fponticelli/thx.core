@@ -1,4 +1,5 @@
 -cp src
 -cp test
 -lib utest
+-D travis
 -main TestAll
