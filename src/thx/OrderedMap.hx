@@ -23,6 +23,18 @@ abstract OrderedMap<K, V>(OrderedMapImpl<K, V>) to IMap<K, V> {
   inline public function getOption(key : K)
     return Options.ofValue(get(key));
 
+  inline public function empty() : OrderedMap<K, V>
+    return new OrderedMap(this.empty());
+
+  inline public function copyTo(that : OrderedMap<K, V>) : OrderedMap<K, V> {
+    for(key in this.keys())
+      that.set(key, this.get(key));
+    return that;
+  }
+
+  inline public function clone() : OrderedMap<K, V>
+    return copyTo(empty());
+
   @:arrayAccess public inline function get(key : K)
     return this.get(key);
   @:arrayAccess public inline function at(index : Int) : Null<V>
@@ -37,21 +49,33 @@ abstract OrderedMap<K, V>(OrderedMapImpl<K, V>) to IMap<K, V> {
 class EnumValueOrderedMap<K : EnumValue, V> extends OrderedMapImpl<K, V> {
   public function new()
     super(new haxe.ds.EnumValueMap<K, V>());
+
+  override public function empty() : OrderedMapImpl<K, V>
+    return new EnumValueOrderedMap();
 }
 
 class IntOrderedMap<V> extends OrderedMapImpl<Int, V> {
   public function new()
     super(new Map<Int,V>());
+
+  override public function empty() : OrderedMapImpl<Int, V>
+    return new IntOrderedMap();
 }
 
 class ObjectOrderedMap<K : {}, V> extends OrderedMapImpl<K, V> {
   public function new()
     super(new haxe.ds.ObjectMap<K, V>());
+
+  override public function empty() : OrderedMapImpl<K, V>
+    return new ObjectOrderedMap();
 }
 
 class StringOrderedMap<V> extends OrderedMapImpl<String, V> {
   public function new()
     super(new Map<String,V>());
+
+  override public function empty() : OrderedMapImpl<String, V>
+    return new StringOrderedMap();
 }
 
 class OrderedMapImpl<K, V> implements IMap<K, V> {
@@ -96,6 +120,9 @@ class OrderedMapImpl<K, V> implements IMap<K, V> {
     }
     map.set(k, v);
   }
+
+  public function empty() : OrderedMapImpl<K, V>
+    return throw new thx.error.AbstractMethod();
 
   @:noCompletion
   public function setValue(k : K, v : V) : V {

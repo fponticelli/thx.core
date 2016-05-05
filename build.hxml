@@ -1,2 +1,2 @@
--cmd haxe tests.hxml -D nodejs -js bin/test.js
+-cmd haxe tests.hxml -js bin/test.js
 -cmd node bin/test.js

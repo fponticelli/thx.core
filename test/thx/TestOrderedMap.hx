@@ -87,4 +87,26 @@ class TestOrderedMap {
     Assert.notNull(OrderedMap.createEnum());
     Assert.notNull(OrderedMap.createObject());
   }
+
+  public function testEmpty() {
+    var ml = OrderedMap.createString();
+    ml["k"] = "value";
+    var e = ml.empty();
+    Assert.isNull(e["k"]);
+  }
+
+  public function testCopyTo() {
+    var ml = OrderedMap.createString();
+    ml["k"] = "value";
+    var e = ml.empty();
+    ml.copyTo(e);
+    Assert.equals("value", e["k"]);
+  }
+
+  public function testClone() {
+    var ml = OrderedMap.createString();
+    ml["k"] = "value";
+    var e = ml.clone();
+    Assert.equals("value", e["k"]);
+  }
 }
