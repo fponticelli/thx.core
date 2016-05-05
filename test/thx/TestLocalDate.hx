@@ -62,7 +62,7 @@ class TestLocalDate {
   }
 
 // C# Date functions are broken in <= 3.2.1
-#if (cs && haxe_ver <= 3.210)
+#if (!cs || haxe_ver > 3.210)
   public function testFromToDate() {
     var d = LocalDate.fromDate(date.toDate());
     Assert.isTrue(date == d, 'expected $date but got ${(d : LocalDate)}');
