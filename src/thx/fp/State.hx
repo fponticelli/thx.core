@@ -23,7 +23,7 @@ abstract State<S, A> (S -> Tuple<S, A>) from S -> Tuple<S, A> {
     return (function(s: S) return this(s).map(f));
 
   public function ap<B>(s2: State<S, A -> B>): State<S, B>
-    return flatMap(function(a: A) return s2.map(function(f: A -> B) return f(a)));
+    return flatMap(function(a: A) : State<S, B> return s2.map(function(f: A -> B) : B return f(a)));
 
   @:op(S1 * F)
   public function flatMap<B>(f: A -> State<S, B>): State<S, B>

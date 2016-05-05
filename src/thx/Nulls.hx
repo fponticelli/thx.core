@@ -101,9 +101,8 @@ trace((o.a.b.c).opt()); // prints 'A'
 
     traverse(Context.typeExpr(value));
     var first = ids.shift(),
-        temps = ['_0 = $first'].concat(Arrays.mapi(ids, function(_, i) return '_${i+1}')).join(', '),
-        buf   = '{\n  var ${temps};\n  null == _0 ? null :',
-        path;
+        buf   = '(function(){\n  var _0 = $first;\n  if(null == _0) return null;';
+    var path = "";
     for(i in 0...ids.length) {
       var id = ids[i];
       if(id.substring(0, 1) == '[') {
@@ -111,9 +110,10 @@ trace((o.a.b.c).opt()); // prints 'A'
       } else {
         path = '.$id';
       }
-      buf += '\n    (null == (_${i+1} = _$i$path) ? null :';
+      buf += '\n  var _${i+1}  = _$i$path;\n  if(null == _${i+1}) return null;';
     }
-    buf += ' _${ids.length}' + Strings.repeat(')', ids.length) + ';\n}';
+    buf += '\n  return _${ids.length};\n})()';
+    // trace(buf);
     return Context.parse(buf , value.pos);
   }
 
