@@ -6,6 +6,6 @@
   "tags": ["thx", "general", "cross", "std"],
   "description": "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.",
   "releasenote": "Added BitSet and BitMatrix. More methods for ReadonlyArray, Arrays, Types, Options, Strings, Maps, Functions, Convert, Error, Dynamics, Validation, functional types and macro helpers. Fixes.",
-  "version": "0.40.0",
+  "version": "0.40.1",
   "contributors": ["fponticelli"]
 }
