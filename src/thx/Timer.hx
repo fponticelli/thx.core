@@ -108,10 +108,7 @@ canelled using the returned cancel function.
     return clear.bind(untyped _global["setTimeout"](callback, delayms));
 #elseif java
     var timer = new java.util.Timer();
-    timer.scheduleAtFixedRate(new TimerTask(function() {
-      timer.cancel();
-      callback();
-    }), haxe.Int64.ofInt(delayms), haxe.Int64.ofInt(delayms));
+    timer.schedule(new TimerTask(callback), haxe.Int64.ofInt(delayms));
     return timer.cancel;
 #elseif !lime
     return throw "platform does not support delays (Timer.delay)";
