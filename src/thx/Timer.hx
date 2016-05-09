@@ -80,10 +80,10 @@ cancel function.
     return clear.bind(untyped __global__["flash.utils.setInterval"](callback, delayms));
 #elseif flash
     return clear.bind(untyped _global["setInterval"](callback, delayms));
-#elseif java
-    var executorService = java.util.concurrent.Executors.newSingleThreadScheduledExecutor();
-    var handler = executorService.scheduleAtFixedRate(new TimerTask(callback), haxe.Int64.ofInt(delayms), haxe.Int64.ofInt(delayms), java.util.concurrent.TimeUnit.MILLISECONDS);
-    return handler.cancel.bind(true);
+// #elseif java
+//     var executorService = java.util.concurrent.Executors.newSingleThreadScheduledExecutor();
+//     var handler = executorService.scheduleAtFixedRate(new TimerTask(callback), haxe.Int64.ofInt(delayms), haxe.Int64.ofInt(delayms), java.util.concurrent.TimeUnit.MILLISECONDS);
+//     return handler.cancel.bind(true);
 #elseif !lime
     return throw "platform does not support delays (Timer.repeat)";
 #else
@@ -106,10 +106,10 @@ canelled using the returned cancel function.
     return clear.bind(untyped __global__["flash.utils.setTimeout"](callback, delayms));
 #elseif flash
     return clear.bind(untyped _global["setTimeout"](callback, delayms));
-#elseif java
-    var executorService = java.util.concurrent.Executors.newSingleThreadScheduledExecutor();
-    var handler = executorService.schedule(new TimerTask(callback), haxe.Int64.ofInt(delayms), java.util.concurrent.TimeUnit.MILLISECONDS);
-    return handler.cancel.bind(true);
+// #elseif java
+//     var executorService = java.util.concurrent.Executors.newSingleThreadScheduledExecutor();
+//     var handler = executorService.schedule(new TimerTask(callback), haxe.Int64.ofInt(delayms), java.util.concurrent.TimeUnit.MILLISECONDS);
+//     return handler.cancel.bind(true);
 #elseif !lime
     return throw "platform does not support delays (Timer.delay)";
 #else

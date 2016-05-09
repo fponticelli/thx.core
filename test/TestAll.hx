@@ -47,7 +47,7 @@ class TestAll {
     runner.addCase(new thx.TestThx());
     runner.addCase(new thx.TestLambda());
     runner.addCase(new thx.TestLambdaStaticExtension());
-#if (js || flash || java)
+#if (js || flash)
     runner.addCase(new thx.TestTimer());
 #end
     runner.addCase(new thx.TestTuple());
