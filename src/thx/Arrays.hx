@@ -162,6 +162,7 @@ same. It stops as soon as the arrays differ.
 /**
 Filters out all null elements in the array
 **/
+  @:deprecated("Arrays.compact is deprecated, use Arrays.filterNull instead.")
   public static function compact<T>(arr : ReadonlyArray<Null<T>>) : Array<T> {
 #if cs
     var result : Array<T> = [];

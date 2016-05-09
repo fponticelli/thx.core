@@ -186,8 +186,8 @@ class TestArrays {
     Assert.same(['B', 'C', 'A'], ['B', '', 'C', null, 'A', ''].compact());
   }
 
-  public function testCompactInt() {
-    Assert.same([1, 0, 2], [null, 1, null, 0, 2].compact());
+  public function testFilterNullInt() {
+    Assert.same([1, 0, 2], [null, 1, null, 0, 2].filterNull());
   }
 
   public function testOrder() {
