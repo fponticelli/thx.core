@@ -496,7 +496,7 @@ Returns a new date that is modified only by the second.
     }
   };
 
-
+  public static var order(default, never): Ord<Date> = Ord.fromIntComparison(compare);
 }
 
 /** Alias of `DateTools`, included so mixins work with `using thx.Dates;` **/

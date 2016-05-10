@@ -56,6 +56,16 @@ Extracts the values of a Map<TKey, TValue> into Array<TValue>
       return map.get(key)
     );
 
+  /**
+   * Unordered fold over key/value pairs in the map.
+   */
+  public static function foldLeftWithKeys<K, A, B>(map: Map<K, A>, f: B -> K -> A -> B, acc: B): B 
+    return map.keys().reduce(
+      function(acc, k) return f(acc, k, map.get(k)),
+      acc
+    );
+  
+
 /**
 Null-safe get.
 **/
