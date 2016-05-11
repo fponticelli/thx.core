@@ -75,6 +75,25 @@ class TestArrays {
     Assert.same([0, 1, 2], indices);
   }
 
+  public function testMap() {
+    var input = [4, 5, 6];
+    var actual = thx.Arrays.map(input, function(v) {
+      return v * 2;
+    });
+    Assert.same([8, 10, 12], actual);
+  }
+
+  public function testMapi() {
+    var input = [4, 5, 6];
+    var is = [];
+    var actual = thx.Arrays.mapi(input, function(v, i) {
+      is.push(i);
+      return v * 2;
+    });
+    Assert.same([8, 10, 12], actual);
+    Assert.same([0, 1, 2], is);
+  }
+
   public function testCrossMulti() {
     var r = [[1,2],[3,4],[5,6]].crossMulti();
     Assert.same([[1,3,5],[2,3,5],[1,4,5],[2,4,5],[1,3,6],[2,3,6],[1,4,6],[2,4,6]], r);
