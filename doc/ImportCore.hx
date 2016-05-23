@@ -48,7 +48,7 @@ import thx.Set;
 import thx.Strings;
 import thx.Time;
 import thx.TimePeriod;
-#if (java || js || flash)
+#if (js || flash)
 import thx.Timer;
 #end
 import thx.Timestamp;
