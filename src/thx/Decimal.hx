@@ -183,6 +183,9 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
   inline public function modulo(that : Decimal) : Decimal
     return this.modulo(that);
 
+  @:to inline public function toFloat() : Float
+    return this.toFloat();
+
   @:to inline public function toInt() : Int
     return this.toInt();
 
@@ -191,9 +194,6 @@ abstract Decimal(DecimalImpl) from DecimalImpl to DecimalImpl {
 
   @:to public function toBigInt() : BigInt
     return this.value.divide(Small.ten.pow(Bigs.fromInt(this.scale)));
-
-  @:to inline public function toFloat() : Float
-    return this.toFloat();
 
   @:to inline public function toString() : String
     return this.toString();
