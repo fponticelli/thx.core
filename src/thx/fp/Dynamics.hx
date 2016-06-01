@@ -103,10 +103,10 @@ class Dynamics {
     };
 
 
-  public static function parseStringMap<E, K, V>(v: Dynamic, f: Dynamic -> VNel<E, V>, err: String -> E): VNel<E, StringMap<V>> {
+  public static function parseStringMap<E, K, V>(v: Dynamic, f: String -> Dynamic -> VNel<E, V>, err: String -> E): VNel<E, StringMap<V>> {
     return if (Reflect.isObject(v)) {
       Reflect.fields(v).traverseValidation(
-        function(field: String) return f(Reflect.getProperty(v, field)).map(Tuple.of.bind(field, _)), 
+        function(field: String) return f(field, Reflect.getProperty(v, field)).map(Tuple.of.bind(field, _)), 
         Nel.semigroup()
       ).map(
         function(tuples: Array<Tuple<String, V>>) return tuples.reduce(
