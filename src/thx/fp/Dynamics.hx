@@ -3,15 +3,15 @@ package thx.fp;
 import haxe.ds.Option;
 import haxe.ds.StringMap;
 
+import thx.Dates;
+import thx.Ints;
+import thx.Floats;
 import thx.Options;
 import thx.Monoid;
 import thx.Nel;
+import thx.Unit;
 import thx.Validation;
 import thx.Validation.*;
-import thx.Unit;
-import thx.Ints;
-import thx.Floats;
-import thx.fp.Dynamics;
 import thx.fp.Functions.flip;
 import thx.fp.Writer;
 
@@ -67,6 +67,12 @@ class Dynamics {
         };
       case other: failureNel('Cannot parse a boolean value from $v (type resolved to $other)');
     };
+
+  public static function parseDate(v: Dynamic): VNel<String, Date> 
+    return parseString(v).flatMapV(
+      function(s) return liftVNel(Dates.parseDate(s))
+    );
+
 
   public static function parseProperty<E, A>(ob: {}, name: String, f: Dynamic -> VNel<E, A>, err: String -> E): VNel<E, A> 
     return nnNel(ob.getPath(name), err('Property "$name" was not found.')).flatMapV(f);
