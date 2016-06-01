@@ -54,6 +54,7 @@ class TestAll {
     runner.addCase(new thx.TestUrl());
     runner.addCase(new thx.TestValidation());
 
+    runner.addCase(new thx.fp.TestDynamics());
     runner.addCase(new thx.fp.TestList());
     runner.addCase(new thx.fp.TestMap());
     runner.addCase(new thx.fp.TestSet());
