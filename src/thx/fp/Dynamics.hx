@@ -109,20 +109,12 @@ class Dynamics {
     };
 
 
-  public static function parseStringMap<E, K, V>(v: Dynamic, f: Dynamic -> String -> VNel<E, V>, err: String -> E): VNel<E, StringMap<V>> {
+  public static function parseStringMap<E, K, V>(v: Dynamic, f: Dynamic -> String -> VNel<E, V>, err: String -> E): VNel<E, std.Map<String, V>> {
     return if (Reflect.isObject(v)) {
       Reflect.fields(v).traverseValidation(
         function(field: String) return f(Reflect.getProperty(v, field), field).map(Tuple.of.bind(field, _)), 
         Nel.semigroup()
-      ).map(
-        function(tuples: Array<Tuple<String, V>>) return tuples.reduce(
-          function(acc: StringMap<V>, t: Tuple<String, V>) {
-            acc.set(t._0, t._1);
-            return acc;
-          },
-          new StringMap()
-        )
-      );
+      ).map(Arrays.toStringMap);
     } else {
       failureNel(err('$v is not object-valued (type resolved to ${Type.typeof(v)})'));
     };

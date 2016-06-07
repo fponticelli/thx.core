@@ -1162,7 +1162,7 @@ Finds the min element of the array given the specified ordering.
     return Options.toFailure(Nel.fromArray(collisions), m);
   }
 
-  public static function toStringMap<V>(arr: ReadonlyArray<Tuple<String, V>>): StringMap<V> {
+  public static function toStringMap<V>(arr: ReadonlyArray<Tuple<String, V>>): Map<String, V> {
     return reduce(
       arr, 
       function(acc: StringMap<V>, t: Tuple<String, V>) {
