@@ -1,5 +1,6 @@
 package thx;
 
+import thx.Either;
 using thx.Ints;
 using thx.Strings;
 
@@ -62,20 +63,29 @@ Converts a string into a `LocalDate` value. The accepted format looks like this:
 ```
 */
   @:from public static function fromString(s : String) : LocalDate {
-    if(s == null)
-      throw new thx.Error('null String cannot be parsed to LocalDate');
-    var pattern = ~/^([-])?(\d+)[-](\d{2})[-](\d{2})$/;
-    if(!pattern.match(s))
-      throw new thx.Error('unable to parse DateTime string: "$s"');
+    return switch parse(s)  {
+      case Left(error): throw new thx.Error(error);
+      case Right(d): d;
+    };
+  }
 
-    var date = create(
-        Std.parseInt(pattern.matched(2)),
-        Std.parseInt(pattern.matched(3)),
-        Std.parseInt(pattern.matched(4))
-    );
-    if(pattern.matched(1) == "-")
-      return new LocalDate(-date.days);
-    return date;
+  public static function parse(s: String): Either<String, LocalDate> {
+    return if (s == null) {
+      Left('null String cannot be parsed to LocalDate');
+    } else {
+      var pattern = ~/^([-])?(\d+)[-](\d{2})[-](\d{2})$/;
+      if (!pattern.match(s)) {
+        Left('unable to parse DateTime string: "$s"');
+      } else {
+        var date = create(
+            Std.parseInt(pattern.matched(2)),
+            Std.parseInt(pattern.matched(3)),
+            Std.parseInt(pattern.matched(4))
+        );
+
+        Right(if (pattern.matched(1) == "-") new LocalDate(-date.days) else date);
+      }
+    }
   }
 
   inline public static function compare(a : LocalDate, b : LocalDate)
