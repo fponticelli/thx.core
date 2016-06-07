@@ -69,9 +69,10 @@ class Dynamics {
     };
 
   public static function parseDate(v: Dynamic): VNel<String, Date> 
-    return parseString(v).flatMapV(
-      function(s) return liftVNel(Dates.parseDate(s))
-    );
+    return parseString(v).flatMapV(liftVNel.compose(Dates.parseDate));
+
+  public static function parseLocalDate(v: Dynamic): VNel<String, LocalDate> 
+    return parseString(v).flatMapV(liftVNel.compose(LocalDate.parse));
 
 
   public static function parseProperty<E, A>(ob: {}, name: String, f: Dynamic -> VNel<E, A>, err: String -> E): VNel<E, A> 
