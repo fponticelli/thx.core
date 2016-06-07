@@ -7,6 +7,7 @@ import thx.Semigroup;
 import thx.Monoid;
 
 import haxe.ds.Option;
+import haxe.ds.StringMap;
 using thx.Options;
 using thx.Arrays;
 
@@ -1159,6 +1160,17 @@ Finds the min element of the array given the specified ordering.
     }
 
     return Options.toFailure(Nel.fromArray(collisions), m);
+  }
+
+  public static function toStringMap<V>(arr: ReadonlyArray<Tuple<String, V>>): Map<String, V> {
+    return reduce(
+      arr, 
+      function(acc: StringMap<V>, t: Tuple<String, V>) {
+        acc.set(t._0, t._1);
+        return acc;
+      },
+      new StringMap()
+    );
   }
 }
 
