@@ -1164,7 +1164,7 @@ Finds the min element of the array given the specified ordering.
 
   public static function toStringMap<V>(arr: ReadonlyArray<Tuple<String, V>>): Map<String, V> {
     return reduce(
-      arr, 
+      arr,
       function(acc: StringMap<V>, t: Tuple<String, V>) {
         acc.set(t._0, t._1);
         return acc;
@@ -1172,6 +1172,65 @@ Finds the min element of the array given the specified ordering.
       new StringMap()
     );
   }
+/**
+	Produces a `Tuple2` containing two `Array`, the left being elements where `f(e) == true`, the rest in the right.
+**/
+  static public function partition<T>(arr: ReadonlyArray<T>, f: T -> Bool): Tuple2<Array<T>, Array<T>> {
+    return arr.foldLeft(new Tuple2([], []), function(a, b) {
+      if(f(b))
+        a._0.push(b);
+      else
+        a._1.push(b);
+      return a;
+    });
+  }
+/**
+  Produces a `Tuple2` containing two `Arrays`, the difference from partition being that after the predicate
+  returns true once, the rest of the elements will be in the right hand of the tuple, regardless of
+  the result of the predicate.
+**/
+  static public function partitionWhile<T>(arr: ReadonlyArray<T>, f: T -> Bool): Tuple2<Array<T>, Array<T>> {
+    var partitioning = true;
+
+    return arr.foldLeft(new Tuple2([], []), function(a, b) {
+      if (partitioning) {
+        if (f(b))
+          a._0.push(b);
+        else {
+          partitioning = false;
+          a._1.push(b);
+        }
+      }
+      else
+        a._1.push(b);
+      return a;
+    });
+  }
+/**
+	Produces an Array from `a[n]` to the last element of `a`.
+**/
+  static public function dropLeft<T>(a: ReadonlyArray<T>, n: Int): Array<T> {
+    return if (n >= a.length) [] else a.slice(n);
+  }
+/**
+	Produces an Array from `a[0]` to a[a.length-n].
+**/
+  static public function dropRight<T>(a: ReadonlyArray<T>, n: Int): Array<T> {
+    return if (n >= a.length) [] else a.slice(0,a.length - n);
+  }
+/**
+	Drops values from Array `a` while the predicate returns true.
+**/
+  static public function dropWhile<T>(a: ReadonlyArray<T>, p: T -> Bool): Array<T> {
+    var r = [].concat(a.toArray());
+
+    for (e in a) {
+      if (p(e)) r.shift(); else break;
+    }
+
+    return r;
+  }
+
 }
 
 /**
