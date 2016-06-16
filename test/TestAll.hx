@@ -4,6 +4,7 @@ import utest.ui.Report;
 class TestAll {
   public static function addTests(runner : Runner) {
     runner.addCase(new thx.TestAnonymousMap());
+    runner.addCase(new thx.TestAny());
     runner.addCase(new thx.TestArrays());
     runner.addCase(new thx.TestAssert());
     runner.addCase(new thx.TestBigInt());
