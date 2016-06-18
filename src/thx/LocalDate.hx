@@ -2,6 +2,7 @@ package thx;
 
 using thx.Ints;
 using thx.Strings;
+import thx.DateConst.*;
 
 /**
 `Date` represents a date (without time) between 5879611-07-12 and -5879611-07-13
@@ -10,26 +11,10 @@ of the `Int` type).
 `Date` represents a moment in time with no time-offset information.
 */
 abstract LocalDate(Int) {
-  static var millisPerSecond : Float = 1000;
-  static var millisPerMinute : Float = millisPerSecond * 60;
-  static var millisPerHour : Float = millisPerMinute * 60;
-  static var millisPerDay : Float = millisPerHour * 24;
-
-  static var daysPerYear : Int = 365;
-  static var daysPer4Years : Int = daysPerYear * 4 + 1;       // 1461
-  static var daysPer100Years : Int = daysPer4Years * 25 - 1;  // 36524
-  static var daysPer400Years : Int = daysPer100Years * 4 + 1; // 146097
-
-  static var unixEpochDays : Int = daysPer400Years * 4 + daysPer100Years * 3 + daysPer4Years * 17 + daysPerYear; // 719,162
-
-  static var DATE_PART_YEAR = 0;
-  static var DATE_PART_DAY_OF_YEAR = 1;
-  static var DATE_PART_MONTH = 2;
-  static var DATE_PART_DAY = 3;
-
-  static var daysToMonth365 = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365];
-  static var daysToMonth366 = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366];
-
+  public inline static var DATE_PART_YEAR = 0;
+  public inline static var DATE_PART_DAY_OF_YEAR = 1;
+  public inline static var DATE_PART_MONTH = 2;
+  public inline static var DATE_PART_DAY = 3;
 /**
 Returns the system date/time relative to UTC.
 */
@@ -66,7 +51,7 @@ Converts a string into a `LocalDate` value. The accepted format looks like this:
       throw new thx.Error('null String cannot be parsed to LocalDate');
     var pattern = ~/^([-])?(\d+)[-](\d{2})[-](\d{2})$/;
     if(!pattern.match(s))
-      throw new thx.Error('unable to parse DateTime string: "$s"');
+      throw new thx.Error('unable to parse LocalDate string: "$s"');
 
     var date = create(
         Std.parseInt(pattern.matched(2)),
@@ -501,6 +486,9 @@ Returns true if this date and the `other` date share the same year and month.
 
   inline public function toDate() : Date
     return new Date(year, month - 1, day, 0, 0, 0);
+
+  inline public function toLocalYearMonth() : LocalYearMonth
+    return LocalYearMonth.create(year, month);
 
   //1997-07-16
   public function toString() {
