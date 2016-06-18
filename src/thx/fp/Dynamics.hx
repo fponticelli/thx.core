@@ -1,15 +1,17 @@
 package thx.fp;
 
 import haxe.ds.Option;
+import haxe.ds.StringMap;
+
+import thx.Dates;
+import thx.Ints;
+import thx.Floats;
 import thx.Options;
 import thx.Monoid;
 import thx.Nel;
+import thx.Unit;
 import thx.Validation;
 import thx.Validation.*;
-import thx.Unit;
-import thx.Ints;
-import thx.Floats;
-import thx.fp.Dynamics;
 import thx.fp.Functions.flip;
 import thx.fp.Writer;
 
@@ -66,6 +68,13 @@ class Dynamics {
       case other: failureNel('Cannot parse a boolean value from $v (type resolved to $other)');
     };
 
+  public static function parseDate(v: Dynamic): VNel<String, Date> 
+    return parseString(v).flatMapV(liftVNel.compose(Dates.parseDate));
+
+  public static function parseLocalDate(v: Dynamic): VNel<String, LocalDate> 
+    return parseString(v).flatMapV(liftVNel.compose(LocalDate.parse));
+
+
   public static function parseProperty<E, A>(ob: {}, name: String, f: Dynamic -> VNel<E, A>, err: String -> E): VNel<E, A> 
     return nnNel(ob.getPath(name), err('Property "$name" was not found.')).flatMapV(f);
 
@@ -99,6 +108,18 @@ class Dynamics {
         };
       case other: failureNel(err('$v is not array-valued (type resolved to $other)'));
     };
+
+
+  public static function parseStringMap<E, K, V>(v: Dynamic, f: Dynamic -> String -> VNel<E, V>, err: String -> E): VNel<E, std.Map<String, V>> {
+    return if (Reflect.isObject(v)) {
+      Reflect.fields(v).traverseValidation(
+        function(field: String) return f(Reflect.getProperty(v, field), field).map(Tuple.of.bind(field, _)), 
+        Nel.semigroup()
+      ).map(Arrays.toStringMap);
+    } else {
+      failureNel(err('$v is not object-valued (type resolved to ${Type.typeof(v)})'));
+    };
+  }
 
   public static function parseMap<E, K, V>(v: Dynamic, f: String -> Dynamic -> VNel<E, Tuple<K, V>>, keyOrder: Ord<K>, err: String -> E): VNel<E, thx.fp.Map<K, V>> {
     return if (Reflect.isObject(v)) {

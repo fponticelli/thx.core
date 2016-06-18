@@ -18,6 +18,9 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
   inline public static function vnel<E, A>(e: Either<Nel<E>, A>): VNel<E, A>
     return e;
 
+  public static function liftVNel<E, A>(e: Either<E, A>): VNel<E, A>
+    return e.leftMap(Nel.pure);
+
   inline public static function pure<E, A>(a: A): Validation<E, A>
     return Right(a);
 

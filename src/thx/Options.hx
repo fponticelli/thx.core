@@ -2,6 +2,7 @@ package thx;
 
 import thx.Functions;
 import thx.Functions.*;
+import thx.Tuple;
 import haxe.ds.Option;
 
 /**
@@ -247,4 +248,50 @@ is be `None`.
       f: A -> B -> C -> D -> E -> F -> G -> H -> I,
       v1: Option<A>, v2: Option<B>, v3: Option<C>, v4: Option<D>, v5: Option<E>, v6: Option<F>, v7: Option<G>, v8: Option<H>): Option<I>
     return ap(v8, ap7(Functions8.curry(f), v1, v2, v3, v4, v5, v6, v7));
+
+  inline static public function combine<A, B>(a : Option<A>, b : Option<B>) : Option<Tuple2<A, B>>
+    return ap2(Tuple2.of, a, b);
+
+  inline static public function combine2<A, B>(a : Option<A>, b : Option<B>) : Option<Tuple2<A, B>>
+    return combine(a, b);
+
+  inline static public function combine3<A, B, C>(a : Option<A>, b : Option<B>, c : Option<C>) : Option<Tuple3<A, B, C>>
+    return ap3(Tuple3.of, a, b, c);
+
+  inline static public function combine4<A, B, C, D>(a : Option<A>, b : Option<B>, c : Option<C>, d : Option<D>) : Option<Tuple4<A, B, C, D>>
+    return ap4(Tuple4.of, a, b, c, d);
+
+  inline static public function combine5<A, B, C, D, E>(a : Option<A>, b : Option<B>, c : Option<C>, d : Option<D>, e : Option<E>) : Option<Tuple5<A, B, C, D, E>>
+    return ap5(Tuple5.of, a, b, c, d, e);
+
+  inline static public function combine6<A, B, C, D, E, F>(a : Option<A>, b : Option<B>, c : Option<C>, d : Option<D>, e : Option<E>, f : Option<F>) : Option<Tuple6<A, B, C, D, E, F>>
+    return ap6(Tuple6.of, a, b, c, d, e, f);
+
+  inline static public function spread2<A, B, C>(v : Option<Tuple2<A, B>>, f : A -> B -> C) : Option<C>
+    return map(v, function(t) {
+      return f(t._0, t._1);
+    });
+
+  inline static public function spread<A, B, C>(v : Option<Tuple2<A, B>>, f : A -> B -> C) : Option<C>
+    return spread2(v, f);
+
+  inline static public function spread3<A, B, C, D>(v : Option<Tuple3<A, B, C>>, f : A -> B -> C -> D) : Option<D>
+    return map(v, function(t) {
+      return f(t._0, t._1, t._2);
+    });
+
+  inline static public function spread4<A, B, C, D, E>(v : Option<Tuple4<A, B, C, D>>, f : A -> B -> C -> D -> E) : Option<E>
+    return map(v, function(t) {
+      return f(t._0, t._1, t._2, t._3);
+    });
+
+  inline static public function spread5<A, B, C, D, E, F>(v : Option<Tuple5<A, B, C, D, E>>, f : A -> B -> C -> D -> E -> F) : Option<F>
+    return map(v, function(t) {
+      return f(t._0, t._1, t._2, t._3, t._4);
+    });
+
+  inline static public function spread6<A, B, C, D, E, F, G>(v : Option<Tuple6<A, B, C, D, E, F>>, f : A -> B -> C -> D -> E -> F -> G) : Option<G>
+    return map(v, function(t) {
+      return f(t._0, t._1, t._2, t._3, t._4, t._5);
+    });
 }

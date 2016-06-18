@@ -4,6 +4,7 @@ import utest.ui.Report;
 class TestAll {
   public static function addTests(runner : Runner) {
     runner.addCase(new thx.TestAnonymousMap());
+    runner.addCase(new thx.TestAny());
     runner.addCase(new thx.TestArrays());
     runner.addCase(new thx.TestAssert());
     runner.addCase(new thx.TestBigInt());
@@ -37,6 +38,7 @@ class TestAll {
     runner.addCase(new thx.TestMaps());
     runner.addCase(new thx.TestNulls());
     runner.addCase(new thx.TestObjects());
+    runner.addCase(new thx.TestOptions());
     runner.addCase(new thx.TestPath());
     runner.addCase(new thx.TestRational());
     runner.addCase(new thx.TestReadonlyArray());
@@ -55,6 +57,7 @@ class TestAll {
     runner.addCase(new thx.TestUrl());
     runner.addCase(new thx.TestValidation());
 
+    runner.addCase(new thx.fp.TestDynamics());
     runner.addCase(new thx.fp.TestList());
     runner.addCase(new thx.fp.TestMap());
     runner.addCase(new thx.fp.TestSet());
