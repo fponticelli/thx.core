@@ -6,9 +6,27 @@ import thx.Weekday;
 
 class TestLocalYearMonth {
   public function new() {}
+
+  public function testAroundZero() {
+    var tests = [
+      { expected : "-2-12", value : -13 },
+      { expected : "-1-01", value : -12 },
+      { expected : "-1-02", value : -11 },
+      { expected : "-1-12", value : -1  },
+      { expected : "1-01",  value : 0   },
+      { expected : "1-02",  value : 1   },
+      { expected : "1-12",  value : 11  },
+      { expected : "2-01",  value : 12  }
+    ];
+    for(test in tests) {
+      var s = LocalYearMonth.fromInt(test.value).toString();
+      Assert.isTrue(test.expected == s, 'toString: expected ${test.expected} but got $s for ${test.value}');
+      var p = LocalYearMonth.fromString(test.expected);
+      Assert.isTrue(test.value == p.months, 'fromString: expected months to be ${test.value} but got $p (${p.month}) for ${test.expected}');
+    }
+  }
   var date = LocalYearMonth.create(2015, 7);
   var next = LocalYearMonth.create(2015, 8);
-
 
   public function testCreate() {
     Assert.equals(2015, date.year, 'expected 2015 but got ${date.year} for year');
@@ -62,12 +80,12 @@ class TestLocalYearMonth {
 #if (!cs || haxe_ver > 3.210)
   public function testFromToDate() {
     var d = LocalYearMonth.fromDate(date.toDate());
-    Assert.isTrue(date.month + 1 == d.month && date.year == d.year, 'expected $date but got ${(d : LocalYearMonth)}');
+    Assert.isTrue((date.month) == d.month && date.year == d.year, 'expected $date but got ${(d : LocalYearMonth)}');
   }
 
   public function testFromToTime() {
     var d : LocalYearMonth = LocalYearMonth.fromTime(date.toDate().getTime());
-    Assert.isTrue(date.month + 1 == d.month && date.year == d.year, 'expected $date but got ${(d : LocalYearMonth)}');
+    Assert.isTrue(date.month == d.month && date.year == d.year, 'expected $date but got ${(d : LocalYearMonth)}');
   }
 #end
 
@@ -84,8 +102,8 @@ class TestLocalYearMonth {
     var d = date
               .addYears(2)
               .addMonths(9),
-        e = "2018-05";
-    Assert.isTrue(d == e, 'expected $e but got $d');
+        e = "2018-04";
+    Assert.isTrue(d.toString() == e, 'expected $e but got $d');
   }
 
   public function testAddMonth() {
@@ -112,7 +130,7 @@ class TestLocalYearMonth {
     assertSnapNext("2013-12", "2013-12", Day);
     assertSnapNext("2014-12", "2014-12", Week);
     assertSnapNext("2015-01", "2014-12", Month);
-    assertSnapNext("2015-05", "2014-05", Year);
+    assertSnapNext("2015-01", "2014-05", Year);
     assertSnapNext("2015-01", "2014-12", Year);
   }
 
@@ -120,9 +138,8 @@ class TestLocalYearMonth {
     assertSnapPrev("2013-12", "2014-01", Minute);
     assertSnapPrev("2013-12", "2014-01", Hour);
     assertSnapPrev("2013-12", "2014-01", Day);
-    assertSnapPrev("2013-12", "2013-12", Day);
-    assertSnapPrev("2014-12", "2014-12", Week);
-    assertSnapPrev("2014-12", "2014-12", Week);
+    assertSnapPrev("2013-11", "2013-12", Day);
+    assertSnapPrev("2014-11", "2014-12", Week);
     assertSnapPrev("2014-11", "2014-12", Month);
     assertSnapPrev("2013-01", "2014-05", Year);
     assertSnapPrev("2013-01", "2014-12", Year);
@@ -136,7 +153,7 @@ class TestLocalYearMonth {
     assertSnapTo("2014-12", "2014-12", Week);
     assertSnapTo("2014-12", "2014-12", Week);
     assertSnapTo("2014-12", "2014-12", Month);
-    assertSnapTo("2015-01", "2014-12", Month);
+    assertSnapTo("2014-12", "2014-12", Month);
     assertSnapTo("2014-01", "2014-05", Year);
     assertSnapTo("2015-01", "2014-12", Year);
   }

@@ -48,14 +48,9 @@ Converts a string into a `LocalYearMonth` value. The accepted format looks like 
     var pattern = ~/^([-])?(\d+)[-](\d{2})$/;
     if(!pattern.match(s))
       throw new thx.Error('unable to parse LocalYearMonth string: "$s"');
-
-    var date = create(
-        Std.parseInt(pattern.matched(2)),
-        Std.parseInt(pattern.matched(3))
-    );
-    if(pattern.matched(1) == "-")
-      return new LocalYearMonth(-date.months);
-    return date;
+    var years  = Std.parseInt(pattern.matched(2)),
+        months = Std.parseInt(pattern.matched(3));
+    return create((pattern.matched(1) == "-" ? -1 : 1) * years, months);
   }
 
   inline public static function compare(a : LocalYearMonth, b : LocalYearMonth)
@@ -84,11 +79,18 @@ Creates a LocalYearMonth instance from its components (year, mont, day).
       month = month - years * 12;
     }
 
-    return rawDateToDays(year, month);
+    return rawDateToMonths(year, month);
   }
 
-  public static function rawDateToDays(year : Int, month : Int) : Int
-    return (year - 1) * 12 + month;
+  static function rawDateToMonths(year : Int, month : Int) : Int {
+    if(year == 0) {
+      return dateToMonth(-1, month + 1);
+    } else if(year < 0) {
+      return (year + 1) * 12 - (13 - month);
+    } else {
+      return (year - 1) * 12 + month - 1;
+    }
+  }
 
 /**
 Creates an array of dates that begin at `start` and end at `end` included.
@@ -173,15 +175,27 @@ Snaps a time to the next second, minute, hour, day, week, month or year.
 @param period Either: Second, Minute, Hour, Day, Week, Month or Year
 **/
   public function snapNext(period : TimePeriod) : LocalYearMonth
-    return toLocalDate().snapNext(period).toLocalYearMonth();
+    return switch period {
+      case Second, Minute, Hour, Day, Week:
+        self();
+      case Month:
+        new LocalYearMonth(this + 1);
+      case Year:
+        LocalYearMonth.create(year + 1, 1);
+    };
 
 /**
 Snaps a time to the previous second, minute, hour, day, week, month or year.
 
 @param period Either: Second, Minute, Hour, Day, Week, Month or Year
 **/
-  public function snapPrev(period : TimePeriod) : LocalYearMonth
-    return toLocalDate().snapPrev(period).toLocalYearMonth();
+public function snapPrev(period : TimePeriod) : LocalYearMonth
+  return switch period {
+    case Second, Minute, Hour, Day, Week, Month:
+      new LocalYearMonth(this - 1);
+    case Year:
+      LocalYearMonth.create(year - 1, 1);
+  };
 
 /**
 Snaps a time to the nearest second, minute, hour, day, week, month or year.
@@ -189,7 +203,14 @@ Snaps a time to the nearest second, minute, hour, day, week, month or year.
 @param period Either: Second, Minute, Hour, Day, Week, Month or Year
 **/
   public function snapTo(period : TimePeriod) : LocalYearMonth
-    return toLocalDate().snapTo(period).toLocalYearMonth();
+    return switch period {
+      case Second, Minute, Hour, Day, Week, Month:
+        self();
+      case Year if(month <= 6):
+        LocalYearMonth.create(year, 1);
+      case Year:
+        LocalYearMonth.create(year + 1, 1);
+    };
 
 /**
 Returns true if this date and the `other` date share the same year.
@@ -286,19 +307,27 @@ Returns true if this date and the `other` date share the same year and month.
     if(null == this)
       return "";
 #end
-    var abs = LocalYearMonth.fromInt(Ints.abs(months));
-    var isneg = months < 0;
-    return (isneg ? "-" : "") + '${abs.year}-${abs.month.lpad("0", 2)}';
+    return '${year}-${month.lpad("0", 2)}';
   }
 
   inline function get_months() : Int
     return this;
 
-  inline function get_year() : Int
-    return 1 + Math.floor(this / 12);
+  function get_year() : Int {
+    if(this < 0) {
+      return Math.floor(this / 12);
+    } else {
+      return 1 + Math.floor(this / 12);
+    }
+  }
 
-  inline function get_month() : Int
-    return (this % 12) + 1;
+  function get_month() : Int {
+    if(this < 0) {
+      return 12 + ((this + 1) % 12);
+    } else {
+      return (this % 12) + 1;
+    }
+  }
 
   inline function get_isInLeapYear() : Bool
     return DateTimeUtc.isLeapYear(year);
