@@ -18,7 +18,7 @@ Returns the system date/time relative to UTC.
     return fromDate(Date.now());
 
 /**
-Returns a LocalYearMonth instance from an `Int` value. The value is the number of days
+Returns a LocalYearMonth instance from an `Int` value. The value is the number of months
 since 1 C.E. (A.D.).
 */
   inline public static function fromInt(months : Int) : LocalYearMonth
