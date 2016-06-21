@@ -496,9 +496,10 @@ Returns true if this date and the `other` date share the same year and month.
 
   inline public function toDate() : Date
     return new Date(year, month - 1, day, 0, 0, 0);
-
   inline public function toLocalYearMonth() : LocalYearMonth
     return LocalYearMonth.create(year, month);
+  inline public function toDateTimeUtc() : DateTimeUtc
+    return DateTimeUtc.create(year, month, day, 0, 0, 0);
 
   //1997-07-16
   public function toString() {

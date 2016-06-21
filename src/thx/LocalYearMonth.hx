@@ -298,7 +298,7 @@ Returns true if this date and the `other` date share the same year and month.
 
   inline public function toDate() : Date
     return new Date(year, month - 1, 1, 0, 0, 0);
-  inline public function toDateTimeUtc() : Date
+  inline public function toDateTimeUtc() : DateTimeUtc
     return DateTimeUtc.create(year, month, 1, 0, 0, 0);
   inline public function toLocalDate() : LocalDate
     return LocalDate.create(year, month, 1);
