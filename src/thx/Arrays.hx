@@ -460,6 +460,13 @@ It returns the first element of the array or null if the array is empty.
   inline public static function first<T>(array : ReadonlyArray<T>) : Null<T>
     return array[0];
 
+
+/**
+It returns an option of the first element or None if the array is empty.
+**/
+  inline public static function firstOption<T>(array : ReadonlyArray<T>) : Option<T>
+    return Options.ofValue(array[0]);
+
 /**
 It traverses an array of elements. Each element is split using the `callback` function and a 'flattened' array is returned.
 
