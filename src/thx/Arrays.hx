@@ -625,6 +625,12 @@ It returns the last element of the array or null if the array is empty.
     return array[array.length-1];
 
 /**
+It returns an option of the last element, `None` if the array is empty.
+**/
+  inline public static function lastOption<T>(array : ReadonlyArray<T>) : Option<T>
+    return Options.ofValue(last(array));
+
+/**
 Static wrapper for `Array` `map` function.
 **/
   #if js inline #end
