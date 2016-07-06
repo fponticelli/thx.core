@@ -77,17 +77,17 @@ class StringOrderedMap<V> extends OrderedMapImpl<String, V> {
   override public function empty() : OrderedMapImpl<String, V>
     return new StringOrderedMap();
 
-  static function reduceArray<T, V>(array : ReadonlyArray<T>, toKey : T -> String, toVal : T -> V) : StringOrderedMap<V>
+  public static function fromArray<T, V>(array : ReadonlyArray<T>, toKey : T -> String, toVal : T -> V) : StringOrderedMap<V>
     return Arrays.reduce(array, function (acc : StringOrderedMap<V>, curr : T) {
       acc.set(toKey(curr), toVal(curr));
       return acc;
     }, new StringOrderedMap());
 
-  public static inline function fromArray<V>(array : ReadonlyArray<V>, toKey : V -> String) : StringOrderedMap<V>
-    return reduceArray(array, toKey, function (val) return val);
+  public static inline function fromValueArray<V>(array : ReadonlyArray<V>, toKey : V -> String) : StringOrderedMap<V>
+    return fromArray(array, toKey, function (val) return val);
 
   public static inline function fromTuples<V>(array : ReadonlyArray<Tuple<String, V>>) : StringOrderedMap<V>
-    return reduceArray(array, function (t) return t.left, function (t) return t.right);
+    return fromArray(array, function (t) return t.left, function (t) return t.right);
 }
 
 class OrderedMapImpl<K, V> implements IMap<K, V> {
