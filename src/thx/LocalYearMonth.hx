@@ -39,18 +39,33 @@ Transforms an epoch time value in milliconds into `LocalYearMonth`.
 /**
 Converts a string into a `LocalYearMonth` value. The accepted format looks like this:
 ```
-2016-08-07
+2016-08
 ```
 */
   @:from public static function fromString(s : String) : LocalYearMonth {
-    if(s == null)
-      throw new thx.Error('null String cannot be parsed to LocalYearMonth');
-    var pattern = ~/^([-])?(\d+)[-](\d{2})$/;
-    if(!pattern.match(s))
-      throw new thx.Error('unable to parse LocalYearMonth string: "$s"');
-    var years  = Std.parseInt(pattern.matched(2)),
-        months = Std.parseInt(pattern.matched(3));
-    return create((pattern.matched(1) == "-" ? -1 : 1) * years, months);
+    return switch parse(s) {
+      case Left(error) : throw new thx.Error(error);
+      case Right(v) : v;
+    };
+  }
+
+/**
+Alternative to fromString that returns the error/success values in an Either,
+rather than throwing and Error.
+*/
+  public static function parse(s : String) : Either<String, LocalYearMonth> {
+    return if (s == null) {
+      Left('null String cannot be parsed to LocalYearMonth');
+    } else {
+      var pattern = ~/^([-])?(\d+)[-](\d{2})$/;
+      if(!pattern.match(s)) {
+        Left('unable to parse LocalYearMonth string: "$s"');
+      } else {
+        var years  = Std.parseInt(pattern.matched(2)),
+            months = Std.parseInt(pattern.matched(3));
+        return Right(create((pattern.matched(1) == "-" ? -1 : 1) * years, months));
+      }
+    }
   }
 
   inline public static function compare(a : LocalYearMonth, b : LocalYearMonth)

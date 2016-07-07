@@ -2,7 +2,9 @@ package thx;
 
 import haxe.PosInfos;
 import utest.Assert;
+import thx.Either;
 import thx.Weekday;
+using thx.Eithers;
 
 class TestLocalYearMonth {
   public function new() {}
@@ -52,6 +54,26 @@ class TestLocalYearMonth {
   public function testToString() {
     Assert.equals('2015-07', date.toString());
     Assert.equals('1-01', LocalYearMonth.fromInt(0).toString());
+  }
+
+  public function testFromString() {
+    Assert.same(LocalYearMonth.create(2012, 2), LocalYearMonth.fromString("2012-02"));
+    Assert.raises(function() LocalYearMonth.fromString("x"));
+    Assert.raises(function() LocalYearMonth.fromString("2012"));
+    Assert.raises(function() LocalYearMonth.fromString("2012-x"));
+    Assert.raises(function() LocalYearMonth.fromString("2012-2"));
+    Assert.raises(function() LocalYearMonth.fromString("2012-0x"));
+    Assert.raises(function() LocalYearMonth.fromString("2012-100"));
+  }
+
+  public function testParse() {
+    Assert.same(Right(LocalYearMonth.create(2012, 2)), LocalYearMonth.parse("2012-02"));
+    Assert.isTrue(LocalYearMonth.parse("x").isLeft());
+    Assert.isTrue(LocalYearMonth.parse("2012").isLeft());
+    Assert.isTrue(LocalYearMonth.parse("2012-x").isLeft());
+    Assert.isTrue(LocalYearMonth.parse("2012-2").isLeft());
+    Assert.isTrue(LocalYearMonth.parse("2012-0x").isLeft());
+    Assert.isTrue(LocalYearMonth.parse("2012-100").isLeft());
   }
 
   public function testEquals() {

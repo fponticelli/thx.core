@@ -68,14 +68,16 @@ class Dynamics {
       case other: failureNel('Cannot parse a boolean value from $v (type resolved to $other)');
     };
 
-  public static function parseDate(v: Dynamic): VNel<String, Date> 
+  public static function parseDate(v: Dynamic): VNel<String, Date>
     return parseString(v).flatMapV(liftVNel.compose(Dates.parseDate));
 
-  public static function parseLocalDate(v: Dynamic): VNel<String, LocalDate> 
+  public static function parseLocalDate(v: Dynamic): VNel<String, LocalDate>
     return parseString(v).flatMapV(liftVNel.compose(LocalDate.parse));
 
+  public static function parseLocalYearMonth(v: Dynamic): VNel<String, LocalYearMonth>
+    return parseString(v).flatMapV(liftVNel.compose(LocalYearMonth.parse));
 
-  public static function parseProperty<E, A>(ob: {}, name: String, f: Dynamic -> VNel<E, A>, err: String -> E): VNel<E, A> 
+  public static function parseProperty<E, A>(ob: {}, name: String, f: Dynamic -> VNel<E, A>, err: String -> E): VNel<E, A>
     return nnNel(ob.getPath(name), err('Property "$name" was not found.')).flatMapV(f);
 
   // This demands that the parser for the field value be able to accept
@@ -113,7 +115,7 @@ class Dynamics {
   public static function parseStringMap<E, K, V>(v: Dynamic, f: Dynamic -> String -> VNel<E, V>, err: String -> E): VNel<E, std.Map<String, V>> {
     return if (Reflect.isObject(v)) {
       Reflect.fields(v).traverseValidation(
-        function(field: String) return f(Reflect.getProperty(v, field), field).map(Tuple.of.bind(field, _)), 
+        function(field: String) return f(Reflect.getProperty(v, field), field).map(Tuple.of.bind(field, _)),
         Nel.semigroup()
       ).map(Arrays.toStringMap);
     } else {
@@ -124,7 +126,7 @@ class Dynamics {
   public static function parseMap<E, K, V>(v: Dynamic, f: String -> Dynamic -> VNel<E, Tuple<K, V>>, keyOrder: Ord<K>, err: String -> E): VNel<E, thx.fp.Map<K, V>> {
     return if (Reflect.isObject(v)) {
       Reflect.fields(v).traverseValidation(
-        function(field: String) return f(field, Reflect.getProperty(v, field)), 
+        function(field: String) return f(field, Reflect.getProperty(v, field)),
         Nel.semigroup()
       ).flatMapV(
         function(tuples) return Arrays.toMap(tuples, keyOrder).leftMap(
