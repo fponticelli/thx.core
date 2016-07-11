@@ -1,5 +1,9 @@
 package thx;
 
+import thx.Validation;
+import thx.Validation.*;
+import thx.Validation.VNel;
+import thx.Validation.VNel.*;
 using haxe.Int64;
 using thx.Ints;
 using thx.Int64s;
@@ -128,6 +132,18 @@ In this case the sign (`+`/`-`) is not optional and seconds cannot be used.
     if(pattern.matched(1) == "-")
       return new DateTime(DateTimeUtc.fromInt64(-date.utc.ticks), time);
     return date;
+  }
+
+/**
+Alternative to fromString that returns the result in an Either rather than
+a value or a thrown error.
+**/
+  public static function parse(s : String) : Either<String, DateTime> {
+    return try {
+      Right(fromString(s));
+    } catch (e : Dynamic) {
+      Left(thx.Error.fromDynamic(e).message);
+    }
   }
 
 /**

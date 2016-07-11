@@ -90,6 +90,18 @@ exception is thrown.
   @:from public static function fromString(s : String) : DateTimeUtc
     return DateTime.fromString(s).utc;
 
+/**
+Alternative to fromString that returns the result in an Either, rather than
+a value or a thrown error.
+**/
+  public static function parse(s : String) : Either<String, DateTimeUtc> {
+    return try {
+      Right(fromString(s));
+    } catch (e : Dynamic) {
+      Left(thx.Error.fromDynamic(e).message);
+    }
+  }
+
   inline public static function compare(a : DateTimeUtc, b : DateTimeUtc)
     return a.compareTo(b);
 
