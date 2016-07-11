@@ -3,6 +3,8 @@ package thx.fp;
 import haxe.ds.Option;
 import haxe.ds.StringMap;
 
+import thx.DateTime;
+import thx.DateTimeUtc;
 import thx.Dates;
 import thx.Ints;
 import thx.Floats;
@@ -70,6 +72,12 @@ class Dynamics {
 
   public static function parseDate(v: Dynamic): VNel<String, Date>
     return parseString(v).flatMapV(liftVNel.compose(Dates.parseDate));
+
+  public static function parseDateTime(v : Dynamic) : VNel<String, DateTime>
+    return parseString(v).flatMapV(liftVNel.compose(DateTime.parse));
+
+  public static function parseDateTimeUtc(v : Dynamic) : VNel<String, DateTimeUtc>
+    return parseString(v).flatMapV(liftVNel.compose(DateTimeUtc.parse));
 
   public static function parseLocalDate(v: Dynamic): VNel<String, LocalDate>
     return parseString(v).flatMapV(liftVNel.compose(LocalDate.parse));
