@@ -59,6 +59,15 @@ class Dynamics {
       case other: failureNel('$v is not a String value (type resolved to $other)');
     };
 
+  public static function parseNonEmptyString(v : Dynamic) : VNel<String, String>
+    return parseString(v).flatMapV(function(str : String) : VNel<String, String> {
+      return if (str == null || str.length == 0) {
+        failureNel('"$v" is not a non-empty String value');
+      } else {
+        successNel(str);
+      }
+    });
+
   public static function parseBool(v: Dynamic): VNel<String, Bool>
     return switch Type.typeof(v) {
       case TBool: successNel(cast v);
