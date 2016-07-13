@@ -137,6 +137,18 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
       v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>, v5: Validation<X, E>, v6: Validation<X, F>, v7: Validation<X, G>, v8: Validation<X, H>,
       s: Semigroup<X>): Validation<X, I>
     return v8.ap(val7(f.curry(), v1, v2, v3, v4, v5, v6, v7, s), s);
+
+  inline static public function val9<X, A, B, C, D, E, F, G, H, I, J>(
+      f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J,
+      v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>, v5: Validation<X, E>, v6: Validation<X, F>, v7: Validation<X, G>, v8: Validation<X, H>, v9: Validation<X, I>,
+      s: Semigroup<X>): Validation<X, J>
+    return v9.ap(val8(f.curry(), v1, v2, v3, v4, v5, v6, v7, v8, s), s);
+
+  inline static public function val10<X, A, B, C, D, E, F, G, H, I, J, K>(
+      f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K,
+      v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>, v5: Validation<X, E>, v6: Validation<X, F>, v7: Validation<X, G>, v8: Validation<X, H>, v9: Validation<X, I>, v10: Validation<X, J>,
+      s: Semigroup<X>): Validation<X, K>
+    return v10.ap(val9(f.curry(), v1, v2, v3, v4, v5, v6, v7, v8, v9, s), s);
 }
 
 class ValidationExtensions {
