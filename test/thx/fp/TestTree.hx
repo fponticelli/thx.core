@@ -26,6 +26,7 @@ import thx.fp.Tree;
     }
     Assert.equals(bf,tbf.join(""));
   }
+  /*
   public function testVisitor(){
     var tree    = construct();
     var visitor = tree.visit();
@@ -79,13 +80,9 @@ import thx.fp.Tree;
     //trace("________________");
     root = m.up();
     Assert.equals(0,root.path.length);
-    /*
-
-    */
-
-    /*
+  
     m = mm.up();
     trace(m);
-    Assert.equals('m',m.value());*/
-  }
+    Assert.equals('m',m.value());
+  }*/
 }
