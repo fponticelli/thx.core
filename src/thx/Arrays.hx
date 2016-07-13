@@ -160,7 +160,6 @@ same. It stops as soon as the arrays differ.
         break;
     return self.slice(0, count);
   }
-
 /**
 Filters out all null elements in the array
 **/
@@ -731,6 +730,16 @@ It applies a function against an accumulator and each value of the array (from l
   public static inline function foldLeft<A, B>(array: ReadonlyArray<A>, init: B, f: B -> A -> B): B
     return reduce(array, f, init);
 
+/**
+ * As with foldLeft, but uses first element as Init.
+ */
+    public static inline function foldLeft1<A, B>(array: ReadonlyArray<A>, f: A -> A -> A): A{
+      var tail = array.dropLeft(1);
+      var head = array.first();
+      return reduce(tail, f, head);
+    }
+
+
   public static function foldLeftEither<A, E, B>(array: ReadonlyArray<A>, init: B, f: B -> A -> Either<E, B>): Either<E, B> {
     var acc: Either<E, B> = Right(init);
     for (a in array) {
@@ -1230,7 +1239,27 @@ Finds the min element of the array given the specified ordering.
 
     return r;
   }
-
+/**
+  Pads out to len, ignores if len is less than Array length.
+**/
+  static public function pad<T>(arr:Array<T>,len:Int):Array<T>{
+    var len0 = len - arr.length;
+    var arr0 = [];
+    for (i in 0...len0){
+      arr0.push(null);
+    }
+    return arr.concat(arr0);
+  }
+/**
+  Fills `null` values in `arr` with `def`.
+**/
+  static public function fill<T>(arr:Array<T>,def:T):Array<T>{
+    return arr.map(
+      function(x){
+        return x == null ? def : x;
+      }
+    );
+  }
 }
 
 /**

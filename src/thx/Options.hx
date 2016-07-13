@@ -83,7 +83,7 @@ wrapped in another Option.
       case None: ifNone;
       case Some(v): f(v);
     };
-  
+
 /**
 `foldLeft` reduce using an accumulating function and an initial value.
 **/
@@ -216,7 +216,15 @@ is be `None`.
       case None: Validation.successNel(value);
       case Some(e): Validation.failureNel(e);
     };
-
+/**
+	Performs `f` on the contents of `o` if `o` != None
+**/
+  public static function each<T>(o: Option<T>, f: T -> Void): Option<T> {
+    return switch (o) {
+      case None     : o;
+      case Some(v)  : f(v); o;
+    }
+  }
   inline static public function ap2<A, B, C>(f: A -> B -> C, v1: Option<A>, v2: Option<B>): Option<C>
     return ap(v2, map(v1, Functions2.curry(f)));
 

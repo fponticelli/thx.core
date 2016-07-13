@@ -222,6 +222,61 @@ as compared by the specified ordering.
     return extremaBy(it, Functions.identity, ord);
 
 /**
+  Take values until the first time `fn` produced false.
+**/
+  public static function takeUntil<A>(it: Iterable<A>,fn: A -> Bool): Array<A>{
+    return Iterators.takeUntil(it.iterator(),fn);
+  }
+/**
+	Produces an Array from `a[n]` to the last element of `a`.
+**/
+  static public function dropLeft<A>(itr: Iterable<A>, n: Int): Iterable<A> {
+    return {
+      iterator : function(){
+        var itr   = itr.iterator();
+        var count = n;
+        while(count > 0){
+          itr.next();
+        }
+        return {
+          next : itr.next,
+          hasNext : itr.hasNext
+        };
+      }
+    };
+  }
+/**
+  Drop values until the first time `fn` produced false.
+**/
+  public static function dropUntil<A>(it:Iterable<A>, fn : A -> Bool) : Array<A>{
+    return Iterators.dropUntil(it.iterator(),fn);
+  }
+  /**
+    Returns an Array that contains all elements from a which are also elements of b.
+    If a contains duplicates, so will the result.
+  **/
+    public static function unionBy<T>(a:Iterable<T>, b:Iterable<T>, eq:T->T->Bool){
+      var res = [];
+      for(e in a){
+        res.push(e);
+      }
+      for (e in b) {
+        if (!any(res, function (x) return eq(x, e))) res.push(e);
+      }
+      return res;
+    }
+  /**
+   Returns an Array that contains all elements from a which are not elements of b.
+    If a contains duplicates, the resulting Array contains duplicates.
+  **/
+    public static function differenceBy<T>(a:Iterable<T>, b:Iterable<T>, eq:T->T->Bool){
+      var res = [];
+      for (e in a) {
+        if (!any(b, function (x) return eq(x, e))) res.push(e);
+      }
+      return res;
+    }
+/**
 Unzip an iterable of Tuple2<T1, T2> to a Tuple2<Array<T1>, Array<T2>>.
 **/
   public static function unzip<T1, T2>(it : Iterable<Tuple2<T1, T2>>)

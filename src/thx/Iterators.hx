@@ -242,6 +242,39 @@ Refer to `thx.Arrays.reducei`.
     return foldLeft(fmap(it, f), m.zero, m.append);
 
 /**
+  Take values until the first time `fn` produced false.
+**/
+  public static function takeUntil<A>(it:Iterator<A>, f : A -> Bool) : Array<A>{
+    var out = [];
+    for(v in it){
+      if(f(v)){
+        out.push(v);
+      }else{
+        break;
+      }
+    }
+    return out;
+  }
+/**
+  Drop values until the first time `fn` produces false.
+**/
+  public static function dropUntil<A>(it:Iterator<A>, f : A -> Bool) : Array<A>{
+    var done  = false;
+    var out   = [];
+    for(v in it){
+      if(!done){
+        if(!f(v)){
+          done = true;
+          out.push(v);
+        }
+      }else{
+        out.push(v);
+      }
+    }
+    return out;
+  }
+
+/**
 `toArray` transforms an `Iterator<T>` into an `Array<T>`.
 **/
   public static function toArray<T>(it : Iterator<T>) : Array<T> {
