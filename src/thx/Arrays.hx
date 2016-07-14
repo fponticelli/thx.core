@@ -746,10 +746,18 @@ It applies a function against an accumulator and each value of the array (from l
 /**
  * As with foldLeft, but uses first element as Init.
  */
-    public static inline function foldLeft1<A, B>(array: ReadonlyArray<A>, f: A -> A -> A): A{
+    public static inline function foldLeft1<A, B>(array: ReadonlyArray<A>, f: A -> A -> A): Option<A>{
       var tail = array.dropLeft(1);
       var head = array.first();
-      return reduce(tail, f, head);
+      return reduce(tail,
+        function(memo,next){
+          return switch [memo,next] {
+            case [None,Some(v)]     : Some(v);
+            case [None,None]        : None;
+            case [Some(a),Some(b)]  : thx.Options.toOption(f(a,b));
+          }
+        }
+      , Options.toOption(head));
     }
 
 
