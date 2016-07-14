@@ -1253,20 +1253,20 @@ Finds the min element of the array given the specified ordering.
     return r;
   }
 /**
-  Pads out to len, ignores if len is less than Array length.
+  Pads out to len with optional default `def`, ignores if len is less than Array length.
 **/
-  static public function pad<T>(arr:Array<T>,len:Int):Array<T>{
+  static public function pad<T>(arr:ReadonlyArray<T>,len:Int,?def:Null<T>):Array<T>{
     var len0 = len - arr.length;
     var arr0 = [];
     for (i in 0...len0){
-      arr0.push(null);
+      arr0.push(def);
     }
     return arr.concat(arr0);
   }
 /**
   Fills `null` values in `arr` with `def`.
 **/
-  static public function fill<T>(arr:Array<T>,def:T):Array<T>{
+  static public function fill<T>(arr:ReadonlyArray<T>,def:T):Array<T>{
     return arr.map(
       function(x){
         return x == null ? def : x;

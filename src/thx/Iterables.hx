@@ -230,13 +230,15 @@ as compared by the specified ordering.
 /**
 	Produces an Array from `a[n]` to the last element of `a`.
 **/
-  static public function dropLeft<A>(itr: Iterable<A>, n: Int): Iterable<A> {
+  static public function c<A>(itr: Iterable<A>, n: Int): Iterable<A> {
     return {
       iterator : function(){
         var itr   = itr.iterator();
         var count = n;
         while(count > 0){
-          itr.next();
+          if(itr.hasNext()){
+            itr.next();
+          }
         }
         return {
           next : itr.next,
