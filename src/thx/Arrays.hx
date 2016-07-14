@@ -1244,7 +1244,9 @@ Finds the min element of the array given the specified ordering.
 	Drops values from Array `a` while the predicate returns true.
 **/
   static public function dropWhile<T>(a: ReadonlyArray<T>, p: T -> Bool): Array<T> {
-    var r = [].concat(a.toArray());
+    var r : Array<T> = [].concat(
+      a.unsafe()
+    );
 
     for (e in a) {
       if (p(e)) r.shift(); else break;
@@ -1261,7 +1263,7 @@ Finds the min element of the array given the specified ordering.
     for (i in 0...len0){
       arr0.push(def);
     }
-    return arr.concat(arr0);
+    return arr.unsafe().concat(arr0);
   }
 /**
   Fills `null` values in `arr` with `def`.
