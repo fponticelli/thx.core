@@ -751,9 +751,11 @@ It applies a function against an accumulator and each value of the array (from l
       var head = array.first();
       return reduce(tail,
         function(memo,next){
-          return switch [memo,next] {
+          var wrapped = Options.toOption(next);
+          return switch [memo,wrapped] {
             case [None,Some(v)]     : Some(v);
             case [None,None]        : None;
+            case [Some(v),None]     : Some(v);
             case [Some(a),Some(b)]  : thx.Options.toOption(f(a,b));
           }
         }
