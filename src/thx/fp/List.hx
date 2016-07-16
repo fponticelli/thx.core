@@ -67,7 +67,37 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
       case Cons(x, xs): Cons(x, go(xs));
     };
   }
-
+  public function head():Null<A>{
+    return switch(this){
+      case Cons(x,xs) : x;
+      default         : null;
+    }
+  }
+  public function tail():List<A>{
+    return switch(this){
+      case Cons(x,xs) : xs;
+      default         : empty();
+    }
+  }
+  public function last():Null<A>{
+    var crs = this;
+    var val = null;
+    while(true){
+      switch crs {
+        case Cons(x,xs):
+          val = x;
+          crs = xs;
+        default: break;
+      }
+    }
+    return val;
+  }
+  public function isDefined():Bool{
+    return switch(this){
+      case Nil    : false;
+      default     : true;
+    }
+  }
   public function map<B>(f : A -> B) : List<B>
     return switch this {
       case Nil: Nil;
@@ -77,7 +107,7 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
   public function zipAp<B>(other: List<A -> B>): List<B>
     return switch this {
       case Nil: Nil;
-      case Cons(x, xs): 
+      case Cons(x, xs):
         switch other {
           case Nil: Nil;
           case Cons(y, ys): Cons(y(x), xs.zipAp(ys));
@@ -87,13 +117,13 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
   /**
    * Zip two arrays by applying the provided function to the aligned members.
    */
-  public static function zip2Ap<A, B, C>(f: A -> B -> C, ax: List<A>, bx: List<B>): List<C> 
+  public static function zip2Ap<A, B, C>(f: A -> B -> C, ax: List<A>, bx: List<B>): List<C>
     return bx.zipAp(ax.map(Functions2.curry(f)));
 
   /**
    * Zip three arrays by applying the provided function to the aligned members.
    */
-  public static function zip3Ap<A, B, C, D>(f: A -> B -> C -> D, ax: List<A>, bx: List<B>, cx: List<C>): List<D> 
+  public static function zip3Ap<A, B, C, D>(f: A -> B -> C -> D, ax: List<A>, bx: List<B>, cx: List<C>): List<D>
     return cx.zipAp(zip2Ap(Functions3.curry(f), ax, bx));
 
   /**

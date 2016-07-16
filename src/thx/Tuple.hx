@@ -134,6 +134,12 @@ Provides a string representation of the Tuple
   public function map<T2>(f: T1 -> T2): Tuple2<T0, T2>
     return new Tuple2(this._0, f(this._1));
 
+  static public function squeeze<T1,T2,R>(f:T1->T2->R):Tuple2<T1,T2> -> R {
+    return function(tp){
+      return f(tp._0,tp._1);
+    }
+  }
+
   @:from inline static public function arrayToTuple2<T>(v : Array<T>) : Tuple2<T, T>
     return new Tuple2(v[0], v[1]);
 }

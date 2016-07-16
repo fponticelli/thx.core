@@ -44,6 +44,7 @@ class TestAll {
     runner.addCase(new thx.TestReadonlyArray());
     runner.addCase(new thx.TestQueryString());
     runner.addCase(new thx.TestSet());
+
     runner.addCase(new thx.TestStaticResource());
     runner.addCase(new thx.TestStrings());
     runner.addCase(new thx.TestTime());
@@ -61,6 +62,7 @@ class TestAll {
     runner.addCase(new thx.fp.TestList());
     runner.addCase(new thx.fp.TestMap());
     runner.addCase(new thx.fp.TestSet());
+    runner.addCase(new thx.fp.TestTree());
     runner.addCase(new thx.fp.TestState());
     runner.addCase(new thx.fp.TestWriter());
     runner.addCase(new thx.fp.TestTreeBag());

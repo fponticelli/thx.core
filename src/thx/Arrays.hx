@@ -160,7 +160,6 @@ same. It stops as soon as the arrays differ.
         break;
     return self.slice(0, count);
   }
-
 /**
 Filters out all null elements in the array
 **/
@@ -744,6 +743,26 @@ It applies a function against an accumulator and each value of the array (from l
   public static inline function foldLeft<A, B>(array: ReadonlyArray<A>, init: B, f: B -> A -> B): B
     return reduce(array, f, init);
 
+/**
+ * As with foldLeft, but uses first element as Init.
+ */
+    public static inline function foldLeft1<A, B>(array: ReadonlyArray<A>, f: A -> A -> A): Option<A>{
+      var tail = array.dropLeft(1);
+      var head = array.first();
+      return reduce(tail,
+        function(memo,next){
+          var wrapped = Options.toOption(next);
+          return switch [memo,wrapped] {
+            case [None,Some(v)]     : Some(v);
+            case [None,None]        : None;
+            case [Some(v),None]     : Some(v);
+            case [Some(a),Some(b)]  : thx.Options.toOption(f(a,b));
+          }
+        }
+      , Options.toOption(head));
+    }
+
+
   public static function foldLeftEither<A, E, B>(array: ReadonlyArray<A>, init: B, f: B -> A -> Either<E, B>): Either<E, B> {
     var acc: Either<E, B> = Right(init);
     for (a in array) {
@@ -1235,7 +1254,9 @@ Finds the min element of the array given the specified ordering.
 	Drops values from Array `a` while the predicate returns true.
 **/
   static public function dropWhile<T>(a: ReadonlyArray<T>, p: T -> Bool): Array<T> {
-    var r = [].concat(a.toArray());
+    var r : Array<T> = [].concat(
+      a.unsafe()
+    );
 
     for (e in a) {
       if (p(e)) r.shift(); else break;
@@ -1243,7 +1264,27 @@ Finds the min element of the array given the specified ordering.
 
     return r;
   }
-
+/**
+  Pads out to len with optional default `def`, ignores if len is less than Array length.
+**/
+  static public function pad<T>(arr:ReadonlyArray<T>,len:Int,?def:Null<T>):Array<T>{
+    var len0 = len - arr.length;
+    var arr0 = [];
+    for (i in 0...len0){
+      arr0.push(def);
+    }
+    return arr.unsafe().concat(arr0);
+  }
+/**
+  Fills `null` values in `arr` with `def`.
+**/
+  static public function fill<T>(arr:ReadonlyArray<T>,def:T):Array<T>{
+    return arr.map(
+      function(x){
+        return x == null ? def : x;
+      }
+    );
+  }
 }
 
 /**
