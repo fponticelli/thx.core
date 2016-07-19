@@ -26,6 +26,12 @@ class TestNulls {
     this.empty = null;
   }
 
+  public function testIssue20160708() {
+    var x = { a: { b: 2 } };
+    Assert.equals(2, x.a.b.or(null));
+    Assert.equals(2, x.a.b.or(3));
+  }
+
   public function testOr() {
     var s : String = null;
     Assert.equals('B', s.or('B'));
