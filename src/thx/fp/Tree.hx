@@ -67,7 +67,7 @@ class Trees{
   /**
     Creates a depth first iterable from a Tree.
   */
-  static public function iterDF(node){ return iter(genDF(node)); }
+  static public function iterDF<T>(node:Tree<T>): Iterable<T> return iter(genDF(node));
   static public function genBF<T>(node:Tree<T>){
     var vals : List<Tree<T>> = Cons(node,Nil);
     return next.bind(vals,bf_concat);
@@ -75,7 +75,7 @@ class Trees{
   /**
     Creates a breadth first iterable from a Tree.
   */
-  static public function iterBF(node){ return iter(genBF(node)); }
+  static public function iterBF<T>(node:Tree<T>):Iterable<T> return iter(genBF(node));
   static public function iter<T>(generator:Generator<T>):Iterable<T>{
     return {
       iterator : function(){
