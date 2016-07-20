@@ -32,6 +32,7 @@ class TestAll {
     runner.addCase(new thx.TestIterators());
     runner.addCase(new thx.TestLocalDate());
     runner.addCase(new thx.TestLocalYearMonth());
+    runner.addCase(new thx.TestNel());
     runner.addCase(new thx.TestOrderedMap());
     runner.addCase(new thx.TestOrderedSet());
     runner.addCase(new thx.TestMake());
