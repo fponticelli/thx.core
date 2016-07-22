@@ -1,5 +1,6 @@
 package thx.fp;
 
+import haxe.ds.Option;
 import haxe.ds.StringMap;
 
 import thx.DateTime;
@@ -7,7 +8,10 @@ import thx.DateTimeUtc;
 import thx.Either;
 using thx.Eithers;
 import thx.Functions.*;
+using thx.Options;
 import thx.fp.Dynamics.*;
+import thx.Validation;
+import thx.Validation.VNel;
 
 import utest.Assert;
 
@@ -17,7 +21,6 @@ class TestDynamics {
   public function testParseStringMap() {
     var sample = { t: 1, u: 2, v: 3 };
     var expected: StringMap<Int> = [ "t" => 1, "u" => 2, "v" => 3 ];
-
     Assert.same(Right(expected), parseStringMap(sample, function(v, _) return parseInt(v), identity));
   }
 
@@ -41,17 +44,32 @@ class TestDynamics {
     Assert.isTrue(thx.fp.Dynamics.parseNonEmptyString([]).either.isLeft());
   }
 
-  public function testParseDateTime() {
-    Assert.same(Right(DateTime.create(2012, 2, 3, 11, 30, 59, 66, Time.zero)), DateTime.parse("2012-02-03T11:30:59.066"));
-    Assert.same(Right(DateTime.create(2012, 2, 3, 11, 30, 59, 66, Time.fromHours(-2))), DateTime.parse("2012-02-03T11:30:59.066-02:00"));
-    Assert.same(Right(DateTime.create(2012, 2, 3, 11, 30, 59, 66, Time.zero)), DateTime.parse("2012-02-03T11:30:59.066Z"));
-    Assert.isTrue(DateTime.parse("x").isLeft());
+  public function testParseOptional() {
+    Assert.same(Right(None), parseOptional(null, parseString));
+    Assert.same(Right(Some("")), parseOptional("", parseString));
+    Assert.same(Right(Some("hi")), parseOptional("hi", parseString));
+    Assert.isTrue(parseOptional(true, parseString).either.isLeft());
   }
 
-  public function testParseDateTimeUtc() {
-    Assert.same(Right(DateTimeUtc.create(2012, 2, 3, 11, 30, 59, 66)), DateTimeUtc.parse("2012-02-03T11:30:59.066"));
-    Assert.same(Right(DateTimeUtc.create(2012, 2, 3, 13, 30, 59, 66)), DateTimeUtc.parse("2012-02-03T11:30:59.066-02:00"));
-    Assert.same(Right(DateTimeUtc.create(2012, 2, 3, 11, 30, 59, 66)), DateTimeUtc.parse("2012-02-03T11:30:59.066Z"));
-    Assert.isTrue(DateTime.parse("x").isLeft());
+  public function testParseOptionalOrElse() {
+    Assert.same(Right("hi"), parseOptionalOrElse(null, parseString, "hi"));
+    Assert.same(Right("bye"), parseOptionalOrElse("bye", parseString, "hi"));
+    Assert.isTrue(parseOptionalOrElse(true, parseString, "hi").either.isLeft());
+  }
+
+  public function testParseOptionalProperty() {
+    Assert.same(Right(None), parseOptionalProperty({}, "test", parseString));
+    Assert.same(Right(None), parseOptionalProperty({ test: null }, "test", parseString));
+    Assert.same(Right(Some("")), parseOptionalProperty({ test: "" }, "test", parseString));
+    Assert.same(Right(Some("hi")), parseOptionalProperty({ test: "hi" }, "test", parseString));
+    Assert.isTrue(parseOptionalProperty({ test: true }, "test", parseString).either.isLeft());
+  }
+
+  public function testParseOptionalPropertyOrElse() {
+    Assert.same(Right("def"), parseOptionalPropertyOrElse({}, "test", parseString, "def"));
+    Assert.same(Right("def"), parseOptionalPropertyOrElse({ test: null }, "test", parseString, "def"));
+    Assert.same(Right(""), parseOptionalPropertyOrElse({ test: "" }, "test", parseString, "def"));
+    Assert.same(Right("hi"), parseOptionalPropertyOrElse({ test: "hi" }, "test", parseString, "def"));
+    Assert.isTrue(parseOptionalPropertyOrElse({ test: true }, "test", parseString, "def").either.isLeft());
   }
 }

@@ -48,7 +48,7 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
   public inline function get_either(): Either<E, A>
     return this;
 
-  inline public function map<B>(f: A -> B): Validation<E, B>
+  public function map<B>(f: A -> B): Validation<E, B>
     return ap(Right(f), function(e1: E, e2: E) { throw "Unreachable"; });
 
   public function foldLeft<B>(b: B, f: B -> A -> B): B
