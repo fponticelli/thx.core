@@ -96,13 +96,11 @@ class Dynamics {
     return parseString(v).flatMapV(liftVNel.compose(LocalYearMonth.parse));
 
   public static function parseOptional<E, A>(v: Null<Dynamic>, f: Dynamic -> VNel<E, A>) : VNel<E, Option<A>> {
-    return if (v != null) f(v).map(function(v) return Some(v)) else successNel(None);
+    return if (v != null) f(v).map(Some) else successNel(None);
   }
 
   public static function parseOptionalOrElse<E, A>(v: Null<Dynamic>, f: Dynamic -> VNel<E, A>, defaultValue: A) : VNel<E, A> {
-    return parseOptional(v, f).map(function(opt) {
-      return opt.getOrElse(defaultValue);
-    });
+    return parseOptional(v, f).map.fn(_.getOrElse(defaultValue));
   }
 
   public static function parseProperty<E, A>(ob: {}, name: String, f: Dynamic -> VNel<E, A>, err: String -> E): VNel<E, A>
@@ -115,8 +113,8 @@ class Dynamics {
   }
 
   public static function parseOptionalProperty<E, A>(ob: {}, name: String, f: Dynamic -> VNel<E, A>): VNel<E, Option<A>> {
-    var property = ob.getPath(name);
-    return if (property != null) f(property).map(function(a) return Some(a)) else successNel(None);
+    var v = ob.getPath(name);
+    return if (v != null) f(v).map(Some) else successNel(None);
   }
 
   public static function parseOptionalPropertyOrElse<E, A>(ob: {}, name: String, f: Dynamic -> VNel<E, A>, defaultValue : A): VNel<E, A> {
