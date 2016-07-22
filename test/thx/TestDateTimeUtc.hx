@@ -3,6 +3,8 @@ package thx;
 import haxe.PosInfos;
 import utest.Assert;
 using thx.DateTimeUtc;
+import thx.Either;
+using thx.Eithers;
 import thx.Weekday;
 import haxe.PosInfos;
 
@@ -188,5 +190,12 @@ class TestDateTimeUtc {
       'expected $date to snap after $expected for $period but it is ${t.toString()}',
       pos
     );
+  }
+
+  public function testParse() {
+    Assert.same(Right(DateTimeUtc.create(2012, 2, 3, 11, 30, 59, 66)), DateTimeUtc.parse("2012-02-03T11:30:59.066"));
+    Assert.same(Right(DateTimeUtc.create(2012, 2, 3, 13, 30, 59, 66)), DateTimeUtc.parse("2012-02-03T11:30:59.066-02:00"));
+    Assert.same(Right(DateTimeUtc.create(2012, 2, 3, 11, 30, 59, 66)), DateTimeUtc.parse("2012-02-03T11:30:59.066Z"));
+    Assert.isTrue(DateTime.parse("x").isLeft());
   }
 }

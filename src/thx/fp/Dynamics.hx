@@ -6,6 +6,7 @@ import haxe.ds.StringMap;
 import thx.DateTime;
 import thx.DateTimeUtc;
 import thx.Dates;
+import thx.Either;
 import thx.Ints;
 import thx.Floats;
 import thx.Options;
@@ -94,6 +95,16 @@ class Dynamics {
   public static function parseLocalYearMonth(v: Dynamic): VNel<String, LocalYearMonth>
     return parseString(v).flatMapV(liftVNel.compose(LocalYearMonth.parse));
 
+  public static function parseOptional<E, A>(v: Null<Dynamic>, f: Dynamic -> VNel<E, A>) : VNel<E, Option<A>> {
+    return if (v != null) f(v).map(function(v) return Some(v)) else successNel(None);
+  }
+
+  public static function parseOptionalOrElse<E, A>(v: Null<Dynamic>, f: Dynamic -> VNel<E, A>, defaultValue: A) : VNel<E, A> {
+    return parseOptional(v, f).map(function(opt) {
+      return opt.getOrElse(defaultValue);
+    });
+  }
+
   public static function parseProperty<E, A>(ob: {}, name: String, f: Dynamic -> VNel<E, A>, err: String -> E): VNel<E, A>
     return nnNel(ob.getPath(name), err('Property "$name" was not found.')).flatMapV(f);
 
@@ -106,6 +117,10 @@ class Dynamics {
   public static function parseOptionalProperty<E, A>(ob: {}, name: String, f: Dynamic -> VNel<E, A>): VNel<E, Option<A>> {
     var property = ob.getPath(name);
     return if (property != null) f(property).map(function(a) return Some(a)) else successNel(None);
+  }
+
+  public static function parseOptionalPropertyOrElse<E, A>(ob: {}, name: String, f: Dynamic -> VNel<E, A>, defaultValue : A): VNel<E, A> {
+    return parseOptionalProperty(ob, name, f).map.fn(_.getOrElse(defaultValue));
   }
 
   public static function parseArray<E, A>(v: Dynamic, f: Dynamic -> VNel<E, A>, err: String -> E): VNel<E, Array<A>>
