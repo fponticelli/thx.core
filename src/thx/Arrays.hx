@@ -749,17 +749,11 @@ It applies a function against an accumulator and each value of the array (from l
     public static inline function foldLeft1<A, B>(array: ReadonlyArray<A>, f: A -> A -> A): Option<A>{
       var tail = array.dropLeft(1);
       var head = array.first();
-      return reduce(tail,
-        function(memo,next){
-          var wrapped = Options.toOption(next);
-          return switch [memo,wrapped] {
-            case [None,Some(v)]     : Some(v);
-            case [None,None]        : None;
-            case [Some(v),None]     : Some(v);
-            case [Some(a),Some(b)]  : thx.Options.toOption(f(a,b));
-          }
-        }
-      , Options.toOption(head));
+      return if(head  == null){
+        None;
+      }else{
+        Some(reduce(tail,f,head));
+      }
     }
 
 
