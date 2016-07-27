@@ -16,7 +16,15 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
 
   @:from
   inline static public function fromArray<A>(arr : Array<A>) : List<A>
-    return arr.reduceRight.fn(bin(_1, _0), empty());
+    return arr.reduceRight(
+      function(memo,next){
+        return switch(memo){
+          case Nil        : Cons(next,Nil);
+          case Cons(x,xs) : Cons(next,Cons(x,xs));
+        }
+      },
+      empty()
+    );
 
   public function foldLeft<B>(b : B, f : B -> A -> B) : B
     return switch this {
