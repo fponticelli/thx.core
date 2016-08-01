@@ -171,78 +171,78 @@ class Dynamics {
     };
   }
 
-  public static function parseTuple2<A, B>(v: Dynamic, fa: Dynamic -> VNel<String, A>, fb: Dynamic -> VNel<String, B>): VNel<String, thx.Tuple<A, B>> {
+  public static function parseTuple2<Err, A, B>(v: Dynamic, fa: Dynamic -> VNel<Err, A>, fb: Dynamic -> VNel<Err, B>, err: String -> Err): VNel<Err, thx.Tuple<A, B>> {
     return if (Reflect.isObject(v)) {
       val2(
         Tuple.of,
-        parseProperty(v, "_0", fa, Functions.identity),
-        parseProperty(v, "_1", fb, Functions.identity),
+        parseProperty(v, "_0", fa, err),
+        parseProperty(v, "_1", fb, err),
         Nel.semigroup()
       );
     } else {
-      failureNel('$v is not a tuple2-object (type resolved to ${Type.typeof(v)})');
+      failureNel(err('$v is not a tuple2-object (type resolved to ${Type.typeof(v)})'));
     };
   }
 
-  public static function parseTuple3<A, B, C>(v: Dynamic, fa: Dynamic -> VNel<String, A>, fb: Dynamic -> VNel<String, B>, fc: Dynamic -> VNel<String, C>): VNel<String, thx.Tuple3<A, B, C>> {
+  public static function parseTuple3<Err, A, B, C>(v: Dynamic, fa: Dynamic -> VNel<Err, A>, fb: Dynamic -> VNel<Err, B>, fc: Dynamic -> VNel<Err, C>, err: String -> Err): VNel<Err, thx.Tuple3<A, B, C>> {
     return if (Reflect.isObject(v)) {
       val3(
         Tuple3.of,
-        parseProperty(v, "_0", fa, Functions.identity),
-        parseProperty(v, "_1", fb, Functions.identity),
-        parseProperty(v, "_2", fc, Functions.identity),
+        parseProperty(v, "_0", fa, err),
+        parseProperty(v, "_1", fb, err),
+        parseProperty(v, "_2", fc, err),
         Nel.semigroup()
       );
     } else {
-      failureNel('$v is not a tuple3-object (type resolved to ${Type.typeof(v)})');
+      failureNel(err('$v is not a tuple3-object (type resolved to ${Type.typeof(v)})'));
     };
   }
 
-  public static function parseTuple4<A, B, C, D>(v: Dynamic, fa: Dynamic -> VNel<String, A>, fb: Dynamic -> VNel<String, B>, fc: Dynamic -> VNel<String, C>, fd: Dynamic -> VNel<String, D>): VNel<String, thx.Tuple4<A, B, C, D>> {
+  public static function parseTuple4<Err, A, B, C, D>(v: Dynamic, fa: Dynamic -> VNel<Err, A>, fb: Dynamic -> VNel<Err, B>, fc: Dynamic -> VNel<Err, C>, fd: Dynamic -> VNel<Err, D>, err: String -> Err): VNel<Err, thx.Tuple4<A, B, C, D>> {
     return if (Reflect.isObject(v)) {
       val4(
         Tuple4.of,
-        parseProperty(v, "_0", fa, Functions.identity),
-        parseProperty(v, "_1", fb, Functions.identity),
-        parseProperty(v, "_2", fc, Functions.identity),
-        parseProperty(v, "_3", fd, Functions.identity),
+        parseProperty(v, "_0", fa, err),
+        parseProperty(v, "_1", fb, err),
+        parseProperty(v, "_2", fc, err),
+        parseProperty(v, "_3", fd, err),
         Nel.semigroup()
       );
     } else {
-      failureNel('$v is not a tuple4-object (type resolved to ${Type.typeof(v)})');
+      failureNel(err('$v is not a tuple4-object (type resolved to ${Type.typeof(v)})'));
     };
   }
 
-  public static function parseTuple5<A, B, C, D, E>(v: Dynamic, fa: Dynamic -> VNel<String, A>, fb: Dynamic -> VNel<String, B>, fc: Dynamic -> VNel<String, C>, fd: Dynamic -> VNel<String, D>, fe: Dynamic -> VNel<String, E>): VNel<String, thx.Tuple5<A, B, C, D, E>> {
+  public static function parseTuple5<Err, A, B, C, D, E>(v: Dynamic, fa: Dynamic -> VNel<Err, A>, fb: Dynamic -> VNel<Err, B>, fc: Dynamic -> VNel<Err, C>, fd: Dynamic -> VNel<Err, D>, fe: Dynamic -> VNel<Err, E>, err: String -> Err): VNel<Err, thx.Tuple5<A, B, C, D, E>> {
     return if (Reflect.isObject(v)) {
       val5(
         Tuple5.of,
-        parseProperty(v, "_0", fa, Functions.identity),
-        parseProperty(v, "_1", fb, Functions.identity),
-        parseProperty(v, "_2", fc, Functions.identity),
-        parseProperty(v, "_3", fd, Functions.identity),
-        parseProperty(v, "_4", fe, Functions.identity),
+        parseProperty(v, "_0", fa, err),
+        parseProperty(v, "_1", fb, err),
+        parseProperty(v, "_2", fc, err),
+        parseProperty(v, "_3", fd, err),
+        parseProperty(v, "_4", fe, err),
         Nel.semigroup()
       );
     } else {
-      failureNel('$v is not a tuple5-object (type resolved to ${Type.typeof(v)})');
+      failureNel(err('$v is not a tuple5-object (type resolved to ${Type.typeof(v)})'));
     };
   }
 
-  public static function parseTuple6<A, B, C, D, E, F>(v: Dynamic, fa: Dynamic -> VNel<String, A>, fb: Dynamic -> VNel<String, B>, fc: Dynamic -> VNel<String, C>, fd: Dynamic -> VNel<String, D>, fe: Dynamic -> VNel<String, E>, ff: Dynamic -> VNel<String, F>): VNel<String, thx.Tuple6<A, B, C, D, E, F>> {
+  public static function parseTuple6<Err, A, B, C, D, E, F>(v: Dynamic, fa: Dynamic -> VNel<Err, A>, fb: Dynamic -> VNel<Err, B>, fc: Dynamic -> VNel<Err, C>, fd: Dynamic -> VNel<Err, D>, fe: Dynamic -> VNel<Err, E>, ff: Dynamic -> VNel<Err, F>, err: String -> Err): VNel<Err, thx.Tuple6<A, B, C, D, E, F>> {
     return if (Reflect.isObject(v)) {
       val6(
         Tuple6.of,
-        parseProperty(v, "_0", fa, Functions.identity),
-        parseProperty(v, "_1", fb, Functions.identity),
-        parseProperty(v, "_2", fc, Functions.identity),
-        parseProperty(v, "_3", fd, Functions.identity),
-        parseProperty(v, "_4", fe, Functions.identity),
-        parseProperty(v, "_5", ff, Functions.identity),
+        parseProperty(v, "_0", fa, err),
+        parseProperty(v, "_1", fb, err),
+        parseProperty(v, "_2", fc, err),
+        parseProperty(v, "_3", fd, err),
+        parseProperty(v, "_4", fe, err),
+        parseProperty(v, "_5", ff, err),
         Nel.semigroup()
       );
     } else {
-      failureNel('$v is not a tuple6-object (type resolved to ${Type.typeof(v)})');
+      failureNel(err('$v is not a tuple6-object (type resolved to ${Type.typeof(v)})'));
     };
   }
 }
