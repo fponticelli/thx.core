@@ -75,27 +75,27 @@ class TestDynamics {
   }
 
   public function testParseTuple2() {
-    Assert.same(Right(Tuple.of("a", 1)), thx.fp.Dynamics.parseTuple2({ _0: "a", _1: 1}, parseString, parseInt));
-    Assert.isTrue(thx.fp.Dynamics.parseTuple2({}, parseString, parseInt).either.isLeft());
+    Assert.same(Right(Tuple.of("a", 1)), thx.fp.Dynamics.parseTuple2({ _0: "a", _1: 1}, parseString, parseInt, identity));
+    Assert.isTrue(thx.fp.Dynamics.parseTuple2({}, parseString, parseInt, identity).either.isLeft());
   }
 
   public function testParseTuple3() {
-    Assert.same(Right(Tuple3.of("a", 1, true)), thx.fp.Dynamics.parseTuple3({ _0: "a", _1: 1, _2: true}, parseString, parseInt, parseBool));
-    Assert.isTrue(thx.fp.Dynamics.parseTuple3({}, parseString, parseInt, parseBool).either.isLeft());
+    Assert.same(Right(Tuple3.of("a", 1, true)), thx.fp.Dynamics.parseTuple3({ _0: "a", _1: 1, _2: true}, parseString, parseInt, parseBool, identity));
+    Assert.isTrue(thx.fp.Dynamics.parseTuple3({}, parseString, parseInt, parseBool, identity).either.isLeft());
   }
 
   public function testParseTuple4() {
-    Assert.same(Right(Tuple4.of("a", 1, true, 0.1)), thx.fp.Dynamics.parseTuple4({ _0: "a", _1: 1, _2: true, _3: 0.1}, parseString, parseInt, parseBool, parseFloat));
-    Assert.isTrue(thx.fp.Dynamics.parseTuple4({}, parseString, parseInt, parseBool, parseFloat).either.isLeft());
+    Assert.same(Right(Tuple4.of("a", 1, true, 0.1)), thx.fp.Dynamics.parseTuple4({ _0: "a", _1: 1, _2: true, _3: 0.1}, parseString, parseInt, parseBool, parseFloat, identity));
+    Assert.isTrue(thx.fp.Dynamics.parseTuple4({}, parseString, parseInt, parseBool, parseFloat, identity).either.isLeft());
   }
 
   public function testParseTuple5() {
-    Assert.same(Right(Tuple5.of("a", 1, true, 0.1, "B")), thx.fp.Dynamics.parseTuple5({ _0: "a", _1: 1, _2: true, _3: 0.1, _4: "B"}, parseString, parseInt, parseBool, parseFloat, parseString));
-    Assert.isTrue(thx.fp.Dynamics.parseTuple5({}, parseString, parseInt, parseBool, parseFloat, parseString).either.isLeft());
+    Assert.same(Right(Tuple5.of("a", 1, true, 0.1, "B")), thx.fp.Dynamics.parseTuple5({ _0: "a", _1: 1, _2: true, _3: 0.1, _4: "B"}, parseString, parseInt, parseBool, parseFloat, parseString, identity));
+    Assert.isTrue(thx.fp.Dynamics.parseTuple5({}, parseString, parseInt, parseBool, parseFloat, parseString, identity).either.isLeft());
   }
 
   public function testParseTuple6() {
-    Assert.same(Right(Tuple6.of("a", 1, true, 0.1, "B", -1)), thx.fp.Dynamics.parseTuple6({ _0: "a", _1: 1, _2: true, _3: 0.1, _4: "B", _5: -1}, parseString, parseInt, parseBool, parseFloat, parseString, parseInt));
-    Assert.isTrue(thx.fp.Dynamics.parseTuple6({}, parseString, parseInt, parseBool, parseFloat, parseString, parseInt).either.isLeft());
+    Assert.same(Right(Tuple6.of("a", 1, true, 0.1, "B", -1)), thx.fp.Dynamics.parseTuple6({ _0: "a", _1: 1, _2: true, _3: 0.1, _4: "B", _5: -1}, parseString, parseInt, parseBool, parseFloat, parseString, parseInt, identity));
+    Assert.isTrue(thx.fp.Dynamics.parseTuple6({}, parseString, parseInt, parseBool, parseFloat, parseString, parseInt, identity).either.isLeft());
   }
 }
