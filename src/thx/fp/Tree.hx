@@ -2,6 +2,7 @@ package thx.fp;
 
 import Map;
 
+import fp.tree.TreeZip;
 using thx.Options;
 using thx.Eithers;
 import thx.Either;
@@ -30,10 +31,9 @@ abstract Tree<T>(TreeImpl<T>) from TreeImpl<T>{
   public function bf(){
     return Trees.iterBF(this);
   }
-  /*
-  public function visit(){
+  public function zipper():TreeZip<T>{
     return new TreeVisitor(this);
-  }*/
+  }
 }
 class Trees{
 
