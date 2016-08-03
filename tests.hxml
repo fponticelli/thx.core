@@ -1,10 +1,6 @@
 -cp src
 -cp test
 -lib utest
--lib stx_transducers
--lib pointwise
--lib stx_tuple
--lib tink_core
--lib stx_compare
+
 -D travis
 -main TestAll

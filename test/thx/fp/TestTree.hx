@@ -47,11 +47,25 @@ import thx.fp.ktree.Zipper;
     var l   = t.down();
     var ll  = l.down();
     var without_ll = l.remChildNode(ll.head());
-    Assert.equals(null,without_ll.up().down().down().value());
+    /*trace(without_ll);
+    trace(without_ll.up().down().down().down());*/
+    Assert.equals('lr',without_ll.up().down().down().value());
     var add_ll = without_ll.addChildNode(ll.head());
     Assert.equals('ll',add_ll.up().down().down().value());
   }
-
+  public function testLeftRight(){
+    var t = construct().zipper();
+    var l = t.down();
+    Assert.equals('l',l.value());
+    var m = l.right();
+    Assert.equals('m',m.value());
+    var r = m.right();
+    Assert.equals('r',r.value());
+    var m = r.left();
+    Assert.equals('m',m.value());
+    var l = m.left();
+    Assert.equals('l',l.value());
+  }
   public function testGen(){
     var tree  = construct();
     var df    = 'rootllllrmmlmmmrr';
@@ -67,63 +81,4 @@ import thx.fp.ktree.Zipper;
     }
     Assert.equals(bf,tbf.join(""));
   }
-  /*
-  public function testVisitor(){
-    var tree    = construct();
-    var visitor = tree.visit();
-    Assert.equals('root',visitor.value());
-    Assert.isFalse(visitor.hasLeft());
-    Assert.isFalse(visitor.hasRight());
-    Assert.isTrue(visitor.isRoot());
-
-
-    var l       = visitor.down();
-    Assert.equals('l',l.value());
-    Assert.isTrue(l.hasRight());
-    Assert.isFalse(l.hasLeft());
-    Assert.isFalse(l.isRoot());
-
-    var root    = visitor.up();
-    Assert.equals('root',root.value());
-
-    var ll      = root.down().down();
-    Assert.equals('ll',ll.value());
-
-    var unknown = ll.down();
-    Assert.isNull(unknown.value());
-
-    var m       = l.right();
-    Assert.equals('m',m.value());
-    Assert.isTrue(m.hasRight());
-    Assert.isTrue(m.hasLeft());
-
-    var r       = m.right();
-    Assert.equals('r',r.value());
-    Assert.isFalse(r.hasRight());
-
-    m = r.left();
-    Assert.equals('m',m.value());
-
-    trace(m);
-
-    root = m.up();
-    Assert.equals('root',root.value());
-
-    Assert.equals(0,root.path.length);
-
-    //trace("________________");
-    var mm = root.down().right().down().right();
-    Assert.equals('mm',mm.value());
-
-
-    m    = mm.up();
-    Assert.equals(2,m.path.length);
-    //trace("________________");
-    root = m.up();
-    Assert.equals(0,root.path.length);
-
-    m = mm.up();
-    trace(m);
-    Assert.equals('m',m.value());
-  }*/
 }
