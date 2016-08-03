@@ -2,19 +2,19 @@ package thx.fp;
 
 import utest.Assert;
 import thx.fp.List;
-import thx.fp.Tree;
-import thx.fp.tree.TreeZip;
+import thx.fp.KTree;
+import thx.fp.ktree.Zipper;
 
 @:access(thx.fp) class TestTree {
   public function new() {}
-  function construct():Tree<String> {
+  function construct():KTree<String> {
     return Branch(
       'root',
       [Branch('l',[Branch('ll'),Branch("lr")]),Branch('m',[Branch('ml'),Branch('mm'),Branch('mr')]),Branch('r')]
     );
   }
   public function testZipNavigation(){
-    var t : TreeZip<String> = construct();
+    var t : Zipper<String> = construct();
     Assert.isTrue(t.isRoot());
     Assert.equals('root',t.value());
     var l = t.down();
@@ -27,7 +27,7 @@ import thx.fp.tree.TreeZip;
     Assert.equals('l',l.value());
   }
   public function testZipEdit(){
-    var t : TreeZip<String> = construct();
+    var t : Zipper<String> = construct();
     var leaf = t.down().down();
     var folded = leaf.foldLeft(
       List.empty(),
@@ -36,14 +36,14 @@ import thx.fp.tree.TreeZip;
         return Cons(next,memo);
       }
     );
-    var updated = TreeZip.update(leaf,Branch("w00t"));
+    var updated = Zipper.update(leaf,Branch("w00t"));
     Assert.equals('w00t',updated.up().down().value());
     Assert.equals('w00t',updated.up().up().down().down().value());
     Assert.equals('l',updated.up().value());
     Assert.equals('root',updated.up().up().value());
   }
   public function testZipMod(){
-    var t : TreeZip<String> = construct();
+    var t : Zipper<String> = construct();
     var l   = t.down();
     var ll  = l.down();
     var without_ll = l.remChildNode(ll.head());

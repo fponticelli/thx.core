@@ -2,7 +2,7 @@ package thx.fp;
 
 import Map;
 
-import fp.tree.TreeZip;
+import thx.fp.ktree.Zipper;
 using thx.Options;
 using thx.Eithers;
 import thx.Either;
@@ -21,26 +21,29 @@ using Lambda;
 private typedef GeneratorResult<T>  = Tuple2<Option<T>,Generator<T>>;
 private typedef Generator<T>        = Void-> GeneratorResult<T>;
 
-abstract Tree<T>(TreeImpl<T>) from TreeImpl<T>{
-  @:noUsing inline static public function empty<A>() : Tree<A>{
+/**
+  Untagged immutable Kary Tree. use .zipper to navigate and edit stepwise.
+*/
+abstract KTree<T>(KTreeImpl<T>) from KTreeImpl<T>{
+  @:noUsing inline static public function empty<A>() : KTree<A>{
     return Empty;
   }
   public function df(){
-    return Trees.iterDF(this);
+    return KTrees.iterDF(this);
   }
   public function bf(){
-    return Trees.iterBF(this);
+    return KTrees.iterBF(this);
   }
-  public function zipper():TreeZip<T>{
-    return new TreeVisitor(this);
+  public function zipper():Zipper<T>{
+    return new Zipper(Cons(this,List.empty()));
   }
 }
-class Trees{
+class KTrees{
 
   static function nothing<T>():GeneratorResult<T>{
     return new Tuple2(None,nothing);
   }
-  static function next<T>(t:List<Tree<T>>,concat:List<Tree<T>> -> List<Tree<T>> -> List<Tree<T>>):GeneratorResult<T>{
+  static function next<T>(t:List<KTree<T>>,concat:List<KTree<T>> -> List<KTree<T>> -> List<KTree<T>>):GeneratorResult<T>{
     return switch t {
       case Cons(Branch(x,xs),rst):
         if(xs == null){ xs = List.empty(); }
@@ -54,28 +57,28 @@ class Trees{
         nothing();
       }
   }
-  static function df_concat<T>(l:List<Tree<T>>,r:List<Tree<T>>):List<Tree<T>>{
+  static function df_concat<T>(l:List<KTree<T>>,r:List<KTree<T>>):List<KTree<T>>{
     return l.concat(r);
   }
-  static function bf_concat<T>(l:List<Tree<T>>,r:List<Tree<T>>):List<Tree<T>>{
+  static function bf_concat<T>(l:List<KTree<T>>,r:List<KTree<T>>):List<KTree<T>>{
     return r.concat(l);
   }
-  static public function genDF<T>(node:Tree<T>){
-    var vals : List<Tree<T>> = Cons(node,Nil);
+  static public function genDF<T>(node:KTree<T>){
+    var vals : List<KTree<T>> = Cons(node,Nil);
     return next.bind(vals,df_concat);
   }
   /**
-    Creates a depth first iterable from a Tree.
+    Creates a depth first iterable from a KTree.
   */
-  static public function iterDF<T>(node:Tree<T>): Iterable<T> return iter(genDF(node));
-  static public function genBF<T>(node:Tree<T>){
-    var vals : List<Tree<T>> = Cons(node,Nil);
+  static public function iterDF<T>(node:KTree<T>): Iterable<T> return iter(genDF(node));
+  static public function genBF<T>(node:KTree<T>){
+    var vals : List<KTree<T>> = Cons(node,Nil);
     return next.bind(vals,bf_concat);
   }
   /**
-    Creates a breadth first iterable from a Tree.
+    Creates a breadth first iterable from a KTree.
   */
-  static public function iterBF<T>(node:Tree<T>):Iterable<T> return iter(genBF(node));
+  static public function iterBF<T>(node:KTree<T>):Iterable<T> return iter(genBF(node));
   static public function iter<T>(generator:Generator<T>):Iterable<T>{
     return {
       iterator : function(){
@@ -97,7 +100,7 @@ class Trees{
     };
   }
 }
-enum TreeImpl<T>{
+enum KTreeImpl<T>{
  Empty;
- Branch(x:T,?xs:List<Tree<T>>);
+ Branch(x:T,?xs:List<KTree<T>>);
 }
