@@ -18,10 +18,7 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
   inline static public function fromArray<A>(arr : Array<A>) : List<A>
     return arr.reduceRight(
       function(memo,next){
-        return switch(memo){
-          case Nil        : Cons(next,Nil);
-          case Cons(x,xs) : Cons(next,Cons(x,xs));
-        }
+        return Cons(next,memo);
       },
       empty()
     );

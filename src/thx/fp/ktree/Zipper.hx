@@ -174,11 +174,13 @@ import thx.fp.KTree;
     return switch(this){
       case Cons(Branch(node,children),rest) if (children == null) : this;
       case Cons(Branch(node,children),rest) :
+        //trace(Branch(node,children));
         children = children.foldLeft(
           List.empty(),
           function(memo,next){
+            //trace(treeEquals(v,next));
             return switch(next){
-              case _  if(treeEquals.bind(v,next)): memo;
+              case _  if(treeEquals(v,next)): memo;
               default : Cons(next,memo);
             }
           }
@@ -226,7 +228,7 @@ import thx.fp.KTree;
   /**
     compares nodes by reference.
   */
-  static function treeEquals<T>(treel:KTree<T>,treer:KTree<T>){
+  static function treeEquals<T>(treel:KTree<T>,treer:KTree<T>):Bool{
     return treel == treer;
   }
 }
