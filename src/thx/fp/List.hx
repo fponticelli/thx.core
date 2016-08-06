@@ -121,7 +121,27 @@ abstract List<A>(ListImpl<A>) from ListImpl<A> to ListImpl<A> {
           case Cons(y, ys): Cons(y(x), xs.zipAp(ys));
         };
     };
-
+  public function iterator():Iterator<A>{
+    var cursor : Null<List<A>> = this;
+    return {
+      next : function(){
+        var value = null;
+        switch(cursor){
+          case Cons(x,xs) :
+            value  = x;
+            cursor = xs;
+          default : cursor = List.empty();
+        }
+        return value;
+      },
+      hasNext : function(){
+        return switch cursor {
+          case Nil : false;
+          default : true;
+        }
+      }
+    }
+  }
   /**
    * Zip two arrays by applying the provided function to the aligned members.
    */

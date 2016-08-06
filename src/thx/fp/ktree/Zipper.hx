@@ -152,9 +152,9 @@ import thx.fp.KTree;
   /**
     Adds a child value as a leaf to the selected node.
   */
-  public function addChild(v:T):Zipper<T>{
+  public function addChild(v:T):Tuple2<KTree<T>,Zipper<T>>{
     var new_tree : KTree<T> = Branch(v,List.empty());
-    return addChildNode(new_tree);
+    return new Tuple2(new_tree,addChildNode(new_tree));
   }
   /**
     Adds a child value to the selected node.
@@ -190,15 +190,46 @@ import thx.fp.KTree;
       default : this;
     }
   }
-  /**
-    Does a downward breadth first search starting on the selected node
-  */
-  /*
-  function select(fn:T->Bool){
-    var handler = function(ls){
-
+  public function selectChild(new_head:KTree<T>):Zipper<T>{
+    return switch(this){
+      case Cons(head,tail) : Cons(new_head,tail);
+      default : Cons(new_head,List.empty());
     }
-  }*/
+  }
+/**
+  Performs a depth first search for predicate FN, and
+*/
+  function selectDF(fn:T->Bool):Zipper<T>{
+    var head = this.head();
+    var path = [];
+
+
+    function handler(node:KTree<T>){
+      
+      if(node == null){
+        return false;
+      }
+      path.unshift(node);
+      if(fn(node.value())){
+        return true;
+      }else{
+        var children = node.children();
+        for(node in children){
+          if(!handler(node)){
+            path.shift();
+          }else{
+            return true;
+          }
+        }
+        return false;
+      }
+    }
+    handler(head);
+    if(path.length == 0){
+      path[0] = KTree.empty();
+    }
+    return this.tail().concat(path);
+  }
   /**
     finds the left sibling of the cursor.
   */

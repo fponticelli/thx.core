@@ -13,6 +13,12 @@ import thx.fp.ktree.Zipper;
       [Branch('l',[Branch('ll'),Branch("lr")]),Branch('m',[Branch('ml'),Branch('mm'),Branch('mr')]),Branch('r')]
     );
   }
+  public function testSelectDF(){
+    var t : Zipper<String> = construct();
+    var a =  t.selectDF(function(x) return x =='mr');
+    var b = t.down().right().down().right();
+    Assert.isTrue(a.toTree().equals(b.toTree()));
+  }
   public function testZipNavigation(){
     var t : Zipper<String> = construct();
     Assert.isTrue(t.isRoot());
@@ -32,7 +38,6 @@ import thx.fp.ktree.Zipper;
     var folded = leaf.foldLeft(
       List.empty(),
       function(memo,next){
-        //trace(next);
         return Cons(next,memo);
       }
     );
@@ -47,8 +52,6 @@ import thx.fp.ktree.Zipper;
     var l   = t.down();
     var ll  = l.down();
     var without_ll = l.remChildNode(ll.head());
-    /*trace(without_ll);
-    trace(without_ll.up().down().down().down());*/
     Assert.equals('lr',without_ll.up().down().down().value());
     var add_ll = without_ll.addChildNode(ll.head());
     Assert.equals('ll',add_ll.up().down().down().value());

@@ -37,6 +37,51 @@ abstract KTree<T>(KTreeImpl<T>) from KTreeImpl<T>{
   public function zipper():Zipper<T>{
     return new Zipper(Cons(this,List.empty()));
   }
+  /**
+    Returns the value of the node, and null otherwise
+  */
+  public function value(){
+    return switch(this){
+      case Branch(x,_) : x;
+      default: null;
+    }
+  }
+  /**
+    Return list of children, or empty list
+  */
+  public function children():List<KTree<T>>{
+    return switch(this){
+      case Branch(_,ls) : ls == null ? List.empty() : ls;
+      default : List.empty();
+    }
+  }
+  public function equals(that:KTree<T>):Bool{
+    return equalsWith(that,function(l,r) return l == r);
+  }
+  public function equalsWith(that:KTree<T>,fn:T->T->Bool):Bool{
+    function handler(ls0:Null<List<KTree<T>>>,ls1:Null<List<KTree<T>>>):Bool{
+      return switch([ls0,ls1]){
+        case [Cons(x,xs),Cons(y,ys)] :
+          var l : KTree<T> = x;
+          var r : KTree<T> = y;
+          l.equals(r) && handler(xs,ys);
+        case [Nil,Nil] : true;
+        case [null,null] : true;
+        default : false;
+      }
+    }
+    return switch([this,that]){
+      case [Branch(l,ls),Branch(r,rs)] :
+        var o : Bool = fn(l,r);
+        if(!o){
+          o;
+        }else{
+          handler(ls,rs);
+        }
+      case [Empty,Empty] : true;
+      default : false;
+    }
+  }
 }
 class KTrees{
 
