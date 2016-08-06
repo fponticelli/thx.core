@@ -104,6 +104,131 @@ import thx.fp.KTree;
   @:to public function toTree():KTree<T>{
     return this.last();
   }
+  /**
+    Adds a child value as a leaf to the selected node.
+  */
+  public function addChild(v:T):Tuple2<KTree<T>,Zipper<T>>{
+    var new_tree : KTree<T> = Branch(v,List.empty());
+    return new Tuple2(new_tree,addChildNode(new_tree));
+  }
+  /**
+    Adds a child value to the selected node.
+  */
+  public function addChildNode(v:KTree<T>):Zipper<T>{
+    return switch(this){
+      case Cons(Branch(node,children),rest) :
+        var new_node = Branch(node,children.prepend(v));
+        update(new_node);
+      default : Cons(v,List.empty());
+    }
+  }
+  /**
+    Removes a child node by identity.
+  */
+  public function remChildNode(v:KTree<T>):Zipper<T>{
+    return switch(this){
+      case Cons(Branch(node,children),rest) if (children == null) : this;
+      case Cons(Branch(node,children),rest) :
+        //trace(Branch(node,children));
+        children = children.foldLeft(
+          List.empty(),
+          function(memo,next){
+            //trace(treeEquals(v,next));
+            return switch(next){
+              case _  if(treeEquals(v,next)): memo;
+              default : Cons(next,memo);
+            }
+          }
+        );
+        var new_node = Branch(node,children);
+        update(new_node);
+      default : this;
+    }
+  }
+  public function selectChild(new_head:KTree<T>):Zipper<T>{
+    return switch(this){
+      case Cons(head,tail) : Cons(new_head,tail);
+      default : Cons(new_head,List.empty());
+    }
+  }
+  public function update(replace:KTree<T>):Zipper<T>{
+    return Zippers.update(this,replace);
+  }
+/**
+  Performs a depth first search for predicate FN, and
+*/
+  public function selectDF(fn:T->Bool):Zipper<T>{
+    var head = this.head();
+    var path = [];
+
+
+    function handler(node:KTree<T>){
+
+      if(node == null){
+        return false;
+      }
+      path.unshift(node);
+      switch node {
+        case Empty: return false;
+        default:
+      }
+
+      if(fn(node.value())){
+        return true;
+      }else{
+        var children = node.children();
+        for(node in children){
+          if(!handler(node)){
+            path.shift();
+          }else{
+            return true;
+          }
+        }
+        return false;
+      }
+    }
+    handler(head);
+    return if(path.length == 0){
+      path[0] = KTree.empty();
+      this.concat(path);
+    }else{
+      this.tail().concat(path);
+    }
+  }
+  /**
+    finds the left sibling of the cursor.
+  */
+  function findLeft(list:List<KTree<T>>,cursor:KTree<T>):List<KTree<T>>{
+    function handler(ls,c):List<KTree<T>>{
+      return switch(ls){
+        case Cons(x,Cons(y,ys)) if (treeEquals(c,y)) : Cons(x,ys);
+        case Cons(x,xs) : handler(xs,c);
+        default : Nil;
+      }
+    }
+    return handler(list,cursor);
+  }
+  /**
+    finds the list of siblings including the cursor.
+  */
+  function findHead(list:List<KTree<T>>,cursor:KTree<T>):List<KTree<T>>{
+    function handler(ls,c){
+      return switch(ls){
+        case Cons(x,xs) if (treeEquals(c,x)) : Cons(x,xs);
+        case Cons(x,xs) : handler(xs,c);
+        default : Nil;
+      }
+    }
+    return handler(list,cursor);
+  }
+  /**
+    compares nodes by reference.
+  */
+  static function treeEquals<T>(treel:KTree<T>,treer:KTree<T>):Bool{
+    return treel == treer;
+  }
+}
+class Zippers{
   /*
     Updates the currently focused node.
   */
@@ -148,118 +273,5 @@ import thx.fp.KTree;
     }
     var o = handler(changes);
     return new Zipper(o);
-  }
-  /**
-    Adds a child value as a leaf to the selected node.
-  */
-  public function addChild(v:T):Tuple2<KTree<T>,Zipper<T>>{
-    var new_tree : KTree<T> = Branch(v,List.empty());
-    return new Tuple2(new_tree,addChildNode(new_tree));
-  }
-  /**
-    Adds a child value to the selected node.
-  */
-  public function addChildNode(v:KTree<T>):Zipper<T>{
-    return switch(this){
-      case Cons(Branch(node,children),rest) :
-        var new_node = Branch(node,children.prepend(v));
-        update(this,new_node);
-      default : Cons(v,List.empty());
-    }
-  }
-  /**
-    Removes a child node by identity.
-  */
-  public function remChildNode(v:KTree<T>):Zipper<T>{
-    return switch(this){
-      case Cons(Branch(node,children),rest) if (children == null) : this;
-      case Cons(Branch(node,children),rest) :
-        //trace(Branch(node,children));
-        children = children.foldLeft(
-          List.empty(),
-          function(memo,next){
-            //trace(treeEquals(v,next));
-            return switch(next){
-              case _  if(treeEquals(v,next)): memo;
-              default : Cons(next,memo);
-            }
-          }
-        );
-        var new_node = Branch(node,children);
-        update(this,new_node);
-      default : this;
-    }
-  }
-  public function selectChild(new_head:KTree<T>):Zipper<T>{
-    return switch(this){
-      case Cons(head,tail) : Cons(new_head,tail);
-      default : Cons(new_head,List.empty());
-    }
-  }
-/**
-  Performs a depth first search for predicate FN, and
-*/
-  function selectDF(fn:T->Bool):Zipper<T>{
-    var head = this.head();
-    var path = [];
-
-
-    function handler(node:KTree<T>){
-      
-      if(node == null){
-        return false;
-      }
-      path.unshift(node);
-      if(fn(node.value())){
-        return true;
-      }else{
-        var children = node.children();
-        for(node in children){
-          if(!handler(node)){
-            path.shift();
-          }else{
-            return true;
-          }
-        }
-        return false;
-      }
-    }
-    handler(head);
-    if(path.length == 0){
-      path[0] = KTree.empty();
-    }
-    return this.tail().concat(path);
-  }
-  /**
-    finds the left sibling of the cursor.
-  */
-  function findLeft(list:List<KTree<T>>,cursor:KTree<T>):List<KTree<T>>{
-    function handler(ls,c):List<KTree<T>>{
-      return switch(ls){
-        case Cons(x,Cons(y,ys)) if (treeEquals(c,y)) : Cons(x,ys);
-        case Cons(x,xs) : handler(xs,c);
-        default : Nil;
-      }
-    }
-    return handler(list,cursor);
-  }
-  /**
-    finds the list of siblings including the cursor.
-  */
-  function findHead(list:List<KTree<T>>,cursor:KTree<T>):List<KTree<T>>{
-    function handler(ls,c){
-      return switch(ls){
-        case Cons(x,xs) if (treeEquals(c,x)) : Cons(x,xs);
-        case Cons(x,xs) : handler(xs,c);
-        default : Nil;
-      }
-    }
-    return handler(list,cursor);
-  }
-  /**
-    compares nodes by reference.
-  */
-  static function treeEquals<T>(treel:KTree<T>,treer:KTree<T>):Bool{
-    return treel == treer;
   }
 }

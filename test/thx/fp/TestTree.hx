@@ -41,7 +41,7 @@ import thx.fp.ktree.Zipper;
         return Cons(next,memo);
       }
     );
-    var updated = Zipper.update(leaf,Branch("w00t"));
+    var updated = leaf.update(Branch("w00t"));
     Assert.equals('w00t',updated.up().down().value());
     Assert.equals('w00t',updated.up().up().down().down().value());
     Assert.equals('l',updated.up().value());
