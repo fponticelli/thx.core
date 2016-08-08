@@ -78,12 +78,13 @@ class SlambdaMacro {
           case EArrayDecl(values) if(values.length > 0): [for (v in values) v.toString()];
           case _: untyped Context.error("Invalid lambda argument, use x => ... or [x,y] => ...", e1.pos);
         }
-
+        var exp = macro return $e2;
+        exp.pos = e.pos;
         {
           expr: EFunction(null, {
             ret: null,
             params: [],
-            expr: macro return $e2,
+            expr: exp,
             args: [for(arg in lambdaArgs) { name: arg, type: null, opt: true }]
           }),
           pos: e.pos
