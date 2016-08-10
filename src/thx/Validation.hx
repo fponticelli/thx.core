@@ -3,6 +3,7 @@ package thx;
 import thx.Either;
 import thx.Tuple;
 import thx.Validation;
+using thx.Arrays;
 using thx.Functions;
 using thx.Eithers;
 
@@ -167,5 +168,25 @@ class ValidationExtensions {
       case left: left;
     };
 
+  public static function appendVNel<E, A>(target: VNel<E, Array<A>>, item: VNel<E, A>) : VNel<E, Array<A>> {
+    return switch [target, item] {
+      case [Right(values), Right(value)] : Right(values.append(value));
+      case [Right(values), Left(errors)] : Left(errors);
+      case [Left(errors), Right(value)] : Left(errors);
+      case [Left(errors1), Left(errors2)] : Left(errors1.append(errors2));
+    };
+  }
+
+  public static function appendValidation<E, A>(target: VNel<E, Array<A>>, item: Validation<E, A>) : VNel<E, Array<A>> {
+    return appendVNel(target, Validation.liftVNel(item.either));
+  }
+
+  public static function appendVNels<E, A>(target: VNel<E, Array<A>>, items: Array<VNel<E, A>>) : VNel<E, Array<A>> {
+    return items.reduce(appendVNel, target);
+  }
+
+  public static function appendValidations<E, A>(target: VNel<E, Array<A>>, items: Array<Validation<E, A>>) : VNel<E, Array<A>> {
+    return items.reduce(appendValidation, target);
+  }
 }
 
