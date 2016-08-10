@@ -45,6 +45,53 @@ using `thx.Dynamics.compare`.
   inline public static function fields(o : {}) : Array<String>
     return Reflect.fields(o);
 
+  public static function deflate(o: {}, ?flattenArrays: Bool = true): {} {
+    function f(v: Dynamic): Either<Dynamic, Map<String, Dynamic>> {
+      if(Std.is(v, Array)) {
+        if(flattenArrays) {
+          var a: Array<Dynamic> = v;
+          return Right(Arrays.reducei(a, function(map: Map<String, Dynamic>, value, i) {
+            switch f(value) {
+              case Left(v):
+                map.set('$i', v);
+              case Right(m):
+                for(k in m.keys()) {
+                  map.set('$i.$k', m.get(k));
+                }
+            }
+            return map;
+          }, new Map()));
+        } else {
+          return Left(v);
+        }
+      } else if(Types.isAnonymousObject(v)) {
+        return Right(Arrays.reduce(Reflect.fields(v), function(map: Map<String, Dynamic>, key) {
+          switch f(Reflect.field(v, key)) {
+            case Left(v):
+              map.set('$key', v);
+            case Right(m):
+              for(k in m.keys()) {
+                map.set('$key.$k', m.get(k));
+              }
+          }
+          return map;
+        }, new Map()));
+      } else {
+        return Left(v);
+      }
+    }
+    return switch f(o) {
+      case Left(v): v;
+      case Right(m): Maps.toObject(m);
+    };
+  }
+
+public static function inflate(o: {}) {
+  return Arrays.reduce(Reflect.fields(o), function(acc, field) {
+    return setPath(acc, field, Reflect.field(o, field));
+  }, {});
+}
+
 /**
 Merges `first` and `second` using the `combine` strategy to return a merged object. The returned
 object is typed as an object containing all of the fields from both `first` and `second`.
