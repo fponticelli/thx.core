@@ -168,7 +168,7 @@ class ValidationExtensions {
       case left: left;
     };
 
-  public static function appendVNelArrayItem<E, A>(target: VNel<E, Array<A>>, item: VNel<E, A>) : VNel<E, Array<A>> {
+  public static function appendVNel<E, A>(target: VNel<E, Array<A>>, item: VNel<E, A>) : VNel<E, Array<A>> {
     return switch [target, item] {
       case [Right(values), Right(value)] : Right(values.append(value));
       case [Right(values), Left(errors)] : Left(errors);
@@ -177,10 +177,16 @@ class ValidationExtensions {
     };
   }
 
-  public static function appendVNelArrayItems<E, A>(target: VNel<E, Array<A>>, items: Array<VNel<E, A>>) : VNel<E, Array<A>> {
-    return items.reduce(function(acc : VNel<E, Array<A>>, item : VNel<E, A>) : VNel<E, Array<A>> {
-      return appendVNelArrayItem(acc, item);
-    }, target);
+  public static function appendValidation<E, A>(target: VNel<E, Array<A>>, item: Validation<E, A>) : VNel<E, Array<A>> {
+    return appendVNel(target, Validation.liftVNel(item.either));
+  }
+
+  public static function appendVNels<E, A>(target: VNel<E, Array<A>>, items: Array<VNel<E, A>>) : VNel<E, Array<A>> {
+    return items.reduce(appendVNel, target);
+  }
+
+  public static function appendValidations<E, A>(target: VNel<E, Array<A>>, items: Array<Validation<E, A>>) : VNel<E, Array<A>> {
+    return items.reduce(appendValidation, target);
   }
 }
 

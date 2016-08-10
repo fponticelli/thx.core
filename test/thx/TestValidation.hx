@@ -49,18 +49,33 @@ class TestValidation {
     Assert.same(Left(Nel.cons(1, Nel.pure(1))), val4(or4, t, t, err, err, semigroup()));
   }
 
-  public function testAppendVNelArrayItem() {
-    Assert.same(Right([1, 2, 3, 4]), VNel.successNel([1, 2, 3]).appendVNelArrayItem(Right(4)));
-    Assert.same(Left(Nel.pure("target error")), VNel.failureNel("target error").appendVNelArrayItem(Right(4)));
-    Assert.same(Left(Nel.pure("item error")), VNel.successNel([1, 2, 3]).appendVNelArrayItem(Left(Nel.pure("item error"))));
-    Assert.same(Left(Nel.nel("target error", ["item error"])), VNel.failureNel("target error").appendVNelArrayItem(Left(Nel.pure("item error"))));
+  public function testAppendVNel() {
+    Assert.same(Right([1, 2, 3, 4]), VNel.successNel([1, 2, 3]).appendVNel(Right(4)));
+    Assert.same(Left(Nel.pure("target error")), VNel.failureNel("target error").appendVNel(Right(4)));
+    Assert.same(Left(Nel.pure("item error")), VNel.successNel([1, 2, 3]).appendVNel(Left(Nel.pure("item error"))));
+    Assert.same(Left(Nel.nel("target error", ["item error"])), VNel.failureNel("target error").appendVNel(Left(Nel.pure("item error"))));
   }
 
-  public function testAppendVNelArrayItems() {
-    Assert.same(Right([1, 2, 3, 4, 5]), VNel.successNel([1, 2, 3]).appendVNelArrayItems([Right(4), Right(5)]));
-    Assert.same(Left(Nel.pure("target error")), VNel.failureNel("target error").appendVNelArrayItems([Right(4), Right(5)]));
+  public function testAppendValidation() {
+    Assert.same(Right([1, 2, 3, 4]), VNel.successNel([1, 2, 3]).appendValidation(Right(4)));
+    Assert.same(Left(Nel.pure("target error")), VNel.failureNel("target error").appendValidation(Right(4)));
+    Assert.same(Left(Nel.pure("item error")), VNel.successNel([1, 2, 3]).appendValidation(Left("item error")));
+    Assert.same(Left(Nel.nel("target error", ["item error"])), VNel.failureNel("target error").appendValidation(Left("item error")));
+  }
+
+  public function testAppendVNels() {
+    Assert.same(Right([1, 2, 3, 4, 5]), VNel.successNel([1, 2, 3]).appendVNels([Right(4), Right(5)]));
+    Assert.same(Left(Nel.pure("target error")), VNel.failureNel("target error").appendVNels([Right(4), Right(5)]));
     var errorItems : Array<VNel<String, Int>> = [Left(Nel.pure("item error 1")), Right(4), Left(Nel.pure("item error 2")), Right(5)];
-    Assert.same(Left(Nel.nel("item error 1", ["item error 2"])), VNel.successNel([1, 2, 3]).appendVNelArrayItems(errorItems));
-    Assert.same(Left(Nel.nel("target error", ["item error 1", "item error 2"])), VNel.failureNel("target error").appendVNelArrayItems(errorItems));
+    Assert.same(Left(Nel.nel("item error 1", ["item error 2"])), VNel.successNel([1, 2, 3]).appendVNels(errorItems));
+    Assert.same(Left(Nel.nel("target error", ["item error 1", "item error 2"])), VNel.failureNel("target error").appendVNels(errorItems));
+  }
+
+  public function testAppendValidations() {
+    Assert.same(Right([1, 2, 3, 4, 5]), VNel.successNel([1, 2, 3]).appendValidations([Right(4), Right(5)]));
+    Assert.same(Left(Nel.pure("target error")), VNel.failureNel("target error").appendValidations([Right(4), Right(5)]));
+    var errorItems : Array<Validation<String, Int>> = [Left("item error 1"), Right(4), Left("item error 2"), Right(5)];
+    Assert.same(Left(Nel.nel("item error 1", ["item error 2"])), VNel.successNel([1, 2, 3]).appendValidations(errorItems));
+    Assert.same(Left(Nel.nel("target error", ["item error 1", "item error 2"])), VNel.failureNel("target error").appendValidations(errorItems));
   }
 }
