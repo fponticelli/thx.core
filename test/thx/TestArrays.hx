@@ -143,6 +143,22 @@ class TestArrays {
     Assert.equals(3, [1,3,5,7,9].findi(function(item, i) return i == 1));
   }
 
+  public function testFindMap() {
+    Assert.same(Some(3), ["1", "2", "3"].findMap(function(input : String) : Option<Int> {
+      var integer = Std.parseInt(input);
+      return (integer > 2) ? Some(integer) : None;
+    }));
+    Assert.same(None, ["1", "2", "3"].findMap(function(input : String) : Option<Int> {
+      var integer = Std.parseInt(input);
+      return (integer > 3) ? Some(integer) : None;
+    }));
+  }
+
+  public function testFindSome() {
+    Assert.same(Some(3), [None, None, Some(3)].findSome());
+    Assert.same(None, [None, None, None].findSome());
+  }
+
   public function testFindLast() {
     Assert.equals(9, [1,3,5,7,9].findLast(function(item) return item % 3 == 0));
   }

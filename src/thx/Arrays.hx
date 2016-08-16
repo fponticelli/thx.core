@@ -428,6 +428,28 @@ If none is found it returns null.
   }
 
 /**
+Finds the first item in an array where the given function `f` returns a `Option.Some` value.
+If no items map to `Some`, `None` is returned.
+**/
+  public static function findMap<TIn, TOut>(values : Array<TIn>, f : TIn -> Option<TOut>) : Option<TOut> {
+    for (value in values) {
+      var opt = f(value);
+      if (!opt.isNone()) return opt;
+    }
+    return None;
+  }
+
+/**
+Finds the first item in an `Array<Option<T>>` that is `Some`, otherwise `None`.
+**/
+  public static function findSome<T>(options : Array<Option<T>>) : Option<T> {
+    for (option in options) {
+      if (!option.isNone()) return option;
+    }
+    return None;
+  }
+
+/**
 It returns the index of the first element of the array that matches the predicate function.
 If none is found it returns `-1`.
 **/
