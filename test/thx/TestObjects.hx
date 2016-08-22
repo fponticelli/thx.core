@@ -192,6 +192,17 @@ class TestObjects {
     Assert.same([[1], [2]], [].setPath("0.*", 1).setPath("*.*", 2));
   }
 
+  public function testDeflateInflate() {
+    var o = { a : { b : [1,2,3], c : { d : false } }};
+
+    var d = Objects.deflate(o, false);
+    Assert.same(o, Objects.inflate(d));
+
+    var d = Objects.deflate(o, true);
+    Assert.same(o, Objects.inflate(d));
+
+  }
+
   public function testRemovePath() {
     var simple = { foo: "bar" };
     var nested = {
