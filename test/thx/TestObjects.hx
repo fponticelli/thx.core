@@ -171,6 +171,8 @@ class TestObjects {
     Assert.isNull(o.getPath(""));
     Assert.isNull(o.getPath("bad"));
     Assert.isNull(o.getPath("bad.key"));
+    Assert.isNull(o.getPath("key1.key5.2.key6")); // bad index in key5 array
+    Assert.isNull(o.getPath("key1.key5.1.key6.0"));
   }
 
   public function testSetPath() {

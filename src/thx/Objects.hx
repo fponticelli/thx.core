@@ -262,7 +262,9 @@ E.g. { key1: { key2: [1, 2, 3] } }.getPath("key1.key2.2") -> returns 3
     var paths = path.split(".");
     var current : Dynamic = o;
     for (currentPath in paths) {
-      if(currentPath.isDigitsOnly()) {
+      if (current == null) {
+        return null;
+      } else if(currentPath.isDigitsOnly()) {
         var index = Std.parseInt(currentPath),
             arr = Std.instance(current, Array);
         if(null == arr) return null;
