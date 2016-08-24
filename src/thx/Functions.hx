@@ -318,4 +318,23 @@ Lambda expressions
 **/
   public macro static function fn<T>(fn : ExprOf<Void -> T>, restArgs : Array<Expr>)
     return SlambdaMacro.f(fn, restArgs);
+
+/**
+Converts an instance of type `T` to an instance of type `U`.
+
+Useful as an extension methods for converting a value to another type inside a chain of function calls.
+
+E.g.
+
+```
+using thx.Functions;
+import thx.Options;
+
+var arr: Array<Int> = [1, 2, 3];
+var opt : Option<Array<Int>> = myArray.lift(Options.ofValue);
+Assert.same(Some(arr), opt); // true
+```
+**/
+  public static inline function lift<T, U>(t : T, f: T -> U) : U
+    return f(t);
 }

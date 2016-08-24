@@ -1,6 +1,10 @@
 package thx;
 
+import haxe.ds.Option;
+
 import utest.Assert;
+
+import thx.Either;
 using thx.Functions;
 
 class TestFunctions {
@@ -53,5 +57,13 @@ class TestFunctions {
 
   public function testNegate() {
     Assert.isFalse((function() return true).negate()());
+  }
+
+  public function testLift() {
+    var arr : Array<Int> = [1, 2, 3];
+    Assert.same(Some(arr), arr.lift(thx.Options.ofValue));
+    Assert.same(Right(arr), arr.lift(Right));
+    Assert.same(Left(arr), arr.lift(Left));
+    Assert.same([1], 1.lift(Arrays.fromItem));
   }
 }
