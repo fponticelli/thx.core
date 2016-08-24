@@ -258,6 +258,12 @@ Creates a new `Array` with `length` elements all set to `fillWith`.
   }
 
 /**
+Creates an `Array<T>` containing the given item
+**/
+  public static function fromItem<T>(t : T) : Array<T>
+    return [t];
+
+/**
 It returns the cross product between two arrays.
 
 ```haxe
