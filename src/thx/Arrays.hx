@@ -258,6 +258,12 @@ Creates a new `Array` with `length` elements all set to `fillWith`.
   }
 
 /**
+Creates an `Array<T>` containing the given item
+**/
+  public static function fromItem<T>(t : T) : Array<T>
+    return [t];
+
+/**
 It returns the cross product between two arrays.
 
 ```haxe
@@ -424,6 +430,28 @@ If none is found it returns null.
     for(element in array)
       if(predicate(element))
         return Some(element);
+    return None;
+  }
+
+/**
+Finds the first item in an array where the given function `f` returns a `Option.Some` value.
+If no items map to `Some`, `None` is returned.
+**/
+  public static function findMap<TIn, TOut>(values : Array<TIn>, f : TIn -> Option<TOut>) : Option<TOut> {
+    for (value in values) {
+      var opt = f(value);
+      if (!opt.isNone()) return opt;
+    }
+    return None;
+  }
+
+/**
+Finds the first item in an `Array<Option<T>>` that is `Some`, otherwise `None`.
+**/
+  public static function findSome<T>(options : Array<Option<T>>) : Option<T> {
+    for (option in options) {
+      if (!option.isNone()) return option;
+    }
     return None;
   }
 
