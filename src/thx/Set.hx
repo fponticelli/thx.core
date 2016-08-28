@@ -32,8 +32,8 @@ Creates a Set of Ints with optional initial values.
 Creates a Set of anonymous objects with optional initial values.
 **/
   public static function createObject<T: {}>(?it : Iterable<T>) {
-    var map = new Map<{}, Bool>();
-    var set = new Set<{}>(map);
+    var map = new Map<T, Bool>();
+    var set = new Set<T>(map);
     if(null != it)
       set.pushMany(it);
     return set;
@@ -43,8 +43,8 @@ Creates a Set of anonymous objects with optional initial values.
 Creates a Set of EnumValue, with optional initial values.
 **/
   public static function createEnum<T: EnumValue>(?arr : Iterable<T>) {
-    var map = new Map<EnumValue, Bool>();
-    var set = new Set<EnumValue>(map);
+    var map = new Map<T, Bool>();
+    var set = new Set<T>(map);
     if(null != arr)
       set.pushMany(arr);
     return set;

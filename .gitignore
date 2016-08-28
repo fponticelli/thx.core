@@ -2,5 +2,6 @@ bin
 doc/pages
 doc/xml
 doc/dox
+.vscode
 .DS_Store
 *.sublime-*
