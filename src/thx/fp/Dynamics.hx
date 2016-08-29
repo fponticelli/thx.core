@@ -142,6 +142,13 @@ class Dynamics {
       case other: failureNel(err('$v is not array-valued (type resolved to $other)'));
     };
 
+  public static function parseNel<E, A>(v: Dynamic, f: Dynamic -> VNel<E, A>, err: String -> E): VNel<E, Nel<A>>
+    return parseArray(v, f, err).flatMapV(
+      function(xs: Array<A>) {
+        return Nel.fromArray(xs).cata(failureNel(err('$v is an empty array; at least one element must be present.')), successNel);
+      }
+    );
+
 
   public static function parseStringMap<E, K, V>(v: Dynamic, f: Dynamic -> String -> VNel<E, V>, err: String -> E): VNel<E, std.Map<String, V>> {
     return if (Reflect.isObject(v)) {
