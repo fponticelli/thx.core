@@ -3,7 +3,7 @@ package thx;
 import haxe.ds.Option;
 import thx.Functions;
 
-@:forward(length, copy, filter, iterator, join, map, slice, toString)
+@:forward(copy, filter, join, map, slice, toString)
 abstract ReadonlyArray<T>(Array<T>) from Array<T> {
   inline public static function empty<T>() : ReadonlyArray<T>
     return [];
@@ -33,9 +33,12 @@ abstract ReadonlyArray<T>(Array<T>) from Array<T> {
     return -1;
   }
 
+  public var length(get,never): Int;
+  inline function get_length(): Int return this.length;
+
   @:arrayAccess
-  inline function get(index : Int)
-    return this[index];
+  inline function get(i:Int): T
+    return this[i];
 
   inline public function head() : Null<T>
     return this[0];
@@ -138,4 +141,7 @@ abstract ReadonlyArray<T>(Array<T>) from Array<T> {
     var array = removeAt(this.length - 1);
     return new Tuple(value, array);
   }
+
+  inline public function iterator() : Iterator<T>
+    return this.iterator();
 }
