@@ -70,6 +70,7 @@ class TestAll {
   }
 
   public static function main() {
+    #if php untyped __call__('ini_set', 'xdebug.max_nesting_level', 10000); #end
     var runner = new Runner();
     addTests(runner);
     Report.create(runner);
