@@ -421,6 +421,12 @@ class TestArrays {
 
     Assert.same(["a1x3true", "b2y4false"], Arrays.zip5Ap(function(s: String, i: Int, t: String, j: Int, b: Bool) return '$s$i$t$j$b', sx, ix, tx, jx, bx));
   }
+
+  public function testFlattenOptions() {
+    Assert.same(Some([]), Arrays.flattenOptions([]));
+    Assert.same(Some([1]), Arrays.flattenOptions([Some(1)]));
+    Assert.same(None, Arrays.flattenOptions([Some(1), None]));
+  }
 }
 
 private class Sample {
