@@ -391,6 +391,20 @@ Filters out all `None` values from an array and extracts `Some(value)` to `value
     }, []);
 
 /**
+Converts an `Array<Option<T>>` to `Option<Array<T>>` only if all elements in the input
+array contain a `Some` value. The input and the output array (if any) will have
+the same length.
+**/
+  public static function flattenOptions<T>(a: ReadonlyArray<Option<T>>) : Option<Array<T>> {
+    var acc = [];
+    for(e in a) switch e {
+      case None: return None;
+      case Some(v): acc.push(v);
+    }
+    return Some(acc);
+  }
+
+/**
 It returns the first element of the array that matches the predicate function.
 If none is found it returns null.
 **/
