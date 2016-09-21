@@ -647,6 +647,20 @@ Creates a new array that alternates the values in `array` with `value`.
     }, create(array.length * 2 - 1, value));
 
 /**
+Lazy version of `intersperse`. It creates a new array that alternates the values in `array` with the result of `f`.
+**/
+  public static function interspersef<T>(array : ReadonlyArray<T>, f : Void -> T) : Array<T> {
+    if(array.length == 0)
+      return [];
+    var acc = [array[0]];
+    for(i in 1...array.length) {
+      acc.push(f());
+      acc.push(array[i]);
+    }
+    return acc;
+  }
+
+/**
 It returns `true` if the array contains zero elements.
 **/
   inline public static function isEmpty<T>(array : ReadonlyArray<T>) : Bool

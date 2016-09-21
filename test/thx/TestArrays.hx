@@ -177,6 +177,12 @@ class TestArrays {
     Assert.same([], [].intersperse(2));
   }
 
+  public function testInterspersef() {
+    Assert.same([1,2,3,2,5], [1,3,5].interspersef(function() return 2));
+    Assert.same([1], [1].interspersef(function() return 2));
+    Assert.same([], [].interspersef(function() return 2));
+  }
+
   public function testFn() {
     Assert.same([2,4,8], [1,2,4].map.fn(_ * 2));
   }
