@@ -234,12 +234,20 @@ class TestObjects {
   public function testWith() {
     var o1 = { name: "John", age: 11 },
         o2 = o1.with(name, "Jane"),
-        o3 = Objects.with(o2, age, 13);
+        o3 = Objects.with(o2, age, 13),
+        o4: SampleWithObject = o1,
+        o5 = o4.with(age, 15);
     Assert.equals("John", o1.name);
     Assert.equals(11, o1.age);
     Assert.isTrue(o1 != o2 && o2 != o3);
     Assert.equals("Jane", o2.name);
     Assert.equals(11, o2.age);
     Assert.equals(13, o3.age);
+    Assert.equals(15, o5.age);
   }
+}
+
+typedef SampleWithObject = {
+  name : String,
+  age : Int
 }

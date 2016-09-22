@@ -400,30 +400,47 @@ E.g. { foo : 'bar' }.removePath('foo') -> returns {}
 Create a copy of the object with the field `field` replaced by `value`.
 */
   macro public static function with<T : {}>(o : haxe.macro.Expr.ExprOf<T>, field : haxe.macro.Expr, value: haxe.macro.Expr) {
-    var matchField = haxe.macro.ExprTools.toString(field),
-        found = false;
+    var matchField = haxe.macro.ExprTools.toString(field);
     var obj = { expr : switch haxe.macro.Context.typeof(o) {
       case TAnonymous(a):
         var t = a.get();
-        haxe.macro.Expr.ExprDef.EObjectDecl(t.fields.map(function(field) {
-          var fieldName = field.name;
-          if(fieldName == matchField) {
-            found = true;
-            return { field: field.name, expr: value };
-          } else {
-            return { field: field.name, expr: macro o.$fieldName };
-          }
-        }));
-      case _:
+        buildFromAnonymous(matchField, t.fields, value, field.pos);
+      case TType(tr, _):
+        var t = tr.get();
+        switch t {
+          case { type : TAnonymous(a) }:
+            var t = a.get();
+            buildFromAnonymous(matchField, t.fields, value, field.pos);
+          case _:
+            null;
+        }
+      case e:
+        // trace(e);
         haxe.macro.Context.error("Objects.with() only works with anonymous objects", o.pos);
         null;
     }, pos : o.pos };
-    if(!found) {
-      haxe.macro.Context.error('object does not contain field `$matchField`', field.pos);
-    }
+
     return macro {
       var o = $o;
       $obj;
     };
   }
+#if macro
+  static function buildFromAnonymous(matchField, fields, value, pos) {
+    var found = false;
+    var e = haxe.macro.Expr.ExprDef.EObjectDecl(fields.map(function(field) {
+      var fieldName = field.name;
+      if(fieldName == matchField) {
+        found = true;
+        return { field: field.name, expr: value };
+      } else {
+        return { field: field.name, expr: macro o.$fieldName };
+      }
+    }));
+    if(!found) {
+      haxe.macro.Context.error('object does not contain field `$matchField`', pos);
+    }
+    return e;
+  }
+#end
 }
