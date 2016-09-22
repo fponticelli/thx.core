@@ -395,4 +395,27 @@ E.g. { foo : 'bar' }.removePath('foo') -> returns {}
 
     return o;
   }
+
+  macro public static function with<T : {}>(o : haxe.macro.Expr.ExprOf<T>, field : haxe.macro.Expr, value: haxe.macro.Expr) {
+    var matchField = haxe.macro.ExprTools.toString(field);
+    var obj = { expr : switch haxe.macro.Context.typeof(o) {
+      case TAnonymous(a):
+        var t = a.get();
+        haxe.macro.Expr.ExprDef.EObjectDecl(t.fields.map(function(field) {
+          var fieldName = field.name;
+          if(fieldName == matchField) {
+            return { field: field.name, expr: value };
+          } else {
+            return { field: field.name, expr: macro o.$fieldName };
+          }
+        }));
+      case _:
+        haxe.macro.Context.error("Objects.with() only works with anonymous objects", o.pos);
+        null;
+    }, pos : o.pos };
+    return macro {
+      var o = $o;
+      $obj;
+    };
+  }
 }

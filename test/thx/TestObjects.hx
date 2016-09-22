@@ -230,4 +230,16 @@ class TestObjects {
     Assert.same(arr, arr.removePath('foo.0.bar'));
     Assert.same({ foo: [{}, {}]}, arr.removePath('foo.1.bar'));
   }
+
+  public function testWith() {
+    var o1 = { name: "John", age: 11 },
+        o2 = o1.with(name, "Jane"),
+        o3 = Objects.with(o2, age, 13);
+    Assert.equals("John", o1.name);
+    Assert.equals(11, o1.age);
+    Assert.isTrue(o1 != o2 && o2 != o3);
+    Assert.equals("Jane", o2.name);
+    Assert.equals(11, o2.age);
+    Assert.equals(13, o3.age);
+  }
 }
