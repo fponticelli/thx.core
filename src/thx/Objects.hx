@@ -396,14 +396,19 @@ E.g. { foo : 'bar' }.removePath('foo') -> returns {}
     return o;
   }
 
+/*
+Create a copy of the object with the field `field` replaced by `value`.
+*/
   macro public static function with<T : {}>(o : haxe.macro.Expr.ExprOf<T>, field : haxe.macro.Expr, value: haxe.macro.Expr) {
-    var matchField = haxe.macro.ExprTools.toString(field);
+    var matchField = haxe.macro.ExprTools.toString(field),
+        found = false;
     var obj = { expr : switch haxe.macro.Context.typeof(o) {
       case TAnonymous(a):
         var t = a.get();
         haxe.macro.Expr.ExprDef.EObjectDecl(t.fields.map(function(field) {
           var fieldName = field.name;
           if(fieldName == matchField) {
+            found = true;
             return { field: field.name, expr: value };
           } else {
             return { field: field.name, expr: macro o.$fieldName };
@@ -413,6 +418,9 @@ E.g. { foo : 'bar' }.removePath('foo') -> returns {}
         haxe.macro.Context.error("Objects.with() only works with anonymous objects", o.pos);
         null;
     }, pos : o.pos };
+    if(!found) {
+      haxe.macro.Context.error('object does not contain field `$matchField`', field.pos);
+    }
     return macro {
       var o = $o;
       $obj;
