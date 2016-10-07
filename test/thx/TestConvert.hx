@@ -57,4 +57,9 @@ class TestConvert {
         date = Convert.toDateTimeUtc(value);
     Assert.isNull(value);
   }
+
+  public function testToObject() {
+    var value : Dynamic = "text";
+    Assert.same({}, Convert.toObjectOr(value, {}));
+  }
 }

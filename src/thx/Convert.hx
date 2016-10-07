@@ -155,7 +155,7 @@ class Convert {
   public static function toObject(value : Dynamic) : {} {
     if(null == value)
       return null;
-    if(Reflect.isObject(value))
+    if(Types.isObject(value))
       return (value : {});
     return switch Types.valueTypeToString(value) {
       case "String":

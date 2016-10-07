@@ -11,13 +11,21 @@ class Types {
     return Reflect.isObject(v) && null == Type.getClass(v);
 
 /**
-Return `true` if `v` is any of the following types: Int, Float, Bool or String.
+Returns `true` if the passed value is an anonymous object or class instance but it is not any of the primitive types.
+**/
+  public static function isObject(v : Dynamic) : Bool
+    return Reflect.isObject(v) && !isPrimitive(v);
+
+/**
+Returns `true` if `v` is any of the following types: Int, Float, Bool, Date or String.
 **/
   public static function isPrimitive(v : Dynamic)
     return switch Type.typeof(v) {
       case TInt, TFloat, TBool: true;
       case TNull, TFunction, TEnum(_), TObject, TUnknown : false;
-      case TClass(c): Type.getClassName(c) == "String";
+      case TClass(c) if(Type.getClassName(c) == "String"): true;
+      case TClass(c) if(Type.getClassName(c) == "Date"): true;
+      case TClass(_): false;
     };
 
 /**
