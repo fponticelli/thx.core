@@ -278,11 +278,19 @@ E.g. { key1: { key2: [1, 2, 3] } }.getPath("key1.key2.2") -> returns 3
     return current;
   }
 
-  /**
-  Null-safe getPath
-  **/
+/**
+Null-safe getPath
+**/
   public static function getPathOption(o : {}, path : String) : Option<Dynamic>
     return Options.ofValue(getPath(o, path));
+
+/**
+Null-safe `getPath` that attempts to parse the result using the provided parse
+function. `thx.fp.Dynamics` has several functions that match this pattern.
+**/
+  public static function parsePath<T>(o : {}, path : String, parse : Dynamic -> Validation.VNel<String, T>) : Validation.VNel<String, T>
+    return Options.toSuccessNel(getPathOption(o, path), 'Object does not contain path $path')
+      .flatMapV(parse);
 
   /**
   Gets a value from an object by a string path.  The path can contain object keys and array indices separated
