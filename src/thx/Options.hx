@@ -88,7 +88,7 @@ wrapped in another Option.
 /**
 Lazy version of `thx.Options.cata`
 **/
-  public static function cataLazy<A, B>(option : Option<A>, ifNone : Void -> B, f : A -> B) : B
+  public static function cataf<A, B>(option : Option<A>, ifNone : Void -> B, f : A -> B) : B
     return switch option {
       case None: ifNone();
       case Some(v) : f(v);
@@ -107,7 +107,7 @@ Lazy version of `thx.Options.cata`
 /**
 Lazy version of `thx.Options.foldLeft`
 **/
-  public static function foldLeftLazy<T, B>(option: Option<T>, b: Void -> B, f: B -> T -> B) : B
+  public static function foldLeftf<T, B>(option: Option<T>, b: Void -> B, f: B -> T -> B) : B
     return switch option {
       case None: b();
       case Some(v) : f(b(), v);
