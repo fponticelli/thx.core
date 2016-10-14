@@ -131,6 +131,12 @@ class TestArrays {
       );
   }
 
+  public function testFilterMap() {
+    Assert.same([0.5,1.5,2.5], [1,2,3,4,5,6].filterMap(function(v) {
+      return if(v % 2 != 0) Some(v / 2) else None;
+    }));
+  }
+
   public function testFilterFn() {
     Assert.same([1,3,5], [1,2,3,4,5,6].filter.fn(_ % 2 != 0));
   }

@@ -460,6 +460,21 @@ If no items map to `Some`, `None` is returned.
   }
 
 /**
+Performs a `filter` and `map` operation at once. It uses predicate to get either
+`None` or a transformed value `Some` of `TOut`.
+**/
+  public static function filterMap<TIn, TOut>(values : Array<TIn>, f : TIn -> Option<TOut>) : Array<TOut> {
+    var acc = [];
+    for (value in values) {
+      switch f(value) {
+        case Some(v): acc.push(v);
+        case None:
+      }
+    }
+    return acc;
+  }
+
+/**
 Finds the first item in an `Array<Option<T>>` that is `Some`, otherwise `None`.
 **/
   public static function findSome<T>(options : Array<Option<T>>) : Option<T> {
