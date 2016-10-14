@@ -1,6 +1,8 @@
 package thx;
 
 import utest.Assert;
+import thx.Either;
+using thx.Eithers;
 using thx.Objects;
 using thx.Strings;
 
@@ -173,6 +175,20 @@ class TestObjects {
     Assert.isNull(o.getPath("bad.key"));
     Assert.isNull(o.getPath("key1.key5.2.key6")); // bad index in key5 array
     Assert.isNull(o.getPath("key1.key5.1.key6.0"));
+  }
+
+  public function testParsePath() {
+    var o = {
+      key1: {
+        key2: 123,
+        key3: "abc"
+      }
+    };
+
+    Assert.same(Right(123), o.parsePath("key1.key2", thx.fp.Dynamics.parseInt));
+    Assert.same(Right("abc"), o.parsePath("key1.key3", thx.fp.Dynamics.parseString));
+    Assert.isTrue(o.parsePath("key5.key6", thx.fp.Dynamics.parseString).either.isLeft());
+    Assert.isTrue(o.parsePath("key1.key3", thx.fp.Dynamics.parseInt).either.isLeft());
   }
 
   public function testSetPath() {
