@@ -1,6 +1,8 @@
 package thx;
 
 using thx.OrderedMap;
+using thx.Functions;
+import thx.Functions.fn;
 using thx.Iterators;
 using thx.Options;
 import utest.Assert;
@@ -121,6 +123,25 @@ class TestOrderedMap {
     Assert.same("d", map.get(new TestStringId("1")));
     Assert.same("b", map.get(new TestStringId("2")));
     Assert.same("c", map.get(new TestStringId("3")));
+
+    var map2 = StringOrderedMap.fromArray([{k:"1", v:"a"}, {k:"2", v:"b"}, {k:"3", v:"c"}, {k:"1", v:"d"}], fn(_.k), fn(_.v));
+    Assert.same(map, map2);
+
+    var map3 = StringOrderedMap.fromValueArray(["a", "b", "c", "d"], function(v : String) {
+      return if (v == "a") "1";
+        else if (v == "b") "2";
+        else if (v == "c") "3";
+        else "1";
+    });
+    Assert.same(map, map3);
+
+    var map4 = StringOrderedMap.fromTuples([
+      new Tuple("1", "a"),
+      new Tuple("2", "b"),
+      new Tuple("3", "c"),
+      new Tuple("1", "d")
+    ]);
+    Assert.same(map, map4);
   }
 
   public function testIntAbstractKey() {
