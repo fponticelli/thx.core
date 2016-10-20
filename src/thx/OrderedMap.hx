@@ -5,10 +5,10 @@ import thx.Tuple;
 
 @:forward(length, set, insert, exists, remove, keys, iterator, tuples, toArray, toString, keyAt, keyIndex, valueIndex, removeAt)
 abstract OrderedMap<K, V>(OrderedMapImpl<K, V>) to IMap<K, V> {
-  inline public static function createString<V>() : OrderedMap<String, V>
+  inline public static function createString<K : String, V>() : OrderedMap<K, V>
     return new OrderedMap(new StringOrderedMap());
 
-  inline public static function createInt<V>() : OrderedMap<Int, V>
+  inline public static function createInt<K : Int, V>() : OrderedMap<K, V>
     return new OrderedMap(new IntOrderedMap());
 
   inline public static function createObject<K : {}, V>() : OrderedMap<K, V>
@@ -37,8 +37,10 @@ abstract OrderedMap<K, V>(OrderedMapImpl<K, V>) to IMap<K, V> {
 
   @:arrayAccess public inline function get(key : K)
     return this.get(key);
+
   @:arrayAccess public inline function at(index : Int) : Null<V>
     return this.at(index);
+
   @:arrayAccess @:noCompletion inline public function arrayWrite(k : K, v : V) : V
     return this.setValue(k, v);
 
@@ -54,11 +56,11 @@ class EnumValueOrderedMap<K : EnumValue, V> extends OrderedMapImpl<K, V> {
     return new EnumValueOrderedMap();
 }
 
-class IntOrderedMap<V> extends OrderedMapImpl<Int, V> {
+class IntOrderedMap<K : Int, V> extends OrderedMapImpl<K, V> {
   public function new()
-    super(new Map<Int,V>());
+    super(cast new haxe.ds.IntMap());
 
-  override public function empty() : OrderedMapImpl<Int, V>
+  override public function empty() : OrderedMapImpl<K, V>
     return new IntOrderedMap();
 }
 
@@ -70,14 +72,14 @@ class ObjectOrderedMap<K : {}, V> extends OrderedMapImpl<K, V> {
     return new ObjectOrderedMap();
 }
 
-class StringOrderedMap<V> extends OrderedMapImpl<String, V> {
+class StringOrderedMap<K : String, V> extends OrderedMapImpl<K, V> {
   public function new()
-    super(new Map<String,V>());
+    super(new Map<K,V>());
 
-  override public function empty() : OrderedMapImpl<String, V>
+  override public function empty() : OrderedMapImpl<K, V>
     return new StringOrderedMap();
 
-  public static function fromArray<T, V>(array : ReadonlyArray<T>, toKey : T -> String, toVal : T -> V) : OrderedMap<String, V>
+  public static function fromArray<T, K : String, V>(array : ReadonlyArray<T>, toKey : T -> K, toVal : T -> V) : OrderedMap<String, V>
     return Arrays.reduce(array, function (acc : OrderedMap<String, V>, curr : T) {
       acc.set(toKey(curr), toVal(curr));
       return acc;
