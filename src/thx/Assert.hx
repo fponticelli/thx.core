@@ -428,9 +428,13 @@ unless you know what you are doing.
         return true;
       case TClass(c):
         // string
-        if (Std.is(expected, String) && expected != value) {
-          status.error = withPath('expected ${Strings.quote(expected)} but it is ${Strings.quote(value)}');
-          return false;
+        if (Std.is(expected, String)) {
+          if(expected == value) {
+            return true;
+          } else {
+            status.error = withPath('expected ${Strings.quote(expected)} but it is ${Strings.quote(value)}');
+            return false;
+          }
         }
 
         // arrays
