@@ -79,16 +79,16 @@ class StringOrderedMap<K : String, V> extends OrderedMapImpl<K, V> {
   override public function empty() : OrderedMapImpl<K, V>
     return new StringOrderedMap();
 
-  public static function fromArray<T, K : String, V>(array : ReadonlyArray<T>, toKey : T -> K, toVal : T -> V) : OrderedMap<String, V>
-    return Arrays.reduce(array, function (acc : OrderedMap<String, V>, curr : T) {
+  public static function fromArray<T, K : String, V>(array : ReadonlyArray<T>, toKey : T -> K, toVal : T -> V) : OrderedMap<K, V>
+    return Arrays.reduce(array, function (acc : OrderedMap<K, V>, curr : T) {
       acc.set(toKey(curr), toVal(curr));
       return acc;
     }, OrderedMap.createString());
 
-  public static inline function fromValueArray<V>(array : ReadonlyArray<V>, toKey : V -> String) : OrderedMap<String, V>
+  public static inline function fromValueArray<K : String, V>(array : ReadonlyArray<V>, toKey : V -> K) : OrderedMap<K, V>
     return fromArray(array, toKey, function (val) return val);
 
-  public static inline function fromTuples<V>(array : ReadonlyArray<Tuple<String, V>>) : OrderedMap<String, V>
+  public static inline function fromTuples<K : String, V>(array : ReadonlyArray<Tuple<K, V>>) : OrderedMap<K, V>
     return fromArray(array, function (t) return t.left, function (t) return t.right);
 }
 
