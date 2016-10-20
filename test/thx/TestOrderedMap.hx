@@ -109,4 +109,38 @@ class TestOrderedMap {
     var e = ml.clone();
     Assert.equals("value", e["k"]);
   }
+
+  public function testStringAbstractKey() {
+    var map : OrderedMap<TestStringId, String> = OrderedMap.createString();
+    map.set(new TestStringId("1"), "a");
+    map.set(new TestStringId("2"), "b");
+    map.set(new TestStringId("3"), "c");
+    map.set(new TestStringId("1"), "d");
+    Assert.same(3, map.keys().toArray().length);
+    Assert.same([new TestStringId("1"), new TestStringId("2"), new TestStringId("3")], map.keys().toArray());
+    Assert.same("d", map.get(new TestStringId("1")));
+    Assert.same("b", map.get(new TestStringId("2")));
+    Assert.same("c", map.get(new TestStringId("3")));
+  }
+
+  public function testIntAbstractKey() {
+    var map : OrderedMap<TestIntId, String> = OrderedMap.createInt();
+    map.set(new TestIntId(1), "a");
+    map.set(new TestIntId(2), "b");
+    map.set(new TestIntId(3), "c");
+    map.set(new TestIntId(1), "d");
+    Assert.same(3, map.keys().toArray().length);
+    Assert.same([new TestIntId(1), new TestIntId(2), new TestIntId(3)], map.keys().toArray());
+    Assert.same("d", map.get(new TestIntId(1)));
+    Assert.same("b", map.get(new TestIntId(2)));
+    Assert.same("c", map.get(new TestIntId(3)));
+  }
+}
+
+abstract TestStringId(String) to String {
+  public function new(id) this = id;
+}
+
+abstract TestIntId(Int) to Int {
+  public function new(id) this = id;
 }
