@@ -878,6 +878,17 @@ Note that the function changes the passed array and doesn't create a copy.
   }
 
 /**
+Copies and resizes an array of `T` to an arbitrary length by adding more
+elements to its end or by removing extra elements.
+
+Note that the function creates and returns a copy of the passed array.
+**/
+public static function resized<T>(array : Array<T>, length : Int, fill : T) {
+  array = array.copy();
+  return resize(array, length, fill);
+}
+
+/**
 It is the same as `reduce` but with the extra integer `index` parameter.
 **/
   public static function reducei<A, B>(array : ReadonlyArray<A>, f : B -> A -> Int -> B, initial : B) : B {
@@ -1397,6 +1408,19 @@ Note that the function changes the passed array and doesn't create a copy.
     return array;
   }
 
+
+
+/**
+Copies and resizes an array of `Float` to an arbitrary length by adding more
+elements (default is `0.0`) to its end or by removing extra elements.
+
+Note that the function creates and returns a copy of the passed array.
+**/
+  public static function resized(array : Array<Float>, length : Int, fill : Float = 0.0) {
+    array = array.copy();
+    return resize(array, length, fill);
+  }
+
 /**
 Returns the sample standard deviation of the sampled values.
 **/
@@ -1451,6 +1475,17 @@ Note that the function changes the passed array and doesn't create a copy.
     array.splice(length, array.length - length);
     return array;
   }
+
+/**
+Copies and resizes an array of `Int` to an arbitrary length by adding more
+elements (default is `0`) to its end or by removing extra elements.
+
+Note that the function creates and returns a copy of the passed array.
+**/
+public static function resized(array : Array<Int>, length : Int, fill : Int = 0) {
+  array = array.copy();
+  return resize(array, length, fill);
+}
 
 /**
 Finds the sum of all the elements in the array.
