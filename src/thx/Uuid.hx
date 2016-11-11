@@ -5,11 +5,11 @@ Helper class to generate [UUID](http://en.wikipedia.org/wiki/Universally_unique_
 strings (version 4).
 **/
 class Uuid {
-  static inline function random()
-    return Math.floor(Math.random()*0x10);
+  static inline function random(max: Int)
+    return Math.floor(Math.random() * max);
 
   static inline function srandom()
-    return "0123456789ABCDEF".charAt(random());
+    return "0123456789ABCDEF".charAt(random(0x10));
 
 /**
 `Uuid.create()` returns a string value representing a UUID value.
@@ -26,12 +26,19 @@ class Uuid {
     for(i in 15...18)
       s[i] = srandom();
     s[18] = '-';
-    s[19] = "89AB".charAt(random() & 0x3);
+    s[19] = "89AB".charAt(random(0x3));
     for(i in 20...23)
       s[i] = srandom();
     s[23] = '-';
     for(i in 24...36)
       s[i] = srandom();
     return s.join('');
+  }
+
+/**
+Returns `true` if the passed `uuid` conforms to the UUID v.4 format.
+**/
+  public static function isValid(uuid: String): Bool {
+    return ~/^[0123456789ABCDEF]{8}-[0123456789ABCDEF]{4}-4[0123456789ABCDEF]{3}-[89AB][0123456789ABCDEF]{3}-[0123456789ABCDEF]{12}$/.match(uuid);
   }
 }

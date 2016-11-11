@@ -45,6 +45,7 @@ class TestAll {
     runner.addCase(new thx.TestReadonlyArray());
     runner.addCase(new thx.TestQueryString());
     runner.addCase(new thx.TestSet());
+    runner.addCase(new thx.TestUuid());
 
     runner.addCase(new thx.TestStaticResource());
     runner.addCase(new thx.TestStrings());
