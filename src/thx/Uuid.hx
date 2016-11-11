@@ -9,7 +9,7 @@ class Uuid {
     return Math.floor(Math.random() * max);
 
   static inline function srandom()
-    return "0123456789ABCDEF".charAt(random(0x10));
+    return "0123456789abcdef".charAt(random(0x10));
 
 /**
 `Uuid.create()` returns a string value representing a UUID value.
@@ -39,6 +39,6 @@ class Uuid {
 Returns `true` if the passed `uuid` conforms to the UUID v.4 format.
 **/
   public static function isValid(uuid: String): Bool {
-    return ~/^[0123456789ABCDEF]{8}-[0123456789ABCDEF]{4}-4[0123456789ABCDEF]{3}-[89AB][0123456789ABCDEF]{3}-[0123456789ABCDEF]{12}$/.match(uuid);
+    return (~/^[0123456789abcdef]{8}-[0123456789abcdef]{4}-4[0123456789abcdef]{3}-[89ab][0123456789abcdef]{3}-[0123456789abcdef]{12}$/i).match(uuid);
   }
 }
