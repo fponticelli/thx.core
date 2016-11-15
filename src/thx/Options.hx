@@ -182,13 +182,21 @@ is be `None`.
     };
 
 /**
-`getOrThrow` extracts the value from `Option` or throws a thx.Error if the `Option` is `None`.
+Extract the value from `Option` or throw a thx.Error if the `Option` is `None`.
 **/
-  public static function getOrThrow<T>(option : Option<T>, ?posInfo : haxe.PosInfos) : T
+  public static function getOrThrow<T>(option: Option<T>, ?err: thx.Error, ?posInfo: haxe.PosInfos): T {
+    if(null == err) err = new thx.Error("Could not extract value from option", posInfo);
     return switch option {
-      case None: throw new thx.Error("Could not extract value from option", posInfo);
+      case None: throw err;
       case Some(v): v;
     };
+  }
+
+/**
+Extract the value from `Option` or throw a thx.Error with the provided message.
+**/
+  public static function getOrFail<T>(option: Option<T>, msg: String, ?posInfo: haxe.PosInfos): T
+    return getOrThrow(option, new thx.Error(msg, posInfo));
 
 /**
 `orElse` returns `option` if it holds a value or `alt` otherwise.
