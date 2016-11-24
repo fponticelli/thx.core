@@ -30,6 +30,7 @@ class TestAll {
     runner.addCase(new thx.TestInts());
     runner.addCase(new thx.TestIterables());
     runner.addCase(new thx.TestIterators());
+    runner.addCase(new thx.TestLazy());
     runner.addCase(new thx.TestLocalDate());
     runner.addCase(new thx.TestLocalYearMonth());
     runner.addCase(new thx.TestNel());
