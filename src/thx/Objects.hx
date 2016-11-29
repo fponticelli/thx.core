@@ -226,6 +226,7 @@ can contain object keys and array indices separated by ".".
 E.g. { key1: { key2: [1, 2, 3] } }.hasPath("key1.key2.2") -> returns true
 **/
   public static function hasPath(o : {}, path : String) : Bool {
+    path = normalizePath(path);
     var paths = path.split(".");
     var current : Dynamic = o;
 
@@ -257,8 +258,10 @@ Gets a value from an object by a string path.  The path can contain object keys 
 by ".".  Returns null for a path that does not exist.
 
 E.g. { key1: { key2: [1, 2, 3] } }.getPath("key1.key2.2") -> returns 3
+E.g. { key1: { key2: [1, 2, 3] } }.getPath("key1.key2[2]") -> returns 3
 **/
   public static function getPath(o : {}, path : String) : Dynamic {
+    path = normalizePath(path);
     var paths = path.split(".");
     var current : Dynamic = o;
     for (currentPath in paths) {
@@ -301,21 +304,7 @@ function. `thx.fp.Dynamics` has several functions that match this pattern.
 ```
   **/
     public static function getPathOr(o : {}, path : String, alt : Dynamic) : Dynamic {
-      var paths = path.split(".");
-      var current : Dynamic = o;
-      for (currentPath in paths) {
-        if(currentPath.isDigitsOnly()) {
-          var index = Std.parseInt(currentPath),
-              arr = Std.instance(current, Array);
-          if(null == arr) return null;
-          current = arr[index];
-        } else if (Reflect.hasField(current, currentPath)) {
-          current = Reflect.field(current, currentPath);
-        } else {
-          return alt;
-        }
-      }
-      return current;
+      return Options.getOrElse(getPathOption(o, path), alt);
     }
 
 /**
@@ -327,6 +316,7 @@ Inner objects and arrays will be created as needed when traversing the path.
 E.g. { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.2", 4) -> returns { key1: { key2: [ 1, 2, 4 ] } }
 **/
   public static function setPath<T>(o : {}, path : String, val : T) : {} {
+    path = normalizePath(path);
     var paths = path.split("."),
         current : Dynamic = o;
 
@@ -377,6 +367,7 @@ Delete an object's property, given a string path to that property.
 E.g. { foo : 'bar' }.removePath('foo') -> returns {}
 **/
   public static function removePath(o : {}, path : String) : {} {
+    path = normalizePath(path);
     var paths = path.split(".");
 
     // the last item in the list of paths is the target field
@@ -402,6 +393,10 @@ E.g. { foo : 'bar' }.removePath('foo') -> returns {}
     } catch (e : Dynamic) { }
 
     return o;
+  }
+
+  static inline function normalizePath(path : String) : String {
+    return ~/\[(\d+)\]/g.replace(path, ".$1"); // Normalize [x] array access to .x (where x is an integer)
   }
 
 /*
