@@ -34,6 +34,7 @@ typedef Iterables = thx.Iterables;
 typedef Iterators = thx.Iterators;
 typedef Maps = thx.Maps;
 typedef Nil = thx.Nil;
+typedef Nothing = thx.Nothing;
 typedef Unit = thx.Unit;
 typedef Nulls = thx.Nulls;
 typedef Objects = thx.Objects;
