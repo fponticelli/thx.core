@@ -8,6 +8,12 @@ package thx;
   - https://github.com/haxetink/tink_core#any
   - https://github.com/haxetink/tink_core/blob/master/src/tink/core/Any.hx
 **/
-abstract Any(Dynamic) from Dynamic {
-  @:noCompletion @:to inline function __promote<A>() : A return this;
+#if haxe < 3.4
+abstract Any(Dynamic) {
+  @:noCompletion @:extern @:to inline function __promote<T>():T return this;
+  @:noCompletion @:extern @:from inline static function __cast<T>(value:T):Any return cast value;
 }
+#else
+import Any as HaxeAny;
+typedef Any = HaxeAny;
+#end
