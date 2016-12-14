@@ -44,15 +44,10 @@ class Int64s {
   public static var minValue = haxe.Int64.make(0x80000000,0x00000001);
 
   public static function abs(value : Int64)
-    return value < zero ? -value : value;
+    return compare(value, Int64.ofInt(0)) > 0 ? value : -value;
 
   public static function compare(a : Int64, b : Int64)
-    if(a > b)
-      return 1;
-    else if(a < b)
-      return -1;
-    else
-      return 0;
+    return haxe.Int64.compare(a, b);
 
   public static function parse(s : String) : Int64 {
     var sIsNegative = false,
