@@ -109,7 +109,7 @@ Shallow, typed merge of two anonymous objects.
   }
 
 /**
-Shallow, untyped merge of two objects.
+Shallow, untyped merge of two anonymous objects.
 **/
   @:deprecated('use thx.Objects.shallowCombine or thx.Objects.deepCombine instead')
   public static function combine(first : {}, second : {}) : {} {
@@ -117,7 +117,7 @@ Shallow, untyped merge of two objects.
   }
 
 /**
-Shallow, untyped merge of two objects.
+Shallow, untyped merge of two anonymous objects.
 **/
   public static function shallowCombine(first: {}, second: {}) : {} {
     var to = {};
@@ -131,8 +131,7 @@ Shallow, untyped merge of two objects.
   }
 
 /**
-Deep merge of two objects.  If types of first or second are specified at compile time, the
-resulting object will be typed appropriately.
+Deep, typed merge of two objects.
 **/
   /* TODO: placeholder for future macro-based deepMergeImpl
   macro public static function deepMerge(first: ExprOf<{}>, second: ExprOf<{}>) {
