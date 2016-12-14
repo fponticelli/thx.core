@@ -95,9 +95,8 @@ public static function inflate(o: {}) {
 /**
 Shallow, typed merge of two anonymous objects.
 **/
-  //@:deprecated('use thx.Objects.shallowMerge or thx.Objects.deepMerge instead')
   macro public static function merge(first : ExprOf<{}>, second : ExprOf<{}>) {
-    haxe.macro.Context.warning('use thx.Objects.shallowMerge or thx.Objects.deepMerge instead', haxe.macro.Context.currentPos());
+    haxe.macro.Context.warning('use thx.Objects.shallowMerge or thx.Objects.deepMerge instead', haxe.macro.Context.currentPos()); // macro-time @:deprecation
     return thx.macro.Objects.shallowMergeImpl(first, second);
   }
 
