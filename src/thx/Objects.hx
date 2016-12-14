@@ -93,21 +93,33 @@ public static function inflate(o: {}) {
 }
 
 /**
-Merges `first` and `second` using the `combine` strategy to return a merged object. The returned
-object is typed as an object containing all of the fields from both `first` and `second`.
+Shallow, typed merge of two anonymous objects.
 **/
+  //@:deprecated('use thx.Objects.shallowMerge or thx.Objects.deepMerge instead')
   macro public static function merge(first : ExprOf<{}>, second : ExprOf<{}>) {
-    return thx.macro.Objects.mergeImpl(first, second);
+    haxe.macro.Context.warning('use thx.Objects.shallowMerge or thx.Objects.deepMerge instead', haxe.macro.Context.currentPos());
+    return thx.macro.Objects.shallowMergeImpl(first, second);
   }
 
 /**
-Copies the values from the fields of `first` and `second` to a new object. If `first` and `second` contain
-fields with the same name, the returned object will use the fields from `second`. Both objects passed
-to this function will be unmodified.
-
-The `combine` operation is not recursive and does a shallow merge of the two objects.
+Shallow, typed merge of two anonymous objects.
 **/
+  macro public static function shallowMerge(first: ExprOf<{}>, second: ExprOf<{}>) {
+    return thx.macro.Objects.shallowMergeImpl(first, second);
+  }
+
+/**
+Shallow, untyped merge of two objects.
+**/
+  @:deprecated('use thx.Objects.shallowCombine or thx.Objects.deepCombine instead')
   public static function combine(first : {}, second : {}) : {} {
+    return shallowCombine(first, second);
+  }
+
+/**
+Shallow, untyped merge of two objects.
+**/
+  public static function shallowCombine(first: {}, second: {}) : {} {
     var to = {};
     for(field in Reflect.fields(first)) {
       Reflect.setField(to, field, Reflect.field(first, field));
@@ -116,6 +128,27 @@ The `combine` operation is not recursive and does a shallow merge of the two obj
       Reflect.setField(to, field, Reflect.field(second, field));
     }
     return to;
+  }
+
+/**
+Deep merge of two objects.  If types of first or second are specified at compile time, the
+resulting object will be typed appropriately.
+**/
+  /* TODO: placeholder for future macro-based deepMergeImpl
+  macro public static function deepMerge(first: ExprOf<{}>, second: ExprOf<{}>) {
+    return thx.macro.Objects.deepMergeImpl(first, second);
+  }
+  */
+
+/**
+Deep, untyped merge of two objects.
+**/
+  public static function deepCombine(first: {}, second: {}) : {} {
+    var deflatedSecond = Objects.deflate(second);
+    for (keyPath in Reflect.fields(deflatedSecond)) {
+      setPath(first, keyPath, Reflect.field(deflatedSecond, keyPath));
+    }
+    return first;
   }
 
 /**
