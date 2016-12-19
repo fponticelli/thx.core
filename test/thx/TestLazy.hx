@@ -6,11 +6,11 @@ class TestLazy {
   public function new() {}
 
   public function testLazy() {
-    Assert.equals("a", alt("a", "b"));
-    Assert.equals("b", alt(null, "b"));
+    Assert.equals("a", alt("a", lazy("b")));
+    Assert.equals("b", alt(null, lazy("b")));
     Assert.equals("b", alt(null, function() return "b"));
 
-    var fs: Lazy<String> = "b";
+    var fs: Lazy<String> = lazy("b");
     Assert.equals("b", fs());
     Assert.equals("b", fs.value);
 
@@ -23,8 +23,8 @@ class TestLazy {
   }
 
   public function testOps() {
-    var vi: Lazy<Int> = 1;
-    var vf: Lazy<Float> = 1.5;
+    var vi: Lazy<Int> = lazy(1);
+    var vf: Lazy<Float> = lazy(1.5);
     Assert.equals(-1, (-vi).value);
     Assert.equals(-1.5, (-vf).value);
   }
@@ -41,5 +41,13 @@ class TestLazy {
 
   public static function alt(value: Null<String>, f: Lazy<String>) {
     return if(null != value) value else f();
+  }
+
+  macro static function lazy(expr) {
+    #if (haxe_ver >= 3.3)
+      return expr;
+    #else
+      return macro function() return $expr;
+    #end
   }
 }

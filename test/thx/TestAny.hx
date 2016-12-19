@@ -28,7 +28,7 @@ class TestAny {
   public function testFromHaxeAny() {
     var haxeAny : HaxeAny = 123;
     var any = Any.fromHaxeAny(123);
-    var int : Int = a.unsafeCast();
+    var int : Int = any.unsafeCast();
     Assert.same(123, int);
   }
 
