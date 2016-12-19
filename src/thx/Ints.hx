@@ -175,7 +175,7 @@ var d6 = Ints.random(1, 6);
 ```
 **/
   inline public static function random(min = 0, max : Int)
-    return Std.random(max + 1) + min;
+    return Std.random(max - min + 1) + min;
 
 /**
 `range` creates an array of integer containing values between  start (included) and stop (excluded)
