@@ -32,7 +32,7 @@ class Objects {
     return TypeTools.toComplexType(TypeTools.follow(Context.getType(qn)));
   }
 
-  public static function mergeImpl(to : ExprOf<{}>, from : ExprOf<{}>) {
+  public static function shallowMergeImpl(to : ExprOf<{}>, from : ExprOf<{}>) {
     var typeTo = TypeTools.toComplexType(Context.typeof(to));
     var typeFrom = TypeTools.toComplexType(Context.typeof(from));
     var arr = [];
@@ -70,11 +70,13 @@ class Objects {
     }
 
     var t : ComplexType = TAnonymous(arr);
-    return macro (cast thx.Objects.combine($e{to}, $e{from}) : $t);
+    return macro (cast thx.Objects.shallowCombine($e{to}, $e{from}) : $t);
   }
   #end
 
-  macro public static function merge(to : ExprOf<{}>, from : ExprOf<{}>) {
-    return mergeImpl(to, from);
+  macro public static function shallowMerge(to : ExprOf<{}>, from : ExprOf<{}>) {
+    return shallowMergeImpl(to, from);
   }
+
+  // TODO: macro-time deepMergeImpl/deepMerge (with properly-typed result)
 }

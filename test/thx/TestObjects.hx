@@ -61,9 +61,9 @@ class TestObjects {
     }
   }
 
-  public function testCombine() {
+  public function testShallowCombine() {
     var o = {'name' : 'Franco', age : 19};
-    var out : Dynamic = thx.Objects.combine(o, { 'foo': 'bar', 'name' : 'Michael', 'age' : 'Two'});
+    var out : Dynamic = thx.Objects.shallowCombine(o, { 'foo': 'bar', 'name' : 'Michael', 'age' : 'Two'});
 
     Assert.same("Michael", out.name);
     Assert.same("Two", out.age);
@@ -71,11 +71,11 @@ class TestObjects {
     Assert.same("Franco", o.name);
   }
 
-  public function testMergeWithNullable() {
+  public function testShallowMergeWithNullable() {
     var a : Null<SpecialObject>,
         options : { sub : Null<SpecialObject> } = { sub : {}};
 
-    a = Objects.merge({
+    a = Objects.shallowMerge({
       foo : 'baz',
       bar : 'qux'
     }, options.sub);
@@ -83,7 +83,7 @@ class TestObjects {
     Assert.same('baz', a.foo);
   }
 
-  public function testMergeWithTypedef() {
+  public function testShallowMergeWithTypedef() {
     var to : SpecialObject = {
           bar : "qux"
         },
@@ -92,11 +92,59 @@ class TestObjects {
           extra : "field"
         };
 
-    var merged : SpecialObject = thx.Objects.merge(to, from);
+    var merged : SpecialObject = thx.Objects.shallowMerge(to, from);
 
     Assert.same(merged.foo, from.foo);
     Assert.same(merged.bar, to.bar);
     Assert.same(Reflect.field(merged, 'extra'), 'field');
+  }
+
+  public function testDeepMerge() {
+    var first = {
+      a: {
+        a1: 123,
+        a2: [1, 2, 3],
+      },
+      b: {
+        b1: 456,
+        b2: [4, 5, 6]
+      }
+    };
+    var second = {
+      a: {
+        a3: "aaa"
+      },
+      b: {
+        b1: 999,
+        b2: [10, 20, 30],
+        b3: {
+          b4: "bbb"
+        }
+      },
+      c: {
+        c1: 789,
+        c2: [789]
+      },
+    };
+    var expected = {
+      a: {
+        a1: 123,
+        a2: [1, 2, 3],
+        a3: "aaa"
+      },
+      b: {
+        b1: 999,
+        b2: [10, 20, 30],
+        b3: {
+          b4: "bbb"
+        }
+      },
+      c: {
+        c1: 789,
+        c2: [789]
+      },
+    };
+    Assert.same(expected, thx.Objects.deepCombine(first, second));
   }
 
   public function testHasPath() {
