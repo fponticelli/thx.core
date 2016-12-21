@@ -184,6 +184,16 @@ the resolver function that by default directly converts the arguments into a str
     return function(a: A) { return function(b) { return f(a, b); } };
 
 /**
+`join` creates a function that calls the 2 functions passed as arguments in sequence
+and passes the same argument values to the both of them.
+**/
+  public inline static function join<T1, T2>(fa : T1 -> T2 -> Void, fb : T1 -> T2 -> Void)
+    return function(v1 : T1, v2 : T2) {
+      fa(v1, v2);
+      fb(v1, v2);
+    }
+
+/**
 Wraps `callback` in a function that negates its results.
 **/
   public inline static function negate<T1, T2>(callback : T1 -> T2 -> Bool)
