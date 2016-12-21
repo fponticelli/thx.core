@@ -253,6 +253,19 @@ Extract the value from `Option` or throw a thx.Error with the provided message.
       case None: Validation.successNel(value);
       case Some(e): Validation.failureNel(e);
     };
+
+  public static function toRight<E, T>(opt: Option<T>, left: E): Either<E, T>
+    return switch opt {
+      case None: Left(left);
+      case Some(r): Right(r);
+    };
+
+  public static function toLeft<E, T>(opt: Option<E>, right: T): Either<E, T>
+    return switch opt {
+      case None: Right(right);
+      case Some(l): Left(l);
+    };
+
 /**
 	Performs `f` on the contents of `o` if `o` != None
 **/
