@@ -8,8 +8,11 @@ abstract OrderedMap<K, V>(OrderedMapImpl<K, V>) to IMap<K, V> {
   inline public static function createString<K : String, V>() : OrderedMap<K, V>
     return new OrderedMap(new StringOrderedMap());
 
+#if !cs
+  // C# doesn't really like this, if you have a solution please make a PR
   inline public static function createInt<K : Int, V>() : OrderedMap<K, V>
     return new OrderedMap(new IntOrderedMap());
+#end
 
   inline public static function createObject<K : {}, V>() : OrderedMap<K, V>
     return new OrderedMap(new ObjectOrderedMap());
