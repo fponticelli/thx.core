@@ -193,9 +193,17 @@ class TestDateTimeUtc {
   }
 
   public function testParse() {
-    Assert.same(Right(DateTimeUtc.create(2012, 2, 3, 11, 30, 59, 66)), DateTimeUtc.parse("2012-02-03T11:30:59.066"));
-    Assert.same(Right(DateTimeUtc.create(2012, 2, 3, 13, 30, 59, 66)), DateTimeUtc.parse("2012-02-03T11:30:59.066-02:00"));
-    Assert.same(Right(DateTimeUtc.create(2012, 2, 3, 11, 30, 59, 66)), DateTimeUtc.parse("2012-02-03T11:30:59.066Z"));
+    assertParse(DateTimeUtc.create(2012, 2, 3, 11, 30, 59, 66), "2012-02-03T11:30:59.066");
+    assertParse(DateTimeUtc.create(2012, 2, 3, 13, 30, 59, 66), "2012-02-03T11:30:59.066-02:00");
+    assertParse(DateTimeUtc.create(2012, 2, 3, 11, 30, 59, 66), "2012-02-03T11:30:59.066Z");
     Assert.isTrue(DateTime.parse("x").isLeft());
+  }
+
+  function assertParse(expected: DateTimeUtc, test: String) {
+    switch DateTimeUtc.parse(test) {
+      case Left(_): Assert.fail('unable to parse DateTimeUtc: $test');
+      case Right(t):
+        Assert.isTrue(t.ticks == expected.ticks, 'DateTimeUtc.parse expected ${expected.toString()} but got ${t.toString()}');
+    }
   }
 }

@@ -43,11 +43,11 @@ class TestInt64s {
   }
 
   public function testAbs() {
-    Assert.same(Int64.ofInt(0), Int64s.abs(Int64.ofInt(0)));
-    Assert.same(Int64.ofInt(1), Int64s.abs(Int64.ofInt(1)));
-    Assert.same(Int64.ofInt(1), Int64s.abs(Int64.ofInt(-1)));
-    Assert.same(Int64.ofInt(42), Int64s.abs(Int64.ofInt(42)));
-    Assert.same(Int64.ofInt(42), Int64s.abs(Int64.ofInt(-42)));
+    Assert.isTrue(Int64.ofInt(0) == Int64s.abs(Int64.ofInt(0)));
+    Assert.isTrue(Int64.ofInt(1) == Int64s.abs(Int64.ofInt(1)));
+    Assert.isTrue(Int64.ofInt(1) == Int64s.abs(Int64.ofInt(-1)));
+    Assert.isTrue(Int64.ofInt(42) == Int64s.abs(Int64.ofInt(42)));
+    Assert.isTrue(Int64.ofInt(42) == Int64s.abs(Int64.ofInt(-42)));
   }
 
   public function testCompare() {
