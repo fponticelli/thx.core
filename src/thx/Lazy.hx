@@ -26,17 +26,30 @@ abstract Lazy<T>(Void -> T) from Void -> T to Void -> T {
   public function toString()
     return 'Lazy[${Std.string(value)}]';
 
-  @:op(-A) public static function negate<T: Float>(l: Lazy<T>): Lazy<T>
+  @:op(-A) public static function negatef(l: Lazy<Float>): Lazy<Float>
     return l.map(function(v) return -v);
-  @:op(A+B) public static function add<T: Float>(l1: Lazy<T>, l2: Lazy<T>): Lazy<T>
+  @:op(A+B) public static function addf(l1: Lazy<Float>, l2: Lazy<Float>): Lazy<Float>
     return function() return l1.value + l2.value;
-  @:op(A-B) public static function subtract<T: Float>(l1: Lazy<T>, l2: Lazy<T>): Lazy<T>
+  @:op(A-B) public static function subtractf(l1: Lazy<Float>, l2: Lazy<Float>): Lazy<Float>
     return function() return l1.value - l2.value;
-  @:op(A*B) public static function multiply<T: Float>(l1: Lazy<T>, l2: Lazy<T>): Lazy<T>
+  @:op(A*B) public static function multiplyf(l1: Lazy<Float>, l2: Lazy<Float>): Lazy<Float>
     return function() return l1.value * l2.value;
-  @:op(A/B) public static function divide<T: Float>(l1: Lazy<T>, l2: Lazy<T>): Lazy<Float>
+  @:op(A/B) public static function dividef(l1: Lazy<Float>, l2: Lazy<Float>): Lazy<Float>
     return function() return l1.value / l2.value;
-  @:op(A%B) public static function mod<T: Float>(l1: Lazy<T>, l2: Lazy<T>): Lazy<T>
+  @:op(A%B) public static function modf(l1: Lazy<Float>, l2: Lazy<Float>): Lazy<Float>
+    return function() return l1.value % l2.value;
+
+  @:op(-A) public static function negate(l: Lazy<Int>): Lazy<Int>
+    return l.map(function(v) return -v);
+  @:op(A+B) public static function add(l1: Lazy<Int>, l2: Lazy<Int>): Lazy<Int>
+    return function() return l1.value + l2.value;
+  @:op(A-B) public static function subtract(l1: Lazy<Int>, l2: Lazy<Int>): Lazy<Int>
+    return function() return l1.value - l2.value;
+  @:op(A*B) public static function multiply(l1: Lazy<Int>, l2: Lazy<Int>): Lazy<Int>
+    return function() return l1.value * l2.value;
+  @:op(A/B) public static function divide(l1: Lazy<Int>, l2: Lazy<Int>): Lazy<Float>
+    return function() return l1.value / l2.value;
+  @:op(A%B) public static function mod(l1: Lazy<Int>, l2: Lazy<Int>): Lazy<Int>
     return function() return l1.value % l2.value;
 }
 
