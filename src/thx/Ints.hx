@@ -42,7 +42,7 @@ Return a comparison value between `a` and `b`. The number is negative if `a` is
 greater than `b`, positive if `a` is lesser than `b` or zero if `a` and `b` are
 equals.
 **/
-  inline public static function compare(a : Int, b : Int) : Int
+  public static function compare(a : Int, b : Int) : Int
     return a - b;
 
 /**
@@ -264,10 +264,10 @@ Similar to `wrap`, it works for numbers between 0 and `max`.
     return v;
   }
 
-  public static var order(default, never): Ord<Int> = 
+  public static var order(default, never): Ord<Int> =
     function(i0, i1) { return if (i0 > i1) GT else if (i0 == i1) EQ else LT; };
 
-  public static var monoid(default, never): Monoid<Int> = 
+  public static var monoid(default, never): Monoid<Int> =
     { zero: 0, append: function(a: Int, b: Int) return a + b };
 }
 
@@ -275,7 +275,7 @@ class RangeIterator {
   var current: Int;
   var stop: Null<Int>;
   var step: Int;
-  
+
   public function new(start: Int, stop: Null<Int> = null, step = 1) {
     this.current = start;
     this.stop = stop;
@@ -289,6 +289,6 @@ class RangeIterator {
   public function next() {
     var result = current;
     current += step;
-    return result; 
+    return result;
   }
 }
