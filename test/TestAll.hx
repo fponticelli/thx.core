@@ -53,7 +53,6 @@ class TestAll {
     runner.addCase(new thx.TestStaticResource());
     runner.addCase(new thx.TestStrings());
     runner.addCase(new thx.TestTime());
-    runner.addCase(new thx.TestThx());
     runner.addCase(new thx.TestLambda());
     runner.addCase(new thx.TestLambdaStaticExtension());
 #if (js || flash)
