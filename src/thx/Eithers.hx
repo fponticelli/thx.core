@@ -94,6 +94,9 @@ class Eithers {
       case Right(v): v;
     };
 
+  public static function toValidation<E, T>(either: Either<E, T>): Validation<E, T>
+    return either;
+
   public static function toVNel<E, T>(either: Either<E, T>): Validation.VNel<E, T>
     return switch either {
       case Left(e): Validation.failureNel(e);
