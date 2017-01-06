@@ -115,4 +115,11 @@ class Eithers {
       case right: right;
     };
   }
+
+  public static function each<L, R>(either: Either<L, R>, f: R -> Void): Void {
+    return switch either {
+      case Right(r): f(r);
+      case Left(e): null;
+    };
+  }
 }
