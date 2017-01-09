@@ -7,6 +7,7 @@ import thx.DateTime;
 import thx.DateTimeUtc;
 import thx.Dates;
 import thx.Either;
+import thx.Eithers.toVNel;
 import thx.Ints;
 import thx.Floats;
 import thx.Options;
@@ -82,19 +83,19 @@ class Dynamics {
     };
 
   public static function parseDate(v: Dynamic): VNel<String, Date>
-    return parseString(v).flatMapV(liftVNel.compose(Dates.parseDate));
+    return parseString(v).flatMapV(toVNel.compose(Dates.parseDate));
 
   public static function parseDateTime(v : Dynamic) : VNel<String, DateTime>
-    return parseString(v).flatMapV(liftVNel.compose(DateTime.parse));
+    return parseString(v).flatMapV(toVNel.compose(DateTime.parse));
 
   public static function parseDateTimeUtc(v : Dynamic) : VNel<String, DateTimeUtc>
-    return parseString(v).flatMapV(liftVNel.compose(DateTimeUtc.parse));
+    return parseString(v).flatMapV(toVNel.compose(DateTimeUtc.parse));
 
   public static function parseLocalDate(v: Dynamic): VNel<String, LocalDate>
-    return parseString(v).flatMapV(liftVNel.compose(LocalDate.parse));
+    return parseString(v).flatMapV(toVNel.compose(LocalDate.parse));
 
   public static function parseLocalYearMonth(v: Dynamic): VNel<String, LocalYearMonth>
-    return parseString(v).flatMapV(liftVNel.compose(LocalYearMonth.parse));
+    return parseString(v).flatMapV(toVNel.compose(LocalYearMonth.parse));
 
   public static function parseOptional<E, A>(v: Null<Dynamic>, f: Dynamic -> VNel<E, A>) : VNel<E, Option<A>> {
     return if (v != null) f(v).map(Some) else successNel(None);
