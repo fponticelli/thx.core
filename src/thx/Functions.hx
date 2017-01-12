@@ -294,6 +294,11 @@ class Functions12 {
     return function(a: A, b: B, c: C, d: D, e: E, f0: F, g: G, h: H, i: I, j: J, k: K) { return function(l) { return f(a, b, c, d, e, f0, g, h, i, j, k, l); } };
 }
 
+class Functions13 {
+  public inline static function curry<A, B, C, D, E, F, G, H, I, J, K, L, M, N>(f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N): A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> (M -> N)
+    return function(a: A, b: B, c: C, d: D, e: E, f0: F, g: G, h: H, i: I, j: J, k: K, l: L) { return function(m) { return f(a, b, c, d, e, f0, g, h, i, j, k, l, m); } };
+}
+
 abstract Reader<A, B> (A -> B) from A -> B to A -> B {
   public function flatMap<C>(f : B -> (A -> C)) : A -> C
     return function(a : A) : C {
