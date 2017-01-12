@@ -1,16 +1,16 @@
 package thx;
 
+import haxe.ds.Option;
+import haxe.ds.StringMap;
+
 import thx.Functions.Functions in F;
 import thx.Functions;
 import thx.Validation;
 import thx.Semigroup;
 import thx.Monoid;
-
-import haxe.ds.Option;
-import haxe.ds.StringMap;
-using thx.Options;
 using thx.Arrays;
-
+using thx.Eithers;
+using thx.Options;
 
 #if macro
 import haxe.macro.Expr;
@@ -1033,6 +1033,19 @@ values in a Some.
     return reduce(arr, function(acc: Option<Array<U>>, t: T) {
       return f(t).ap(acc.map(function(ux: Array<U>) return function(u: U) { ux.push(u); return ux; }));
     }, Some([]));
+
+/**
+Traverse the array with a function that may return values wrapped in Either.
+If any result is in Left, the first such value is returned; if all results
+are in Right, then the array of those results is returned in Right.
+
+If you want to instead collect errors rather than fail on the first error,
+see traverseValidation.
+**/
+  public static function traverseEither<E, T, U>(arr: ReadonlyArray<T>, f: T -> Either<E, U>): Either<E, Array<U>>
+    return reduce(arr, function(acc: Either<E, Array<U>>, t: T) {
+      return f(t).ap(acc.map(function(ux: Array<U>) return function(u: U) { ux.push(u); return ux; }));
+    }, Right([]));
 
 /**
 Traverse the array with a function that may return values wrapped in Validation.

@@ -2,10 +2,9 @@ package thx;
 
 import thx.Either;
 import thx.Tuple;
-import thx.Validation;
+import thx.Eithers;
 using thx.Arrays;
 using thx.Functions;
-using thx.Eithers;
 
 typedef VNel<E, A> = Validation<Nel<E>, A>;
 /**
@@ -13,14 +12,9 @@ typedef VNel<E, A> = Validation<Nel<E>, A>;
  * on the left type. This is useful for composing validation functions.
  */
 abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
-  inline public static function validation<E, A>(e: Either<E, A>): Validation<E, A>
-    return e;
-
-  inline public static function vnel<E, A>(e: Either<Nel<E>, A>): VNel<E, A>
-    return e;
-
-  public static function liftVNel<E, A>(e: Either<E, A>): VNel<E, A>
-    return e.leftMap(Nel.pure);
+  public var either(get, never): Either<E, A>;
+  inline public function get_either(): Either<E, A>
+    return this;
 
   inline public static function pure<E, A>(a: A): Validation<E, A>
     return Right(a);
@@ -31,38 +25,22 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
   inline public static function failure<E, A>(e: E): Validation<E, A>
     return Left(e);
 
-  // nonNull
-  inline public static function nn<E, A>(a: Null<A>, e: E): Validation<E, A>
-    return (a == null) ? failure(e) : success(a);
-
   inline public static function successNel<E, A>(a: A): VNel<E, A>
     return pure(a);
 
   inline public static function failureNel<E, A>(e: E): VNel<E, A>
     return Left(Nel.pure(e));
 
+  // nonNull
+  inline public static function nn<E, A>(a: Null<A>, e: E): Validation<E, A>
+    return (a == null) ? failure(e) : success(a);
+
   // nonNullNel
   inline public static function nnNel<E, A>(a: Null<A>, e: E): VNel<E, A>
     return (a == null) ? failureNel(e) : successNel(a);
 
-  public var either(get, never): Either<E, A>;
-  public inline function get_either(): Either<E, A>
-    return this;
-
   public function map<B>(f: A -> B): Validation<E, B>
-    return ap(Right(f), function(e1: E, e2: E) { throw "Unreachable"; });
-
-  public function foldLeft<B>(b: B, f: B -> A -> B): B
-    return switch this {
-      case Left(_): b;
-      case Right(a): f(b, a);
-    };
-
-  /**
-   * Fold by mapping the contained value into some monoidal type and reducing with that monoid.
-   */
-  public function foldMap<B>(f: A -> B, m: Monoid<B>): B
-    return (map(f): Validation<E, B>).foldLeft(m.zero, m.append);
+    return Eithers.map(this, f);
 
   public function ap<B>(v: Validation<E, A -> B>, s: Semigroup<E>): Validation<E, B>
     return switch this {
@@ -78,31 +56,36 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
         }
     };
 
-  inline public function zip<B>(v: Validation<E, B>, s: Semigroup<E>): Validation<E, Tuple2<A, B>>
-    return ap((v.either.map(function(b: B){ return Tuple2.of.bind(_, b); }): Either<E, A -> Tuple2<A, B>>), s);
-
-  inline public function leftMap<E0>(f: E -> E0): Validation<E0, A>
-    return (either.leftMap(f) : Either<E0, A>);
-
-  inline public function wrapNel(): VNel<E, A>
-    return (either.leftMap(Nel.pure) : Either<Nel<E>, A>);
-
-  public function ensure(p: A -> Bool, error: E): Validation<E, A>
-    return switch this {
-      case Right(a): if (p(a)) this else failure(error);
-      case left: left;
-    };
-
-  // This is not simply flatMap because it is not consistent with ap,
-  // as should be the case in other monads. It is equivalent to
-  // `this.either.flatMap(f).validation`
+  /**
+   * This is not simply flatMap because it is not consistent with ap,
+   * as should be the case in other monads. It is equivalent to
+   * `this.either.flatMap(f).validation`
+   */
   inline public function flatMapV<B>(f: A -> Validation<E, B>): Validation<E, B>
     return switch this {
       case Left(a) : Left(a);
       case Right(b): f(b);
     };
 
+  inline public function foldLeft<B>(b: B, f: B -> A -> B): B
+    return Eithers.foldLeft(this, b, f);
+
+  inline public function foldMap<B>(f: A -> B, m: Monoid<B>): B
+    return Eithers.foldMap(this, f, m);
+
+  inline public function leftMap<E0>(f: E -> E0): Validation<E0, A>
+    return Eithers.leftMap(this, f);
+
+  inline public function wrapNel(): VNel<E, A>
+    return Eithers.leftMap(this, Nel.pure);
+
+  inline public function ensure(p: A -> Bool, error: E): Validation<E, A>
+    return Eithers.ensure(this, p, error);
+
   //// UTILITY FUNCTIONS ////
+  inline public static function vnel<E, A>(e: Either<Nel<E>, A>): VNel<E, A>
+    return e;
+
   inline static public function val2<X, A, B, C>(f: A -> B -> C, v1: Validation<X, A>, v2: Validation<X, B>, s: Semigroup<X>): Validation<X, C>
     return v2.ap(v1.map(f.curry()), s);
 
@@ -190,7 +173,7 @@ class ValidationExtensions {
   }
 
   public static function appendValidation<E, A>(target: VNel<E, Array<A>>, item: Validation<E, A>) : VNel<E, Array<A>> {
-    return appendVNel(target, Validation.liftVNel(item.either));
+    return appendVNel(target, Eithers.toVNel(item.either));
   }
 
   public static function appendVNels<E, A>(target: VNel<E, Array<A>>, items: Array<VNel<E, A>>) : VNel<E, Array<A>> {

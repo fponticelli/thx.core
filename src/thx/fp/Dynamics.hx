@@ -7,8 +7,10 @@ import thx.DateTime;
 import thx.DateTimeUtc;
 import thx.Dates;
 import thx.Either;
+import thx.Eithers.toVNel;
 import thx.Ints;
 import thx.Floats;
+import thx.Functions.identity;
 import thx.Options;
 import thx.Monoid;
 import thx.Nel;
@@ -27,74 +29,89 @@ using thx.Options;
 using thx.Objects;
 
 class Dynamics {
-  public static function parseInt(v: Dynamic): VNel<String, Int>
+  inline public static function parseInt(v: Dynamic): VNel<String, Int>
+    return parseInt0(v, identity);
+
+  public static function parseInt0<E>(v: Dynamic, err: String -> E): VNel<E, Int>
     return switch Type.typeof(v) {
       case TInt :   successNel(cast v);
       case TClass(name) :
         switch Type.getClassName(Type.getClass(v)) {
           case "String" if (Ints.canParse(v)) : successNel(Ints.parse(cast v));
-          case other: failureNel('Cannot parse an integer value from $v (type resolved to $other)');
+          case other: failureNel(err('Cannot parse an integer value from $v (type resolved to $other)'));
         };
 
-      case other: failureNel('Cannot parse an integer value from $v (type resolved to $other)');
+      case other: failureNel(err('Cannot parse an integer value from $v (type resolved to $other)'));
     };
 
-  public static function parseFloat(v: Dynamic): VNel<String, Float>
+  inline public static function parseFloat(v: Dynamic): VNel<String, Float>
+    return parseFloat0(v, identity);
+
+  public static function parseFloat0<E>(v: Dynamic, err: String -> E): VNel<E, Float>
     return switch Type.typeof(v) {
       case TInt :   successNel(cast v);
       case TFloat : successNel(cast v);
       case TClass(name) :
         switch Type.getClassName(Type.getClass(v)) {
           case "String" if (Floats.canParse(v)) : successNel(Floats.parse(cast v));
-          case other: failureNel('Cannot parse a floating-point value from $v (type resolved to $other)');
+          case other: failureNel(err('Cannot parse a floating-point value from $v (type resolved to $other)'));
         };
-      case other: failureNel('Cannot parse a floating-point value from $v (type resolved to $other)');
+      case other: failureNel(err('Cannot parse a floating-point value from $v (type resolved to $other)'));
     };
 
-  public static function parseString(v: Dynamic): VNel<String, String>
+  inline public static function parseString(v: Dynamic): VNel<String, String>
+    return parseString0(v, identity);
+
+  public static function parseString0<E>(v: Dynamic, err: String -> E): VNel<E, String>
     return switch Type.typeof(v) {
       case TClass(name) :
         switch Type.getClassName(Type.getClass(v)) {
           case "String": successNel(cast v);
-          case other: failureNel('$v is not a String value (type resolved to $other)');
+          case other: failureNel(err('$v is not a String value (type resolved to $other)'));
         };
-      case other: failureNel('$v is not a String value (type resolved to $other)');
+      case other: failureNel(err('$v is not a String value (type resolved to $other)'));
     };
 
-  public static function parseNonEmptyString(v : Dynamic) : VNel<String, String>
-    return parseString(v).flatMapV(function(str : String) : VNel<String, String> {
-      return if (str == null || str.length == 0) {
-        failureNel('"$v" is not a non-empty String value');
+  inline public static function parseNonEmptyString(v : Dynamic) : VNel<String, String>
+    return parseNonEmptyString0(v, identity);
+
+  public static function parseNonEmptyString0<E>(v : Dynamic, err: String -> E) : VNel<E, String>
+    return parseString0(v, err).flatMapV(
+      function(str : String) return if (str == null || str.length == 0) {
+        failureNel(err('"$v" is not a non-empty String value'));
       } else {
         successNel(str);
       }
-    });
+    );
 
-  public static function parseBool(v: Dynamic): VNel<String, Bool>
+  inline public static function parseBool(v: Dynamic): VNel<String, Bool>
+    return parseBool0(v, identity);
+
+  public static function parseBool0<E>(v: Dynamic, err: String -> E): VNel<E, Bool>
     return switch Type.typeof(v) {
       case TBool: successNel(cast v);
       case TClass(name) :
         switch Type.getClassName(Type.getClass(v)) {
           case "String" if (Bools.canParse(v)) : successNel(Bools.parse(cast v));
-          case other: failureNel('Cannot parse a boolean value from $v (type resolved to $other)');
+          case other: failureNel(err('Cannot parse a boolean value from $v (type resolved to $other)'));
         };
-      case other: failureNel('Cannot parse a boolean value from $v (type resolved to $other)');
+      case other: failureNel(err('Cannot parse a boolean value from $v (type resolved to $other)'));
     };
 
   public static function parseDate(v: Dynamic): VNel<String, Date>
-    return parseString(v).flatMapV(liftVNel.compose(Dates.parseDate));
+    return parseString(v).flatMapV(toVNel.compose(Dates.parseDate));
 
   public static function parseDateTime(v : Dynamic) : VNel<String, DateTime>
-    return parseString(v).flatMapV(liftVNel.compose(DateTime.parse));
+    return parseString(v).flatMapV(toVNel.compose(DateTime.parse));
 
   public static function parseDateTimeUtc(v : Dynamic) : VNel<String, DateTimeUtc>
-    return parseString(v).flatMapV(liftVNel.compose(DateTimeUtc.parse));
+    return parseString(v).flatMapV(toVNel.compose(DateTimeUtc.parse));
 
   public static function parseLocalDate(v: Dynamic): VNel<String, LocalDate>
-    return parseString(v).flatMapV(liftVNel.compose(LocalDate.parse));
+    return parseString(v).flatMapV(toVNel.compose(LocalDate.parse));
 
   public static function parseLocalYearMonth(v: Dynamic): VNel<String, LocalYearMonth>
-    return parseString(v).flatMapV(liftVNel.compose(LocalYearMonth.parse));
+    return parseString(v).flatMapV(toVNel.compose(LocalYearMonth.parse));
 
   public static function parseOptional<E, A>(v: Null<Dynamic>, f: Dynamic -> VNel<E, A>) : VNel<E, Option<A>> {
     return if (v != null) f(v).map(Some) else successNel(None);
