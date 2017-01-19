@@ -135,6 +135,18 @@ In this case the sign (`+`/`-`) is not optional and seconds cannot be used.
   }
 
 /**
+Checks if a Dynamic value is an instance of DateTime
+Note: because thx.DateTime is an abstract of Array<haxe.Int64>, any array of exactly 2 haxe.Int64s will be considered to be a thx.DateTime
+**/
+  public static function is(v : Dynamic) : Bool {
+    if (v == null) return false;
+    if (!Std.is(v, Array)) return false;
+    var vs : Array<Dynamic> = v;
+    if (vs.length != 2) return false;
+    return thx.Arrays.all(vs, haxe.Int64.is);
+  }
+
+/**
 Alternative to fromString that returns the result in an Either rather than
 a value or a thrown error.
 **/
