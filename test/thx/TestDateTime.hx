@@ -181,10 +181,35 @@ class TestDateTime {
     );
   }
 
+  public function testIs() {
+    Assert.isFalse(DateTime.is(null));
+    Assert.isFalse(DateTime.is(""));
+    Assert.isFalse(DateTime.is(42));
+    Assert.isFalse(DateTime.is(42.5));
+    Assert.isFalse(DateTime.is(true));
+    Assert.isFalse(DateTime.is([]));
+    Assert.isFalse(DateTime.is({}));
+    Assert.isFalse(DateTime.is([1, 2]));
+    Assert.isFalse(DateTime.is(DateTimeUtc.now()));
+    Assert.isFalse(DateTime.is(Date.now()));
+    Assert.isFalse(DateTime.is([haxe.Int64.ofInt(1)]));
+    Assert.isFalse(DateTime.is([haxe.Int64.ofInt(1), haxe.Int64.ofInt(2), haxe.Int64.ofInt(3)]));
+    Assert.isTrue(DateTime.is(DateTime.now()));
+    Assert.isTrue(DateTime.is([haxe.Int64.ofInt(1), haxe.Int64.ofInt(2)])); // Array of exactly 2 Int64s is considered to be a DateTime
+  }
+
   public function testParse() {
-    Assert.same(Right(DateTime.create(2012, 2, 3, 11, 30, 59, 66, Time.zero)), DateTime.parse("2012-02-03T11:30:59.066"));
-    Assert.same(Right(DateTime.create(2012, 2, 3, 11, 30, 59, 66, Time.fromHours(-2))), DateTime.parse("2012-02-03T11:30:59.066-02:00"));
-    Assert.same(Right(DateTime.create(2012, 2, 3, 11, 30, 59, 66, Time.zero)), DateTime.parse("2012-02-03T11:30:59.066Z"));
+    assertParse(DateTime.create(2012, 2, 3, 11, 30, 59, 66, Time.zero), "2012-02-03T11:30:59.066");
+    assertParse(DateTime.create(2012, 2, 3, 11, 30, 59, 66, Time.fromHours(-2)), "2012-02-03T11:30:59.066-02:00");
+    assertParse(DateTime.create(2012, 2, 3, 11, 30, 59, 66, Time.zero), "2012-02-03T11:30:59.066Z");
     Assert.isTrue(DateTime.parse("x").isLeft());
+  }
+
+  function assertParse(expected: DateTime, test: String) {
+    switch DateTime.parse(test) {
+      case Left(_): Assert.fail('unable to parse DateTime: $test');
+      case Right(t):
+        Assert.isTrue(t.utc.ticks == expected.utc.ticks, 'DateTime.parse expected ${expected.toString()} but got ${t.toString()}');
+    }
   }
 }

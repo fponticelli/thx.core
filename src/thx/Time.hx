@@ -26,6 +26,14 @@ abstract Time(Int64) {
     return totalSeconds * ticksPerSecondI64;
   }
 
+/**
+Checks if a dynamic value is an instance of Time.
+Note: because thx.Time is an abstract of haxe.Int64, any haxe.Int64 will be considered to be a thx.Time
+**/
+  public static function is(v : Dynamic) : Bool {
+    return haxe.Int64.is(v);
+  }
+
   @:from public static function fromString(s : String) : Time {
     var pattern = ~/^([-+])?(?:(\d+)[.](\d{1,2})|(\d+))[:](\d{2})(?:[:](\d{2})(?:\.(\d+))?)?$/;
     if(!pattern.match(s))

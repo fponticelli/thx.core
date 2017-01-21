@@ -73,6 +73,16 @@ class Eithers {
     };
 
   /**
+   * `ap` transforms a value contained in `Either<E, RIn>` to `Either<E, ROut>` using a `callback`
+   * wrapped in the right side of another Either.
+   */
+  public static function ap<L, RIn, ROut>(either : Either<L, RIn>, fa: Either<L, RIn -> ROut>): Either<L, ROut>
+    return switch either {
+      case Left(l): Left(l);
+      case Right(v): map(fa, function(f) return f(v));
+    };
+
+  /**
     Maps an Either<L, RIn> to and Either<L, ROut>.
   **/
   public static function flatMap<L, RIn, ROut>(either : Either<L, RIn>, f : RIn -> Either<L, ROut>) : Either<L, ROut> {
@@ -94,11 +104,11 @@ class Eithers {
       case Right(v): v;
     };
 
+  public static function toValidation<E, T>(either: Either<E, T>): Validation<E, T>
+    return either;
+
   public static function toVNel<E, T>(either: Either<E, T>): Validation.VNel<E, T>
-    return switch either {
-      case Left(e): Validation.failureNel(e);
-      case Right(v): Validation.successNel(v);
-    };
+    return leftMap(either, Nel.pure);
 
   public static function cata<L, R, A>(either: Either<L, R>, l: L -> A, r: R -> A): A
     return switch either {
@@ -106,10 +116,43 @@ class Eithers {
       case Right(r0): r(r0);
     };
 
+  public static function foldLeft<L, R, A>(either: Either<L, R>, a: A, f: A -> R -> A): A
+    return switch either {
+      case Left(l0):  a;
+      case Right(r0): f(a, r0);
+    };
+
+  /**
+   * Fold by mapping the contained value into some monoidal type and reducing with that monoid.
+   */
+  public static function foldMap<L, R, A>(either: Either<L, R>, f: R -> A, m: Monoid<A>): A
+    return foldLeft(map(either, f), m.zero, m.append);
+
   public static function orElse<L, R>(e0: Either<L, R>, e1: Either<L, R>): Either<L, R> {
     return switch e0 {
       case Left(e): e1;
       case right: right;
+    };
+  }
+
+  public static function each<L, R>(either: Either<L, R>, f: R -> Void): Void {
+    return switch either {
+      case Left(l): null;
+      case Right(r): f(r);
+    };
+  }
+
+  public static function eachLeft<L, R>(either: Either<L, R>, f: L -> Void): Void {
+    return switch either {
+      case Left(l): f(l);
+      case Right(r): null;
+    };
+  }
+
+  public static function ensure<L, R>(either: Either<L, R>, p: R -> Bool, error: L): Either<L, R> {
+    return switch either {
+      case Right(a): if (p(a)) either else Left(error);
+      case _: either;
     };
   }
 }

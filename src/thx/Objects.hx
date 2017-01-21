@@ -93,21 +93,32 @@ public static function inflate(o: {}) {
 }
 
 /**
-Merges `first` and `second` using the `combine` strategy to return a merged object. The returned
-object is typed as an object containing all of the fields from both `first` and `second`.
+Shallow, typed merge of two anonymous objects.
 **/
   macro public static function merge(first : ExprOf<{}>, second : ExprOf<{}>) {
-    return thx.macro.Objects.mergeImpl(first, second);
+    haxe.macro.Context.warning('use thx.Objects.shallowMerge or thx.Objects.deepMerge instead', haxe.macro.Context.currentPos()); // macro-time @:deprecation
+    return thx.macro.Objects.shallowMergeImpl(first, second);
   }
 
 /**
-Copies the values from the fields of `first` and `second` to a new object. If `first` and `second` contain
-fields with the same name, the returned object will use the fields from `second`. Both objects passed
-to this function will be unmodified.
-
-The `combine` operation is not recursive and does a shallow merge of the two objects.
+Shallow, typed merge of two anonymous objects.
 **/
+  macro public static function shallowMerge(first: ExprOf<{}>, second: ExprOf<{}>) {
+    return thx.macro.Objects.shallowMergeImpl(first, second);
+  }
+
+/**
+Shallow, untyped merge of two anonymous objects.
+**/
+  @:deprecated('use thx.Objects.shallowCombine or thx.Objects.deepCombine instead')
   public static function combine(first : {}, second : {}) : {} {
+    return shallowCombine(first, second);
+  }
+
+/**
+Shallow, untyped merge of two anonymous objects.
+**/
+  public static function shallowCombine(first: {}, second: {}) : {} {
     var to = {};
     for(field in Reflect.fields(first)) {
       Reflect.setField(to, field, Reflect.field(first, field));
@@ -116,6 +127,26 @@ The `combine` operation is not recursive and does a shallow merge of the two obj
       Reflect.setField(to, field, Reflect.field(second, field));
     }
     return to;
+  }
+
+/**
+Deep, typed merge of two objects.
+**/
+  /* TODO: placeholder for future macro-based deepMergeImpl
+  macro public static function deepMerge(first: ExprOf<{}>, second: ExprOf<{}>) {
+    return thx.macro.Objects.deepMergeImpl(first, second);
+  }
+  */
+
+/**
+Deep, untyped merge of two objects.
+**/
+  public static function deepCombine(first: {}, second: {}) : {} {
+    var deflatedSecond = Objects.deflate(second);
+    for (keyPath in Reflect.fields(deflatedSecond)) {
+      setPath(first, keyPath, Reflect.field(deflatedSecond, keyPath));
+    }
+    return first;
   }
 
 /**
@@ -226,6 +257,7 @@ can contain object keys and array indices separated by ".".
 E.g. { key1: { key2: [1, 2, 3] } }.hasPath("key1.key2.2") -> returns true
 **/
   public static function hasPath(o : {}, path : String) : Bool {
+    path = normalizePath(path);
     var paths = path.split(".");
     var current : Dynamic = o;
 
@@ -257,8 +289,10 @@ Gets a value from an object by a string path.  The path can contain object keys 
 by ".".  Returns null for a path that does not exist.
 
 E.g. { key1: { key2: [1, 2, 3] } }.getPath("key1.key2.2") -> returns 3
+E.g. { key1: { key2: [1, 2, 3] } }.getPath("key1.key2[2]") -> returns 3
 **/
   public static function getPath(o : {}, path : String) : Dynamic {
+    path = normalizePath(path);
     var paths = path.split(".");
     var current : Dynamic = o;
     for (currentPath in paths) {
@@ -301,21 +335,7 @@ function. `thx.fp.Dynamics` has several functions that match this pattern.
 ```
   **/
     public static function getPathOr(o : {}, path : String, alt : Dynamic) : Dynamic {
-      var paths = path.split(".");
-      var current : Dynamic = o;
-      for (currentPath in paths) {
-        if(currentPath.isDigitsOnly()) {
-          var index = Std.parseInt(currentPath),
-              arr = Std.instance(current, Array);
-          if(null == arr) return null;
-          current = arr[index];
-        } else if (Reflect.hasField(current, currentPath)) {
-          current = Reflect.field(current, currentPath);
-        } else {
-          return alt;
-        }
-      }
-      return current;
+      return Options.getOrElse(getPathOption(o, path), alt);
     }
 
 /**
@@ -327,6 +347,7 @@ Inner objects and arrays will be created as needed when traversing the path.
 E.g. { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.2", 4) -> returns { key1: { key2: [ 1, 2, 4 ] } }
 **/
   public static function setPath<T>(o : {}, path : String, val : T) : {} {
+    path = normalizePath(path);
     var paths = path.split("."),
         current : Dynamic = o;
 
@@ -377,6 +398,7 @@ Delete an object's property, given a string path to that property.
 E.g. { foo : 'bar' }.removePath('foo') -> returns {}
 **/
   public static function removePath(o : {}, path : String) : {} {
+    path = normalizePath(path);
     var paths = path.split(".");
 
     // the last item in the list of paths is the target field
@@ -402,6 +424,10 @@ E.g. { foo : 'bar' }.removePath('foo') -> returns {}
     } catch (e : Dynamic) { }
 
     return o;
+  }
+
+  static inline function normalizePath(path : String) : String {
+    return ~/\[(\d+)\]/g.replace(path, ".$1"); // Normalize [x] array access to .x (where x is an integer)
   }
 
 /*

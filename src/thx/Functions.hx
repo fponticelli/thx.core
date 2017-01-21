@@ -184,6 +184,16 @@ the resolver function that by default directly converts the arguments into a str
     return function(a: A) { return function(b) { return f(a, b); } };
 
 /**
+`join` creates a function that calls the 2 functions passed as arguments in sequence
+and passes the same argument values to the both of them.
+**/
+  public inline static function join<T1, T2>(fa : T1 -> T2 -> Void, fb : T1 -> T2 -> Void)
+    return function(v1 : T1, v2 : T2) {
+      fa(v1, v2);
+      fb(v1, v2);
+    }
+
+/**
 Wraps `callback` in a function that negates its results.
 **/
   public inline static function negate<T1, T2>(callback : T1 -> T2 -> Bool)
@@ -282,6 +292,11 @@ class Functions11 {
 class Functions12 {
   public inline static function curry<A, B, C, D, E, F, G, H, I, J, K, L, M>(f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M): A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> (L -> M)
     return function(a: A, b: B, c: C, d: D, e: E, f0: F, g: G, h: H, i: I, j: J, k: K) { return function(l) { return f(a, b, c, d, e, f0, g, h, i, j, k, l); } };
+}
+
+class Functions13 {
+  public inline static function curry<A, B, C, D, E, F, G, H, I, J, K, L, M, N>(f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N): A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> (M -> N)
+    return function(a: A, b: B, c: C, d: D, e: E, f0: F, g: G, h: H, i: I, j: J, k: K, l: L) { return function(m) { return f(a, b, c, d, e, f0, g, h, i, j, k, l, m); } };
 }
 
 abstract Reader<A, B> (A -> B) from A -> B to A -> B {

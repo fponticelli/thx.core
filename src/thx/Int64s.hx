@@ -43,16 +43,15 @@ class Int64s {
   public static var maxValue = haxe.Int64.make(0x7fffffff,0xffffffff);
   public static var minValue = haxe.Int64.make(0x80000000,0x00000001);
 
-  public static function abs(value : Int64)
-    return value < zero ? -value : value;
+  public static function abs(value : Int64): Int64
+    return compare(value, Int64.ofInt(0)) > 0 ? value : -value;
 
-  public static function compare(a : Int64, b : Int64)
-    if(a > b)
-      return 1;
-    else if(a < b)
-      return -1;
-    else
-      return 0;
+  public static function compare(a : Int64, b : Int64): Int
+#if cpp
+    return a > b ? 1 : (a < b ? -1 : 0);
+#else
+    return haxe.Int64.compare(a, b);
+#end
 
   public static function parse(s : String) : Int64 {
     var sIsNegative = false,

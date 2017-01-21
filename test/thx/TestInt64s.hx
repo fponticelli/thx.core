@@ -42,5 +42,22 @@ class TestInt64s {
     }
   }
 
+  public function testAbs() {
+    Assert.isTrue(Int64.ofInt(0) == Int64s.abs(Int64.ofInt(0)));
+    Assert.isTrue(Int64.ofInt(1) == Int64s.abs(Int64.ofInt(1)));
+    Assert.isTrue(Int64.ofInt(1) == Int64s.abs(Int64.ofInt(-1)));
+    Assert.isTrue(Int64.ofInt(42) == Int64s.abs(Int64.ofInt(42)));
+    Assert.isTrue(Int64.ofInt(42) == Int64s.abs(Int64.ofInt(-42)));
+  }
+
+  public function testCompare() {
+    Assert.same(0, Int64s.compare(Int64.ofInt(3), Int64.ofInt(3)));
+    Assert.same(1, Int64s.compare(Int64.ofInt(4), Int64.ofInt(3)));
+    Assert.same(-1, Int64s.compare(Int64.ofInt(4), Int64.ofInt(5)));
+    Assert.same(0, Int64s.compare(Int64.ofInt(-3), Int64.ofInt(-3)));
+    Assert.same(-1, Int64s.compare(Int64.ofInt(-4), Int64.ofInt(-3)));
+    Assert.same(1, Int64s.compare(Int64.ofInt(-4), Int64.ofInt(-5)));
+  }
+
   static inline function here(?pos : haxe.PosInfos) return pos;
 }

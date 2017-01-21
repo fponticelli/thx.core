@@ -159,9 +159,14 @@ class Convert {
       return (value : {});
     return switch Types.valueTypeToString(value) {
       case "String":
-        try
-          Json.parse((value : String))
-        catch(e : Dynamic)
+        try {
+          var v = Json.parse((value : String));
+  #if php
+          if(null == v)
+            throw new Error('unable to convert string $value to Object');
+  #end
+          return v;
+        } catch(e : Dynamic)
           throw new Error('unable to convert string $value to Object');
       case _:
         throw new Error('unable to convert $value to Object');

@@ -38,4 +38,23 @@ class TestTime {
     Assert.equals("89:25:30.005", ("3.17:25:30.005" : Time).toString());
     Assert.equals("-89:25:30.05", ("-3.17:25:30.05" : Time).toString());
   }
+
+  public function testIs() {
+    Assert.isFalse(Time.is(null));
+    Assert.isFalse(Time.is(""));
+    Assert.isFalse(Time.is(42));
+    Assert.isFalse(Time.is(42.5));
+    Assert.isFalse(Time.is(true));
+    Assert.isFalse(Time.is([]));
+    Assert.isFalse(Time.is({}));
+    Assert.isFalse(Time.is([1, 2]));
+    Assert.isFalse(Time.is(DateTime.now()));
+    Assert.isFalse(Time.is(Date.now()));
+    Assert.isFalse(Time.is([haxe.Int64.ofInt(1)]));
+    Assert.isFalse(Time.is([haxe.Int64.ofInt(1), haxe.Int64.ofInt(2)]));
+    Assert.isFalse(Time.is([haxe.Int64.ofInt(1), haxe.Int64.ofInt(2), haxe.Int64.ofInt(3)]));
+    Assert.isTrue(Time.is(DateTimeUtc.now())); // DateTimeUtc is an Int64, so it is also considered a Time
+    Assert.isTrue(Time.is(Time.fromString("00:00:06")));
+    Assert.isTrue(Time.is(haxe.Int64.ofInt(1))); // one Int64 is considered to be a Time
+  }
 }

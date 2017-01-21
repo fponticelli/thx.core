@@ -61,9 +61,9 @@ class TestObjects {
     }
   }
 
-  public function testCombine() {
+  public function testShallowCombine() {
     var o = {'name' : 'Franco', age : 19};
-    var out : Dynamic = thx.Objects.combine(o, { 'foo': 'bar', 'name' : 'Michael', 'age' : 'Two'});
+    var out : Dynamic = thx.Objects.shallowCombine(o, { 'foo': 'bar', 'name' : 'Michael', 'age' : 'Two'});
 
     Assert.same("Michael", out.name);
     Assert.same("Two", out.age);
@@ -71,11 +71,11 @@ class TestObjects {
     Assert.same("Franco", o.name);
   }
 
-  public function testMergeWithNullable() {
+  public function testShallowMergeWithNullable() {
     var a : Null<SpecialObject>,
         options : { sub : Null<SpecialObject> } = { sub : {}};
 
-    a = Objects.merge({
+    a = Objects.shallowMerge({
       foo : 'baz',
       bar : 'qux'
     }, options.sub);
@@ -83,7 +83,7 @@ class TestObjects {
     Assert.same('baz', a.foo);
   }
 
-  public function testMergeWithTypedef() {
+  public function testShallowMergeWithTypedef() {
     var to : SpecialObject = {
           bar : "qux"
         },
@@ -92,11 +92,59 @@ class TestObjects {
           extra : "field"
         };
 
-    var merged : SpecialObject = thx.Objects.merge(to, from);
+    var merged : SpecialObject = thx.Objects.shallowMerge(to, from);
 
     Assert.same(merged.foo, from.foo);
     Assert.same(merged.bar, to.bar);
     Assert.same(Reflect.field(merged, 'extra'), 'field');
+  }
+
+  public function testDeepMerge() {
+    var first = {
+      a: {
+        a1: 123,
+        a2: [1, 2, 3],
+      },
+      b: {
+        b1: 456,
+        b2: [4, 5, 6]
+      }
+    };
+    var second = {
+      a: {
+        a3: "aaa"
+      },
+      b: {
+        b1: 999,
+        b2: [10, 20, 30],
+        b3: {
+          b4: "bbb"
+        }
+      },
+      c: {
+        c1: 789,
+        c2: [789]
+      },
+    };
+    var expected = {
+      a: {
+        a1: 123,
+        a2: [1, 2, 3],
+        a3: "aaa"
+      },
+      b: {
+        b1: 999,
+        b2: [10, 20, 30],
+        b3: {
+          b4: "bbb"
+        }
+      },
+      c: {
+        c1: 789,
+        c2: [789]
+      },
+    };
+    Assert.same(expected, thx.Objects.deepCombine(first, second));
   }
 
   public function testHasPath() {
@@ -115,12 +163,17 @@ class TestObjects {
         key6: null
       }
     };
-
     Assert.isTrue(o.hasPath('key1.key2'));
     Assert.isTrue(o.hasPath('key1.key4.1'));
+    Assert.isTrue(o.hasPath('key1.key4[1]'));
+    Assert.isTrue(o.hasPath('key1.key5[0].key6'));
+    Assert.isTrue(o.hasPath('key1.key5[1].key6'));
     Assert.isTrue(o.hasPath('key1.key6'));
 
     Assert.isFalse(o.hasPath('key1.key4.2'));
+    Assert.isFalse(o.hasPath('key1.key4[2]'));
+    Assert.isFalse(o.hasPath('key1.key5[2]'));
+    Assert.isFalse(o.hasPath('key1.key5[2].key6'));
     Assert.isFalse(o.hasPath('key1.key7'));
   }
 
@@ -142,8 +195,24 @@ class TestObjects {
       }
     };
 
+    Assert.isTrue(o.hasPathValue('key1'));
+    Assert.isTrue(o.hasPathValue('key1.key2'));
+    Assert.isTrue(o.hasPathValue('key1.key3'));
+    Assert.isTrue(o.hasPathValue('key1.key4.0'));
+    Assert.isTrue(o.hasPathValue('key1.key4.1'));
+    Assert.isTrue(o.hasPathValue('key1.key4[0]'));
+    Assert.isTrue(o.hasPathValue('key1.key4[1]'));
+    Assert.isTrue(o.hasPathValue('key1.key5'));
+    Assert.isTrue(o.hasPathValue('key1.key5.0.key6'));
+    Assert.isTrue(o.hasPathValue('key1.key5.1.key6'));
+    Assert.isTrue(o.hasPathValue('key1.key5[0].key6'));
+    Assert.isTrue(o.hasPathValue('key1.key5[1].key6'));
+
     Assert.isFalse(o.hasPathValue('key1.key6'));
     Assert.isFalse(o.hasPathValue('key1.key4.2'));
+    Assert.isFalse(o.hasPathValue('key1.key4[2]'));
+    Assert.isFalse(o.hasPathValue('key1.key4.3'));
+    Assert.isFalse(o.hasPathValue('key1.key4[3]'));
     Assert.isFalse(o.hasPathValue('key1.key7'));
   }
 
@@ -165,28 +234,34 @@ class TestObjects {
     Assert.same(123, o.getPath("key1.key2"));
     Assert.same("abc", o.getPath("key1.key3"));
     Assert.same("one", o.getPath("key1.key4.0"));
-    Assert.same("two", o.getPath("key1.key4.1"));
+    Assert.same("one", o.getPath("key1.key4[0]"));
+    Assert.same("two", o.getPath("key1.key4[1]"));
     Assert.same([ { key6: "test1" }, { key6: "test2" } ], o.getPath("key1.key5"));
     Assert.same("test1", o.getPath("key1.key5.0.key6"));
     Assert.same("test2", o.getPath("key1.key5.1.key6"));
+    Assert.same("test1", o.getPath("key1.key5[0].key6"));
+    Assert.same("test2", o.getPath("key1.key5[1].key6"));
 
     Assert.isNull(o.getPath(""));
     Assert.isNull(o.getPath("bad"));
     Assert.isNull(o.getPath("bad.key"));
     Assert.isNull(o.getPath("key1.key5.2.key6")); // bad index in key5 array
     Assert.isNull(o.getPath("key1.key5.1.key6.0"));
+    Assert.isNull(o.getPath("key1.key5.1.key6[0]"));
   }
 
   public function testParsePath() {
     var o = {
       key1: {
         key2: 123,
-        key3: "abc"
+        key3: "abc",
+        key4: [true, false]
       }
     };
-
     Assert.same(Right(123), o.parsePath("key1.key2", thx.fp.Dynamics.parseInt));
     Assert.same(Right("abc"), o.parsePath("key1.key3", thx.fp.Dynamics.parseString));
+    Assert.same(Right(true), o.parsePath("key1.key4.0", thx.fp.Dynamics.parseBool));
+    Assert.same(Right(true), o.parsePath("key1.key4[0]", thx.fp.Dynamics.parseBool));
     Assert.isTrue(o.parsePath("key5.key6", thx.fp.Dynamics.parseString).either.isLeft());
     Assert.isTrue(o.parsePath("key1.key3", thx.fp.Dynamics.parseInt).either.isLeft());
   }
@@ -196,12 +271,16 @@ class TestObjects {
     Assert.same({ key1: "val1", key2: "val2" }, ({}).setPath("key1", "val1").setPath("key2", "val2"));
     Assert.same({ key1: { key2: "val" } }, ({}).setPath("key1.key2", "val"));
     Assert.same({ key1: [ { key2: "val" } ] }, ({}).setPath("key1.0.key2", "val"));
+    Assert.same({ key1: [ { key2: "val" } ] }, ({}).setPath("key1[0].key2", "val"));
     Assert.same({ key1: [ [ [ null, 123 ] ] ] }, ({}).setPath("key1.0.0.1", 123));
+    Assert.same({ key1: [ [ [ null, 123 ] ] ] }, ({}).setPath("key1[0][0][1]", 123));
     Assert.same({ key1: [ [ [ null, { key2: "val" } ] ] ] }, ({}).setPath("key1.0.0.1.key2", "val"));
+    Assert.same({ key1: [ [ [ null, { key2: "val" } ] ] ] }, ({}).setPath("key1[0][0][1].key2", "val"));
 
     Assert.same({ key: "val" }, { key: "before" }.setPath("key", "val"));
     Assert.same({ key1: { key2: "val" } }, { key1: { key2: "before" } }.setPath("key1.key2", "val"));
     Assert.same({ key1: { key2: [ 1, 55, 3 ] } }, { key1: { key2: [1, 2, 3] } }.setPath("key1.key2.1", 55));
+    Assert.same({ key1: { key2: [ 1, 55, 3 ] } }, { key1: { key2: [1, 2, 3] } }.setPath("key1.key2[1]", 55));
     Assert.same({ key1: 123, newKey: "val" }, { key1: 123 }.setPath("newKey", "val"));
 
     Assert.same([1, 2], [].setPath("*", 1).setPath("*", 2));

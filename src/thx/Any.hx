@@ -1,13 +1,23 @@
 package thx;
 
+#if (haxe_ver >= 3.4)
+import Any as HaxeAny;
+#end
+
+
 /**
   Safer version of Haxe Dynamic that prevents common issues with Dynamics by forcing
   you to explicitly convert it to the desired type before doing any operations on it.
 
-  Taken from Haxe tink_core library by Juraj Kirchheim
-  - https://github.com/haxetink/tink_core#any
-  - https://github.com/haxetink/tink_core/blob/master/src/tink/core/Any.hx
+  Note: this Any type differs from the Haxe Any type (in 3.4 or later) in how implicit
+  conversions to and from Dynamic are handled.
 **/
-abstract Any(Dynamic) from Dynamic {
-  @:noCompletion @:to inline function __promote<A>() : A return this;
+abstract Any(Dynamic) {
+  @:from inline public static function ofValue<T>(value:T):Any return cast value;
+  inline public function unsafeCast<T>():T return this;
+
+#if (haxe_ver >= 3.4)
+  @:from inline public static function fromHaxeAny(haxeAny : HaxeAny) : Any return cast haxeAny;
+  inline public function toHaxeAny() : HaxeAny return cast this;
+#end
 }

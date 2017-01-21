@@ -69,4 +69,14 @@ class TestInts {
       Assert.equals(test.e, test.t.toString(test.b));
     }
   }
+
+  public function testRandom() {
+    var min = 10;
+    var max = 20;
+    for (i in 0...10000) {
+      var v = Ints.random(min, max);
+      Assert.isTrue(min <= v, 'the random value ${v} should be larger than the minimum value ${min}');
+      Assert.isTrue(v <= max, 'the random value ${v} should be smaller than the maximum value ${max}');
+    }
+  }
 }

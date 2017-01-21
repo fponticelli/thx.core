@@ -30,9 +30,11 @@ class TestAll {
     runner.addCase(new thx.TestInts());
     runner.addCase(new thx.TestIterables());
     runner.addCase(new thx.TestIterators());
+    runner.addCase(new thx.TestLazy());
     runner.addCase(new thx.TestLocalDate());
     runner.addCase(new thx.TestLocalYearMonth());
     runner.addCase(new thx.TestNel());
+    runner.addCase(new thx.TestNothing());
     runner.addCase(new thx.TestOrderedMap());
     runner.addCase(new thx.TestOrderedSet());
     runner.addCase(new thx.TestMake());
@@ -46,12 +48,12 @@ class TestAll {
     runner.addCase(new thx.TestReadonlyArray());
     runner.addCase(new thx.TestQueryString());
     runner.addCase(new thx.TestSet());
+    runner.addCase(new thx.TestTypes());
     runner.addCase(new thx.TestUuid());
 
     runner.addCase(new thx.TestStaticResource());
     runner.addCase(new thx.TestStrings());
     runner.addCase(new thx.TestTime());
-    runner.addCase(new thx.TestThx());
     runner.addCase(new thx.TestLambda());
     runner.addCase(new thx.TestLambdaStaticExtension());
 #if (js || flash)

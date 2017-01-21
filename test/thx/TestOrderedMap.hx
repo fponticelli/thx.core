@@ -84,8 +84,9 @@ class TestOrderedMap {
         Assert.equals("value", m.get("k"));
 
     acceptMap(ml);
-
+#if !cs
     Assert.notNull(OrderedMap.createInt());
+#end
     Assert.notNull(OrderedMap.createEnum());
     Assert.notNull(OrderedMap.createObject());
   }
@@ -144,6 +145,7 @@ class TestOrderedMap {
     Assert.same(map, map4);
   }
 
+#if !cs
   public function testIntAbstractKey() {
     var map : OrderedMap<TestIntId, String> = OrderedMap.createInt();
     map.set(new TestIntId(1), "a");
@@ -156,6 +158,7 @@ class TestOrderedMap {
     Assert.same("b", map.get(new TestIntId(2)));
     Assert.same("c", map.get(new TestIntId(3)));
   }
+#end
 }
 
 abstract TestStringId(String) to String {
