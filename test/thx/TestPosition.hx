@@ -9,8 +9,13 @@ class TestPosition{
   }
   public function test(){
     var pos = Position.here();
-    equals("|>[TestPosition.hx]thx.TestPosition#test:11<|",'$pos');
+    equals("thx.TestPosition?L=11#test",'$pos');
     equals("thx.TestPosition#test",pos.getClassMethodString());
-    equals("thx.TestPosition#test@11",pos.getClassMethodLineString());
+    equals("thx.TestPosition.FileNameNotModule?L=19#get",FileNameNotModule.get().toString());
+  }
+}
+class FileNameNotModule{
+  static public function get(){
+    return Position.here();
   }
 }
