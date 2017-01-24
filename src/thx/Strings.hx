@@ -165,6 +165,18 @@ Return the number of occurances of `test` in `s`.
   inline public static function containsAny(s : String, tests : Array<String>)
     return tests.any(contains.bind(s, _));
 
+/**
+`contains` returns `true` if `s` contains all of the strings in `tests` regardless of the text case
+**/
+  inline public static function caseInsensitiveContainsAll(s : String, tests : Array<String>)
+    return tests.all(caseInsensitiveContains.bind(s, _));
+
+/**
+`contains` returns `true` if `s` contains all of the strings in `tests`
+**/
+  inline public static function containsAll(s : String, tests : Array<String>)
+    return tests.all(contains.bind(s, _));
+
 
 /**
 `dasherize` replaces all the occurrances of `_` with `-`;

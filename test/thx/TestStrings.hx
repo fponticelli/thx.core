@@ -59,6 +59,18 @@ class TestStrings {
     Assert.isTrue("one two three".containsAny(["one two", "x", "three"]));
   }
 
+  public function testContainsAll() {
+    Assert.isTrue("test".containsAll(["t", "s", "e"]));
+    Assert.isFalse("test".containsAll(["e", "x", "y"]));
+    Assert.isTrue("test".containsAll(["t"]));
+    Assert.isTrue("test".containsAll(["e"]));
+    Assert.isTrue("test".containsAll(["s", "t"]));
+    Assert.isFalse("test".containsAll(["x", "t"]));
+    Assert.isFalse("one two three".containsAll(["zero", "one", "two"]));
+    Assert.isTrue("one two three".containsAll(["one", "two", "three"]));
+    Assert.isTrue("one two three".containsAll(["one two", "three"]));
+  }
+
   public function testHashCode() {
     Assert.equals(97, "a".hashCode());
     Assert.equals(96354, "abc".hashCode());
