@@ -91,6 +91,14 @@ exception is thrown.
     return DateTime.fromString(s).utc;
 
 /**
+Checks if a dynamic value is an instance of DateTimeUtc.
+Note: because thx.DateTimeUtc is an abstract of haxe.Int64, any haxe.Int64 will be considered to be a thx.DateTimeUtc
+**/
+  public static function is(v : Dynamic) : Bool {
+    return haxe.Int64.is(v);
+  }
+
+/**
 Alternative to fromString that returns the result in an Either, rather than
 a value or a thrown error.
 **/

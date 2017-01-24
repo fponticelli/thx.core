@@ -192,6 +192,24 @@ class TestDateTimeUtc {
     );
   }
 
+  public function testIs() {
+    Assert.isFalse(DateTimeUtc.is(null));
+    Assert.isFalse(DateTimeUtc.is(""));
+    Assert.isFalse(DateTimeUtc.is(42));
+    Assert.isFalse(DateTimeUtc.is(42.5));
+    Assert.isFalse(DateTimeUtc.is(true));
+    Assert.isFalse(DateTimeUtc.is([]));
+    Assert.isFalse(DateTimeUtc.is({}));
+    Assert.isFalse(DateTimeUtc.is([1, 2]));
+    Assert.isFalse(DateTimeUtc.is(DateTime.now()));
+    Assert.isFalse(DateTimeUtc.is(Date.now()));
+    Assert.isFalse(DateTimeUtc.is([haxe.Int64.ofInt(1)]));
+    Assert.isFalse(DateTimeUtc.is([haxe.Int64.ofInt(1), haxe.Int64.ofInt(2)]));
+    Assert.isFalse(DateTimeUtc.is([haxe.Int64.ofInt(1), haxe.Int64.ofInt(2), haxe.Int64.ofInt(3)]));
+    Assert.isTrue(DateTimeUtc.is(DateTimeUtc.now()));
+    Assert.isTrue(DateTimeUtc.is(haxe.Int64.ofInt(1))); // one Int64 is considered to be a DateTimeUtc
+  }
+
   public function testParse() {
     assertParse(DateTimeUtc.create(2012, 2, 3, 11, 30, 59, 66), "2012-02-03T11:30:59.066");
     assertParse(DateTimeUtc.create(2012, 2, 3, 13, 30, 59, 66), "2012-02-03T11:30:59.066-02:00");
