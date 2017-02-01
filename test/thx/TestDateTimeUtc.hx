@@ -200,7 +200,11 @@ class TestDateTimeUtc {
     Assert.isFalse(DateTimeUtc.is(true));
     Assert.isFalse(DateTimeUtc.is([]));
     Assert.isFalse(DateTimeUtc.is({}));
+#if cpp
+    Assert.isTrue(DateTimeUtc.is([1, 2]));
+#else
     Assert.isFalse(DateTimeUtc.is([1, 2]));
+#end
     Assert.isFalse(DateTimeUtc.is(DateTime.now()));
     Assert.isFalse(DateTimeUtc.is(Date.now()));
     Assert.isFalse(DateTimeUtc.is([haxe.Int64.ofInt(1)]));

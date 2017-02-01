@@ -189,7 +189,11 @@ class TestDateTime {
     Assert.isFalse(DateTime.is(true));
     Assert.isFalse(DateTime.is([]));
     Assert.isFalse(DateTime.is({}));
+#if cpp
+    Assert.isTrue(DateTime.is([1, 2]));
+#else
     Assert.isFalse(DateTime.is([1, 2]));
+#end
     Assert.isFalse(DateTime.is(DateTimeUtc.now()));
     Assert.isFalse(DateTime.is(Date.now()));
     Assert.isFalse(DateTime.is([haxe.Int64.ofInt(1)]));
