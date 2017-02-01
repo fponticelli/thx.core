@@ -142,16 +142,7 @@ Deep, typed merge of two objects.
 Deep, untyped merge of two objects.
 **/
   public static function deepCombine(first: {}, second: {}) : {} {
-    for (key in Reflect.fields(second)) {
-      var firstValue = Reflect.field(first, key);
-      var secondValue = Reflect.field(second, key);
-      if (firstValue != null && secondValue != null && Types.isAnonymousObject(firstValue) && Types.isAnonymousObject(secondValue)) {
-        Reflect.setField(first, key, deepCombine(firstValue, secondValue));
-      } else {
-        Reflect.setField(first, key, secondValue);
-      }
-    }
-    return first;
+    return copyTo(second, first, true);
   }
 
 /**
