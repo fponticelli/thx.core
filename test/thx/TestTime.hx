@@ -42,7 +42,11 @@ class TestTime {
   public function testIs() {
     Assert.isFalse(Time.is(null));
     Assert.isFalse(Time.is(""));
+#if cpp
+    Assert.isTrue(Time.is(42));
+#else
     Assert.isFalse(Time.is(42));
+#end
     Assert.isFalse(Time.is(42.5));
     Assert.isFalse(Time.is(true));
     Assert.isFalse(Time.is([]));
