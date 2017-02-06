@@ -181,7 +181,7 @@ match `end`. No interpolation is made.
     return Ord.fromIntComparison(compare);
 
 /**
-Creates a DateTime instance from its components (year, mont, day, hour, minute,
+Creates a DateTime instance from its components (year, month, day, hour, minute,
 second, millisecond and time offset).
 
 All time components are optionals.

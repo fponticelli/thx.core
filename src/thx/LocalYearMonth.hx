@@ -5,21 +5,19 @@ using thx.Strings;
 import thx.DateConst.*;
 
 /**
-`Date` represents a date (without time) between 5879611-07-12 and -5879611-07-13
-(the actual boundary values are platform specific and depend on the precision
-of the `Int` type).
-`Date` represents a moment in time with no time-offset information.
+`LocalYearMonth` represents a date (without day of the month) without time-offset
+information.
 */
 abstract LocalYearMonth(Int) {
 /**
-Returns the system date/time relative to UTC.
+Returns the system year/month.
 */
   public static function now() : LocalYearMonth
     return fromDate(Date.now());
 
 /**
-Returns a LocalYearMonth instance from an `Int` value. The value is the number of days
-since 1 C.E. (A.D.).
+Returns a `LocalYearMonth` instance from an `Int` value. The value is the number
+of months since 1 C.E. (A.D.).
 */
   inline public static function fromInt(months : Int) : LocalYearMonth
     return new LocalYearMonth(months);
@@ -72,14 +70,14 @@ rather than throwing and Error.
     return Ints.compare(a.months, b.months);
 
 /**
-Creates a LocalYearMonth instance from its components (year, mont, day).
+Creates a LocalYearMonth instance from its components (year, month).
 */
   public static function create(year : Int, month : Int) {
-    var months = dateToMonth(year, month);
+    var months = dateToYearMonth(year, month);
     return new LocalYearMonth(months);
   }
 
-  public static function dateToMonth(year : Int, month : Int) : Int {
+  public static function dateToYearMonth(year : Int, month : Int) : Int {
     if(month == 0) {
       year--;
       month = 12;
@@ -99,7 +97,7 @@ Creates a LocalYearMonth instance from its components (year, mont, day).
 
   static function rawDateToMonths(year : Int, month : Int) : Int {
     if(year == 0) {
-      return dateToMonth(-1, month + 1);
+      return dateToYearMonth(-1, month + 1);
     } else if(year < 0) {
       return (year + 1) * 12 - (13 - month);
     } else {
@@ -161,25 +159,25 @@ Tells how many days in the month of this date.
     return DateTimeUtc.daysInMonth(year, month);
 
 /**
-Returns a new date, exactly 1 year before the given date/time.
+Returns a new date, exactly 1 year before the given year/month.
 **/
   inline public function prevYear()
     return LocalYearMonth.create(year - 1, month);
 
 /**
-Returns a new date, exactly 1 year after the given date/time.
+Returns a new date, exactly 1 year after the given year/month.
 **/
   inline public function nextYear()
     return LocalYearMonth.create(year + 1, month);
 
 /**
-Returns a new date, exactly 1 month before the given date/time.
+Returns a new date, exactly 1 month before the given year/month.
 **/
   inline public function prevMonth()
     return LocalYearMonth.create(year, month - 1);
 
 /**
-Returns a new date, exactly 1 month after the given date/time.
+Returns a new date, exactly 1 month after the given year/month.
 **/
   inline public function nextMonth()
     return LocalYearMonth.create(year, month + 1);
@@ -204,13 +202,13 @@ Snaps a time to the previous second, minute, hour, day, week, month or year.
 
 @param period Either: Second, Minute, Hour, Day, Week, Month or Year
 **/
-public function snapPrev(period : TimePeriod) : LocalYearMonth
-  return switch period {
-    case Second, Minute, Hour, Day, Week, Month:
-      new LocalYearMonth(this - 1);
-    case Year:
-      LocalYearMonth.create(year - 1, 1);
-  };
+  public function snapPrev(period : TimePeriod) : LocalYearMonth
+    return switch period {
+      case Second, Minute, Hour, Day, Week, Month:
+        new LocalYearMonth(this - 1);
+      case Year:
+        LocalYearMonth.create(year - 1, 1);
+    };
 
 /**
 Snaps a time to the nearest second, minute, hour, day, week, month or year.
@@ -234,10 +232,10 @@ Returns true if this date and the `other` date share the same year.
     return year == other.year;
 
 /**
-Returns true if this date and the `other` date share the same year and month.
+Returns true if this date and the `other` date share the same month.
 **/
   public function sameMonth(other : LocalYearMonth)
-    return sameYear(other) && month == other.month;
+    return month == other.month;
 
   public function withYear(year : Int)
     return create(year, month);

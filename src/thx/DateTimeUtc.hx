@@ -114,7 +114,7 @@ a value or a thrown error.
     return a.compareTo(b);
 
 /**
-Creates a DateTime instance from its components (year, mont, day, hour, minute
+Creates a DateTime instance from its components (year, month, day, hour, minute
 second and millisecond).
 
 All time components are optionals.

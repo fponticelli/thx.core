@@ -77,7 +77,7 @@ Converts a string into a `LocalDate` value. The accepted format looks like this:
     return Ints.compare(a.days, b.days);
 
 /**
-Creates a LocalDate instance from its components (year, mont, day).
+Creates a LocalDate instance from its components (year, month, day).
 */
   public static function create(year : Int, month : Int, day : Int) {
     var days = dateToDays(year, month, day);
