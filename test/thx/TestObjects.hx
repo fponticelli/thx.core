@@ -108,6 +108,10 @@ class TestObjects {
       b: {
         b1: 456,
         b2: [4, 5, 6]
+      },
+      "d0.0": {
+        x: 123,
+        y: 456
       }
     };
     var second = {
@@ -125,6 +129,10 @@ class TestObjects {
         c1: 789,
         c2: [789]
       },
+      "d0.0": {
+        x: 123,
+        y: 789
+      }
     };
     var expected = {
       a: {
@@ -143,8 +151,13 @@ class TestObjects {
         c1: 789,
         c2: [789]
       },
+      "d0.0": {
+        x: 123,
+        y: 789
+      }
     };
-    Assert.same(expected, thx.Objects.deepCombine(first, second));
+    var actual = thx.Objects.deepCombine(first, second);
+    Assert.same(expected, actual);
   }
 
   public function testHasPath() {

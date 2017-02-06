@@ -195,7 +195,11 @@ class TestDateTimeUtc {
   public function testIs() {
     Assert.isFalse(DateTimeUtc.is(null));
     Assert.isFalse(DateTimeUtc.is(""));
+#if cpp
+    Assert.isTrue(DateTimeUtc.is(42));
+#else
     Assert.isFalse(DateTimeUtc.is(42));
+#end
     Assert.isFalse(DateTimeUtc.is(42.5));
     Assert.isFalse(DateTimeUtc.is(true));
     Assert.isFalse(DateTimeUtc.is([]));

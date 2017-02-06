@@ -142,11 +142,7 @@ Deep, typed merge of two objects.
 Deep, untyped merge of two objects.
 **/
   public static function deepCombine(first: {}, second: {}) : {} {
-    var deflatedSecond = Objects.deflate(second);
-    for (keyPath in Reflect.fields(deflatedSecond)) {
-      setPath(first, keyPath, Reflect.field(deflatedSecond, keyPath));
-    }
-    return first;
+    return copyTo(second, first, true);
   }
 
 /**

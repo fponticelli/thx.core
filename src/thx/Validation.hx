@@ -67,6 +67,17 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
       case Right(b): f(b);
     };
 
+  /**
+   * If `this` validation is a Right, keep it. Otherwise, try `other` as an
+   * alternative, merging their errors if both are Left.
+  **/
+  public function orElseV(other: Validation<E, A>, s: Semigroup<E>): Validation<E, A>
+    return switch [this, other.either] {
+      case [Right(_), _]: this;
+      case [_, Right(_)]: other;
+      case [Left(e1), Left(e2)]: Left(s.append(e1, e2));
+    }
+
   inline public function foldLeft<B>(b: B, f: B -> A -> B): B
     return Eithers.foldLeft(this, b, f);
 
