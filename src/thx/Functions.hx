@@ -26,6 +26,18 @@ Returns a function that invokes `callback` after being being invoked `n` times.
     }
 
 /**
+`memoize` wraps `callback` and calls it only once storing the result for future needs.
+**/
+  public static function memoize<TOut>(callback : Void -> TOut) : Void -> TOut {
+    var result : TOut = null;
+    return function() {
+      if(result == null)
+        result = callback();
+      return result;
+    }
+  }
+
+/**
 `once` wraps and returns the argument function. `once` ensures that `f` will be called
 at most once even if the returned function is invoked multiple times.
 **/
