@@ -31,6 +31,11 @@ class TestValidation {
     Assert.same((Right(1): Validation<Int, Int>), rt.ap(rbi, add));
   }
 
+  public function testVal1() {
+    Assert.same(Right({ val: 42 }), val1(function(v) return { val: v }, successNel(42)));
+    Assert.same(Left(Single(1)), val1(function(v) return { val: v }, failureNel(1)));
+  }
+
   // val4 is defined in terms of val3, and then ultimately in terms
   // of val2 and ap so this implicitly tests all of those functions
   public function testVal4() {

@@ -97,6 +97,9 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
   inline public static function vnel<E, A>(e: Either<Nel<E>, A>): VNel<E, A>
     return e;
 
+  inline static public function val1<X, A, B>(f : A -> B, v1: Validation<X, A>) : Validation<X, B>
+    return v1.map(f);
+
   inline static public function val2<X, A, B, C>(f: A -> B -> C, v1: Validation<X, A>, v2: Validation<X, B>, s: Semigroup<X>): Validation<X, C>
     return v2.ap(v1.map(f.curry()), s);
 
