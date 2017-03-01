@@ -305,7 +305,8 @@ class TestObjects {
   public function testDeflateInflate() {
     var tests: Array<Dynamic> = [
       { a: { b: [1,2,3], c: { d: false } }},
-      { visit: { customCompany: { companyId: { none: {}}}}}
+      { visit: { customCompany: { companyId: { none: {}}}}},
+      { arr: []}
     ];
 
     for(test in tests) {

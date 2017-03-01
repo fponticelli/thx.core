@@ -49,18 +49,22 @@ using `thx.Dynamics.compare`.
     function f(v: Dynamic): Either<Dynamic, Map<String, Dynamic>> {
       if(Std.is(v, Array)) {
         if(flattenArrays) {
-          var a: Array<Dynamic> = v;
-          return Right(Arrays.reducei(a, function(map: Map<String, Dynamic>, value, i) {
-            switch f(value) {
-              case Left(v):
-                map.set('$i', v);
-              case Right(m):
-                for(k in m.keys()) {
-                  map.set('$i.$k', m.get(k));
-                }
-            }
-            return map;
-          }, new Map()));
+          if(v.length == 0) {
+            return Left([]);
+          } else {
+            var a: Array<Dynamic> = v;
+            return Right(Arrays.reducei(a, function(map: Map<String, Dynamic>, value, i) {
+              switch f(value) {
+                case Left(v):
+                  map.set('$i', v);
+                case Right(m):
+                  for(k in m.keys()) {
+                    map.set('$i.$k', m.get(k));
+                  }
+              }
+              return map;
+            }, new Map()));
+          }
         } else {
           return Left(v);
         }
