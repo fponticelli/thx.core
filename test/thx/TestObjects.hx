@@ -303,14 +303,18 @@ class TestObjects {
   }
 
   public function testDeflateInflate() {
-    var o = { a : { b : [1,2,3], c : { d : false } }};
+    var tests: Array<Dynamic> = [
+      { a: { b: [1,2,3], c: { d: false } }},
+      { visit: { customCompany: { companyId: { none: {}}}}}
+    ];
 
-    var d = Objects.deflate(o, false);
-    Assert.same(o, Objects.inflate(d));
+    for(test in tests) {
+      var d = Objects.deflate(test, false);
+      Assert.same(test, Objects.inflate(d));
 
-    var d = Objects.deflate(o, true);
-    Assert.same(o, Objects.inflate(d));
-
+      var d = Objects.deflate(test, true);
+      Assert.same(test, Objects.inflate(d));
+    }
   }
 
   public function testRemovePath() {

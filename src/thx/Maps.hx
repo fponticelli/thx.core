@@ -59,12 +59,12 @@ Extracts the values of a Map<TKey, TValue> into Array<TValue>
   /**
    * Unordered fold over key/value pairs in the map.
    */
-  public static function foldLeftWithKeys<K, A, B>(map: Map<K, A>, f: B -> K -> A -> B, acc: B): B 
+  public static function foldLeftWithKeys<K, A, B>(map: Map<K, A>, f: B -> K -> A -> B, acc: B): B
     return map.keys().reduce(
       function(acc, k) return f(acc, k, map.get(k)),
       acc
     );
-  
+
 
 /**
 Null-safe get.
@@ -89,6 +89,12 @@ it returns the provided `alt` value instead.
     var v = map.get(key);
     return null == v ? alt : v;
   }
+
+/**
+Returns true if the map is empty (no key/value pairs).
+**/
+  inline public static function isEmpty<TKey, TValue>(map : Map<TKey, TValue>)
+    return !map.iterator().hasNext();
 
 /**
 Returns true if a value is of any type of Map. Equivalent to `Std.is(v, IMap)`.

@@ -65,13 +65,17 @@ using `thx.Dynamics.compare`.
           return Left(v);
         }
       } else if(Types.isAnonymousObject(v)) {
-        return Right(Arrays.reduce(Reflect.fields(v), function(map: Map<String, Dynamic>, key) {
+        return Right(Arrays.reduce(Reflect.fields(v), function(map: Map<String, Dynamic>, key: String) {
           switch f(Reflect.field(v, key)) {
             case Left(v):
               map.set('$key', v);
             case Right(m):
-              for(k in m.keys()) {
-                map.set('$key.$k', m.get(k));
+              if(Maps.isEmpty(m)) {
+                map.set('$key', {});
+              } else {
+                for(k in m.keys()) {
+                  map.set('$key.$k', m.get(k));
+                }
               }
           }
           return map;
@@ -81,8 +85,10 @@ using `thx.Dynamics.compare`.
       }
     }
     return switch f(o) {
-      case Left(v): v;
-      case Right(m): Maps.toObject(m);
+      case Left(v):
+        v;
+      case Right(m):
+        Maps.toObject(m);
     };
   }
 
