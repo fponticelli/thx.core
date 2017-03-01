@@ -38,7 +38,22 @@ class TestFunctions {
     Assert.equals(1, counter);
   }
 
-  public function testMemoize() {
+  public function testMemoize0() {
+    var counter = 0;
+    var test = function() {
+      ++counter;
+      return 10;
+    };
+    var memoized = Functions0.memoize(test);
+    Assert.equals(0, counter);
+    Assert.equals(10, memoized());
+    Assert.equals(1, counter);
+    Assert.equals(10, memoized());
+    Assert.equals(1, counter);
+    Assert.equals(10, memoized());
+  }
+
+  public function testMemoize1() {
     var counter = 0,
         test    = function(x) {
           ++counter;
