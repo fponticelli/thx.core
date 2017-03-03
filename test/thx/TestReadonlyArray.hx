@@ -36,6 +36,12 @@ class TestReadonlyArray {
     Assert.same([1,2,4,5], b);
   }
 
+  public function testReduce() {
+    var a: ReadonlyArray<Int> = [1,2,3];
+    Assert.equals(6, a.reduce(function(a, v) return a + v, 0));
+    Assert.equals(9, a.reducei(function(a, v, i) return a + v + i, 0));
+  }
+
   public function testPush() {
     var a : ReadonlyArray<Int> = [1, 2, 3];
     var b = a.push(4);
