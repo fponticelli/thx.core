@@ -1,6 +1,7 @@
 package thx;
 
 import haxe.ds.Option;
+using thx.Functions;
 
 /**
   Extension methods for the `thx.Either` type.
@@ -153,6 +154,44 @@ class Eithers {
     return switch either {
       case Right(a): if (p(a)) either else Left(error);
       case _: either;
+    };
+  }
+}
+
+// Kleisli arrow specialized to Either
+abstract EitherK<A, L, R>(A -> Either<L, R>) from A -> Either<L, R> to A -> Either<L, R> {
+  public function apply(a: A) return this(a);
+
+  public function compose<A0>(f: A0 -> Either<L, A>): EitherK<A0, L, R> {
+    return function(a0: A0) return Eithers.flatMap(f(a0), this);
+  }
+
+  public function andThen<R0>(f: R -> Either<L, R0>): EitherK<A, L, R0> {
+    return function(a: A) return Eithers.flatMap(this(a), f);
+  }
+
+  public static function pure<A, L, R>(r: R): EitherK<A, L, R> {
+    return function(a: A) return Right(r);
+  }
+
+  public function map<R0>(f: R -> R0): EitherK<A, L, R0> {
+    return flatMap(pure.compose(f));
+  }
+
+  public function ap<R0>(e: EitherK<A, L, R -> R0>): EitherK<A, L, R0> {
+    return flatMap(function(r: R) return e.map(function(f: R -> R0) return f(r)));
+  }
+
+  public function flatMap<R0>(f: R -> EitherK<A, L, R0>): EitherK<A, L, R0> {
+    return function(a: A) return Eithers.flatMap(this(a), function(r: R) return f(r).apply(a));
+  }
+
+  public static function monoid<L, R>(): Monoid<EitherK<R, L, R>> {
+    return {
+      zero: (function(r: R) return Right(r): EitherK<R, L, R>),
+      append: function(f0: EitherK<R, L, R>, f1: EitherK<R, L, R>): EitherK<R, L, R> {
+        return function(r: R) return Eithers.flatMap(f0.apply(r), f1.apply);
+      }
     };
   }
 }
