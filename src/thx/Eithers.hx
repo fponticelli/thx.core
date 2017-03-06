@@ -162,12 +162,12 @@ class Eithers {
 abstract EitherK<A, L, R>(A -> Either<L, R>) from A -> Either<L, R> to A -> Either<L, R> {
   public function apply(a: A) return this(a);
 
-  public function compose<A0>(f: A0 -> Either<L, A>): EitherK<A0, L, R> {
-    return function(a0: A0) return Eithers.flatMap(f(a0), this);
+  public function compose<A0>(f: EitherK<A0, L, A>): EitherK<A0, L, R> {
+    return function(a0: A0) return Eithers.flatMap(f.apply(a0), this);
   }
 
-  public function andThen<R0>(f: R -> Either<L, R0>): EitherK<A, L, R0> {
-    return function(a: A) return Eithers.flatMap(this(a), f);
+  public function andThen<R0>(f: EitherK<R, L, R0>): EitherK<A, L, R0> {
+    return function(a: A) return Eithers.flatMap(this(a), f.apply);
   }
 
   public static function pure<A, L, R>(r: R): EitherK<A, L, R> {
