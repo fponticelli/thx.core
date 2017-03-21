@@ -5,7 +5,6 @@
 package thx;
 
 import utest.Assert;
-import thx.Arrays;
 using thx.Functions;
 using thx.Floats;
 using thx.Arrays;
@@ -278,6 +277,11 @@ class TestArrays {
   public function testContains() {
     Assert.isTrue([1, 2, 3].contains(2));
     Assert.isFalse([1, 2, 3].contains(4));
+  }
+
+  public function testContainsWithPredicate() {
+    Assert.isTrue([1, 2, 3].contains({v: 2}, function(e, i) return e == i.v));
+    Assert.isFalse([1, 2, 3].contains({v:4}, function(e, i) return e == i.v));
   }
 
   public function testContainsAll() {
