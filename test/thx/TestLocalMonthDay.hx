@@ -60,19 +60,19 @@ class TestLocalMonthDay {
   }
 
   public function testFromString() {
+    Assert.same(LocalMonthDay.create(1, 1), LocalMonthDay.fromString("--00-00"));
+    Assert.same(LocalMonthDay.create(2, 29), LocalMonthDay.fromString("--02-30"));
     Assert.raises(function() LocalMonthDay.fromString("x"));
-    Assert.raises(function() LocalMonthDay.fromString("--00-00"));
     Assert.raises(function() LocalMonthDay.fromString("--x-01"));
     Assert.raises(function() LocalMonthDay.fromString("--01-xx"));
-    Assert.raises(function() LocalMonthDay.fromString("--02-30"));
   }
 
   public function testParse() {
-    Assert.isTrue(LocalMonthDay.parse("x").isLeft());
     Assert.same(Right(LocalMonthDay.create(1, 1)), LocalMonthDay.parse("--00-00"));
+    Assert.same(Right(LocalMonthDay.create(2, 29)), LocalMonthDay.parse("--02-30"));
+    Assert.isTrue(LocalMonthDay.parse("x").isLeft());
     Assert.isTrue(LocalMonthDay.parse("--x-01").isLeft());
     Assert.isTrue(LocalMonthDay.parse("--01-xx").isLeft());
-    Assert.same(Right(LocalMonthDay.create(2, 29)), LocalMonthDay.parse("--02-30"));
   }
 
   public function testEquals() {

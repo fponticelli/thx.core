@@ -9,10 +9,11 @@ import thx.Either;
 using thx.Eithers;
 import thx.Functions.*;
 using thx.Options;
-import thx.fp.Dynamics.*;
+import thx.Nel;
 import thx.Tuple;
 import thx.Validation;
 import thx.Validation.VNel;
+import thx.fp.Dynamics.*;
 
 import utest.Assert;
 
@@ -43,6 +44,18 @@ class TestDynamics {
     Assert.isTrue(thx.fp.Dynamics.parseNonEmptyString(true).either.isLeft());
     Assert.isTrue(thx.fp.Dynamics.parseNonEmptyString({}).either.isLeft());
     Assert.isTrue(thx.fp.Dynamics.parseNonEmptyString([]).either.isLeft());
+  }
+
+  public function testParsePlainObject() {
+    Assert.same(Right({ }), parsePlainObject({ }));
+    Assert.same(Right({ a: "b" }), parsePlainObject({ a: "b" }));
+    Assert.same(Left(Single("null is not a plain object")), parsePlainObject(null));
+    Assert.same(Left(Single("hi is not a plain object")), parsePlainObject("hi"));
+    Assert.same(Left(Single("[] is not a plain object")), parsePlainObject([]));
+    Assert.same(Left(Single("true is not a plain object")), parsePlainObject(true));
+#if js
+    Assert.same(Left(Single("Error: message is not a plain object")), parsePlainObject(new js.Error('message')));
+#end
   }
 
   public function testParseOptional() {
