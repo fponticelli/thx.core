@@ -311,6 +311,41 @@ class Functions13 {
     return function(a: A, b: B, c: C, d: D, e: E, f0: F, g: G, h: H, i: I, j: J, k: K, l: L) { return function(m) { return f(a, b, c, d, e, f0, g, h, i, j, k, l, m); } };
 }
 
+class Functions14 {
+  public inline static function curry<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O>(f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O): A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> (N -> O)
+    return function(a: A, b: B, c: C, d: D, e: E, f0: F, g: G, h: H, i: I, j: J, k: K, l: L, m : M) { return function(n) { return f(a, b, c, d, e, f0, g, h, i, j, k, l, m, n); } };
+}
+
+class Functions15 {
+  public inline static function curry<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P>(f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P): A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> (O -> P)
+    return function(a: A, b: B, c: C, d: D, e: E, f0: F, g: G, h: H, i: I, j: J, k: K, l: L, m : M, n : N) { return function(o) { return f(a, b, c, d, e, f0, g, h, i, j, k, l, m, n, o); } };
+}
+
+class Functions16 {
+  public inline static function curry<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q>(f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P -> Q): A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> (P -> Q)
+    return function(a: A, b: B, c: C, d: D, e: E, f0: F, g: G, h: H, i: I, j: J, k: K, l: L, m : M, n : N, o : O) { return function(p) { return f(a, b, c, d, e, f0, g, h, i, j, k, l, m, n, o, p); } };
+}
+
+class Functions17 {
+  public inline static function curry<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R>(f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P -> Q -> R): A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P -> (Q -> R)
+    return function(a: A, b: B, c: C, d: D, e: E, f0: F, g: G, h: H, i: I, j: J, k: K, l: L, m : M, n : N, o : O, p : P) { return function(q) { return f(a, b, c, d, e, f0, g, h, i, j, k, l, m, n, o, p, q); } };
+}
+
+class Functions18 {
+  public inline static function curry<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S>(f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P -> Q -> R -> S): A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P -> Q -> (R -> S)
+    return function(a: A, b: B, c: C, d: D, e: E, f0: F, g: G, h: H, i: I, j: J, k: K, l: L, m : M, n : N, o : O, p : P, q : Q) { return function(r) { return f(a, b, c, d, e, f0, g, h, i, j, k, l, m, n, o, p, q, r); } };
+}
+
+class Functions19 {
+  public inline static function curry<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T>(f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P -> Q -> R -> S -> T): A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P -> Q -> R -> (S -> T)
+    return function(a: A, b: B, c: C, d: D, e: E, f0: F, g: G, h: H, i: I, j: J, k: K, l: L, m : M, n : N, o : O, p : P, q : Q, r : R) { return function(s) { return f(a, b, c, d, e, f0, g, h, i, j, k, l, m, n, o, p, q, r, s); } };
+}
+
+class Functions20 {
+  public inline static function curry<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U>(f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P -> Q -> R -> S -> T -> U): A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P -> Q -> R -> S -> (T -> U)
+    return function(a: A, b: B, c: C, d: D, e: E, f0: F, g: G, h: H, i: I, j: J, k: K, l: L, m : M, n : N, o : O, p : P, q : Q, r : R, s : S) { return function(t) { return f(a, b, c, d, e, f0, g, h, i, j, k, l, m, n, o, p, q, r, s, t); } };
+}
+
 abstract Reader<A, B> (A -> B) from A -> B to A -> B {
   public function flatMap<C>(f : B -> (A -> C)) : A -> C
     return function(a : A) : C {
