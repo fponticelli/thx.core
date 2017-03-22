@@ -165,6 +165,48 @@ abstract Validation<E, A> (Either<E, A>) from Either<E, A> {
       v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>, v5: Validation<X, E>, v6: Validation<X, F>, v7: Validation<X, G>, v8: Validation<X, H>, v9: Validation<X, I>, v10: Validation<X, J>, v11: Validation<X, K>, v12: Validation<X, L>, v13: Validation<X, M>,
       s: Semigroup<X>): Validation<X, N>
     return v13.ap(val12(f.curry(), v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, s), s);
+
+  inline static public function val14<X, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O>(
+      f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O,
+      v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>, v5: Validation<X, E>, v6: Validation<X, F>, v7: Validation<X, G>, v8: Validation<X, H>, v9: Validation<X, I>, v10: Validation<X, J>, v11: Validation<X, K>, v12: Validation<X, L>, v13: Validation<X, M>, v14: Validation<X, N>,
+      s: Semigroup<X>): Validation<X, O>
+    return v14.ap(val13(f.curry(), v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, s), s);
+
+  inline static public function val15<X, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P>(
+      f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P,
+      v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>, v5: Validation<X, E>, v6: Validation<X, F>, v7: Validation<X, G>, v8: Validation<X, H>, v9: Validation<X, I>, v10: Validation<X, J>, v11: Validation<X, K>, v12: Validation<X, L>, v13: Validation<X, M>, v14: Validation<X, N>, v15: Validation<X, O>,
+      s: Semigroup<X>): Validation<X, P>
+    return v15.ap(val14(f.curry(), v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, s), s);
+
+  inline static public function val16<X, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q>(
+      f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P -> Q,
+      v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>, v5: Validation<X, E>, v6: Validation<X, F>, v7: Validation<X, G>, v8: Validation<X, H>, v9: Validation<X, I>, v10: Validation<X, J>, v11: Validation<X, K>, v12: Validation<X, L>, v13: Validation<X, M>, v14: Validation<X, N>, v15: Validation<X, O>, v16: Validation<X, P>,
+      s: Semigroup<X>): Validation<X, Q>
+    return v16.ap(val15(f.curry(), v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, s), s);
+
+  inline static public function val17<X, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R>(
+      f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P -> Q -> R,
+      v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>, v5: Validation<X, E>, v6: Validation<X, F>, v7: Validation<X, G>, v8: Validation<X, H>, v9: Validation<X, I>, v10: Validation<X, J>, v11: Validation<X, K>, v12: Validation<X, L>, v13: Validation<X, M>, v14: Validation<X, N>, v15: Validation<X, O>, v16: Validation<X, P>, v17: Validation<X, Q>,
+      s: Semigroup<X>): Validation<X, R>
+    return v17.ap(val16(f.curry(), v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, s), s);
+
+  inline static public function val18<X, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S>(
+      f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P -> Q -> R -> S,
+      v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>, v5: Validation<X, E>, v6: Validation<X, F>, v7: Validation<X, G>, v8: Validation<X, H>, v9: Validation<X, I>, v10: Validation<X, J>, v11: Validation<X, K>, v12: Validation<X, L>, v13: Validation<X, M>, v14: Validation<X, N>, v15: Validation<X, O>, v16: Validation<X, P>, v17: Validation<X, Q>, v18: Validation<X, R>,
+      s: Semigroup<X>): Validation<X, S>
+    return v18.ap(val17(f.curry(), v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, s), s);
+
+  inline static public function val19<X, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T>(
+      f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P -> Q -> R -> S -> T,
+      v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>, v5: Validation<X, E>, v6: Validation<X, F>, v7: Validation<X, G>, v8: Validation<X, H>, v9: Validation<X, I>, v10: Validation<X, J>, v11: Validation<X, K>, v12: Validation<X, L>, v13: Validation<X, M>, v14: Validation<X, N>, v15: Validation<X, O>, v16: Validation<X, P>, v17: Validation<X, Q>, v18: Validation<X, R>, v19: Validation<X, S>,
+      s: Semigroup<X>): Validation<X, T>
+    return v19.ap(val18(f.curry(), v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, s), s);
+
+  inline static public function val20<X, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U>(
+      f: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P -> Q -> R -> S -> T -> U,
+      v1: Validation<X, A>, v2: Validation<X, B>, v3: Validation<X, C>, v4: Validation<X, D>, v5: Validation<X, E>, v6: Validation<X, F>, v7: Validation<X, G>, v8: Validation<X, H>, v9: Validation<X, I>, v10: Validation<X, J>, v11: Validation<X, K>, v12: Validation<X, L>, v13: Validation<X, M>, v14: Validation<X, N>, v15: Validation<X, O>, v16: Validation<X, P>, v17: Validation<X, Q>, v18: Validation<X, R>, v19: Validation<X, S>, v20: Validation<X, T>,
+      s: Semigroup<X>): Validation<X, U>
+    return v20.ap(val19(f.curry(), v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, s), s);
 }
 
 class ValidationExtensions {
