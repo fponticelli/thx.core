@@ -53,7 +53,9 @@ class TestDynamics {
     Assert.same(Left(Single("hi is not a plain object")), parsePlainObject("hi"));
     Assert.same(Left(Single("[] is not a plain object")), parsePlainObject([]));
     Assert.same(Left(Single("true is not a plain object")), parsePlainObject(true));
+#if js
     Assert.same(Left(Single("Error: message is not a plain object")), parsePlainObject(new js.Error('message')));
+#end
   }
 
   public function testParseOptional() {
