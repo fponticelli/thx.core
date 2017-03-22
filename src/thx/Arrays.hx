@@ -150,8 +150,8 @@ Finds the first occurrance of `element` and returns all the elements before it.
 Traverse both arrays from the beginning and collect the elements that are the
 same. It stops as soon as the arrays differ.
 **/
-  public static function commonsFromStart<T>(self : ReadonlyArray<T>, other : ReadonlyArray<T>, ?equality : T -> T -> Bool) : Array<T> {
-    if(null == equality) equality = F.equality;
+  public static function commonsFromStart<T, PT>(self : ReadonlyArray<T>, other : ReadonlyArray<PT>, ?equality : T -> PT -> Bool) : Array<T> {
+    if(null == equality) equality = cast F.equality;
     var count = 0;
     for(pair in zip(self, other))
       if(equality(pair._0, pair._1))
@@ -212,9 +212,9 @@ Returns `true` if `element` is found in the array.
 
 An optional equality function can be passed as the last argument. If not provided, strict equality is adopted.
 **/
-  public static function contains<T>(array : ReadonlyArray<T>, element : T, ?eq : T -> T -> Bool) : Bool {
+  public static function contains<T, PT>(array : ReadonlyArray<T>, element : PT, ?eq : T -> PT -> Bool) : Bool {
     if(null == eq) {
-      return array.indexOf(element) >= 0;
+      return array.indexOf(cast element) >= 0;
     } else {
       for(i in 0...array.length)
         if(eq(array[i], element))
@@ -228,7 +228,7 @@ Returns `true` if all elements in `elements` are found in the array.
 
 An optional equality function can be passed as the last argument. If not provided, strict equality is adopted.
 **/
-  public static function containsAll<T>(array : Array<T>, elements : Iterable<T>, ?eq : T -> T -> Bool) : Bool {
+  public static function containsAll<T, PT>(array : Array<T>, elements : Iterable<PT>, ?eq : T -> PT -> Bool) : Bool {
     for (el in elements) {
       if (!contains(array, el, eq)) return false;
     }
@@ -240,7 +240,7 @@ Returns `true` if any element in `elements` is found in the array.
 
 An optional equality function can be passed as the last argument. If not provided, strict equality is adopted.
 **/
-  public static function containsAny<T>(array : ReadonlyArray<T>, elements : Iterable<T>, ?eq : T -> T -> Bool) : Bool {
+  public static function containsAny<T, PT>(array : ReadonlyArray<T>, elements : Iterable<PT>, ?eq : T -> PT -> Bool) : Bool {
     for (el in elements) {
       if (contains(array, el, eq)) return true;
     }
@@ -342,13 +342,13 @@ The iteration ends as soon as the `callback` returns `false`.
           return;
 
 /**
-It compares the lengths and elements of two given arrays and returns `true` if they match.
+It compares the lengths and elements of two given arrays and returns `true` if all elements match.
 
 An optional equality function can be passed as the last argument. If not provided, strict equality is adopted.
 **/
-  public static function equals<T>(a : ReadonlyArray<T>, b : ReadonlyArray<T>, ?equality : T -> T -> Bool) {
+  public static function equals<T, PT>(a : ReadonlyArray<T>, b : ReadonlyArray<PT>, ?equality : T -> PT -> Bool) {
     if(a == null || b == null || a.length != b.length) return false;
-    if(null == equality) equality = F.equality;
+    if(null == equality) equality = cast F.equality;
     for(i in 0...a.length)
       if(!equality(a[i], b[i]))
         return false;
@@ -753,7 +753,7 @@ It works the same as `Array.sort()` but doesn't change the original array and re
 Pulls from `array` all occurrences of all the elements in `toRemove`. Optionally takes
 an `equality` function.
 **/
-  public static function pull<T>(array : Array<T>, toRemove : ReadonlyArray<T>, ?equality : T -> T -> Bool)
+  public static function pull<T, PT>(array : Array<T>, toRemove : ReadonlyArray<PT>, ?equality : T -> PT -> Bool)
     for(element in toRemove)
       removeAll(array, element, equality);
 
@@ -911,9 +911,9 @@ Same as `Arrays.reduce` but starting from the last element and traversing to the
 Remove every occurrance of `element` from `array`. If `equality` is not specified, strict equality
 will be adopted.
 **/
-  public static function removeAll<T>(array : Array<T>, element : T, ?equality : T -> T -> Bool) {
+  public static function removeAll<T, PT>(array : Array<T>, element : PT, ?equality : T -> PT -> Bool) {
     if(null == equality)
-      equality = Functions.equality;
+      equality = cast Functions.equality;
     var i = array.length;
     while(--i >= 0)
       if(equality(array[i], element))
