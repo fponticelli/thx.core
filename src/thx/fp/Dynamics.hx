@@ -113,6 +113,14 @@ class Dynamics {
   public static function parseLocalYearMonth(v: Dynamic): VNel<String, LocalYearMonth>
     return parseString(v).flatMapV(toVNel.compose(LocalYearMonth.parse));
 
+  public static function parsePlainObject(v: Dynamic) : VNel<String, {}> {
+    return if (thx.Types.isAnonymousObject(v)) {
+      successNel(cast v);
+    } else {
+      failureNel('$v is not a plain object');
+    }
+  }
+
   public static function parseOptional<E, A>(v: Null<Dynamic>, f: Dynamic -> VNel<E, A>) : VNel<E, Option<A>> {
     return if (v != null) f(v).map(Some) else successNel(None);
   }
