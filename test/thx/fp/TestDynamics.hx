@@ -21,9 +21,8 @@ class TestDynamics {
   public function new() {}
 
   public function testParseStringMap() {
-    var sample = { t: 1, u: 2, v: 3 };
-    var expected: StringMap<Int> = [ "t" => 1, "u" => 2, "v" => 3 ];
-    Assert.same(Right(expected), parseStringMap(sample, function(v, _) return parseInt(v), identity));
+    Assert.same(Right(["t" => 1, "u" => 2, "v" => 3]), parseStringMap({ t: 1, u: 2, v: 3 }, function(v, _) return parseInt(v), identity));
+    Assert.isTrue(parseStringMap([1, 2, 3], function(v, _) return parseInt(v), identity).either.isLeft());
   }
 
   public function testParseString() {
