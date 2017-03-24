@@ -176,7 +176,7 @@ class Dynamics {
 
 
   public static function parseStringMap<E, K, V>(v: Dynamic, f: Dynamic -> String -> VNel<E, V>, err: String -> E): VNel<E, std.Map<String, V>> {
-    return if (Reflect.isObject(v)) {
+    return if (Types.isAnonymousObject(v)) {
       Reflect.fields(v).traverseValidation(
         function(field: String) return f(Reflect.getProperty(v, field), field).map(Tuple.of.bind(field, _)),
         Nel.semigroup()
@@ -187,7 +187,7 @@ class Dynamics {
   }
 
   public static function parseMap<E, K, V>(v: Dynamic, f: String -> Dynamic -> VNel<E, Tuple<K, V>>, keyOrder: Ord<K>, err: String -> E): VNel<E, thx.fp.Map<K, V>> {
-    return if (Reflect.isObject(v)) {
+    return if (Types.isAnonymousObject(v)) {
       Reflect.fields(v).traverseValidation(
         function(field: String) return f(field, Reflect.getProperty(v, field)),
         Nel.semigroup()
@@ -204,7 +204,7 @@ class Dynamics {
   }
 
   public static function parseTuple2<Err, A, B>(v: Dynamic, fa: Dynamic -> VNel<Err, A>, fb: Dynamic -> VNel<Err, B>, err: String -> Err): VNel<Err, thx.Tuple<A, B>> {
-    return if (Reflect.isObject(v)) {
+    return if (Types.isAnonymousObject(v)) {
       val2(
         Tuple.of,
         parseProperty(v, "_0", fa, err),
@@ -217,7 +217,7 @@ class Dynamics {
   }
 
   public static function parseTuple3<Err, A, B, C>(v: Dynamic, fa: Dynamic -> VNel<Err, A>, fb: Dynamic -> VNel<Err, B>, fc: Dynamic -> VNel<Err, C>, err: String -> Err): VNel<Err, thx.Tuple3<A, B, C>> {
-    return if (Reflect.isObject(v)) {
+    return if (Types.isAnonymousObject(v)) {
       val3(
         Tuple3.of,
         parseProperty(v, "_0", fa, err),
@@ -231,7 +231,7 @@ class Dynamics {
   }
 
   public static function parseTuple4<Err, A, B, C, D>(v: Dynamic, fa: Dynamic -> VNel<Err, A>, fb: Dynamic -> VNel<Err, B>, fc: Dynamic -> VNel<Err, C>, fd: Dynamic -> VNel<Err, D>, err: String -> Err): VNel<Err, thx.Tuple4<A, B, C, D>> {
-    return if (Reflect.isObject(v)) {
+    return if (Types.isAnonymousObject(v)) {
       val4(
         Tuple4.of,
         parseProperty(v, "_0", fa, err),
@@ -246,7 +246,7 @@ class Dynamics {
   }
 
   public static function parseTuple5<Err, A, B, C, D, E>(v: Dynamic, fa: Dynamic -> VNel<Err, A>, fb: Dynamic -> VNel<Err, B>, fc: Dynamic -> VNel<Err, C>, fd: Dynamic -> VNel<Err, D>, fe: Dynamic -> VNel<Err, E>, err: String -> Err): VNel<Err, thx.Tuple5<A, B, C, D, E>> {
-    return if (Reflect.isObject(v)) {
+    return if (Types.isAnonymousObject(v)) {
       val5(
         Tuple5.of,
         parseProperty(v, "_0", fa, err),
@@ -262,7 +262,7 @@ class Dynamics {
   }
 
   public static function parseTuple6<Err, A, B, C, D, E, F>(v: Dynamic, fa: Dynamic -> VNel<Err, A>, fb: Dynamic -> VNel<Err, B>, fc: Dynamic -> VNel<Err, C>, fd: Dynamic -> VNel<Err, D>, fe: Dynamic -> VNel<Err, E>, ff: Dynamic -> VNel<Err, F>, err: String -> Err): VNel<Err, thx.Tuple6<A, B, C, D, E, F>> {
-    return if (Reflect.isObject(v)) {
+    return if (Types.isAnonymousObject(v)) {
       val6(
         Tuple6.of,
         parseProperty(v, "_0", fa, err),
