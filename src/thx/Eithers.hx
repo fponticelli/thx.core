@@ -117,6 +117,13 @@ class Eithers {
       case Right(r0): r(r0);
     };
 
+  public static function bimap<L, R, A, B>(either: Either<L, R>, l: L -> A, r: R -> B): Either<A, B> {
+    return switch either {
+      case Left(l0):  Left(l(l0));
+      case Right(r0): Right(r(r0));
+    }
+  }
+
   public static function foldLeft<L, R, A>(either: Either<L, R>, a: A, f: A -> R -> A): A
     return switch either {
       case Left(l0):  a;
