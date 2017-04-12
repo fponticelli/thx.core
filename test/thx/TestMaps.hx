@@ -95,4 +95,33 @@ class TestMaps {
     Assert.same(1, map3.keys().toArray().length);
     Assert.same(3, map3.get("key3"));
   }
+
+  public function testGetAlt() {
+    var map = [
+      "a" => 1,
+      "b" => 2
+    ];
+    Assert.same(1, map.getAlt("a", 100));
+    Assert.same(2, map.getAlt("b", 100));
+    Assert.same(100, map.getAlt("c", 100));
+    Assert.same([
+      "a" => 1,
+      "b" => 2
+    ], map);
+  }
+
+  public function testGetAltSet() {
+    var map = [
+      "a" => 1,
+      "b" => 2
+    ];
+    Assert.same(1, map.getAltSet("a", 100));
+    Assert.same(2, map.getAltSet("b", 100));
+    Assert.same(100, map.getAltSet("c", 100));
+    Assert.same([
+      "a" => 1,
+      "b" => 2,
+      "c" => 100
+    ], map);
+  }
 }

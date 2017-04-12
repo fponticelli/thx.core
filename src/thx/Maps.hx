@@ -91,6 +91,20 @@ it returns the provided `alt` value instead.
   }
 
 /**
+Given a `key` returns the associated value from `map`. If the key doesn't exist or the associated value is `null`,
+it returns the provided `alt` value instead, and stores the `alt` value in the map.
+**/
+  public static function getAltSet<TKey, TValue>(map : Map<TKey, TValue>, key : TKey, alt : TValue) : TValue {
+    var v = map.get(key);
+    return if (v != null) {
+      v;
+    } else {
+      map.set(key, alt);
+      alt;
+    }
+  }
+
+/**
 Returns true if the map is empty (no key/value pairs).
 **/
   inline public static function isEmpty<TKey, TValue>(map : Map<TKey, TValue>)
