@@ -451,7 +451,7 @@ If none is found it returns null.
 Finds the first item in an array where the given function `f` returns a `Option.Some` value.
 If no items map to `Some`, `None` is returned.
 **/
-  public static function findMap<TIn, TOut>(values : Array<TIn>, f : TIn -> Option<TOut>) : Option<TOut> {
+  public static function findMap<TIn, TOut>(values : ReadonlyArray<TIn>, f : TIn -> Option<TOut>) : Option<TOut> {
     for (value in values) {
       var opt = f(value);
       if (!opt.isNone()) return opt;
@@ -463,7 +463,7 @@ If no items map to `Some`, `None` is returned.
 Performs a `filter` and `map` operation at once. It uses predicate to get either
 `None` or a transformed value `Some` of `TOut`.
 **/
-  public static function filterMap<TIn, TOut>(values : Array<TIn>, f : TIn -> Option<TOut>) : Array<TOut> {
+  public static function filterMap<TIn, TOut>(values : ReadonlyArray<TIn>, f : TIn -> Option<TOut>) : Array<TOut> {
     var acc = [];
     for (value in values) {
       switch f(value) {
@@ -477,7 +477,7 @@ Performs a `filter` and `map` operation at once. It uses predicate to get either
 /**
 Finds the first item in an `Array<Option<T>>` that is `Some`, otherwise `None`.
 **/
-  public static function findSome<T>(options : Array<Option<T>>) : Option<T> {
+  public static function findSome<T>(options : ReadonlyArray<Option<T>>) : Option<T> {
     for (option in options) {
       if (!option.isNone()) return option;
     }
