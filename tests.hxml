@@ -2,4 +2,5 @@
 -cp test
 -lib utest
 -D travis
+# -D analyzer
 -main TestAll

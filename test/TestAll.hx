@@ -34,6 +34,7 @@ class TestAll {
     runner.addCase(new thx.TestLocalDate());
     runner.addCase(new thx.TestLocalYearMonth());
     runner.addCase(new thx.TestLocalMonthDay());
+    runner.addCase(new thx.TestMaybe());
     runner.addCase(new thx.TestNel());
     runner.addCase(new thx.TestNothing());
     runner.addCase(new thx.TestOrderedMap());
