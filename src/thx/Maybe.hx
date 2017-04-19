@@ -15,6 +15,9 @@ abstract Maybe<T>(Null<T>) from Null<T> {
   inline function new(value: Null<T>): Maybe<T>
     this = value;
 
+  inline public function getUnsafe(): T
+    return this;
+
   inline public function get(): Null<T>
     return this;
 
