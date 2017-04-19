@@ -56,6 +56,16 @@ Extracts the values of a Map<TKey, TValue> into Array<TValue>
       return map.get(key)
     );
 
+/**
+Creates a `Map<K, V>` from an `Array<T>` using key extractor `T -> K` and value extractor `T -> V` functions.
+`K` must be a string.
+**/
+  public static function fromArray<T, K : String, V>(array : ReadonlyArray<T>, toKey : T -> K, toVal : T -> V) : Map<K, V>
+    return Arrays.reduce(array, function (acc : Map<K, V>, curr : T) {
+      acc.set(toKey(curr), toVal(curr));
+      return acc;
+    }, new Map());
+
   /**
    * Unordered fold over key/value pairs in the map.
    */

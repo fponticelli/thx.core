@@ -35,6 +35,21 @@ class TestMaps {
     Assert.same([1, 2, 3], values);
   }
 
+  public function testFromArray() {
+    var a = [
+      { k: "a", v: 1 },
+      { k: "b", v: 2 },
+      { k: "b", v: 3 },
+      { k: "c", v: 4 },
+    ];
+    var map = Maps.fromArray(a, function(v) return v.k, function(v) return v.v);
+    Assert.same([
+      "a" => 1,
+      "b" => 3,
+      "c" => 4
+    ], map);
+  }
+
   public function testGetOption() {
     var map = [ "key1" => 1];
 
