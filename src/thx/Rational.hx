@@ -24,15 +24,16 @@ abstract Rational(RationalImpl) from RationalImpl to RationalImpl {
   public static function create(num : BigInt, den : BigInt) {
     if(den == 0)
       throw new thx.Error('division by zero');
-    var g = Ints.gcd(num, den);
-    num = Std.int(num / g);
-    den = Std.int(den / g);
-    if(den < 0) {
+
+    var g = num.gcd(den);
+    num = num / g;
+    den = den / g;
+    if(den.isNegative()) {
       num = -num;
       den = -den;
     }
-    if(num == 0)
-      den = 1;
+    if(num.isZero())
+      den = BigInt.one;
     return new Rational(num, den);
   }
 
@@ -50,12 +51,11 @@ abstract Rational(RationalImpl) from RationalImpl to RationalImpl {
   public function add(that : Rational) : Rational {
     if(compareTo(zero) == 0) return that;
     if(that.compareTo(zero) == 0) return this;
-    var f = Ints.gcd(num, that.num),
-        g = Ints.gcd(den, that.den),
+    var f = num.gcd(that.num),
+        g = den.gcd(that.den),
         s : { num : BigInt, den : BigInt } = create(
-              Std.int(num / f) * Std.int(that.den / g) +
-              Std.int(that.num / f) * Std.int(den / g),
-              Ints.lcm(den, that.den)
+              num / f * that.den / g + that.num / f * den / g,
+              den.lcm(that.den)
             );
 
     s.num = s.num * f;
