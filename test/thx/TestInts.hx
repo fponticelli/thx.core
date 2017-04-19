@@ -23,6 +23,17 @@ class TestInts {
     Assert.same([7,5,3], range);
   }
 
+  public function testGcd() {
+    Assert.equals(2, 4.gcd(6));
+    Assert.equals(3, 3.gcd(9));
+    Assert.equals(100, 100.gcd(100));
+    Assert.equals(1, 9.gcd(25));
+    Assert.equals(25, 100.gcd(75));
+    Assert.equals(1, 0.gcd(1));
+    Assert.equals(1, 1.gcd(0));
+    Assert.equals(1, 1.gcd(1));
+  }
+
   public function testParse() {
     var tests = [
       { e : -50, t : "-50", b : 10 },

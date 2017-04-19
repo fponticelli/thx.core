@@ -151,26 +151,19 @@ abstract BigInt(BigIntImpl) from BigIntImpl to BigIntImpl {
   inline public function min(that : BigInt) : BigInt
     return less(this, that) ? this : that;
 
-  public function gcd(that : BigInt) : BigInt {
-    var a = abs(),
-        b = that.abs();
-    if(equals(a, b) || a.isZero())
-      return b;
-    if(b.isZero())
-      return a;
-    if(a.isEven()) {
-      if(b.isOdd()) {
-        return a.divide(Small.two).gcd(b);
-      }
-      return a.divide(Small.two).gcd(b.divide(Small.two)).multiply(Small.two);
-    }
-    if(b.isEven()) {
-      return a.gcd(b.divide(Small.two));
-    }
-    if(greater(a, b)) {
-      return a.subtract(b).divide(Small.two).gcd(b);
-    }
-    return b.subtract(a).divide(Small.two).gcd(a);
+/**
+Returns the greater common denominator
+**/
+  public function gcd(n : BigInt) : BigInt {
+    var m = this.abs();
+    n = n.abs();
+    var t;
+    do {
+      if(n == 0) return m;
+      t = m;
+      m = n;
+      n = t.modulo(m);
+    } while(true);
   }
 
   public function lcm(that : BigInt) : BigInt {

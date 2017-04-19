@@ -51,8 +51,13 @@ Returns the greater common denominator
   public static function gcd(m : Int, n : Int) : Int {
     m = abs(m);
     n = abs(n);
-    if(n == 0) return m;
-    return gcd(n, m % n);
+    var t;
+    do {
+      if(n == 0) return m;
+      t = m;
+      m = n;
+      n = t % m;
+    } while(true);
   }
 
 /**
