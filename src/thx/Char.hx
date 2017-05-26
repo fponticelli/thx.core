@@ -129,8 +129,8 @@ representation of this type.
 /**
 Converts a `Char` to `String`.
 */
-  @:to #if !(neko || php || cpp) inline #end public function toString() : String {
-    #if (neko || php || cpp)
+  @:to #if !(neko || php || cpp || eval) inline #end public function toString() : String {
+    #if (neko || php || cpp || eval)
     var c = new Utf8();
     c.addChar(this);
     return c.toString();
