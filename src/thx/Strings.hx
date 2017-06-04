@@ -496,8 +496,8 @@ Surrounds a string with the contents of `left` and `right`. If `right` is omitte
 /**
 It transforms a string into an `Array` of characters.
 **/
-  #if !(neko || php) inline #end public static function toArray(s : String) {
-    #if (neko || php)
+  #if !(neko || php || eval) inline #end public static function toArray(s : String) {
+    #if (neko || php || eval)
     var arr = [];
     for(i in 0...Utf8.length(s))
       arr.push(Utf8.sub(s, i, 1));

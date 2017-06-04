@@ -261,7 +261,7 @@ Returns true if this date and the `other` date share the same month.
     return create(month + months, day);
 
   public function compareTo(other : LocalMonthDay) : Int {
-#if(js || php || neko)
+#if(js || php || neko || eval)
     if(null == other && this == null) return 0;
     if(null == this) return -1;
     else if(null == other) return 1;
@@ -320,7 +320,7 @@ Returns true if this date and the `other` date share the same month.
 
   //1997-07-16
   public function toString() {
-#if(js || php || neko)
+#if(js || php || neko || eval)
     if(null == this)
       return "";
 #end

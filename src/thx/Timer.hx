@@ -252,7 +252,7 @@ Note that the initial value might change from platform to platform so only delta
     return untyped __js__("performance").now();
 #elseif flash
     return flash.Lib.getTimer();
-#elseif (cpp || neko)
+#elseif (cpp || neko || eval)
     return haxe.Timer.stamp() * 1000.0;
 #elseif cs
     return (cs.system.Environment.TickCount : Float);

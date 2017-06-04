@@ -623,7 +623,7 @@ Returns true if this date and the `other` date share the same year, month, day, 
     return addMonths(years * 12);
 
   public function compareTo(other : DateTimeUtc) : Int {
-#if(js || php || neko)
+#if(js || php || neko || eval)
     if(null == other && this == null) return 0;
     if(null == this) return -1;
     else if(null == other) return 1;
@@ -696,7 +696,7 @@ Returns true if this date and the `other` date share the same year, month, day, 
 
   //1997-07-16T19:20:30Z
   public function toString() {
-#if(js || php || neko)
+#if(js || php || neko || eval)
     if(null == this)
       return "";
 #end

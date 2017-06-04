@@ -223,9 +223,9 @@ class Bigs {
         r : Array<Float> = createFloatArray(l),
         product : Float, carry, i, a_i : Float, b_j : Float;
     for(i in 0...a_l) {
-      a_i = a[i] #if neko + 0.0 #end;
+      a_i = a[i] #if (neko || eval) + 0.0 #end;
       for(j in 0...b_l) {
-        b_j = b[j] #if neko + 0.0 #end;
+        b_j = b[j] #if (neko || eval) + 0.0 #end;
         product = a_i * b_j + r[i + j];
         carry = Floats.ftrunc(product / BASE);
         r[i + j] = Floats.ftrunc(product - carry * BASE);
@@ -243,7 +243,7 @@ class Bigs {
         carry  : Float = 0.0,
         product : Float, i = 0,
         a_i : Float,
-        bf : Float = b #if neko + 0.0 #end;
+        bf : Float = b #if (neko || eval) + 0.0 #end;
     while(i < l) {
       a_i = a[i];
       product = carry + a[i] * bf;
@@ -330,9 +330,9 @@ class Bigs {
         r = createFloatArray(l + l),
         product : Float, carry, i, a_i : Float, a_j : Float;
     for(i in 0...l) {
-      a_i = a[i] #if neko + 0.0 #end;
+      a_i = a[i] #if (neko || eval) + 0.0 #end;
       for(j in 0...l) {
-        a_j = a[j] #if neko + 0.0 #end;
+        a_j = a[j] #if (neko || eval) + 0.0 #end;
         product = a_i * a_j + r[i + j];
         carry = Floats.ftrunc(product / BASE);
         r[i + j] = Floats.ftrunc(product - carry * BASE);
@@ -348,7 +348,7 @@ class Bigs {
     var a_l = a.length,
         b_l = b.length,
         result = createFloatArray(b.length),
-        divisorMostSignificantDigit : Float = b[b_l - 1] #if neko + 0.0 #end,
+        divisorMostSignificantDigit : Float = b[b_l - 1] #if (neko || eval) + 0.0 #end,
         // normalization
         lambda = Math.ceil(BASE / (2 * divisorMostSignificantDigit)),
         remainder : Array<Float> = multiplySmall(a, lambda).map(function(v) : Float return v),
@@ -361,7 +361,7 @@ class Bigs {
     shift = a_l - b_l;
     while(shift >= 0) {
       quotientDigit = BASE - 1.0;
-      quotientDigit = Math.ffloor(((remainder[shift + b_l] #if neko + 0.0000000001 #end) * BASE + remainder[shift + b_l - 1]) / divisorMostSignificantDigit);
+      quotientDigit = Math.ffloor(((remainder[shift + b_l] #if (neko || eval) + 0.0000000001 #end) * BASE + remainder[shift + b_l - 1]) / divisorMostSignificantDigit);
       carry = 0.0;
       borrow = 0.0;
       l = divisor.length;
