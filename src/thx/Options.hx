@@ -284,11 +284,11 @@ Extract the value from `Option` or throw a thx.Error with the provided message.
   }
 
   inline static public function alt3<A>(a : Option<A>, b : Option<A>, c : Option<A>) : Option<A> {
-    return alt2(a, alt2(b, c));
+    return alt2(alt2(a, b), c);
   }
 
   inline static public function alt4<A>(a : Option<A>, b : Option<A>, c : Option<A>, d : Option<A>) : Option<A> {
-    return alt2(a, alt3(b, c, d));
+    return alt2(alt3(a, b, c), d);
   }
 
   static public function alts<A>(as : ReadonlyArray<Option<A>>) : Option<A> {
