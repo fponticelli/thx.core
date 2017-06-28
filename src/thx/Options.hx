@@ -291,7 +291,7 @@ Extract the value from `Option` or throw a thx.Error with the provided message.
     return alt2(a, alt3(b, c, d));
   }
 
-  static public function alts<A>(as : Array<Option<A>>) : Option<A> {
+  static public function alts<A>(as : ReadonlyArray<Option<A>>) : Option<A> {
     return Arrays.reduce(as, alt2, None);
   }
 
