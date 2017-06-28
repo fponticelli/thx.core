@@ -275,6 +275,26 @@ Extract the value from `Option` or throw a thx.Error with the provided message.
       case Some(v)  : f(v); o;
     }
   }
+
+  inline static public function alt2<A>(a : Option<A>, b : Option<A>) : Option<A> {
+    return switch [a, b] {
+      case [None, r] : r;
+      case [l, _] : l;
+    };
+  }
+
+  inline static public function alt3<A>(a : Option<A>, b : Option<A>, c : Option<A>) : Option<A> {
+    return alt2(a, alt2(b, c));
+  }
+
+  inline static public function alt4<A>(a : Option<A>, b : Option<A>, c : Option<A>, d : Option<A>) : Option<A> {
+    return alt2(a, alt3(b, c, d));
+  }
+
+  static public function alts<A>(as : Array<Option<A>>) : Option<A> {
+    return Arrays.reduce(as, alt2, None);
+  }
+
   inline static public function ap2<A, B, C>(f: A -> B -> C, v1: Option<A>, v2: Option<B>): Option<C>
     return ap(v2, map(v1, Functions2.curry(f)));
 
