@@ -43,4 +43,65 @@ class TestOptions {
     Assert.same(-9, Some(10).foldLeftf(function() return 1, function(acc, v) return acc - v));
     Assert.same(1, None.foldLeftf(function() return 1, function(acc, v) return acc - v));
   }
+
+  public function testAlt2() {
+    Assert.same(Some("a"), Options.alt2(Some("a"), Some("b")));
+    Assert.same(Some("a"), Options.alt2(Some("a"), None));
+    Assert.same(Some("a"), Options.alt2(None     , Some("a")));
+    Assert.same(None,      Options.alt2(None     , None));
+  }
+
+  public function testAlt3() {
+    Assert.same(Some("a"), Options.alt3(Some("a"), Some("b"), Some("c")));
+    Assert.same(Some("a"), Options.alt3(Some("a"), Some("b"), None));
+    Assert.same(Some("a"), Options.alt3(Some("a"), None     , Some("c")));
+    Assert.same(Some("a"), Options.alt3(Some("a"), None     , None));
+    Assert.same(Some("b"), Options.alt3(None     , Some("b"), Some("c")));
+    Assert.same(Some("b"), Options.alt3(None     , Some("b"), None));
+    Assert.same(Some("c"), Options.alt3(None     , None     , Some("c")));
+    Assert.same(None,      Options.alt3(None     , None     , None));
+  }
+
+  public function testAlt4() {
+    Assert.same(Some("a"), Options.alt4(Some("a"), Some("b"), Some("c"), Some("d")));
+    Assert.same(Some("a"), Options.alt4(Some("a"), Some("b"), Some("c"), None));
+    Assert.same(Some("a"), Options.alt4(Some("a"), Some("b"), None     , Some("d")));
+    Assert.same(Some("a"), Options.alt4(Some("a"), Some("b"), None     , None));
+    Assert.same(Some("a"), Options.alt4(Some("a"), None     , Some("c"), Some("d")));
+    Assert.same(Some("a"), Options.alt4(Some("a"), None     , Some("c"), None));
+    Assert.same(Some("a"), Options.alt4(Some("a"), None     , None     , Some("d")));
+    Assert.same(Some("a"), Options.alt4(Some("a"), None     , None     , None));
+    Assert.same(Some("b"), Options.alt4(None     , Some("b"), Some("c"), Some("d")));
+    Assert.same(Some("b"), Options.alt4(None     , Some("b"), Some("c"), None));
+    Assert.same(Some("b"), Options.alt4(None     , Some("b"), None     , Some("d")));
+    Assert.same(Some("b"), Options.alt4(None     , Some("b"), None     , None));
+    Assert.same(Some("c"), Options.alt4(None     , None     , Some("c"), Some("d")));
+    Assert.same(Some("c"), Options.alt4(None     , None     , Some("c"), None));
+    Assert.same(Some("d"), Options.alt4(None     , None     , None     , Some("d")));
+    Assert.same(None,      Options.alt4(None     , None     , None     , None));
+  }
+
+  public function testAlts() {
+    Assert.same(None, Options.alts([]));
+    Assert.same(None, Options.alts([None]));
+    Assert.same(Some("a"), Options.alts([Some("a")]));
+    Assert.same(Some("a"), Options.alts([None, Some("a")]));
+    Assert.same(Some("a"), Options.alts([Some("a"), None]));
+    Assert.same(Some("a"), Options.alts([ Some("a"), Some("b"), Some("c"), Some("d") ]));
+    Assert.same(Some("a"), Options.alts([ Some("a"), Some("b"), Some("c"), None      ]));
+    Assert.same(Some("a"), Options.alts([ Some("a"), Some("b"), None     , Some("d") ]));
+    Assert.same(Some("a"), Options.alts([ Some("a"), Some("b"), None     , None      ]));
+    Assert.same(Some("a"), Options.alts([ Some("a"), None     , Some("c"), Some("d") ]));
+    Assert.same(Some("a"), Options.alts([ Some("a"), None     , Some("c"), None      ]));
+    Assert.same(Some("a"), Options.alts([ Some("a"), None     , None     , Some("d") ]));
+    Assert.same(Some("a"), Options.alts([ Some("a"), None     , None     , None      ]));
+    Assert.same(Some("b"), Options.alts([ None     , Some("b"), Some("c"), Some("d") ]));
+    Assert.same(Some("b"), Options.alts([ None     , Some("b"), Some("c"), None      ]));
+    Assert.same(Some("b"), Options.alts([ None     , Some("b"), None     , Some("d") ]));
+    Assert.same(Some("b"), Options.alts([ None     , Some("b"), None     , None      ]));
+    Assert.same(Some("c"), Options.alts([ None     , None     , Some("c"), Some("d") ]));
+    Assert.same(Some("c"), Options.alts([ None     , None     , Some("c"), None      ]));
+    Assert.same(Some("d"), Options.alts([ None     , None     , None     , Some("d") ]));
+    Assert.same(None,      Options.alts([ None     , None     , None     , None      ]));
+  }
 }

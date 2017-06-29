@@ -275,6 +275,39 @@ Extract the value from `Option` or throw a thx.Error with the provided message.
       case Some(v)  : f(v); o;
     }
   }
+
+/**
+  Returns the first Some value, or None
+  Alias for `orElse`, but intended for static use, and leads into alt3, alt4, alts, etc.
+ */
+  inline static public function alt2<A>(a : Option<A>, b : Option<A>) : Option<A> {
+    return switch [a, b] {
+      case [None, r] : r;
+      case [l, _] : l;
+    };
+  }
+
+/**
+  Returns the first Some value, or None
+ */
+  inline static public function alt3<A>(a : Option<A>, b : Option<A>, c : Option<A>) : Option<A> {
+    return alt2(alt2(a, b), c);
+  }
+
+/**
+  Returns the first Some value, or None
+ */
+  inline static public function alt4<A>(a : Option<A>, b : Option<A>, c : Option<A>, d : Option<A>) : Option<A> {
+    return alt2(alt3(a, b, c), d);
+  }
+
+/**
+  Returns the first Some value, or None
+ */
+  static public function alts<A>(as : ReadonlyArray<Option<A>>) : Option<A> {
+    return Arrays.reduce(as, alt2, None);
+  }
+
   inline static public function ap2<A, B, C>(f: A -> B -> C, v1: Option<A>, v2: Option<B>): Option<C>
     return ap(v2, map(v1, Functions2.curry(f)));
 
