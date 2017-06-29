@@ -387,21 +387,16 @@ Lambda expressions
     return SlambdaMacro.f(fn, restArgs);
 
 /**
-Converts an instance of type `T` to an instance of type `U`.
-
-Useful as an extension methods for converting a value to another type inside a chain of function calls.
-
-E.g.
-
-```
-using thx.Functions;
-import thx.Options;
-
-var arr: Array<Int> = [1, 2, 3];
-var opt : Option<Array<Int>> = myArray.lift(Options.ofValue);
-Assert.same(Some(arr), opt); // true
-```
+Extension method for function application to an argument with a function.
 **/
-  public static inline function lift<T, U>(t : T, f: T -> U) : U
-    return f(t);
+  public static inline function passTo<A, B>(a : A, f: A -> B) : B {
+    return f(a);
+  }
+
+/**
+Extension method for function application with a function to an argument.
+**/
+  public static inline function applyTo<A, B>(f : A -> B, a : A) : B {
+    return f(a);
+  }
 }

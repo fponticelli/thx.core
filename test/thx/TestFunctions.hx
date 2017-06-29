@@ -74,11 +74,17 @@ class TestFunctions {
     Assert.isFalse((function() return true).negate()());
   }
 
-  public function testLift() {
+  public function testPassTo() {
     var arr : Array<Int> = [1, 2, 3];
-    Assert.same(Some(arr), arr.lift(thx.Options.ofValue));
-    Assert.same(Right(arr), arr.lift(Right));
-    Assert.same(Left(arr), arr.lift(Left));
-    Assert.same([1], 1.lift(Arrays.fromItem));
+    Assert.same(Some(arr), arr.passTo(thx.Options.ofValue));
+    Assert.same(Right(arr), arr.passTo(Right));
+    Assert.same(Left(arr), arr.passTo(Left));
+    Assert.same([1], 1.passTo(Arrays.fromItem));
+  }
+
+  public function testApplyTo() {
+    Assert.same(1, thx.Functions.identity.applyTo(1));
+    Assert.same(Some(1), Options.ofValue.applyTo(1));
+    Assert.same(None, Options.ofValue.applyTo(null));
   }
 }
