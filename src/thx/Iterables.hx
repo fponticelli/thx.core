@@ -253,36 +253,40 @@ as compared by the specified ordering.
   public static function dropUntil<A>(it:Iterable<A>, fn : A -> Bool) : Array<A>{
     return Iterators.dropUntil(it.iterator(),fn);
   }
-  /**
-    Returns an Array that contains all elements from a which are also elements of b.
-    If a contains duplicates, so will the result.
-  **/
-    public static function unionBy<T>(a:Iterable<T>, b:Iterable<T>, eq:T->T->Bool){
-      var res = [];
-      for(e in a){
+
+/**
+  Returns an Array that contains all elements from `a` which are also elements of `b`.
+  If `a` contains duplicates, so will the result.
+**/
+  public static function unionBy<T>(a: Iterable<T>, b: Iterable<T>, eq: T -> T -> Bool): Array<T>{
+    var res = [];
+    for(e in a.iterator()){
+      res.push(e);
+    }
+    for (e in b.iterator()) {
+      if (!any(res, function (x: T): Bool return eq(x, e)))
         res.push(e);
-      }
-      for (e in b) {
-        if (!any(res, function (x) return eq(x, e))) res.push(e);
-      }
-      return res;
     }
-  /**
-   Returns an Array that contains all elements from a which are not elements of b.
-    If a contains duplicates, the resulting Array contains duplicates.
-  **/
-    public static function differenceBy<T>(a:Iterable<T>, b:Iterable<T>, eq:T->T->Bool){
-      var res = [];
-      for (e in a) {
-        if (!any(b, function (x) return eq(x, e))) res.push(e);
-      }
-      return res;
+    return res;
+  }
+
+/**
+ Returns an Array that contains all elements from a which are not elements of b.
+  If a contains duplicates, the resulting Array contains duplicates.
+**/
+  public static function differenceBy<T>(a:Iterable<T>, b:Iterable<T>, eq:T->T->Bool){
+    var res = [];
+    for (e in a) {
+      if (!any(b, function (x) return eq(x, e))) res.push(e);
     }
+    return res;
+  }
 /**
 Unzip an iterable of Tuple2<T1, T2> to a Tuple2<Array<T1>, Array<T2>>.
 **/
   public static function unzip<T1, T2>(it : Iterable<Tuple2<T1, T2>>)
     return Iterators.unzip(it.iterator());
+
 /**
 Unzip an iterable of Tuple3<T1, T2, T3> to a Tuple3<Array<T1>, Array<T2>, Array<T3>>.
 **/

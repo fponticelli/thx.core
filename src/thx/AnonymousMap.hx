@@ -90,10 +90,8 @@ It returns a string representation of the object.
         .join(", ")
       + ' }';
 
-
-
   public function copy() : AnonymousMap<V> {
-    var target = new AnonymousMap({});
+    var target: AnonymousMap<V> = new AnonymousMap({});
     for(k in keys())
       target.set(k, get(k));
     return target;
