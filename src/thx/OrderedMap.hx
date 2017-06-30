@@ -206,4 +206,11 @@ class OrderedMapImpl<K, V> implements IMap<K, V> {
       values.push(map.get(k));
     return values;
   }
+
+  public function copy() : OrderedMapImpl<K, V> {
+    var target = empty();
+    for(k in keys())
+      target.set(k, get(k));
+    return target;
+  }
 }

@@ -83,5 +83,19 @@ It returns an iterator of values in the object.
 It returns a string representation of the object.
 **/
   public function toString() : String
-    return '{ ${Maps.tuples(this).map(function(t) return t._0 + " => " + t._1).join(", ")} }';
+    return
+      '{ '
+      + Maps.tuples(this)
+        .map(function(t) return t._0 + " => " + t._1)
+        .join(", ")
+      + ' }';
+
+
+
+  public function copy() : AnonymousMap<V> {
+    var target = new AnonymousMap({});
+    for(k in keys())
+      target.set(k, get(k));
+    return target;
+  }
 }
