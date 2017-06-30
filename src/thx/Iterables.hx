@@ -259,7 +259,7 @@ as compared by the specified ordering.
   If `a` contains duplicates, so will the result.
 **/
   public static function unionBy<T>(a: Iterable<T>, b: Iterable<T>, eq: T -> T -> Bool): Array<T>{
-    var res = [];
+    var res: Array<T>  = [];
     for(e in a.iterator()){
       res.push(e);
     }
@@ -274,10 +274,11 @@ as compared by the specified ordering.
  Returns an Array that contains all elements from a which are not elements of b.
   If a contains duplicates, the resulting Array contains duplicates.
 **/
-  public static function differenceBy<T>(a:Iterable<T>, b:Iterable<T>, eq:T->T->Bool){
-    var res = [];
-    for (e in a) {
-      if (!any(b, function (x) return eq(x, e))) res.push(e);
+  public static function differenceBy<T>(a:Iterable<T>, b:Iterable<T>, eq: T -> T -> Bool): Array<T> {
+    var res: Array<T> = [];
+    for (e in a.iterator()) {
+      if (!any(b, function (x: T): Bool return eq(x, e)))
+        res.push(e);
     }
     return res;
   }
