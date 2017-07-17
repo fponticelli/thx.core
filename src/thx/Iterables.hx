@@ -264,7 +264,7 @@ as compared by the specified ordering.
       res.push(e);
     }
     for (e in b.iterator()) {
-      if (!any(res, function (x: T): Bool return eq(x, e)))
+      if (!any(res, function (x: T) return (eq(x, e): Bool)))
         res.push(e);
     }
     return res;
@@ -277,7 +277,7 @@ as compared by the specified ordering.
   public static function differenceBy<T>(a:Iterable<T>, b:Iterable<T>, eq: T -> T -> Bool): Array<T> {
     var res: Array<T> = [];
     for (e in a.iterator()) {
-      if (!any(b, function (x: T): Bool return eq(x, e)))
+      if (!any(b, function (x: T) return (eq(x, e): Bool)))
         res.push(e);
     }
     return res;
