@@ -322,7 +322,7 @@ comparison is ==.
 
     for (v in array) {
       var keep = !any(result, function(r) {
-        return predicate(r, v);
+	  return (predicate(r, v) : Bool);
       });
       if (keep) result.push(v);
     }
@@ -779,7 +779,7 @@ trace(indexes); // output [2,0,1]
 **/
   public static function rank<T>(array : ReadonlyArray<T>, compare : T -> T -> Int, ?incrementDuplicates = true) : Array<Int> {
     var arr = Arrays.mapi(array, function(v, i) return Tuple.of(v, i));
-    arr.sort(function(a, b) return compare(a.left, b.left));
+    arr.sort(function(a, b) return (compare(a.left, b.left) : Int));
     if(incrementDuplicates) {
       var usedIndexes = thx.Set.createInt();
       return Arrays.reducei(arr, function(acc, x, i) {
