@@ -2,7 +2,6 @@ package thx;
 
 import thx.Either;
 using thx.Ints;
-using thx.Strings;
 import thx.DateConst.*;
 
 /**
@@ -33,10 +32,10 @@ since 1 C.E. (A.D.).
 Transforms a Haxe native `Date` instance into `LocalDate`.
 */
   @:from public static function fromDate(date : Date) : LocalDate
-    return fromTime(date.getTime());
+    return create(date.getFullYear(), date.getMonth() + 1, date.getDate());
 
 /**
-Transforms an epoch time value in milliconds into `LocalDate`.
+Transforms an epoch time value in milliconds into `LocalDate` assuming GMT time.
 */
   @:from public static function fromTime(timestamp : Float) : LocalDate
     return new LocalDate(Std.int(timestamp / millisPerDay) + unixEpochDays);
@@ -493,6 +492,12 @@ Returns true if this date and the `other` date share the same year and month.
   @:op(A<=B)
   inline static public function lessEquals(self : LocalDate, that : LocalDate) : Bool
     return self.days.compare(that.days) <= 0;
+
+/**
+Transforms a date to a timestamp assuming GMT time.
+*/
+  inline public function toTime() : Float
+    return (this - unixEpochDays) * millisPerDay;
 
   inline public function toDate() : Date
     return new Date(year, month - 1, day, 0, 0, 0);

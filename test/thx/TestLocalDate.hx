@@ -69,7 +69,7 @@ class TestLocalDate {
   }
 
   public function testFromToTime() {
-    var date2 : LocalDate = LocalDate.fromTime(date.toDate().getTime());
+    var date2 : LocalDate = LocalDate.fromTime(date.toTime());
     Assert.isTrue(date == date2, 'expected $date but got $date2');
   }
 #end
