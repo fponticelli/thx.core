@@ -181,6 +181,13 @@ Warning: this operation is `O(n)`
     return go([], this);
   }
 
+  public function intersperse(a: A): Nel<A> {
+    return switch this {
+      case Single(x): Single(x);
+      case ConsNel(x, xs): ConsNel(x, ConsNel(a, xs.intersperse(a)));
+    }
+  }
+
 /**
 Gets a `Semigroup` instance for `Nel<A>`, using the `append` method of `Nel<A>`.
 **/

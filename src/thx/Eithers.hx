@@ -163,6 +163,20 @@ class Eithers {
       case _: either;
     };
   }
+
+  public static function exists<L, R>(either: Either<L, R>, p: R -> Bool): Bool {
+    return switch either {
+      case Right(a): p(a);
+      case _: false;
+    }
+  }
+
+  public static function forall<L, R>(either: Either<L, R>, p: R -> Bool): Bool {
+    return switch either {
+      case Right(a): p(a);
+      case _: true;
+    }
+  }
 }
 
 // Kleisli arrow specialized to Either
