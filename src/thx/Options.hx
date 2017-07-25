@@ -236,9 +236,21 @@ Extract the value from `Option` or throw a thx.Error with the provided message.
       case Some(v): Validation.success(v);
     };
 
+  public static function toLazySuccess<E, T>(option: Option<T>, error: Void -> E): Validation<E, T>
+    return switch option {
+      case None: Validation.failure(error());
+      case Some(v): Validation.success(v);
+    };
+
   public static function toSuccessNel<E, T>(option: Option<T>, error: E): Validation.VNel<E, T>
     return switch option {
       case None: Validation.failureNel(error);
+      case Some(v): Validation.successNel(v);
+    };
+
+  public static function toLazySuccessNel<E, T>(option: Option<T>, error: Void -> E): Validation.VNel<E, T>
+    return switch option {
+      case None: Validation.failureNel(error());
       case Some(v): Validation.successNel(v);
     };
 
@@ -257,6 +269,12 @@ Extract the value from `Option` or throw a thx.Error with the provided message.
   public static function toRight<E, T>(opt: Option<T>, left: E): Either<E, T>
     return switch opt {
       case None: Left(left);
+      case Some(r): Right(r);
+    };
+
+  public static function toLazyRight<E, T>(opt: Option<T>, left: Void -> E): Either<E, T>
+    return switch opt {
+      case None: Left(left());
       case Some(r): Right(r);
     };
 
