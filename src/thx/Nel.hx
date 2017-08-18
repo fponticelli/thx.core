@@ -82,6 +82,13 @@ Warning: this operation is `O(n)`
       case ConsNel(x, xs): ConsNel(x, xs.append(nel));
     };
 
+  public function concat(xs: Array<A>): Nel<A> {
+    return switch Nel.fromArray(xs) {
+      case Some(other): (this: Nel<A>).append(other);
+      case None: this;
+    };
+  }
+
 /**
 Gets the head item of this `Nel<A>`, which is guaranteed to exist
 **/
