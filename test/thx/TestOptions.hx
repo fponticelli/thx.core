@@ -30,8 +30,8 @@ class TestOptions {
   }
 
   public function testCataf() {
-    Assert.same(9, Some(10).cataf(function() return 0, function(v) return v - 1));
-    Assert.same(0, None.cataf(function() return 0, function(v) return v - 1));
+    Assert.same(0, None.cataf(() -> 0, v -> { Assert.fail(); return v - 1; }));
+    Assert.same(9, Some(10).cataf(() -> { Assert.fail(); return 0; }, v ->  v - 1));
   }
 
   public function testFoldLeft() {
@@ -42,6 +42,18 @@ class TestOptions {
   public function testFoldLeftf() {
     Assert.same(-9, Some(10).foldLeftf(function() return 1, function(acc, v) return acc - v));
     Assert.same(1, None.foldLeftf(function() return 1, function(acc, v) return acc - v));
+  }
+
+  public function testGetOrElseF() {
+    Assert.same(20, None    .getOrElseF(() -> 20));
+    Assert.same(10, Some(10).getOrElseF(() -> { Assert.fail(); return 20; }));
+  }
+
+  public function testOrElseF() {
+    Assert.same(None,     None    .orElseF(() -> None));
+    Assert.same(Some(20), None    .orElseF(() -> Some(20)));
+    Assert.same(Some(10), Some(10).orElseF(() -> { Assert.fail(); return None; }));
+    Assert.same(Some(10), Some(10).orElseF(() -> { Assert.fail(); return Some(20); }));
   }
 
   public function testAlt2() {
@@ -103,5 +115,17 @@ class TestOptions {
     Assert.same(Some("c"), Options.alts([ None     , None     , Some("c"), None      ]));
     Assert.same(Some("d"), Options.alts([ None     , None     , None     , Some("d") ]));
     Assert.same(None,      Options.alts([ None     , None     , None     , None      ]));
+  }
+
+  public function testAltsF() {
+    Assert.same(None, Options.altsF([]));
+    Assert.same(Some(10), Options.altsF([
+      () -> None,
+      () -> Some(10),
+      () -> {
+        Assert.fail();
+        return Some(20);
+      }
+    ]));
   }
 }

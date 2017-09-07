@@ -182,6 +182,15 @@ is be `None`.
     };
 
 /**
+`getOrElseF` extracts the value from `Option`. If the `Option` is `None`, `alt` function is called to produce a default value..
+**/
+  public static function getOrElseF<T>(option: Option<T>, alt: Void -> T) : T
+    return switch option {
+      case None: alt();
+      case Some(v) : v;
+    };
+
+/**
 Extract the value from `Option` or throw a thx.Error if the `Option` is `None`.
 **/
   public static function getOrThrow<T>(option: Option<T>, ?err: thx.Error, ?posInfo: haxe.PosInfos): T {
@@ -206,6 +215,15 @@ Extract the value from `Option` or throw a thx.Error with the provided message.
       case None: alt;
       case Some(_) : option;
     };
+
+/**
+`orElseF` returns `option` if it holds a value or calls `alt` to produce a default `Option<T>`.
+**/
+  public static function orElseF<T>(option: Option<T>, alt: Void -> Option<T>) : Option<T>
+    return switch option {
+      case None: alt();
+      case Some(_) : option;
+    }
 
   public static function all<T>(option: Option<T>, f: T -> Bool): Bool
     return switch option {
@@ -324,6 +342,13 @@ Extract the value from `Option` or throw a thx.Error with the provided message.
  */
   static public function alts<A>(as : ReadonlyArray<Option<A>>) : Option<A> {
     return Arrays.reduce(as, alt2, None);
+  }
+
+/**
+  Returns the result of the first function that produces a `Some` value, or `None`
+ */
+  static public function altsF<A>(fs : ReadonlyArray<Void -> Option<A>>) : Option<A> {
+    return Arrays.reduce(fs, orElseF, None);
   }
 
   inline static public function ap2<A, B, C>(f: A -> B -> C, v1: Option<A>, v2: Option<B>): Option<C>
