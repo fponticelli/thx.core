@@ -58,7 +58,7 @@ Assert.same(100, x);
 
         // invalid
         case macro $inv <= $_:
-          Context.error("thx.fp.Monad.Do: invalid binding, must be identifier", inv.pos);
+          Context.error("thx.fp.Monad.Do: invalid <= binding - left side must be identifier or _", inv.pos);
 
         // _ <= monadExpr
         case _:
