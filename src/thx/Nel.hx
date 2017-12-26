@@ -82,6 +82,13 @@ Warning: this operation is `O(n)`
       case ConsNel(x, xs): ConsNel(x, xs.append(nel));
     };
 
+  public function concat(xs: Array<A>): Nel<A> {
+    return switch Nel.fromArray(xs) {
+      case Some(other): (this: Nel<A>).append(other);
+      case None: this;
+    };
+  }
+
 /**
 Gets the head item of this `Nel<A>`, which is guaranteed to exist
 **/
@@ -179,6 +186,13 @@ Warning: this operation is `O(n)`
       }
     }
     return go([], this);
+  }
+
+  public function intersperse(a: A): Nel<A> {
+    return switch this {
+      case Single(x): Single(x);
+      case ConsNel(x, xs): ConsNel(x, ConsNel(a, xs.intersperse(a)));
+    }
   }
 
 /**

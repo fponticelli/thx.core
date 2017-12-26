@@ -92,4 +92,28 @@ class TestEithers {
     Assert.same(l2, l.leftMap(function(i) { return i + 1; }));
     Assert.same(rt, rt.leftMap(function(i) { return i + 1; }));
   }
+
+  public function testGetOrElse() : Void {
+    Assert.same(12, Left("x").getOrElse(12));
+    Assert.same("x", Right("x").getOrElse("y"));
+  }
+
+  public function testGetOrElseF() : Void {
+    Assert.same(12, Left("x").getOrElseF(() -> 12));
+    Assert.same("x", Right("x").getOrElseF(() -> { Assert.fail(); return "y"; }));
+  }
+
+  public function testOrElse() : Void {
+    Assert.same(Left(2), Left(1).orElse(Left(2)));
+    Assert.same(Right("x"), Left(1).orElse(Right("x")));
+    Assert.same(Right(1), Right(1).orElse(Left("x")));
+    Assert.same(Right(1), Right(1).orElse(Right(2)));
+  }
+
+  public function testOrElseF() : Void {
+    Assert.same(Left(2), Left(1).orElseF(() -> Left(2)));
+    Assert.same(Right("x"), Left(1).orElseF(() -> Right("x")));
+    Assert.same(Right(1), Right(1).orElseF(() -> { Assert.fail(); return Left("x"); }));
+    Assert.same(Right(1), Right(1).orElseF(() -> { Assert.fail(); return Right(2); }));
+  }
 }

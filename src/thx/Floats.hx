@@ -10,7 +10,9 @@ class Floats {
 **/
   public static inline var EPSILON : Float = 1e-9;
 
-  static var pattern_parse = ~/^(\+|-)?\d+(\.\d+)?(e-?\d+)?$/;
+  static var pattern_parse = ~/^(\+|-)?(:?\d+(\.\d+)?(e-?\d+)?|nan|NaN|NAN)$/;
+  static var pattern_inf = ~/^\+?(inf|Inf|INF)$/;
+  static var pattern_neg_inf = ~/^-(inf|Inf|INF)$/;
 
 /**
 Returns the angular distance between 2 angles.
@@ -36,7 +38,7 @@ Rounds a number up to the specified number of decimals.
 `canParse` checks if a string value can be safely converted into a `Float` value.
 **/
   public static function canParse(s : String)
-    return pattern_parse.match(s);
+    return pattern_parse.match(s) || pattern_inf.match(s) || pattern_neg_inf.match(s);
 
 /**
 `clamp` restricts a value within the specified range.
@@ -179,7 +181,7 @@ tollerance (last optional argument). By default the tollerance is defined as
   public static function parse(s : String) {
     if (s.substring(0, 1) == "+")
       s = s.substring(1);
-    return Std.parseFloat(s);
+    return if (pattern_inf.match(s)) Math.POSITIVE_INFINITY else if (pattern_neg_inf.match(s)) Math.NEGATIVE_INFINITY else Std.parseFloat(s);
   }
 
 /**

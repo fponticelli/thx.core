@@ -133,12 +133,34 @@ class Eithers {
   /**
    * Fold by mapping the contained value into some monoidal type and reducing with that monoid.
    */
-  public static function foldMap<L, R, A>(either: Either<L, R>, f: R -> A, m: Monoid<A>): A
+  public static function foldMap<L, R, A>(either: Either<L, R>, f: R -> A, m: Monoid<A>): A {
     return foldLeft(map(either, f), m.zero, m.append);
+  }
+
+  public static function getOrElse<L, R>(e0: Either<L, R>, v: R) : R {
+    return switch e0 {
+      case Left(_) : v;
+      case Right(v) : v;
+    };
+  }
+
+  public static function getOrElseF<L, R>(e0: Either<L, R>, f : Void -> R) : R {
+    return switch e0 {
+      case Left(_) : f();
+      case Right(v) : v;
+    };
+  }
 
   public static function orElse<L, R>(e0: Either<L, R>, e1: Either<L, R>): Either<L, R> {
     return switch e0 {
       case Left(e): e1;
+      case right: right;
+    };
+  }
+
+  public static function orElseF<L, R>(e0: Either<L, R>, f: Void -> Either<L, R>): Either<L, R> {
+    return switch e0 {
+      case Left(e): f();
       case right: right;
     };
   }
@@ -162,6 +184,20 @@ class Eithers {
       case Right(a): if (p(a)) either else Left(error);
       case _: either;
     };
+  }
+
+  public static function exists<L, R>(either: Either<L, R>, p: R -> Bool): Bool {
+    return switch either {
+      case Right(a): p(a);
+      case _: false;
+    }
+  }
+
+  public static function forall<L, R>(either: Either<L, R>, p: R -> Bool): Bool {
+    return switch either {
+      case Right(a): p(a);
+      case _: true;
+    }
   }
 }
 

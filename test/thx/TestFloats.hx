@@ -120,4 +120,42 @@ class TestFloats {
       Assert.equals(test.ccw, r, 'circular interpolation CCW at 50% between ${test.a} and ${test.b} should be ${test.ccw} but it is ${r}');
     }
   }
+
+  public function testCanParse() {
+    var tests = ["0", "0.0", "0.1", "1.0", "1.0e2", "0.1e2", "Inf", "inf", "INF", "NaN", "nan", "NAN"];
+    for (test in tests) {
+      Assert.isTrue(Floats.canParse(test));
+    }
+  }
+
+  public function testCannotParse() {
+    var tests = ["0.", ".0", "abc", "1.a"];
+    for (test in tests) {
+      Assert.isFalse(Floats.canParse(test));
+    }
+  }
+
+  public function testParse() {
+    var tests = [
+      "0" => a -> a == 0.0,
+      "0.0" => a -> a == 0.0, 
+      "0.1" => a -> a == 0.1, 
+      "1.0" => a -> a == 1.0,
+      "1.0e2" => a -> a == 100.0,
+      "0.1e2" => a -> a == 10.0, 
+      "1.0e-2" => a -> a == 0.01,
+      "0.1e-2" => a -> a == 0.001, 
+      "Inf" => a -> !Math.isFinite(a) && !Math.isNaN(a),
+      "inf" => a -> !Math.isFinite(a) && !Math.isNaN(a),
+      "INF" => a -> !Math.isFinite(a) && !Math.isNaN(a), 
+      "NaN" => Math.isNaN,
+      "nan" => Math.isNaN,
+      "NAN" => Math.isNaN
+    ];
+
+    for (k in tests.keys()) {
+      Assert.isTrue(tests[k](Floats.parse(k)));
+    }
+  }
+
 }

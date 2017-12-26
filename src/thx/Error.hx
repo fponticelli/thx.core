@@ -37,8 +37,8 @@ The collected error stack.
   public var stackItems(default, null): Array<StackItem>;
 
 /**
-The `Error` constructor only requires a steing message. `stack` and `pos` are automatically
-populate but can be provided if preferred.
+The `Error` constructor only requires a string message. `stack` and `pos` are automatically
+populated, but can be provided if preferred.
 **/
   public function new(message: String, ?stack: Array<StackItem>, ?pos: PosInfos) {
 #if js
