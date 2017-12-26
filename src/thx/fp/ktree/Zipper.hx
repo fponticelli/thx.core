@@ -147,7 +147,7 @@ import thx.fp.KTree;
   }
   public function selectChild(new_head:KTree<T>):Zipper<T>{
     return switch(this){
-      case Cons(head,tail) : Cons(new_head,tail);
+      case Cons(head,t) : Cons(new_head,t);
       default : Cons(new_head,List.empty());
     }
   }
