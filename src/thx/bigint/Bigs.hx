@@ -205,7 +205,7 @@ class Bigs {
       difference = a[i] + carry;
       carry = Math.floor(difference / BASE);
       remainder = difference % BASE;
-      r[i] = remainder < 0 ? remainder + BASE : difference;
+      r[i] = difference < 0 && remainder != 0 ? remainder + BASE : remainder;
     }
     var n = arrayToSmall(r);
     if(null != n) {
