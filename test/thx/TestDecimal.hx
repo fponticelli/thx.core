@@ -109,6 +109,7 @@ class TestDecimal {
     Assert.isTrue(("123.456" : Decimal) - "76.544000" == "46.912000");
     Assert.isTrue(("123.456" : Decimal) - "0.004" == "123.452");
     Assert.isTrue(("123.456" : Decimal) - "-0.456" == "123.912");
+    Assert.isTrue(("1514906978" : Decimal) - "1514906971.959475" == "6.040525");
   }
 
   public function testComparison() {
