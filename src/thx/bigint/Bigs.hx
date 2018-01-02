@@ -200,11 +200,12 @@ class Bigs {
     var l = a.length,
         r = #if js untyped __js__("new Array")(l) #else [] #end,
         carry = -b,
-        i, difference;
+        i, difference, remainder;
     for(i in 0...l) {
       difference = a[i] + carry;
       carry = Math.floor(difference / BASE);
-      r[i] = difference < 0 ? difference % BASE + BASE : difference;
+      remainder = difference % BASE;
+      r[i] = remainder < 0 ? remainder + BASE : difference;
     }
     var n = arrayToSmall(r);
     if(null != n) {
