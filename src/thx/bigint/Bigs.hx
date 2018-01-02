@@ -200,11 +200,13 @@ class Bigs {
     var l = a.length,
         r = #if js untyped __js__("new Array")(l) #else [] #end,
         carry = -b,
-        i, difference;
+        i, difference, remainder;
     for(i in 0...l) {
       difference = a[i] + carry;
       carry = Math.floor(difference / BASE);
-      r[i] = difference < 0 ? difference % BASE + BASE : difference;
+      // Chrome resolves -1 % 1 to -0 and -0 < 0 == true, Std.int fixes this with -0 | 0 = 0
+      remainder = Std.int(difference % BASE); 
+      r[i] = difference < 0 ? (remainder < 0 ? remainder + BASE : remainder) : difference;
     }
     var n = arrayToSmall(r);
     if(null != n) {
