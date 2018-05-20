@@ -206,8 +206,9 @@ class Bigs {
       carry = Math.floor(difference / BASE);
       // Chrome resolves -1 % 1 to -0 and -0 < 0 == true, Std.int fixes this with -0 | 0 = 0
       remainder = Std.int(difference % BASE); 
-      r[i] = difference < 0 ? (remainder < 0 ? remainder + BASE : remainder) : difference;
+      r[i] = difference < -BASE ?  (remainder < 0 ? remainder + BASE : remainder) : difference;
     }
+
     var n = arrayToSmall(r);
     if(null != n) {
       if(sign) n = -n;
