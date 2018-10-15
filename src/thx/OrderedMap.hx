@@ -185,6 +185,9 @@ class OrderedMapImpl<K, V> implements IMap<K, V> {
     return arr.map(function (key)
       return new Tuple2(key, map.get(key)));
 
+  public function keyValueIterator ():KeyValueIterator<K, V> 
+    return arr.map((key) -> {key:key, value: map.get(key)}).iterator();
+
   public function toString() : String {
     var s = "";
     s += "[";
