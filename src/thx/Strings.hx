@@ -345,7 +345,9 @@ or case neutral characters.
 `isDigitsOnly` returns `true` if the string only contains digits.
 **/
   public static inline function isDigitsOnly(value : String) : Bool
-#if php
+  #if (php && haxe_ver>=4.0)
+    return untyped php.Syntax.code('ctype_digit({0})',value);
+#elseif (php && haxe_ver<4.0)
     return untyped __call__("ctype_digit", value);
 #else
     return DIGITS.match(value);
