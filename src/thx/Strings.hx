@@ -50,7 +50,9 @@ the process is limited to whitespace separated words.
 **/
   public static function capitalizeWords(value : String, ?whiteSpaceOnly = false) : String {
     if(whiteSpaceOnly) {
-#if php
+    #if (php && haxe_ver>=4.0)
+    return php.Global.ucwords(value);
+#elseif (php && haxe_ver<4.0)
       return untyped __call__("ucwords", value);
 #else
       return UCWORDSWS.map(capitalize(value), upperMatch);
@@ -312,7 +314,9 @@ Checks if `s` contains only (and at least one) alphabetical characters.
 `isAlphaNum` returns `true` if the string only contains alpha-numeric characters.
 **/
   public static inline function isAlphaNum(value : String) : Bool
-#if php
+#if ( php && haxe_ver >=4.0)
+  return  php.Syntax.code('ctype_alnum({0})',value);
+#elseif (php && haxe_ver<4.0)
     return untyped __call__("ctype_alnum", value);
 #else
     return ALPHANUM.match(value);
