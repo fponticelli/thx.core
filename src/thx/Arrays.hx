@@ -1103,6 +1103,7 @@ Unzip an array of Tuple2<T1, T2> to a Tuple2<Array<T1>, Array<T2>>.
     array.map(function(t) {
       a1.push(t._0);
       a2.push(t._1);
+      return null;
     });
     return new Tuple2(a1, a2);
   }
@@ -1116,6 +1117,7 @@ Unzip an array of Tuple3<T1, T2, T3> to a Tuple3<Array<T1>, Array<T2>, Array<T3>
       a1.push(t._0);
       a2.push(t._1);
       a3.push(t._2);
+      return null;
     });
     return new Tuple3(a1, a2, a3);
   }
@@ -1130,6 +1132,7 @@ Unzip an array of Tuple4<T1, T2, T3, T4> to a Tuple4<Array<T1>, Array<T2>, Array
       a2.push(t._1);
       a3.push(t._2);
       a4.push(t._3);
+      return null;
     });
     return new Tuple4(a1, a2, a3, a4);
   }
@@ -1145,6 +1148,7 @@ Unzip an array of Tuple5<T1, T2, T3, T4, T5> to a Tuple5<Array<T1>, Array<T2>, A
       a3.push(t._2);
       a4.push(t._3);
       a5.push(t._4);
+      return null;
     });
     return new Tuple5(a1, a2, a3, a4, a5);
   }
