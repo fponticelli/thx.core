@@ -486,7 +486,9 @@ Returns `true` if `s` starts with any of the values in `values`.
 of the existing text nodes.
 **/
   public static function stripTags(s : String) : String
-#if php
+ #if (php && haxe_ver>=4.0)
+    return untyped php.Syntax.code('strip_tags({0})',s);
+#elseif (php && haxe_ver<4.0)
     return untyped __call__("strip_tags", s);
 #else
     return STRIPTAGS.replace(s, "");
@@ -543,7 +545,9 @@ Returns an array of `String` split by line breaks.
 `trimChars` removes from the beginning and the end of the string any character that is present in `charlist`.
 **/
   public static inline function trimChars(value : String, charlist : String) : String
-#if php
+ #if (php && haxe_ver>=4.0)
+    return untyped php.Global.trim('strip_tags({0})',s);
+#elseif (php && haxe_ver<4.0)
     return untyped __call__("trim", value, charlist);
 #else
     return trimCharsRight(trimCharsLeft(value, charlist), charlist);
@@ -553,7 +557,9 @@ Returns an array of `String` split by line breaks.
 `trimCharsLeft` removes from the beginning of the string any character that is present in `charlist`.
 **/
   public static function trimCharsLeft(value : String, charlist : String) : String {
-#if php
+ #if (php && haxe_ver>=4.0)
+    return untyped php.Global.ltrim(value,charlist);
+#elseif (php && haxe_ver<4.0)
     return untyped __call__("ltrim", value, charlist);
 #else
     var pos = 0;
@@ -570,7 +576,9 @@ Returns an array of `String` split by line breaks.
 `trimCharsRight` removes from the end of the string any character that is present in `charlist`.
 **/
   public static function trimCharsRight(value : String, charlist : String) : String {
-#if php
+ #if (php && haxe_ver>=4.0)
+    return untyped php.Global.rtrim(value,charlist);
+#elseif (php && haxe_ver<4.0)
     return untyped __call__("rtrim", value, charlist);
 #else
     var len = value.length,
