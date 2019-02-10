@@ -147,28 +147,28 @@ Note: because thx.Time is an abstract of haxe.Int64, any haxe.Int64 will be cons
     return self.ticks.compare(that.ticks) > 0;
 
   inline public function greater(that : Time) : Bool
-    return compare(that.ticks) > 0;
+    return compareTo(that) > 0;
 
   @:op(A>=B)
   inline static public function greaterEqualsTo(self : Time, that : Time) : Bool
     return self.ticks.compare(that.ticks) >= 0;
 
   inline public function greaterEquals(that : Time) : Bool
-    return compare(that.ticks) >= 0;
+    return compareTo(that) >= 0;
 
   @:op(A<B)
   inline static public function lessThan(self : Time, that : Time) : Bool
     return self.ticks.compare(that.ticks) < 0;
 
   inline public function less(that : Time) : Bool
-    return compare(that.ticks) < 0;
+    return compareTo(that) < 0;
 
   @:op(A<=B)
   inline static public function lessEqualsTo(self : Time, that : Time) : Bool
     return self.ticks.compare(that.ticks) <= 0;
 
   inline public function lessEquals(that : Time) : Bool
-    return compare(that.ticks) <= 0;
+    return compareTo(that) <= 0;
 
   public function toDateTimeUtc()
     return new DateTimeUtc(ticks);

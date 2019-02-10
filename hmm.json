@@ -1,0 +1,11 @@
+{
+  "dependencies": [
+    {
+      "name": "utest",
+      "type": "git",
+      "dir": "src",
+      "ref": "0ee9c1a",
+      "url": "git@github.com:fponticelli/utest"
+    }
+  ]
+}

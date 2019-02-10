@@ -484,8 +484,8 @@ unless you know what you are doing.
         // hash, inthash
         if (Std.is(expected, #if (haxe_ver >= 3.200) haxe.Constraints.IMap #else Map.IMap #end)) {
           if(status.recursive || status.path == '') {
-            var map = cast(expected, Map.IMap<Dynamic, Dynamic>),
-                vmap = cast(value, Map.IMap<Dynamic, Dynamic>),
+            var map = cast(expected, Map<Dynamic, Dynamic>),
+                vmap = cast(value, Map<Dynamic, Dynamic>),
                 keys : Array<Dynamic> = [for (k in map.keys()) k],
                 vkeys : Array<Dynamic> = [for (k in vmap.keys()) k];
 

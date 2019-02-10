@@ -96,4 +96,13 @@ It returns a string representation of the object.
       target.set(k, get(k));
     return target;
   }
+
+	public function keyValueIterator():KeyValueIterator<String, V> {
+		var a = [];
+		for (key in keys()) {
+			a.push({key: key, value: get(key)});
+		}
+		a.sort((a, b) -> Reflect.compare(a.key, b.key));
+		return a.iterator();
+	}
 }

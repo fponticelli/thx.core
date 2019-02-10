@@ -31,10 +31,10 @@ class TestSet {
     Assert.same([1,3], (s1 - s2 : Array<Int>).order(Ints.compare));
   }
 
-  public function testBooleans() {
-    var s = Set.createInt([1,2,3])
-              .union(Set.createInt([2,3,4]))
-              .difference(Set.createInt([2,3]));
-    Assert.same([1,4], s.order(Ints.compare));
-  }
+  // public function testBooleans() {
+  //   var s = Set.createInt([1,2,3])
+  //             .union(Set.createInt([2,3,4]))
+  //             .difference(Set.createInt([2,3]));
+  //   Assert.same([1,4], s.order(Ints.compare));
+  // }
 }
