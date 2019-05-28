@@ -51,9 +51,6 @@ An optional equality function can be passed as the last argument. If not provide
       if(!equality(a.next(), b.next()))
         return false;
     }
-    #if haxe < 3.3
-    return true;
-    #end
   }
 
 /**
