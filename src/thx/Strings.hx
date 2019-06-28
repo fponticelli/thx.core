@@ -39,6 +39,32 @@ If `searchFor` is not found, an empty string is returned.
     }
 
 /**
+`before` searches for the first occurrance of `searchFor` and returns the text before that.
+
+If `searchFor` is not found, an empty string is returned.
+**/
+  public static function before(value : String, searchFor : String) {
+    var pos = value.indexOf(searchFor);
+    if (pos < 0)
+      return "";
+    else
+      return value.substring(0, pos);
+  }
+
+  /**
+  `beforeLast` searches for the last occurrance of `searchFor` and returns the text before that.
+
+  If `searchFor` is not found, an empty string is returned.
+  **/
+    public static function beforeLast(value : String, searchFor : String) {
+      var pos = value.lastIndexOf(searchFor);
+      if (pos < 0)
+        return "";
+      else
+        return value.substring(0, pos);
+    }
+
+/**
 `capitalize` returns a string with the first character convert to upper case.
 **/
   inline public static function capitalize(s : String)
