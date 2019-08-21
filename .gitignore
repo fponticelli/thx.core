@@ -5,3 +5,4 @@ doc/dox
 .vscode
 .DS_Store
 *.sublime-*
+.haxelib
