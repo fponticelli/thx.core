@@ -142,7 +142,7 @@ will be empty if `Option` is `None` or will contain one value otherwise.
 `toBool` transforms an `Option` value into a boolean: `None` maps to `false`, and
 `Some(_)` to `true`. The value in `Some` has no play in the conversion.
 **/
-  #if ((haxe <= 3.2) && java) @:generic #end
+  #if ((haxe_ver <= 3.2) && java) @:generic #end
   public static function toBool<T>(option : Option<T>) : Bool
     return switch option {
       case None: false;
@@ -152,7 +152,7 @@ will be empty if `Option` is `None` or will contain one value otherwise.
 /**
 `isNone` determines whether the option is a None
 **/
-  #if ((haxe <= 3.2) && java) @:generic #end
+  #if ((haxe_ver <= 3.2) && java) @:generic #end
   public static function isNone<T>(option: Option<T>): Bool
     return !toBool(option);
 
