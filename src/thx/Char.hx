@@ -131,13 +131,13 @@ representation of this type.
 Converts a `Char` to `String`.
 */
   @:to #if !(neko || php || cpp || eval) inline #end public function toString() : String {
-    #if (neko || php || cpp || eval)
-    var c = new Utf8();
-    c.addChar(this);
-    return c.toString();
-    #else
+    // #if (neko || php || cpp || eval)
+    // var c = new UnicodeString();
+    // c.addChar(this);
+    // return c.toString();
+    // #else
     return String.fromCharCode(this);
-    #end
+    // #end
   }
 
 /**
