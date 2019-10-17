@@ -9,7 +9,7 @@ using thx.Arrays;
 
 class Objects {
   static function overwriteFieldsInType(fields : Array<Field>, type : Array<Field>)
-    fields.map(function (field) {
+    fields.each(function (field) {
       type.extract(function (fvar) return fvar.name == field.name);
       type.push(field);
     });
