@@ -3,7 +3,6 @@ package thx;
 using StringTools;
 using thx.Arrays;
 import thx.Monoid;
-import haxe.Utf8;
 
 /** Alias of `StringTools`, included so mixins work with `using thx.Strings;` **/
 typedef HaxeStringTools = StringTools;
@@ -67,8 +66,10 @@ If `searchFor` is not found, an empty string is returned.
 /**
 `capitalize` returns a string with the first character convert to upper case.
 **/
-  inline public static function capitalize(s : String)
-    return Utf8.sub(s, 0, 1).toUpperCase() + Utf8.sub(s, 1, Utf8.length(s) - 1);
+  inline public static function capitalize(s : String) {
+    var s = new UnicodeString(s);
+    return s.substr(0, 1).toUpperCase() + s.substr(1);
+  }
 
 /**
 Capitalize the first letter of every word in `value`. If `whiteSpaceOnly` is set to `true`
@@ -147,11 +148,7 @@ It compares to string and it returns a negative number if `a` is inferior to `b`
 or otherwise a positive non-sero number.
 **/
   public inline static function compare(a : String, b : String)
-  #if neko // haxe.Utf8.compare does not work properly: https://github.com/HaxeFoundation/haxe/issues/4396
     return a < b ? -1 : (a > b ? 1 : 0);
-  #else
-    return Utf8.compare(a, b);
-  #end
 
   public static var order(default, never): Ord<String> = Ord.fromIntComparison(compare);
 
@@ -236,13 +233,15 @@ of `symbol`.
 ```
 **/
   public static function ellipsis(s : String, ?maxlen = 20, ?symbol = "…") {
-    var sl = Utf8.length(s),
-        symboll = Utf8.length(symbol);
+    var s = new UnicodeString(s),
+        symbol = new UnicodeString(symbol);
+    var sl = s.length,
+        symboll = symbol.length;
     if (sl > maxlen) {
       if(maxlen < symboll) {
-        return Utf8.sub(symbol, symboll - maxlen, maxlen);
+        return symbol.substr(symboll - maxlen, maxlen);
       } else {
-        return Utf8.sub(s, 0, maxlen - symboll) + symbol;
+        return s.substr(0, maxlen - symboll) + symbol;
       }
     } else
       return s;
@@ -256,15 +255,17 @@ Same as `ellipsis` but puts the symbol in the middle of the string and not to th
 ```
 **/
   public static function ellipsisMiddle(s : String, ?maxlen = 20, ?symbol = "…") {
-    var sl = Utf8.length(s),
-        symboll = Utf8.length(symbol);
+    var s = new UnicodeString(s),
+        symbol = new UnicodeString(symbol);
+    var sl = s.length,
+        symboll = symbol.length;
     if (sl > maxlen) {
       if(maxlen <= symboll) {
         return ellipsis(s, maxlen, symbol);
       }
       var hll = Math.ceil((maxlen - symboll) / 2),
           hlr = Math.floor((maxlen - symboll) / 2);
-      return Utf8.sub(s, 0, hll) + symbol + Utf8.sub(s, sl - hlr, hlr);
+      return s.substr(0, hll) + symbol + s.substr(sl - hlr, hlr);
     } else
       return s;
   }
@@ -398,8 +399,10 @@ Convert first letter in `value` to lower case.
 /**
 Returns a random substring from the `value` argument. The length of such value is by default `1`.
 **/
-  public static function random(value : String, length = 1)
-    return Utf8.sub(value, Math.floor((Utf8.length(value) - length + 1) * Math.random()), length);
+  public static function random(value : String, length = 1) {
+    var value = new UnicodeString(value);
+    return value.substr(Math.floor((value.length - length + 1) * Math.random()), length);
+  }
 
 /**
 Returns a random sampling of the specified length from the seed string.
@@ -532,9 +535,10 @@ It transforms a string into an `Array` of characters.
 **/
   #if !(neko || php || eval) inline #end public static function toArray(s : String) {
     #if (neko || php || eval)
-    var arr = [];
-    for(i in 0...Utf8.length(s))
-      arr.push(Utf8.sub(s, i, 1));
+    var arr = [],
+        len = new UnicodeString(s);
+    for(i in 0...s.length)
+      arr.push(s.substr(i, 1));
     return arr;
     #else
     return s.split('');
@@ -545,18 +549,21 @@ It transforms a string into an `Array` of characters.
 It transforms a string into an `Array` of char codes in integer format.
 **/
   inline public static function toCharcodes(s : String) : Array<Int>
-    return map(s, function(s : String)
-        return Utf8.charCodeAt(s, 0));
+    return map(
+      s,
+      function(s : String) return new UnicodeString(s).charCodeAt(0)
+    );
 
 /**
 Returns an array of `String` whose elements are equally long (using `len`). If the string `s`
 is not exactly divisible by `len` the last element of the array will be shorter.
 **/
   public static function toChunks(s : String, len : Int) : Array<String> {
-    var chunks = [];
-    while(Utf8.length(s) > 0) {
-      chunks.push(Utf8.sub(s, 0, len));
-      s = Utf8.sub(s, len, Utf8.length(s) - len);
+    var chunks = [],
+        s = new UnicodeString(s);
+    while(s.length > 0) {
+      chunks.push(s.substr(0, len));
+      s = s.substr(len, s.length - len);
     }
     return chunks;
   }
@@ -699,7 +706,8 @@ Words whose length exceeds `columns` are not split.
   }
 
   public static function lpad(s : String, char : String, length : Int) {
-    var diff = length - Utf8.length(s);
+    var s = new UnicodeString(s);
+    var diff = length - s.length;
     if(diff > 0) {
       return repeat(char, diff) + s;
     } else {
@@ -708,7 +716,8 @@ Words whose length exceeds `columns` are not split.
   }
 
   public static function rpad(s : String, char : String, length : Int) {
-    var diff = length - Utf8.length(s);
+    var s = new UnicodeString(s);
+    var diff = length - s.length;
     if(diff > 0) {
       return s + repeat(char, diff);
     } else {

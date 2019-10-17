@@ -1,6 +1,6 @@
 package thx;
 
-import haxe.Utf8;
+import UnicodeString;
 
 /**
 Represents one Utf8 character stored as an integer value.
@@ -10,7 +10,7 @@ abstract Char(Int)  {
 Retrieve a `Char` at the specified position `index` in string `s`.
 */
   public static function at(s : String, index : Int) : Char
-    return Utf8.charCodeAt(s, index);
+    return new UnicodeString(s).charCodeAt(index);
 
 /**
 Converts an `Int` value to `Char`.
@@ -25,7 +25,7 @@ Converts a `String` into a `Char.` Only the first character in the string
 is used in the conversion.
 */
   @:from inline public static function fromString(s : String) : Char
-    return Utf8.charCodeAt(s, 0);
+    return new UnicodeString(s).charCodeAt(0);
 
   inline public static function compare(a : Char, b : Char)
     return a.compareTo(b);
@@ -36,8 +36,9 @@ is used in the conversion.
 /**
 Compares two chars returning -1, 0 or 1.
 */
-  inline public function compareTo(other : Char) : Int
-    return Utf8.compare(toString(), other);
+  inline public function compareTo(other : Char) : Int {
+    return Ints.compare(this, other.toInt());
+  }
 
 /**
 Returns true if a string is all breaking whitespace.

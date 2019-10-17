@@ -30,6 +30,9 @@ is going to change the state of the underlying anonymous object.
   public function new(o : {})
     this.o = o;
 
+  public function clear()
+    this.o = {};
+
 /**
 It gets the value at the specified key.
 **/

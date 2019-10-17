@@ -3,6 +3,7 @@ package thx;
 import haxe.PosInfos;
 import utest.Assert;
 import thx.Weekday;
+using thx.Arrays;
 
 class TestLocalDate {
   public function new() {}
@@ -29,7 +30,7 @@ class TestLocalDate {
       { expected : LocalDate.fromString("2013-12-31"), test : LocalDate.create(2014,1,0) }
     ];
 
-    expectations.map(function(o) {
+    expectations.each(function(o) {
       Assert.isTrue(o.expected == o.test, 'expected ${o.expected.toString()} but was  ${o.test.toString()}');
     });
   }

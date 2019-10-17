@@ -5,6 +5,7 @@ import utest.Assert;
 import thx.Either;
 import thx.Weekday;
 using thx.Eithers;
+using thx.Arrays;
 
 class TestLocalMonthDay {
   public function new() {}
@@ -31,7 +32,7 @@ class TestLocalMonthDay {
       { expected : LocalMonthDay.fromString("--05-07"), test : LocalMonthDay.create( 5, 7) },
     ];
 
-    expectations.map(function(o) {
+    expectations.each(function(o) {
       Assert.isTrue(o.expected == o.test, 'expected ${o.expected.toString()} but was  ${o.test.toString()}');
     });
   }
@@ -45,7 +46,7 @@ class TestLocalMonthDay {
       { day: 1,  month: 3, test : 60 },
     ];
 
-    expectations.map(function(o) {
+    expectations.each(function(o) {
       var d = LocalMonthDay.fromInt(o.test);
       Assert.isTrue(o.day == d.day && o.month == d.month, 'expected day ${o.day} == ${d.day} and month ${o.month} == ${d.month} for month/day ${o.test}');
     });

@@ -201,7 +201,7 @@ Returns a Map containing the number of occurrances for each value in the array.
   @:generic
   public static function count<T>(arr : ReadonlyArray<T>) : Map<T, Int> {
     var map = new Map<T, Int>();
-    arr.map(function(v)
+    arr.each(function(v)
       map.set(v, map.exists(v) ? map.get(v) + 1 : 1)
     );
     return map;

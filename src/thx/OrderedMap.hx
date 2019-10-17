@@ -38,6 +38,9 @@ abstract OrderedMap<K, V>(OrderedMapImpl<K, V>) to IMap<K, V> {
   inline public function clone() : OrderedMap<K, V>
     return copyTo(empty());
 
+  inline public function clear()
+    this = this.empty();
+
   @:arrayAccess public inline function get(key : K)
     return this.get(key);
 
@@ -103,6 +106,12 @@ class OrderedMapImpl<K, V> implements IMap<K, V> {
 
   function new(map : IMap<K, V>) {
     this.map = map;
+    this.arr = [];
+    this.length = 0;
+  }
+
+  public function clear() {
+    this.map.clear();
     this.arr = [];
     this.length = 0;
   }
@@ -185,7 +194,7 @@ class OrderedMapImpl<K, V> implements IMap<K, V> {
     return arr.map(function (key)
       return new Tuple2(key, map.get(key)));
 
-  public function keyValueIterator ():KeyValueIterator<K, V> 
+  public function keyValueIterator ():KeyValueIterator<K, V>
     return arr.map((key) -> {key:key, value: map.get(key)}).iterator();
 
   public function toString() : String {

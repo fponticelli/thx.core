@@ -2,6 +2,7 @@ package thx;
 
 import haxe.PosInfos;
 import utest.Assert;
+using thx.Arrays;
 using thx.Dates;
 
 class TestDates {
@@ -32,7 +33,7 @@ class TestDates {
       { expected : new Date(2013, 11, 31, 23, 59, 59), test : Dates.create(2014,0,1,0,0,-1) }
     ];
 
-    expectations.map(function(o) {
+    expectations.each(function(o) {
       Assert.floatEquals(o.expected.getTime(), o.test.getTime(), 'expected ${o.expected.toString()} but was  ${o.test.toString()}');
     });
   }

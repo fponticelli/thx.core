@@ -6,9 +6,9 @@ import thx.error.ErrorWrapper;
 
 /**
 Defines a generic Error type. When the target platform is JS, `Error` extends the native
-`js.Error` type.
+`js.lib.Error` type.
 **/
-class Error #if js extends js.Error #end {
+class Error #if js extends js.lib.Error #end {
 /**
 It creates an instance of Error from any value.
 

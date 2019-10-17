@@ -270,7 +270,7 @@ E.g. { key1: { key2: [1, 2, 3] } }.hasPath("key1.key2.2") -> returns true
     for (currentPath in paths) {
       if(currentPath.isDigitsOnly()) {
         var index = Std.parseInt(currentPath),
-            arr = Std.instance(current, Array);
+            arr = Std.downcast(current, Array);
         if(null == arr || arr.length <= index) return false;
         current = arr[index];
       } else if (Reflect.hasField(current, currentPath)) {
@@ -306,7 +306,7 @@ E.g. { key1: { key2: [1, 2, 3] } }.getPath("key1.key2[2]") -> returns 3
         return null;
       } else if(currentPath.isDigitsOnly()) {
         var index = Std.parseInt(currentPath),
-            arr = Std.instance(current, Array);
+            arr = Std.downcast(current, Array);
         if(null == arr) return null;
         current = arr[index];
       } else if (Reflect.hasField(current, currentPath)) {

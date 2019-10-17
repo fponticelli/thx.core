@@ -33,7 +33,7 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
           var parts = v.split(assignment);
           if (parts[0] != "") qs.add(decodeURIComponent(parts[0]), null == parts[1] ? null : decodeURIComponent(parts[1]));
           return qs;
-        }, new Map() 
+        }, new Map()
       );
     }
   }
@@ -44,7 +44,7 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
   @:from public static function fromObject(o : {}) : QueryString {
     var qs : QueryString = new Map();
     if(!Reflect.isObject(o)) throw 'unable to convert $o to QueryString';
-    Objects.tuples(o).map(function(t) {
+    Objects.tuples(o).each(function(t) {
         if(Std.is(t.right, Array)) {
           qs.setMany(t.left, (cast t.right : Array<Dynamic>).map.fn('$_'));
         } else {
