@@ -1,7 +1,5 @@
 package thx;
 
-import UnicodeString;
-
 /**
 Represents one Utf8 character stored as an integer value.
 */
@@ -10,7 +8,8 @@ abstract Char(Int)  {
 Retrieve a `Char` at the specified position `index` in string `s`.
 */
   public static function at(s : String, index : Int) : Char
-    return new UnicodeString(s).charCodeAt(index);
+    return s.charCodeAt(index);
+    // return new UnicodeString(s).charCodeAt(index);
 
 /**
 Converts an `Int` value to `Char`.
@@ -25,7 +24,8 @@ Converts a `String` into a `Char.` Only the first character in the string
 is used in the conversion.
 */
   @:from inline public static function fromString(s : String) : Char
-    return new UnicodeString(s).charCodeAt(0);
+    return s.charCodeAt(0);
+    // return new UnicodeString(s).charCodeAt(0);
 
   inline public static function compare(a : Char, b : Char)
     return a.compareTo(b);

@@ -67,7 +67,7 @@ If `searchFor` is not found, an empty string is returned.
 `capitalize` returns a string with the first character convert to upper case.
 **/
   inline public static function capitalize(s : String) {
-    var s = new UnicodeString(s);
+    // var s = new UnicodeString(s);
     return s.substr(0, 1).toUpperCase() + s.substr(1);
   }
 
@@ -233,8 +233,8 @@ of `symbol`.
 ```
 **/
   public static function ellipsis(s : String, ?maxlen = 20, ?symbol = "…") {
-    var s = new UnicodeString(s),
-        symbol = new UnicodeString(symbol);
+    // var s = new UnicodeString(s),
+    //     symbol = new UnicodeString(symbol);
     var sl = s.length,
         symboll = symbol.length;
     if (sl > maxlen) {
@@ -255,8 +255,8 @@ Same as `ellipsis` but puts the symbol in the middle of the string and not to th
 ```
 **/
   public static function ellipsisMiddle(s : String, ?maxlen = 20, ?symbol = "…") {
-    var s = new UnicodeString(s),
-        symbol = new UnicodeString(symbol);
+    // var s = new UnicodeString(s),
+    //     symbol = new UnicodeString(symbol);
     var sl = s.length,
         symboll = symbol.length;
     if (sl > maxlen) {
@@ -400,7 +400,7 @@ Convert first letter in `value` to lower case.
 Returns a random substring from the `value` argument. The length of such value is by default `1`.
 **/
   public static function random(value : String, length = 1) {
-    var value = new UnicodeString(value);
+    // var value = new UnicodeString(value);
     return value.substr(Math.floor((value.length - length + 1) * Math.random()), length);
   }
 
@@ -534,15 +534,15 @@ Surrounds a string with the contents of `left` and `right`. If `right` is omitte
 It transforms a string into an `Array` of characters.
 **/
   #if !(neko || php || eval) inline #end public static function toArray(s : String) {
-    #if (neko || php || eval)
-    var arr = [],
-        len = new UnicodeString(s);
-    for(i in 0...s.length)
-      arr.push(s.substr(i, 1));
-    return arr;
-    #else
+    // #if (neko || php || eval)
+    // var arr = [],
+    //     len = new UnicodeString(s);
+    // for(i in 0...s.length)
+    //   arr.push(s.substr(i, 1));
+    // return arr;
+    // #else
     return s.split('');
-    #end
+    // #end
   }
 
 /**
@@ -551,7 +551,8 @@ It transforms a string into an `Array` of char codes in integer format.
   inline public static function toCharcodes(s : String) : Array<Int>
     return map(
       s,
-      function(s : String) return new UnicodeString(s).charCodeAt(0)
+      // function(s : String) return new UnicodeString(s).charCodeAt(0)
+      function(s : String) return s.charCodeAt(0)
     );
 
 /**
@@ -559,8 +560,8 @@ Returns an array of `String` whose elements are equally long (using `len`). If t
 is not exactly divisible by `len` the last element of the array will be shorter.
 **/
   public static function toChunks(s : String, len : Int) : Array<String> {
-    var chunks = [],
-        s = new UnicodeString(s);
+    var chunks = [];
+        // s = new UnicodeString(s);
     while(s.length > 0) {
       chunks.push(s.substr(0, len));
       s = s.substr(len, s.length - len);
@@ -706,7 +707,7 @@ Words whose length exceeds `columns` are not split.
   }
 
   public static function lpad(s : String, char : String, length : Int) {
-    var s = new UnicodeString(s);
+    // var s = new UnicodeString(s);
     var diff = length - s.length;
     if(diff > 0) {
       return repeat(char, diff) + s;
@@ -716,7 +717,7 @@ Words whose length exceeds `columns` are not split.
   }
 
   public static function rpad(s : String, char : String, length : Int) {
-    var s = new UnicodeString(s);
+    // var s = new UnicodeString(s);
     var diff = length - s.length;
     if(diff > 0) {
       return s + repeat(char, diff);
