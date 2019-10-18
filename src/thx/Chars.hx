@@ -14,8 +14,7 @@ abstract Chars(Array<Char>)  {
 Converts a `String` into `Chars`.
 */
   @:from public static function fromString(s : String) : Chars
-    return Strings.map(s, function(s : String) : Char
-      return Utf8.charCodeAt(s, 0));
+    return Strings.map(s, function(s : String) : Char return s.charCodeAt(0));
 
 /**
 Converts an `Array` of `Int` representing char codes into `Chars`.
