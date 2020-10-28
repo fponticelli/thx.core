@@ -1,204 +1,209 @@
 package thx;
 
 import utest.Assert;
+
 using thx.Nulls;
+
 import thx.Nulls.*;
 
-class TestNulls {
-  public var withValue = "A";
-  public var withoutValue : String;
-  public var getter(get, null) : String;
-  public var setter(get, set) : String;
-  function get_getter() return 'A';
+class TestNulls extends utest.Test {
+	public var withValue = "A";
+	public var withoutValue:String;
+	public var getter(get, null):String;
+	public var setter(get, set):String;
 
-  var v : String;
-  function get_setter() return v;
-  function set_setter(v : String) return this.v = v;
+	function get_getter()
+		return 'A';
 
-  public var nested : { a : { b : String }};
-  public var empty : { a : { b : String }};
+	var v:String;
 
-  public function new() { }
+	function get_setter()
+		return v;
 
-  public function setup() {
-    this.v = null;
-    this.nested = { a : { b : 'A' } };
-    this.empty = null;
-  }
+	function set_setter(v:String)
+		return this.v = v;
 
-  public function testIssue20160708() {
-    var x: { a: { b : Null<Int> } } = { a: { b: 2 } };
-    Assert.equals(2, x.a.b.or(null));
-    Assert.equals(2, x.a.b.or(3));
-  }
+	public var nested:{a:{b:String}};
+	public var empty:{a:{b:String}};
 
-  public function testOr() {
-    var s : String = null;
-    Assert.equals('B', s.or('B'));
-    s = 'A';
-    Assert.equals('A', s.or('B'));
+	public function setup() {
+		this.v = null;
+		this.nested = {a: {b: 'A'}};
+		this.empty = null;
+	}
 
-    var s : String = null;
-    Assert.equals('B', Nulls.or(s, 'B'));
-    s = 'A';
-    Assert.equals('A', Nulls.or(s, 'B'));
+	public function testIssue20160708() {
+		var x:{a:{b:Null<Int>}} = {a: {b: 2}};
+		Assert.equals(2, x.a.b.or(null));
+		Assert.equals(2, x.a.b.or(3));
+	}
 
-    Assert.equals('A', Nulls.or(withValue, 'B'));
-    Assert.equals('A', withValue.or('B'));
+	public function testOr() {
+		var s:String = null;
+		Assert.equals('B', s.or('B'));
+		s = 'A';
+		Assert.equals('A', s.or('B'));
 
-    Assert.equals('B', Nulls.or(withoutValue, 'B'));
-    Assert.equals('B', withoutValue.or('B'));
+		var s:String = null;
+		Assert.equals('B', Nulls.or(s, 'B'));
+		s = 'A';
+		Assert.equals('A', Nulls.or(s, 'B'));
 
-    var o : { a : String, b : String } = { a : "A", b : null };
+		Assert.equals('A', Nulls.or(withValue, 'B'));
+		Assert.equals('A', withValue.or('B'));
 
-    Assert.equals('A', Nulls.or(o.a, 'B'));
-    Assert.equals('A', (o.a).or('B'));
+		Assert.equals('B', Nulls.or(withoutValue, 'B'));
+		Assert.equals('B', withoutValue.or('B'));
 
-    Assert.equals('B', Nulls.or(o.b, 'B'));
-    Assert.equals('B', (o.b).or('B'));
+		var o:{a:String, b:String} = {a: "A", b: null};
 
-    Assert.equals('A', Nulls.or(getter, 'B'));
-    Assert.equals('A', getter.or('B'));
+		Assert.equals('A', Nulls.or(o.a, 'B'));
+		Assert.equals('A', (o.a).or('B'));
 
-    Assert.equals('B', Nulls.or(setter, 'B'));
-    Assert.equals('B', setter.or('B'));
+		Assert.equals('B', Nulls.or(o.b, 'B'));
+		Assert.equals('B', (o.b).or('B'));
 
-    setter = 'A';
-    Assert.equals('A', Nulls.or(setter, 'B'));
-    Assert.equals('A', setter.or('B'));
-  }
+		Assert.equals('A', Nulls.or(getter, 'B'));
+		Assert.equals('A', getter.or('B'));
 
-  public function testOpt() {
-    var o : { a : { b : { c : String }}} = null;
+		Assert.equals('B', Nulls.or(setter, 'B'));
+		Assert.equals('B', setter.or('B'));
 
-    Assert.isNull((o.a.b.c).opt());
-    Assert.isNull(Nulls.opt(o.a.b.c));
-    Assert.isNull(Nulls.opt(o.a.b.c));
-    Assert.isNull((o.a.b.c).opt());
+		setter = 'A';
+		Assert.equals('A', Nulls.or(setter, 'B'));
+		Assert.equals('A', setter.or('B'));
+	}
 
-    Assert.equals('B', (o.a.b.c).or('B'));
+	public function testOpt() {
+		var o:{a:{b:{c:String}}} = null;
 
-    o = { a : { b : { c : 'A' } } };
-    Assert.equals('A', (o.a.b.c).opt());
-    Assert.equals('A', (o.a.b.c).or('B'));
+		Assert.isNull((o.a.b.c).opt());
+		Assert.isNull(Nulls.opt(o.a.b.c));
+		Assert.isNull(Nulls.opt(o.a.b.c));
+		Assert.isNull((o.a.b.c).opt());
 
-    Assert.same({ c : 'A'}, (o.a.b).opt());
-    Assert.same({ c : 'A'}, (o.a.b).or({ c : 'B'}));
+		Assert.equals('B', (o.a.b.c).or('B'));
 
-    o = { a : { b : null } };
-    Assert.isNull((o.a.b.c).opt());
-    Assert.equals('B', (o.a.b.c).or('B'));
+		o = {a: {b: {c: 'A'}}};
+		Assert.equals('A', (o.a.b.c).opt());
+		Assert.equals('A', (o.a.b.c).or('B'));
 
-    Assert.isNull((o.a.b).opt());
-    Assert.same({ c : 'B'}, (o.a.b).or({ c : 'B'}));
+		Assert.same({c: 'A'}, (o.a.b).opt());
+		Assert.same({c: 'A'}, (o.a.b).or({c: 'B'}));
 
-    Assert.equals('A', (this.nested.a.b).opt());
-    Assert.equals('A', (nested.a.b).opt());
+		o = {a: {b: null}};
+		Assert.isNull((o.a.b.c).opt());
+		Assert.equals('B', (o.a.b.c).or('B'));
 
-    Assert.isNull((this.empty.a.b).opt());
-    Assert.isNull((empty.a.b).opt());
+		Assert.isNull((o.a.b).opt());
+		Assert.same({c: 'B'}, (o.a.b).or({c: 'B'}));
 
-    var arr : { a : Array<{ b : String }> } = null;
-    Assert.isNull((arr.a[0].b).opt());
-    arr = { a : [{ b : 'A' }] };
-    Assert.isNull((arr.a[1].b).opt());
-    Assert.equals('A', (arr.a[0].b).opt());
+		Assert.equals('A', (this.nested.a.b).opt());
+		Assert.equals('A', (nested.a.b).opt());
 
-    var arr : Array<Array<Array<Null<Int>>>> = null;
-    Assert.isNull((arr[0]).opt());
-    Assert.isNull((arr[0][1]).opt());
-    Assert.isNull((arr[0][1][3]).opt());
+		Assert.isNull((this.empty.a.b).opt());
+		Assert.isNull((empty.a.b).opt());
 
-    arr = [[[1,2,3],[4,5,6]]];
-    Assert.equals(1, (arr[0][0][0]).opt());
-    Assert.equals(6, (arr[0][1][2]).opt());
-  }
+		var arr:{a:Array<{b:String}>} = null;
+		Assert.isNull((arr.a[0].b).opt());
+		arr = {a: [{b: 'A'}]};
+		Assert.isNull((arr.a[1].b).opt());
+		Assert.equals('A', (arr.a[0].b).opt());
 
-  public function testOrWithIndex() {
-    var arr : Array<Array<Array<Null<Int>>>> = null,
-        i = 4;
-    Assert.equals(7, (arr[0][1][3]).or(7));
-    Assert.equals(7, (arr[i][1][3]).or(7));
-    Assert.equals(7, (arr[0][i][3]).or(7));
-    Assert.equals(7, (arr[0][1][i]).or(7));
-  }
+		var arr:Array<Array<Array<Null<Int>>>> = null;
+		Assert.isNull((arr[0]).opt());
+		Assert.isNull((arr[0][1]).opt());
+		Assert.isNull((arr[0][1][3]).opt());
 
-  var m : {
-    f : String -> { change : Void -> String }
-  };
+		arr = [[[1, 2, 3], [4, 5, 6]]];
+		Assert.equals(1, (arr[0][0][0]).opt());
+		Assert.equals(6, (arr[0][1][2]).opt());
+	}
 
-  var m2 : {
-    f : String -> String
-  };
+	public function testOrWithIndex() {
+		var arr:Array<Array<Array<Null<Int>>>> = null, i = 4;
+		Assert.equals(7, (arr[0][1][3]).or(7));
+		Assert.equals(7, (arr[i][1][3]).or(7));
+		Assert.equals(7, (arr[0][i][3]).or(7));
+		Assert.equals(7, (arr[0][1][i]).or(7));
+	}
 
-  public function testOrMethod() {
-    Assert.equals('x', (this.m.f('Y').change()).or('x'));
-    var first = true;
-    m = {
-      f : function(s) {
-        if(first) {
-          first = false;
-          return {
-            change : function() return s.toLowerCase()
-          }
-        } else {
-          // check for side effects on potentially multiple calls
-          return throw 'method called multiple times';
-        }
-      }
-    };
-    Assert.equals('y', (this.m.f('Y').change()).or('x'));
-#if !python
-    Assert.equals('x', (this.m2.f('Y').toLowerCase()).or('x'));
-#end
-  }
+	var m:{
+		f:String->{change: Void -> String}
+	};
 
-  public function testIsNull() {
-    Assert.isTrue((empty).isNull());
-    Assert.isTrue((empty.a).isNull());
-    Assert.isTrue((empty.a.b).isNull());
-  }
+	var m2:{
+		f:String->String
+	};
 
-  public function testNotNull() {
-    Assert.isTrue((nested).notNull());
-    Assert.isTrue((nested.a).notNull());
-    Assert.isTrue((nested.a.b).notNull());
-  }
+	public function testOrMethod() {
+		Assert.equals('x', (this.m.f('Y').change()).or('x'));
+		var first = true;
+		m = {
+			f: function(s) {
+				if (first) {
+					first = false;
+					return {
+						change: function() return s.toLowerCase()
+					}
+				} else {
+					// check for side effects on potentially multiple calls
+					return throw 'method called multiple times';
+				}
+			}
+		};
+		Assert.equals('y', (this.m.f('Y').change()).or('x'));
+		#if !python
+		Assert.equals('x', (this.m2.f('Y').toLowerCase()).or('x'));
+		#end
+	}
 
-  public function testEnsure() {
-    var nops : String = null,
-        yups : String = "some content";
+	public function testIsNull() {
+		Assert.isTrue((empty).isNull());
+		Assert.isTrue((empty.a).isNull());
+		Assert.isTrue((empty.a.b).isNull());
+	}
 
-    Assert.isNull(ensureField);
-    Assert.isNull(ensureStaticField);
+	public function testNotNull() {
+		Assert.isTrue((nested).notNull());
+		Assert.isTrue((nested.a).notNull());
+		Assert.isTrue((nested.a.b).notNull());
+	}
 
-    nops.ensure("alt");
-    yups.ensure("alt");
+	public function testEnsure() {
+		var nops:String = null, yups:String = "some content";
 
-    Assert.equals("alt", nops);
-    Assert.equals("some content", yups);
+		Assert.isNull(ensureField);
+		Assert.isNull(ensureStaticField);
 
-    nops = null;
-    Nulls.ensure(nops, "alt");
-    Nulls.ensure(yups, "alt");
+		nops.ensure("alt");
+		yups.ensure("alt");
 
-    Assert.equals("alt", nops);
-    Assert.equals("some content", yups);
+		Assert.equals("alt", nops);
+		Assert.equals("some content", yups);
 
-    ensureField.ensure("alt");
-    ensureStaticField.ensure("alt");
-    Nulls.ensure(ensureField, "alt");
-    Nulls.ensure(ensureStaticField, "alt");
+		nops = null;
+		Nulls.ensure(nops, "alt");
+		Nulls.ensure(yups, "alt");
 
-    ensureField = null;
-    ensureStaticField = null;
+		Assert.equals("alt", nops);
+		Assert.equals("some content", yups);
 
-    Nulls.ensure(ensureField, "alt");
-    Nulls.ensure(ensureStaticField, "alt");
-    Nulls.ensure(ensureField, "alt");
-    Nulls.ensure(ensureStaticField, "alt");
-  }
+		ensureField.ensure("alt");
+		ensureStaticField.ensure("alt");
+		Nulls.ensure(ensureField, "alt");
+		Nulls.ensure(ensureStaticField, "alt");
 
-  var ensureField : String = null;
-  static var ensureStaticField : String = null;
+		ensureField = null;
+		ensureStaticField = null;
+
+		Nulls.ensure(ensureField, "alt");
+		Nulls.ensure(ensureStaticField, "alt");
+		Nulls.ensure(ensureField, "alt");
+		Nulls.ensure(ensureStaticField, "alt");
+	}
+
+	var ensureField:String = null;
+
+	static var ensureStaticField:String = null;
 }

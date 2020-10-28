@@ -1,6 +1,0 @@
--cp src
--cp test
--lib utest
--main TestAll
--js _
---no-output
