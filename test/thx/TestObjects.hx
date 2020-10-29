@@ -47,6 +47,7 @@ class TestObjects extends utest.Test {
 		Assert.same([{_0: 'a', _1: 'A'}, {_0: 'b', _1: 'B'}], tuples);
 	}
 
+	#if !jvm
 	public function testAssign() {
 		var o = {'name': 'Franco', age: 19};
 		var out:Dynamic = thx.Objects.assign(o, {'foo': 'bar', 'name': 'Michael', 'age': 'Two'});
@@ -59,6 +60,7 @@ class TestObjects extends utest.Test {
 			Assert.same(Reflect.field(out, field), Reflect.field(o, field));
 		}
 	}
+	#end
 
 	public function testShallowCombine() {
 		var o = {'name': 'Franco', age: 19};

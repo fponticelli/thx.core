@@ -1,0 +1,10 @@
+-cmd haxe tests.hxml --js bin/test.js
+-cmd node bin/test.js
+-cmd haxe tests.hxml --jvm bin/test-java.jar
+-cmd java -jar bin/test-java.jar
+-cmd haxe tests.hxml -python bin/test.py
+-cmd python3 bin/test.py
+#-cmd haxe tests.hxml -php bin/test-php
+#-cmd php bin/test-php/index.php
+-cmd haxe tests.hxml -cpp bin/cpp
+-cmd ./bin/cpp/TestAll

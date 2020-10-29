@@ -5,11 +5,9 @@ language: haxe
 
 os:
   - linux
-#  - osx
 
 haxe:
-#  - "3.2.1"
-  - "4.0.0-rc.5"
+  - "4.1.4"
   - development
 
 # matrix:

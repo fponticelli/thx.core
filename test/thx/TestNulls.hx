@@ -153,7 +153,7 @@ class TestNulls extends utest.Test {
 			}
 		};
 		Assert.equals('y', (this.m.f('Y').change()).or('x'));
-		#if !python
+		#if !(python || php)
 		Assert.equals('x', (this.m2.f('Y').toLowerCase()).or('x'));
 		#end
 	}

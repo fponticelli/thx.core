@@ -56,6 +56,7 @@ class TestError extends utest.Test {
 		emptyIterator(it); // will not throw
 	}
 
+	#if !jvm
 	public function testEmptyIterable() {
 		var it = {iterator: function() return new IntIterator(0, 0)};
 		Assert.raises(function() emptyIterable(null), NullArgument);
@@ -63,6 +64,7 @@ class TestError extends utest.Test {
 		var it = {iterator: function() return new IntIterator(0, 4)};
 		emptyIterable(it); // will not throw
 	}
+	#end
 
 	public function nullInt(i:Null<Int>)
 		NullArgument.throwIfNull(i);
