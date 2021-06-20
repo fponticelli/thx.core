@@ -156,7 +156,7 @@ class Assert {
 		#if !no_asserts
 		if (msg == null)
 			msg = 'expected type ${Types.anyValueToString(type)} but it is ${Types.valueTypeToString(value)}';
-		isTrue(Std.is(value, type), msg, pos);
+		isTrue(Std.isOfType(value, type), msg, pos);
 		#end
 	}
 
@@ -333,7 +333,7 @@ class Assert {
 					var name = Types.anyValueToString(type);
 					msgWrongType = 'expected throw of type $name but it is $ex';
 				}
-				isTrue(Std.is(ex, type), msgWrongType, pos);
+				isTrue(Std.isOfType(ex, type), msgWrongType, pos);
 			}
 		}
 		#end
@@ -471,7 +471,7 @@ class Assert {
 				return true;
 			case TClass(c):
 				// string
-				if (Std.is(expected, String)) {
+				if (Std.isOfType(expected, String)) {
 					if (expected == value) {
 						return true;
 					} else {
@@ -481,7 +481,7 @@ class Assert {
 				}
 
 				// arrays
-				if (Std.is(expected, Array)) {
+				if (Std.isOfType(expected, Array)) {
 					if (status.recursive || status.path == '') {
 						if (expected.length != value.length) {
 							status.error = withPath('expected ${expected.length} elements but they are ${value.length}');
@@ -500,7 +500,7 @@ class Assert {
 				}
 
 				// date
-				if (Std.is(expected, Date)) {
+				if (Std.isOfType(expected, Date)) {
 					if ((expected : Date).getTime() != (value : Date).getTime()) {
 						status.error = withPath('expected $expected but it is $value');
 						return false;
@@ -509,7 +509,7 @@ class Assert {
 				}
 
 				// bytes
-				if (Std.is(expected, Bytes)) {
+				if (Std.isOfType(expected, Bytes)) {
 					if (status.recursive || status.path == '') {
 						var ebytes:Bytes = expected, vbytes:Bytes = value;
 						if (ebytes.length != vbytes.length)
@@ -524,7 +524,7 @@ class Assert {
 				}
 
 				// hash, inthash
-				if (Std.is(expected, #if (haxe_ver >= 3.200) haxe.Constraints.IMap #else Map.IMap #end)) {
+				if (Std.isOfType(expected, #if (haxe_ver >= 3.200) haxe.Constraints.IMap #else Map.IMap #end)) {
 					if (status.recursive || status.path == '') {
 						var map = cast(expected, Map<Dynamic, Dynamic>),
 							vmap = cast(value, Map<Dynamic, Dynamic>),

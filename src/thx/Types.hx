@@ -114,11 +114,11 @@ class Types {
 		Returns a string describing the type of any `value`.
 	**/
 	inline public static function anyValueToString(value:Dynamic) {
-		if (Std.is(value, Type.ValueType))
+		if (Std.isOfType(value, Type.ValueType))
 			return toString(value);
-		if (Std.is(value, Class))
+		if (Std.isOfType(value, Class))
 			return Type.getClassName(value);
-		if (Std.is(value, Enum))
+		if (Std.isOfType(value, Enum))
 			return Type.getEnumName(value);
 		return valueTypeToString(value);
 	}

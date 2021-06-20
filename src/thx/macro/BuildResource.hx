@@ -39,7 +39,7 @@ class BuildResource {
 		var length = prefix.length;
 		o.tuples().map(function(t) {
 			if (t.left.startsWith(prefix)) {
-				if (!Std.is(t.right, String))
+				if (!Std.isOfType(t.right, String))
 					return;
 				var key = t.left.substring(length),
 					value:String = path.isEmpty() ? t.right : '$path/${t.right}',
@@ -59,7 +59,7 @@ class BuildResource {
 			.map(function(v) return v.params)
 			.flatten()
 			.map(function(p) return ExprTools.getValue(p));
-		if (values.length == 0 || !Std.is(values[0], String))
+		if (values.length == 0 || !Std.isOfType(values[0], String))
 			return prefixSymbol;
 		return values[0];
 	}
