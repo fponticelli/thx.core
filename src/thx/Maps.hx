@@ -114,10 +114,10 @@ class Maps {
 		return !map.iterator().hasNext();
 
 	/**
-		Returns true if a value is of any type of Map. Equivalent to `Std.is(v, IMap)`.
+		Returns true if a value is of any type of Map. Equivalent to `Std.isOfType(v, IMap)`.
 	**/
 	inline public static function isMap(v:Dynamic)
-		return Std.is(v, IMap);
+		return Std.isOfType(v, IMap);
 
 	public static function string<TKey, TValue>(m:IMap<TKey, TValue>):String {
 		return "[" + tuples(m).map(function(t:Tuple<TKey, TValue>):String {

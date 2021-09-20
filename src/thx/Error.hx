@@ -15,7 +15,7 @@ class Error #if js extends js.lib.Error #end {
 		If `err` is already an instance of `Error`, it is returned and nothing is created.
 	**/
 	public static function fromDynamic(err:Dynamic, ?pos:PosInfos):Error {
-		if (Std.is(err, Error))
+		if (Std.isOfType(err, Error))
 			return cast err;
 		return new ErrorWrapper("" + err, err, null, pos);
 	}

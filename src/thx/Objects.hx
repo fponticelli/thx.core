@@ -48,7 +48,7 @@ class Objects {
 
 	public static function deflate(o:{}, ?flattenArrays:Bool = true):{} {
 		function f(v:Dynamic):Either<Dynamic, Map<String, Dynamic>> {
-			if (Std.is(v, Array)) {
+			if (Std.isOfType(v, Array)) {
 				if (flattenArrays) {
 					if (v.length == 0) {
 						return Left([]);
@@ -224,7 +224,7 @@ class Objects {
 	public static function string(o:{}):String {
 		return "{" + Reflect.fields(o).map(function(key) {
 			var v = Reflect.field(o, key);
-			var s = if (Std.is(v, String)) {
+			var s = if (Std.isOfType(v, String)) {
 				Strings.quote((v : String));
 			} else {
 				Dynamics.string(v);

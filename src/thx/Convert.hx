@@ -240,7 +240,7 @@ class Convert {
 	public static function toArray<T>(value:Dynamic, convert:Dynamic->T):Array<T> {
 		if (null == value)
 			return [];
-		return Std.is(value, Array) ? (value : Array<Dynamic>).map(convert) : throw new Error('unable to convert $value to Array<T>');
+		return Std.isOfType(value, Array) ? (value : Array<Dynamic>).map(convert) : throw new Error('unable to convert $value to Array<T>');
 	}
 
 	public static function toMap<T>(value:Dynamic, convert:Dynamic->T):Map<String, T> {

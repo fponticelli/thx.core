@@ -33,11 +33,11 @@ class Dynamics {
 					return false;
 
 				// string
-				if (Std.is(a, String))
+				if (Std.isOfType(a, String))
 					return false;
 
 				// arrays
-				if (Std.is(a, Array)) {
+				if (Std.isOfType(a, Array)) {
 					var aa:Array<Dynamic> = cast a, ab:Array<Dynamic> = cast b;
 					if (aa.length != ab.length)
 						return false;
@@ -48,7 +48,7 @@ class Dynamics {
 				}
 
 				// date
-				if (Std.is(a, Date))
+				if (Std.isOfType(a, Date))
 					return untyped a.getTime() == b.getTime();
 
 				// map

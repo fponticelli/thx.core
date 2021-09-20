@@ -130,7 +130,7 @@ abstract DateTime(Array<Int64>) {
 	public static function is(v:Dynamic):Bool {
 		if (v == null)
 			return false;
-		if (!Std.is(v, Array))
+		if (!Std.isOfType(v, Array))
 			return false;
 		var vs:Array<Dynamic> = v;
 		if (vs.length != 2)
