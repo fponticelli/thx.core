@@ -189,6 +189,12 @@ class TestDateTime extends utest.Test {
 		Assert.isTrue(DateTime.is([haxe.Int64.ofInt(1), haxe.Int64.ofInt(2)])); // Array of exactly 2 Int64s is considered to be a DateTime
 	}
 
+	public function testSubtract() {
+		var time = Time.createDays(10, 9, 8, 7, 6);
+		var date2 = date + time;
+		Assert.equals(date2 - date, time);
+	}
+
 	public function testParse() {
 		assertParse(DateTime.create(2012, 2, 3, 11, 30, 59, 66, Time.zero), "2012-02-03T11:30:59.066");
 		assertParse(DateTime.create(2012, 2, 3, 11, 30, 59, 66, Time.fromHours(-2)), "2012-02-03T11:30:59.066-02:00");
