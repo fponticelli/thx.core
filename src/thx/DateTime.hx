@@ -540,7 +540,7 @@ abstract DateTime(Array<Int64>) {
 		return new DateTime(DateTimeUtc.fromInt64(utc.ticks - time.ticks), offset);
 
 	@:op(A - B) function subtractDate(date:DateTime):Time {
-		var base = DateTimeUtc.fromInt64(utc.ticks + date.utc.ticks),
+		var base = DateTimeUtc.fromInt64(utc.ticks - date.utc.ticks),
 			date = new DateTime(base, offset);
 		return new Time(date.utc.ticks);
 	}
