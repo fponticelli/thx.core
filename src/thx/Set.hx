@@ -179,7 +179,7 @@ abstract Set<T>(Map<T, Bool>) {
 		Converts `Set` into `String`. To differentiate from normal `Array`s the output string
 		uses curly braces `{}` instead of square brackets `[]`.
 	**/
-	@:to public function toString()
+	@:to public function toString(): String
 		return "{" + toArray().join(", ") + "}";
 
 	function get_length() {
