@@ -87,12 +87,9 @@ A `Set` is a list of unique values. Values are unique in a way that no duplicate
 `Set<T>` is an abstract built on top of `Array<T>`. Like `Array`, it is a mutable structure and shares with it most of its methods with.
 
 ```haxe
-var set = Set.create();
-set.add(1);
-set.add(2);
+var set = Set.createInt([1,2]);
 set.add(3);
-// again one!
-set.add(1);
+set.add(1); // again one!
 
 set.length == 3; // true!
 ```
