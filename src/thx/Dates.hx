@@ -43,19 +43,21 @@ class Dates {
 		if (hour < 0)
 			hour += 24;
 
-		if (day == 0) {
+		year += Math.floor(month / 12);
+		month = month % 12;
+		if (month < 0)
+			month += 12;
+
+		// Normalize month and year before using daysInMonth to avoid invalid months value
+		while(day < 1) {
 			month -= 1;
 			if (month < 0) {
 				month = 11;
 				year -= 1;
 			}
-			day = daysInMonth(year, month);
+			var days = daysInMonth(year, month);
+			day += days;
 		}
-
-		year += Math.floor(month / 12);
-		month = month % 12;
-		if (month < 0)
-			month += 12;
 
 		var days = daysInMonth(year, month);
 		while (day > days) {
