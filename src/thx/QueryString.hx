@@ -48,7 +48,7 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
 			throw 'unable to convert $o to QueryString';
 		Objects.tuples(o).each(function(t) {
 			if (Std.isOfType(t.right, Array)) {
-				qs.setMany(t.left, (cast t.right : Array<Dynamic>).map.fn('$_'));
+				qs.setMany(t.left, (cast t.right : Array<Dynamic>).map((a)->'$a'));
 			} else {
 				qs.set(t.left, '${t.right}');
 			}
@@ -136,7 +136,7 @@ abstract QueryString(Map<String, QueryStringValue>) from Map<String, QueryString
 			if (vs.length == 0)
 				return [ek];
 			else {
-				return vs.map.fn('$ek$assignment${encodeURIComponent(_)}');
+				return vs.map((a) -> '$ek$assignment${encodeURIComponent(a)}');
 			}
 		}).flatten().join(separator);
 	}
