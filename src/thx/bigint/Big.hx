@@ -51,11 +51,20 @@ class Big implements BigIntImpl {
 	public function divide(that:BigIntImpl):BigIntImpl
 		return divMod(that).quotient;
 
-	public function divMod(that:BigIntImpl):{quotient:BigIntImpl, remainder:BigIntImpl} {
-		if (that.isZero())
-			throw new Error('division by zero');
-		return that.isSmall ? divModSmall(cast that) : divModBig(cast that);
-	}
+public function divMod(that : BigIntImpl) : { quotient : BigIntImpl, remainder : BigIntImpl } {
+    if(that.isZero())
+      throw new Error('division by zero');
+    return if (that.isSmall && this.isSmall){
+      divModSmall(cast that);
+    } else if (that.isSmall) {
+      
+      var upgraded=new Big([],that.sign);
+      var added=upgraded.addSmall(cast that);
+      divModBig(cast added);
+    } else {
+      divModBig(cast that);
+    }
+  }
 
 	public function divModSmall(small:Small):{quotient:BigIntImpl, remainder:BigIntImpl} {
 		var values = Bigs.divModSmall(value, Ints.abs(small.value));
