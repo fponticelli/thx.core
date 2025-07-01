@@ -543,9 +543,11 @@ class Strings {
 	/**
 		It transforms a string into an `Array` of char codes in integer format.
 	**/
-	inline public static function toCharcodes(s:String):Array<Int>
-		return map(s, // function(s : String) return new UnicodeString(s).charCodeAt(0)
-			function(s:String) return s.charCodeAt(0));
+	inline public static function toCharcodes(s:String):Array<Int>{
+		var ar:Array<String>=s.split("");
+		var ar2:Array<Int>=ar.map(v->v.charCodeAt(0));
+		return ar2;
+	}
 
 	/**
 		Returns an array of `String` whose elements are equally long (using `len`). If the string `s`

@@ -394,6 +394,12 @@ class Objects {
 
 		E.g. { foo : 'bar' }.removePath('foo') -> returns {}
 	**/
+	#if cs
+	public static macro function removePath(o:{}, path:String):{} {
+		haxe.macro.Context.error("this is not supported in cs", haxe.macro.Context.currentPos());
+		return {};
+	}
+	#else
 	public static function removePath(o:{}, path:String):{} {
 		path = normalizePath(path);
 		var paths = path.split(".");
@@ -422,6 +428,7 @@ class Objects {
 
 		return o;
 	}
+	#end
 
 	static inline function normalizePath(path:String):String {
 		return ~/\[(\d+)\]/g.replace(path, ".$1"); // Normalize [x] array access to .x (where x is an integer)
